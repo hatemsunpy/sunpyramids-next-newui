@@ -8,8 +8,8 @@ export function TourInclusions({ title, items, icon }: { title: string; items: s
         <ul className="tour-bullet-list">
           {list.map((item, index) => (
             <li key={index}>
-              <span className={`tour-bullet-icon ${icon}`} aria-hidden="true" />
-              {item}
+              <span className={`tour-bullet-icon ${icon}`} aria-hidden="true">{icon === "check" ? "✓" : "−"}</span>
+              <span>{item}</span>
             </li>
           ))}
         </ul>

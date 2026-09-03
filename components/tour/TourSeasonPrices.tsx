@@ -3,10 +3,10 @@ import type { Tour } from "@/types/api";
 
 export function TourSeasonPrices({ seasons }: { seasons: NonNullable<Tour["seasons"]> }) {
   return (
-    <section className="tour-seasons">
+    <section className="tour-seasons" id="prices" aria-labelledby="tour-prices-title">
       <div className="container-shell">
         <div className="tour-section-heading">
-          <h2>Tour Prices</h2>
+          <h2 id="tour-prices-title">Find your travel window</h2>
           <p>Choose the travel window and group size that suits your plans.</p>
         </div>
         <div className="tour-season-grid">
@@ -24,8 +24,12 @@ export function TourSeasonPrices({ seasons }: { seasons: NonNullable<Tour["seaso
               ? `${dayLabel ? `(${dayLabel}) ` : ""}${monthLabel}${yearLabel ? ` ${yearLabel}` : ""}`
               : season.title || `Season ${index + 1}`;
             return (
-              <div key={index} className="tour-season-card">
-                <p className="tour-season-date">{seasonLabel}</p>
+              <article key={season.id || index} className="tour-season-card">
+                <header className="tour-season-head">
+                  <span>Travel window</span>
+                  <h3 className="tour-season-date">{seasonLabel}</h3>
+                </header>
+                <div className="tour-season-rates">
                 {solo ? (
                   <div className="tour-season-row">
                     <span>Solo</span>
@@ -44,7 +48,8 @@ export function TourSeasonPrices({ seasons }: { seasons: NonNullable<Tour["seaso
                     </strong>
                   </div>
                 ))}
-              </div>
+                </div>
+              </article>
             );
           })}
         </div>

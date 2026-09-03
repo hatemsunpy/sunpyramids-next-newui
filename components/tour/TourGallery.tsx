@@ -10,20 +10,27 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
   const [thumbnailsReady, setThumbnailsReady] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
-  const gallery = tour?.gallery?.length ? tour.gallery : [tour?.featured_image || "/images/mainBanner.png"];
-  const thumbnailWindowSize = 5;
-  const thumbnailStart = Math.min(
-    Math.max(active - Math.floor(thumbnailWindowSize / 2), 0),
-    Math.max(gallery.length - thumbnailWindowSize, 0),
-  );
-  const visibleThumbnails = gallery.slice(thumbnailStart, thumbnailStart + thumbnailWindowSize);
+  const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image]).filter((image): image is string => Boolean(image));
+  const previewIndexes = gallery
+    .map((_, index) => index)
+    .filter((index) => index !== active)
+    .slice(0, 2);
 
   function showPhoto(index: number) {
+    if (!gallery.length) return;
     setActive((index + gallery.length) % gallery.length);
   }
 
+  if (!gallery.length) {
+    return (
+      <section className="tour-gallery tour-gallery-empty" aria-label="Tour photography">
+        <p>Photography is not available for this tour.</p>
+      </section>
+    );
+  }
+
   return (
-    <section className="tour-gallery">
+    <section className={`tour-gallery ${previewIndexes.length ? "has-previews" : ""}`} aria-label="Tour gallery">
       <div
         className="tour-gallery-main"
         onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null; }}
@@ -37,12 +44,12 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         <Image
           key={`${gallery[active]}-${active}`}
           src={gallery[active]}
-          alt={`${tour?.title || "Tour"} photo ${active + 1}`}
+          alt={`${tour?.title || tour?.name || "Tour"} photo ${active + 1}`}
           fill
           preload={active === 0}
           fetchPriority={active === 0 ? "high" : "auto"}
           loading={active === 0 ? "eager" : "lazy"}
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 62vw, 967px"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 72vw"
           className="tour-gallery-slide is-active"
           onLoad={() => setThumbnailsReady(true)}
         />
@@ -58,25 +65,23 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         </div>
         <a className="tour-gallery-expand" href={gallery[active]} target="_blank" rel="noreferrer" aria-label="Open current photo"><ExpandIcon /></a>
       </div>
-      <div className="tour-gallery-thumbs">
-        {visibleThumbnails.map((src, offset) => {
-          const index = thumbnailStart + offset;
+      {previewIndexes.length ? <div className={`tour-gallery-previews tour-gallery-previews-${previewIndexes.length}`}>
+        {previewIndexes.map((index) => {
+          const src = gallery[index];
           return (
             <button
-              key={`thumb-${src}-${index}`}
+              key={`preview-${src}-${index}`}
               type="button"
-              className={`tour-gallery-thumb ${index === active ? "is-active" : ""}`}
+              className="tour-gallery-preview"
               onClick={() => setActive(index)}
               aria-label={`View photo ${index + 1}`}
             >
-              {thumbnailsReady || index === active ? (
-                <Image src={src} alt="" width={80} height={80} loading="lazy" />
-              ) : null}
+              {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 1024px) 0px, 28vw" loading="lazy" /> : null}
             </button>
           );
         })}
-      </div>
-      <span className="tour-gallery-count" aria-live="polite">{active + 1} / {gallery.length}</span>
+      </div> : null}
+      <span className="tour-gallery-count" aria-live="polite"><strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}</span>
       {actionMessage ? <p className="tour-gallery-message" role="status">{actionMessage}</p> : null}
     </section>
   );
