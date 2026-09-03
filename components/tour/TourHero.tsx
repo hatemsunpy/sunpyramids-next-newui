@@ -12,7 +12,7 @@ export function TourHero({ tour, title }: { tour: Tour | null; title: string }) 
   const price = tour?.adult_price ?? tour?.start_from ?? tour?.price;
 
   const duration = tour?.duration || (tour?.duration_in_days ? `${tour.duration_in_days} ${Number(tour.duration_in_days) === 1 ? "Day" : "Days"}` : null);
-  const tourType = tour?.type || "Private Tour";
+  const tourType = tour?.type;
 
   return (
     <header className="tour-hero-copy">
@@ -29,11 +29,12 @@ export function TourHero({ tour, title }: { tour: Tour | null; title: string }) 
         </div>
       ) : null}
       {title ? <h1 className="tour-page-title">{title}</h1> : null}
-      <div className="tour-hero-meta-pills" aria-label="Tour essentials">
-        {duration ? <span className="tour-hero-pill">{duration}</span> : null}
-        <span className="tour-hero-pill">{tourType}</span>
-        <span className="tour-hero-pill tour-hero-pill-highlight">Local Egyptologists</span>
-      </div>
+      {duration || tourType ? (
+        <div className="tour-hero-meta-pills" aria-label="Tour essentials">
+          {duration ? <span className="tour-hero-pill">{duration}</span> : null}
+          {tourType ? <span className="tour-hero-pill">{tourType}</span> : null}
+        </div>
+      ) : null}
       <div className="tour-hero-conversion">
         {tour?.is_inquiry ? (
           <span className="tour-hero-inquiry">Tailored availability</span>

@@ -11,8 +11,6 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
   const touchStartX = useRef<number | null>(null);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
   const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image]).filter((image): image is string => Boolean(image));
-  
-  // Show up to 3 stacked preview thumbnails on the right
   const previewLimit = 3;
   const otherIndexes = gallery
     .map((_, index) => index)
@@ -25,9 +23,9 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
     setActive((index + gallery.length) % gallery.length);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "ArrowLeft") showPhoto(active - 1);
-    else if (e.key === "ArrowRight") showPhoto(active + 1);
+  function navigateGalleryWithKeyboard(event: React.KeyboardEvent) {
+    if (event.key === "ArrowLeft") showPhoto(active - 1);
+    else if (event.key === "ArrowRight") showPhoto(active + 1);
   }
 
   if (!gallery.length) {
@@ -43,7 +41,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
       className={`tour-gallery ${previewIndexes.length ? "has-previews" : ""}`}
       aria-label="Tour gallery"
       tabIndex={0}
-      onKeyDown={handleKeyDown}
+      onKeyDown={navigateGalleryWithKeyboard}
     >
       <div
         className="tour-gallery-main"
@@ -92,7 +90,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
                 onClick={() => showPhoto(index)}
                 aria-label={`View photo ${index + 1}`}
               >
-                {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 1024px) 0px, 25vw" loading="lazy" /> : null}
+                {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" /> : null}
                 {isLastWithMore ? (
                   <span className="tour-gallery-more-overlay" aria-hidden="true">
                     +{remainingCount + 1} photos
