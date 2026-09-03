@@ -1,4 +1,3 @@
-import { TourCollapsible } from "@/components/tour/TourCollapsible";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import type { Tour } from "@/types/api";
 
@@ -23,52 +22,48 @@ function tourDestinationCount(tour: Tour | null) {
 }
 
 export function TourOverview({ tour }: { tour: Tour | null }) {
-  const category = tour?.categories?.[0]?.title || tour?.category?.name || "—";
+  const category = tour?.categories?.[0]?.title || tour?.category?.name;
   const destinationCount = tourDestinationCount(tour);
+  const duration = tour?.duration || (tour?.duration_in_days ? `${tour.duration_in_days} ${Number(tour.duration_in_days) === 1 ? "Day" : "Days"}` : "");
+  const facts = [
+    duration ? { type: "duration" as const, label: "Duration", value: duration } : null,
+    destinationCount ? { type: "cities" as const, label: "Places", value: `${destinationCount} ${destinationCount === 1 ? "Place" : "Places"}` } : null,
+    tour?.type ? { type: "type" as const, label: "Tour style", value: tour.type } : null,
+    category ? { type: "category" as const, label: "Category", value: category } : null,
+  ].filter((fact): fact is { type: "duration" | "cities" | "type" | "category"; label: string; value: string } => Boolean(fact));
+  const hasLogistics = Boolean(tour?.pickup_time || tour?.run);
 
   return (
-    <>
-      <section className="tour-info-grid">
-        <div className="tour-info-card">
-          <TourInfoIcon type="duration" />
-          <span className="tour-info-label">Duration</span>
-          <span className="tour-info-value">{tour?.duration || `${tour?.duration_in_days || 1} Days`}</span>
-        </div>
-        <div className="tour-info-card">
-          <TourInfoIcon type="cities" />
-          <span className="tour-info-label">Cities</span>
-          <span className="tour-info-value">{destinationCount} Cities</span>
-        </div>
-        <div className="tour-info-card">
-          <TourInfoIcon type="type" />
-          <span className="tour-info-label">Type</span>
-          <span className="tour-info-value">{tour?.type || "Private Tour"}</span>
-        </div>
-        <div className="tour-info-card">
-          <TourInfoIcon type="category" />
-          <span className="tour-info-label">Category</span>
-          <span className="tour-info-value">{category}</span>
-        </div>
-      </section>
+    <section className="tour-overview" id="overview" aria-labelledby="tour-overview-title">
+      <div className="tour-editorial-heading">
+        <h2 id="tour-overview-title">Your journey, clearly mapped</h2>
+        <p>The essential shape of the experience before the day-by-day detail.</p>
+      </div>
 
-      <section className="tour-overview">
-        <TourCollapsible title="Overview" defaultOpen>
-          <div className="tour-overview-pickup">
-            <div className="tour-overview-card">
-              <span>Pick-up Time</span>
-              <strong>{tour?.pickup_time || "—"}</strong>
-            </div>
-            <div className="tour-overview-card">
-              <span>Tour availability</span>
-              <strong>{tour?.run || "—"}</strong>
-            </div>
-          </div>
-          {tour?.overview ? (
-            <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.overview) }} />
-          ) : null}
-        </TourCollapsible>
+      {facts.length ? <div className="tour-info-grid" role="group" tabIndex={0} aria-label="Tour quick facts">
+        {facts.map((fact) => <div className="tour-info-card" key={`${fact.label}-${fact.value}`}>
+          <TourInfoIcon type={fact.type} />
+          <span className="tour-info-label">{fact.label}</span>
+          <span className="tour-info-value">{fact.value}</span>
+        </div>)}
+      </div> : null}
+
+      {tour?.overview || hasLogistics ? <div className={`tour-overview-body ${hasLogistics ? "has-logistics" : ""}`}>
+        {hasLogistics ? <aside className="tour-overview-pickup" aria-label="Tour logistics">
+          {tour?.pickup_time ? <div className="tour-overview-card">
+            <span>Pick-up time</span>
+            <strong>{tour.pickup_time}</strong>
+          </div> : null}
+          {tour?.run ? <div className="tour-overview-card">
+            <span>Tour availability</span>
+            <strong>{tour.run}</strong>
+          </div> : null}
+        </aside> : null}
+        {tour?.overview ? (
+          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tour.overview) }} />
+        ) : null}
+      </div> : null}
       </section>
-    </>
   );
 }
 

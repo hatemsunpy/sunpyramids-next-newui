@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { useTourActions } from "@/components/tour/TourActions";
@@ -24,24 +23,9 @@ function destinationMapUrl(destinations: TourDestination[], activeDestination: T
 }
 
 export function DeferredTourMapImage({ sizes }: { sizes: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry?.isIntersecting) return;
-      setVisible(true);
-      observer.disconnect();
-    });
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div ref={containerRef} className="tour-deferred-map-image">
-      {visible ? <Image src="/images/map.png" alt="Tour destinations map" fill sizes={sizes} /> : null}
+    <div className="tour-deferred-map-image tour-map-unavailable" data-sizes={sizes}>
+      <span>Map preview is not available for this destination.</span>
     </div>
   );
 }
@@ -74,6 +58,7 @@ function DestinationList({ destinations, activeDestination, onSelect }: { destin
 
 export function TourDestinationsModal({ tour, locale, destinations, open, onClose }: { tour: Tour; locale: Locale; destinations: TourDestination[]; open: boolean; onClose: () => void }) {
   const { format } = useCurrency();
+  const price = tour.adult_price ?? tour.start_from ?? tour.price;
   const [activeDestination, setActiveDestination] = useState(destinations[0]);
   const { actionMessage, shareTour } = useTourActions(tour, locale);
   const modalRef = useRef<HTMLElement>(null);
@@ -130,7 +115,7 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
           <div className="tour-destinations-summary">
             <h3>{tour.title || tour.name}</h3>
             <div className="tour-destinations-price-row">
-              <div><span>Price</span><strong>{format(tour.adult_price || tour.start_from || tour.price || 0)}</strong></div>
+              {price !== null && price !== undefined && price !== "" ? <div><span>Price</span><strong>{format(price)}</strong></div> : <span />}
               <button className="btn-outline" type="button" onClick={shareTour}>Share</button>
             </div>
             <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now</button>

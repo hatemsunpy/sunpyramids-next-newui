@@ -67,8 +67,9 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   // Inquiry tours bypass all booking/pricing logic and render a contact form instead.
   if (tour?.is_inquiry) {
     return (
-      <aside className="tour-right-panel">
+      <aside className="tour-right-panel" id="tour-booking">
         <div className="tour-booking-card tour-inquiry-card">
+          <span className="tour-booking-kicker">Built around your dates</span>
           <h3 className="tour-inquiry-title">Contact Us For Checking Availability</h3>
           <ContactForm locale={locale} tourId={tour?.id} tourTitle={tour?.title} />
         </div>
@@ -118,34 +119,43 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   }
 
   return (
-    <aside className="tour-right-panel">
+    <aside className="tour-right-panel" id="tour-booking">
       <div className={`tour-booking-dialog ${mobileOpen ? "is-open" : ""}`} role={mobileOpen ? "dialog" : undefined} aria-modal={mobileOpen || undefined} aria-label={mobileOpen ? "Book this tour" : undefined}>
         <button className="tour-booking-backdrop" type="button" onClick={() => setMobileOpen(false)} aria-label="Close booking panel" />
         <div className="tour-booking-card">
           <button className="tour-booking-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Close booking panel">×</button>
-          <div className="tour-booking-price">
-            <div>
-              <span className="tour-booking-label">Price</span>
-              <strong className="tour-price-current">{format(passengerTotal)}</strong>
-              {offer ? <span className="tour-price-original">{format(baseTotal)}</span> : null}
+          <header className="tour-booking-intro">
+            <div className="tour-booking-price">
+              <div>
+                <span className="tour-booking-kicker">Plan your departure</span>
+                <span className="tour-booking-label">Current price</span>
+                <strong className="tour-price-current">{format(passengerTotal)}</strong>
+                {offer ? <span className="tour-price-original">{format(baseTotal)}</span> : null}
+              </div>
+              <button type="button" className="tour-booking-share" onClick={shareTour}>
+                Share
+              </button>
             </div>
-            <button type="button" className="btn-outline btn-sm" onClick={shareTour}>
-              Share
-            </button>
-          </div>
-          <p className="tour-booking-assurance">Book directly with a local Egypt specialist.</p>
+            <p className="tour-booking-assurance">Book directly with a local Egypt specialist.</p>
+          </header>
 
           <form className="tour-booking-form" onSubmit={submit}>
-            <label className="tour-field">
-              <span>Date</span>
-              <input type="date" value={date} onChange={(event) => setDate(event.target.value)} required />
-            </label>
+            <div className="tour-booking-step">
+              <span className="tour-booking-step-number" aria-hidden="true">1</span>
+              <label className="tour-field">
+                <span>Choose your date</span>
+                <input type="date" value={date} onChange={(event) => setDate(event.target.value)} required />
+              </label>
+            </div>
 
-            <div className="tour-passengers">
-              <span className="tour-booking-label">Passengers</span>
-              <Counter label="Adults (12+)" value={adults} onChange={setAdults} min={1} />
-              <Counter label="Children (3 - 11)" value={children} onChange={setChildren} />
-              <Counter label="Infants (0 - 2)" value={infants} onChange={setInfants} />
+            <div className="tour-booking-step">
+              <span className="tour-booking-step-number" aria-hidden="true">2</span>
+              <div className="tour-passengers">
+                <span className="tour-booking-label">Who is traveling?</span>
+                <Counter label="Adults (12+)" value={adults} onChange={setAdults} min={1} />
+                <Counter label="Children (3 - 11)" value={children} onChange={setChildren} />
+                <Counter label="Infants (0 - 2)" value={infants} onChange={setInfants} />
+              </div>
             </div>
 
             {tour?.options?.length ? (
@@ -153,7 +163,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
             ) : null}
 
             <div className="tour-booking-total">
-              <span>Total</span>
+              <span>Trip total</span>
               <strong>{format(total)}</strong>
             </div>
 
@@ -163,10 +173,8 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
             {status === "error" ? <p className="tour-booking-error" role="alert">Something went wrong. Please try again.</p> : null}
           </form>
 
-          <div className="tour-booking-actions">
-            <button type="button" className="btn-outline" onClick={favoriteTour}>
-              Favorites
-            </button>
+          <div className="tour-booking-actions" aria-label="Other ways to continue">
+            <button type="button" className="tour-booking-secondary" onClick={favoriteTour}>Save for later</button>
             <a className="btn-outline" href={whatsappInquiryUrl(`I want to inquire about a tour (${tour?.title})`)} target="_blank" rel="noreferrer">
               Ask a question
             </a>

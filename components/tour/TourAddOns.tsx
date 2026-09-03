@@ -12,8 +12,8 @@ export function updatedSelectedOptions(selected: number[], optionId: number, che
 export function TourAddOns({ options, selected, onChange }: { options: NonNullable<Tour["options"]>; selected: number[]; onChange: (ids: number[]) => void }) {
   const { format } = useCurrency();
   return (
-    <section className="tour-addons">
-      <TourCollapsible title="Add-ons" defaultOpen>
+    <section className="tour-addons" id="add-ons">
+      <TourCollapsible title="Optional experiences" defaultOpen>
         <div className="tour-addon-list">
           {options.map((option) => (
             <label key={option.id} className="tour-addon">
@@ -27,8 +27,13 @@ export function TourAddOns({ options, selected, onChange }: { options: NonNullab
                   onChange(updatedSelectedOptions(selected, id, event.target.checked));
                 }}
               />
-              <span className="tour-addon-name">{option.name}</span>
-              <span className="tour-addon-price">{format(option.adult_price || 0)}</span>
+              <span className="tour-addon-copy">
+                <span className="tour-addon-name">{option.name}</span>
+                {option.description ? <span className="tour-addon-description">{option.description}</span> : null}
+              </span>
+              {option.adult_price !== null && option.adult_price !== undefined && option.adult_price !== "" ? (
+                <span className="tour-addon-price">{format(option.adult_price)}</span>
+              ) : null}
             </label>
           ))}
         </div>
@@ -58,7 +63,7 @@ export function TourBookingAddOns({ options, selected, optionsTotal, onChange }:
               <label key={option.id || option.name}>
                 <input type="checkbox" checked={selected.includes(optionId)} onChange={(event) => onChange(updatedSelectedOptions(selected, optionId, event.target.checked))} />
                 <span>{option.name}</span>
-                <strong>{format(option.adult_price || 0)}</strong>
+                {option.adult_price !== null && option.adult_price !== undefined && option.adult_price !== "" ? <strong>{format(option.adult_price)}</strong> : null}
               </label>
             );
           })}

@@ -17,7 +17,7 @@ export function TourItineraryDisclosure({ children }: { children: ReactNode }) {
 
   return (
     <TourCollapsible
-      title="Itinerary"
+      title="Full itinerary"
       defaultOpen
       actions={
         <button type="button" className="btn-outline btn-sm" onClick={toggleAll}>
