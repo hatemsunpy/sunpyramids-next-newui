@@ -17,20 +17,44 @@ export function TourHighlightsDestinations({ tour, locale }: { tour: Tour | null
       <div className="tour-destination-story">
         {displayDestinations.map((destination, index) => {
           const image = destination.banner || destination.phone_banner || destination.featured_image || destination.gallery?.[0];
+          const isLead = index === 0 && displayDestinations.length > 1;
           return (
-            <article className={`tour-destination-story-item ${image ? "has-image" : ""}`} key={destination.id || destination.slug || index}>
-              {image ? <div className="tour-destination-story-media"><Image src={image} alt="" fill sizes="(max-width: 768px) 100vw, 36vw" /></div> : null}
+            <article
+              className={`tour-destination-story-item ${image ? "has-image" : ""} ${isLead ? "is-lead-story" : ""}`}
+              key={destination.id || destination.slug || index}
+            >
+              {image ? (
+                <div className="tour-destination-story-media">
+                  <Image
+                    src={image}
+                    alt=""
+                    fill
+                    sizes={isLead ? "(max-width: 768px) 100vw, 48vw" : "(max-width: 768px) 100vw, 24vw"}
+                  />
+                </div>
+              ) : null}
               <div className="tour-destination-story-copy">
-                <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-                <h3>{destination.title || destination.name}</h3>
+                <span className="tour-destination-step" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="tour-destination-info">
+                  {isLead ? <span className="tour-destination-badge">Key Destination</span> : null}
+                  <h3>{destination.title || destination.name}</h3>
+                </div>
               </div>
             </article>
           );
         })}
-        {modalDestinations.length ? <button type="button" className="tour-map-button" onClick={() => setDestinationsOpen(true)}>
-          Explore destinations
-          <span aria-hidden="true">→</span>
-        </button> : null}
+        {modalDestinations.length ? (
+          <button
+            type="button"
+            className="tour-map-button"
+            onClick={() => setDestinationsOpen(true)}
+          >
+            <span>Explore all destinations ({modalDestinations.length})</span>
+            <span className="tour-map-button-arrow" aria-hidden="true">→</span>
+          </button>
+        ) : null}
       </div>
       <div className="tour-attractions">
         {featuredDestinations.map((parent) => {
