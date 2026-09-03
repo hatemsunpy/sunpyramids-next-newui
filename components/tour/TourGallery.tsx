@@ -11,14 +11,23 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
   const touchStartX = useRef<number | null>(null);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
   const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image]).filter((image): image is string => Boolean(image));
-  const previewIndexes = gallery
+  
+  // Show up to 3 stacked preview thumbnails on the right
+  const previewLimit = 3;
+  const otherIndexes = gallery
     .map((_, index) => index)
-    .filter((index) => index !== active)
-    .slice(0, 2);
+    .filter((index) => index !== active);
+  const previewIndexes = otherIndexes.slice(0, previewLimit);
+  const remainingCount = Math.max(0, gallery.length - 1 - previewLimit);
 
   function showPhoto(index: number) {
     if (!gallery.length) return;
     setActive((index + gallery.length) % gallery.length);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "ArrowLeft") showPhoto(active - 1);
+    else if (e.key === "ArrowRight") showPhoto(active + 1);
   }
 
   if (!gallery.length) {
@@ -30,7 +39,12 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
   }
 
   return (
-    <section className={`tour-gallery ${previewIndexes.length ? "has-previews" : ""}`} aria-label="Tour gallery">
+    <section
+      className={`tour-gallery ${previewIndexes.length ? "has-previews" : ""}`}
+      aria-label="Tour gallery"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       <div
         className="tour-gallery-main"
         onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null; }}
@@ -49,7 +63,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           preload={active === 0}
           fetchPriority={active === 0 ? "high" : "auto"}
           loading={active === 0 ? "eager" : "lazy"}
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 72vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 75vw"
           className="tour-gallery-slide is-active"
           onLoad={() => setThumbnailsReady(true)}
         />
@@ -65,23 +79,34 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         </div>
         <a className="tour-gallery-expand" href={gallery[active]} target="_blank" rel="noreferrer" aria-label="Open current photo"><ExpandIcon /></a>
       </div>
-      {previewIndexes.length ? <div className={`tour-gallery-previews tour-gallery-previews-${previewIndexes.length}`}>
-        {previewIndexes.map((index) => {
-          const src = gallery[index];
-          return (
-            <button
-              key={`preview-${src}-${index}`}
-              type="button"
-              className="tour-gallery-preview"
-              onClick={() => setActive(index)}
-              aria-label={`View photo ${index + 1}`}
-            >
-              {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 1024px) 0px, 28vw" loading="lazy" /> : null}
-            </button>
-          );
-        })}
-      </div> : null}
-      <span className="tour-gallery-count" aria-live="polite"><strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}</span>
+      {previewIndexes.length ? (
+        <div className={`tour-gallery-previews tour-gallery-previews-${previewIndexes.length}`}>
+          {previewIndexes.map((index, i) => {
+            const src = gallery[index];
+            const isLastWithMore = i === previewLimit - 1 && remainingCount > 0;
+            return (
+              <button
+                key={`preview-${src}-${index}`}
+                type="button"
+                className={`tour-gallery-preview react-bits-glare ${isLastWithMore ? "has-more-badge" : ""}`}
+                onClick={() => showPhoto(index)}
+                aria-label={`View photo ${index + 1}`}
+              >
+                {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 1024px) 0px, 25vw" loading="lazy" /> : null}
+                {isLastWithMore ? (
+                  <span className="tour-gallery-more-overlay" aria-hidden="true">
+                    +{remainingCount + 1} photos
+                  </span>
+                ) : null}
+                <span className="react-bits-glare-effect" aria-hidden="true" />
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+      <span className="tour-gallery-count" aria-live="polite">
+        <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
+      </span>
       {actionMessage ? <p className="tour-gallery-message" role="status">{actionMessage}</p> : null}
     </section>
   );

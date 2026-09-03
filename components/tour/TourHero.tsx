@@ -11,21 +11,36 @@ export function TourHero({ tour, title }: { tour: Tour | null; title: string }) 
   const offer = Number(tour?.offer || 0);
   const price = tour?.adult_price ?? tour?.start_from ?? tour?.price;
 
+  const duration = tour?.duration || (tour?.duration_in_days ? `${tour.duration_in_days} ${Number(tour.duration_in_days) === 1 ? "Day" : "Days"}` : null);
+  const tourType = tour?.type || "Private Tour";
+
   return (
     <header className="tour-hero-copy">
-      {destination || category || offer > 0 ? <div className="tour-hero-context" role="group" aria-label="Tour context">
-        {destination ? <span>{destination}</span> : null}
-        {category ? <><span className="tour-hero-context-separator" aria-hidden="true" /> <span>{category}</span></> : null}
-        {offer > 0 ? <span className="tour-hero-offer">Save {offer}%</span> : null}
-      </div> : null}
+      {destination || category || offer > 0 ? (
+        <div className="tour-hero-context" role="group" aria-label="Tour context">
+          {destination ? <span className="tour-hero-context-item">{destination}</span> : null}
+          {category ? (
+            <>
+              <span className="tour-hero-context-separator" aria-hidden="true" />
+              <span className="tour-hero-context-item">{category}</span>
+            </>
+          ) : null}
+          {offer > 0 ? <span className="tour-hero-offer">Save {offer}%</span> : null}
+        </div>
+      ) : null}
       {title ? <h1 className="tour-page-title">{title}</h1> : null}
+      <div className="tour-hero-meta-pills" aria-label="Tour essentials">
+        {duration ? <span className="tour-hero-pill">{duration}</span> : null}
+        <span className="tour-hero-pill">{tourType}</span>
+        <span className="tour-hero-pill tour-hero-pill-highlight">Local Egyptologists</span>
+      </div>
       <div className="tour-hero-conversion">
         {tour?.is_inquiry ? (
           <span className="tour-hero-inquiry">Tailored availability</span>
         ) : price !== null && price !== undefined && price !== "" ? (
           <div className="tour-hero-price">
-            <span>From</span>
-            <strong><PriceText amount={price} /></strong>
+            <span className="tour-hero-price-label">From</span>
+            <strong className="tour-hero-price-amount"><PriceText amount={price} /></strong>
           </div>
         ) : null}
         <TourBookingTrigger inquiry={Boolean(tour?.is_inquiry)} />

@@ -32,14 +32,29 @@ export function RelatedTours({ tours, locale }: { tours: Tour[]; locale: Locale 
             const price = item.price ?? item.start_from ?? item.adult_price;
             return (
               <article className={`tour-related-card ${image ? "has-image" : ""}`} key={item.id || item.slug}>
-                <Link href={tourPath(slug, locale)}>
-                  {image ? <div className="tour-related-media"><Image src={image} alt={title} fill sizes="(max-width: 768px) 82vw, 38vw" /></div> : null}
+                <Link href={tourPath(slug, locale)} className="tour-related-link">
+                  {image ? (
+                    <div className="tour-related-media">
+                      <Image src={image} alt={title} fill sizes="(max-width: 768px) 85vw, (max-width: 1200px) 45vw, 30vw" />
+                      {place ? <span className="tour-related-badge">{place}</span> : null}
+                    </div>
+                  ) : null}
                   <div className="tour-related-copy">
-                    {place ? <span className="tour-related-place">{place}</span> : null}
-                    <h3>{title}</h3>
-                    <div className="tour-related-meta">
-                      {price !== null && price !== undefined && price !== "" ? <span>From <strong><PriceText amount={price} /></strong></span> : null}
-                      {item.duration ? <span>{item.duration}</span> : null}
+                    <div className="tour-related-header">
+                      {place && !image ? <span className="tour-related-place">{place}</span> : null}
+                      <h3>{title}</h3>
+                    </div>
+                    <div className="tour-related-footer">
+                      <div className="tour-related-meta">
+                        {price !== null && price !== undefined && price !== "" ? (
+                          <div className="tour-related-price-box">
+                            <span className="tour-related-price-label">From</span>
+                            <strong className="tour-related-price-val"><PriceText amount={price} /></strong>
+                          </div>
+                        ) : null}
+                        {item.duration ? <span className="tour-related-duration">{item.duration}</span> : null}
+                      </div>
+                      <span className="tour-related-arrow" aria-hidden="true">→</span>
                     </div>
                   </div>
                 </Link>
