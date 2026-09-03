@@ -1,15 +1,29 @@
+import Image from "next/image";
 import { HomeSearchShortcuts } from "@/components/HomeSearchShortcuts";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
 import type { Locale, Tour } from "@/types/api";
 
 export function MakeYourTripCTA({ tour, locale }: { tour: Tour | null; locale: Locale }) {
-  const tourTitle = tour?.title || tour?.name || "Egypt Tour";
-  const whatsappUrl = whatsappInquiryUrl(`Hello, I would like to plan a custom trip based on "${tourTitle}".`);
+  const tourTitle = tour?.title || tour?.name;
+  const featureImage = tour?.featured_image || tour?.gallery?.[0];
+  const whatsappMessage = tourTitle
+    ? `Hello, I would like to plan a custom trip based on "${tourTitle}".`
+    : "Hello, I would like to plan a custom trip to Egypt.";
+  const whatsappUrl = whatsappInquiryUrl(whatsappMessage);
 
   return (
     <section className="tour-make-trip section-pad" aria-labelledby="tour-make-trip-title">
       <div className="container-shell make-trip-section">
         <div className="tour-make-trip-editorial">
+          {featureImage ? (
+            <Image
+              className="tour-make-trip-media"
+              src={featureImage}
+              alt=""
+              fill
+              sizes="(max-width: 1180px) 100vw, 52vw"
+            />
+          ) : null}
           <span className="tour-make-trip-kicker">Tailor-Made Concierge</span>
           <h2 id="tour-make-trip-title">Craft your bespoke journey across Egypt</h2>
           <p className="tour-make-trip-copy">
@@ -54,4 +68,3 @@ export function MakeYourTripCTA({ tour, locale }: { tour: Tour | null; locale: L
     </section>
   );
 }
-
