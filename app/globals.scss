@@ -4088,6 +4088,10 @@ select {
   .tour-page-redesign .tour-booking-dialog .tour-booking-card {
     animation: none;
   }
+}
+
+.tour-breadcrumb {
+  display: flex;
   align-items: center;
   gap: 0.65rem;
   overflow: hidden;
