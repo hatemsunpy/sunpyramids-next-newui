@@ -74,11 +74,11 @@
 
 .home-hero-v2 {
   position: relative;
-  width: min(calc(100% - clamp(1rem, 2vw, 2rem)), 1540px);
+  width: 100%;
   min-height: min(900px, 100svh);
-  margin-inline: auto;
+  margin-inline: 0;
   overflow: hidden;
-  border-radius: 0 0 var(--spt-radius-panel) var(--spt-radius-panel);
+  border-radius: 0;
   background: var(--spt-anchor-deep);
   color: white;
 }
@@ -1385,7 +1385,7 @@
   .home-hero-v2 {
     width: 100%;
     min-height: 855px;
-    border-radius: 0 0 18px 18px;
+    border-radius: 0;
   }
 
   .home-hero-v2__inner {
