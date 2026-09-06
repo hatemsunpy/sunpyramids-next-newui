@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteShell } from "@/components/SiteShell";
 import { TourPage } from "@/components/TourPage";
-import { getRelatedTours, getTourReliable } from "@/lib/data";
+import { getPublicSiteSettings, getRelatedTours, getTourReliable } from "@/lib/data";
 import { decodePathSegment, tourPath } from "@/lib/locales";
 import { resolvePrefixedLocale } from "@/lib/route-helpers";
 import { resolveRequiredApiResult } from "@/lib/resolve-api-result";
@@ -22,12 +22,16 @@ export default async function Page({ params }: Props) {
   const resolved = await params;
   const locale = await resolvePrefixedLocale(Promise.resolve({ locale: resolved.locale }));
   const slug = decodePathSegment(resolved.slug);
+  const settingsPromise = getPublicSiteSettings(locale);
   const tour = resolveRequiredApiResult(await getTourReliable(slug, locale), `tour "${slug}"`);
-  const relatedTours = await getRelatedTours(tour, locale, 12);
+  const [relatedTours, settings] = await Promise.all([
+    getRelatedTours(tour, locale, 12),
+    settingsPromise,
+  ]);
   return (
-    <SiteShell locale={locale}>
+    <SiteShell locale={locale} settings={settings}>
       <JsonLd schema={tour?.seo?.structure_schema} />
-      <TourPage tour={tour} relatedTours={relatedTours} locale={locale} />
+      <TourPage tour={tour} relatedTours={relatedTours} socialLinks={settings.socialLinks} locale={locale} />
     </SiteShell>
   );
 }
