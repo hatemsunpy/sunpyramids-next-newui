@@ -3778,6 +3778,94 @@ select {
   width: var(--tour-main-width);
 }
 
+/* Specular rim treatment shared by Tour Detail controls. */
+.tour-page-redesign :is(
+  button:not(.tour-booking-backdrop),
+  a.btn-primary,
+  a.btn-outline,
+  a.tour-gallery-expand,
+  a.tour-make-trip-direct-btn
+) {
+  --tour-specular-x: 50%;
+  --tour-specular-y: 50%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.tour-page-redesign :is(
+  button:not(.tour-booking-backdrop),
+  a.btn-primary,
+  a.btn-outline,
+  a.tour-gallery-expand,
+  a.tour-make-trip-direct-btn
+)::before {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    7rem circle at var(--tour-specular-x) var(--tour-specular-y),
+    rgba(255, 255, 255, 0.98) 0,
+    rgba(255, 255, 255, 0.56) 18%,
+    rgba(255, 255, 255, 0.14) 44%,
+    transparent 72%
+  );
+  content: "";
+  opacity: 0.44;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.tour-page-redesign :is(
+  button:not(.tour-booking-backdrop),
+  a.btn-primary,
+  a.btn-outline,
+  a.tour-gallery-expand,
+  a.tour-make-trip-direct-btn
+)::after {
+  position: absolute;
+  inset: -80% -45%;
+  z-index: 2;
+  background: linear-gradient(112deg, transparent 38%, rgba(255, 255, 255, 0.28) 50%, transparent 62%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-48%) rotate(8deg);
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+}
+
+.tour-page-redesign :is(
+  button:not(.tour-booking-backdrop),
+  a.btn-primary,
+  a.btn-outline,
+  a.tour-gallery-expand,
+  a.tour-make-trip-direct-btn
+):is(:hover, :focus-visible)::before {
+  opacity: 1;
+}
+
+.tour-page-redesign :is(
+  button:not(.tour-booking-backdrop),
+  a.btn-primary,
+  a.btn-outline,
+  a.tour-gallery-expand,
+  a.tour-make-trip-direct-btn
+):hover::after {
+  opacity: 1;
+  transform: translateX(48%) rotate(8deg);
+}
+
+.tour-page-redesign button:disabled::before,
+.tour-page-redesign button:disabled::after {
+  opacity: 0;
+}
+
 /* Focus indicators */
 .tour-page-redesign button:focus-visible,
 .tour-page-redesign a:focus-visible,
@@ -5864,6 +5952,26 @@ select {
   .tour-social-card-media::after,
   .tour-social-image {
     transition-duration: 0.01ms;
+  }
+
+  .tour-page-redesign :is(
+    button:not(.tour-booking-backdrop),
+    a.btn-primary,
+    a.btn-outline,
+    a.tour-gallery-expand,
+    a.tour-make-trip-direct-btn
+  )::before {
+    transition: none;
+  }
+
+  .tour-page-redesign :is(
+    button:not(.tour-booking-backdrop),
+    a.btn-primary,
+    a.btn-outline,
+    a.tour-gallery-expand,
+    a.tour-make-trip-direct-btn
+  )::after {
+    display: none;
   }
 
   .tour-booking-dialog .tour-booking-card { animation: none; }
