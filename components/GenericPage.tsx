@@ -88,137 +88,327 @@ export function GenericPage({
     return <ImpactPage page={page} title={title} image={image} route={route} locale={locale} tours={tours} blogs={blogs} faqs={faqs} />;
   }
 
-  return <ContentPage page={page} title={title} image={image} />;
+  return <ContentPage page={page} title={title} image={image} locale={locale} />;
 }
 
-function PageHero({ title, image }: { title: string; image: string }) {
+function EditorialHeroCompact({
+  title,
+  eyebrow,
+  locale = "en",
+}: {
+  title: string;
+  eyebrow?: string;
+  locale?: Locale;
+}) {
   return (
-    <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${image})` }}>
-      <h1>{title}</h1>
-    </section>
+    <header className="editorial-hero editorial-hero--compact">
+      <div className="editorial-hero-inner">
+        <nav className="editorial-breadcrumb" aria-label="Breadcrumb">
+          <Link href={withLocale("/", locale)}>Home</Link>
+          <span className="separator" aria-hidden="true">›</span>
+          <span className="current" aria-current="page">{title}</span>
+        </nav>
+        {eyebrow && <span className="editorial-eyebrow">{eyebrow}</span>}
+        <h1 className="editorial-title">{title}</h1>
+      </div>
+    </header>
   );
 }
 
-function ContentPage({ page, title, image }: { page: ApiPage | null; title: string; image: string }) {
+function ContentPage({
+  page,
+  title,
+  locale = "en",
+}: {
+  page: ApiPage | null;
+  title: string;
+  image: string;
+  locale?: Locale;
+}) {
   return (
     <main>
-      <PageHero title={title} image={image} />
-      <section className="original-content-section container-shell">
-        <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }} />
-      </section>
-    </main>
-  );
-}
-
-function ContactPage({ page, title, image, locale, settings }: { page: ApiPage | null; title: string; image: string; locale: Locale; settings?: PublicSiteSettings }) {
-  const dynamicEmails = settings?.notificationEmails.length ? settings.notificationEmails : siteContact.safeFallbackEmails;
-  const emails = [...new Set([...dynamicEmails, ...siteContact.staticEmails])];
-  const copy = uiCopy(locale);
-  return (
-    <main>
-      <PageHero title={title} image={image} />
-      <section className="contact-clone container-shell">
-        <div className="contact-info-panel">
-          <p className="eyebrow">{copy.contactInfo}</p>
-          <h2>Send Your Feedback</h2>
-          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description || "We would be happy to help you plan your Egypt trip.") }} />
-          <div className="contact-methods">
-            {siteContact.phones.map((phone) => <a key={phone.href} href={phone.href}>{phone.display}</a>)}
-            <a href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
-              WhatsApp {siteContact.whatsapp.display}
-            </a>
-            {emails.map((email) => <a key={email} href={`mailto:${email}`}>{email}</a>)}
-            {settings?.locationUrl ? (
-              <a href={settings.locationUrl} target="_blank" rel="noreferrer">{siteContact.address}</a>
-            ) : <p>{siteContact.address}</p>}
-            {settings?.socialLinks.length ? (
-              <div className="footer-social-links" aria-label="Social links">
-                {settings.socialLinks.map((item) => (
-                  <a key={`${item.type}-${item.url}`} href={item.url} target="_blank" rel="noreferrer">{item.type}</a>
-                ))}
-              </div>
-            ) : null}
+      <EditorialHeroCompact title={title} eyebrow="Policy & Terms" locale={locale} />
+      <section className="editorial-legal-shell">
+        <div className="editorial-container">
+          <div className="editorial-legal-doc">
+            <div className="legal-header">
+              <h1>{title}</h1>
+              <p>Official legal terms and privacy policies for Sun Pyramids Tours guests.</p>
+            </div>
+            <article
+              className="editorial-prose"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
+            />
           </div>
         </div>
-        <ContactForm locale={locale} />
       </section>
     </main>
   );
 }
 
-function AboutPage({ page, title, image, locale, faqs, team }: { page: ApiPage | null; title: string; image: string; locale: Locale; faqs: ApiPage[]; team: TeamMember[] }) {
+function ContactPage({
+  page,
+  title,
+  locale,
+  settings,
+}: {
+  page: ApiPage | null;
+  title: string;
+  image: string;
+  locale: Locale;
+  settings?: PublicSiteSettings;
+}) {
+  const dynamicEmails = settings?.notificationEmails?.length ? settings.notificationEmails : siteContact.safeFallbackEmails;
+  const emails = [...new Set([...dynamicEmails, ...siteContact.staticEmails])];
+  const copy = uiCopy(locale);
+
+  return (
+    <main>
+      <EditorialHeroCompact title={title} eyebrow={copy.contactInfo || "Direct Contact"} locale={locale} />
+      <section className="editorial-main-section">
+        <div className="editorial-container">
+          <div className="editorial-contact-layout">
+            <div className="contact-info-card">
+              <span className="card-eyebrow">{copy.contactInfo || "Get in Touch"}</span>
+              <h2>We&apos;re Here to Help</h2>
+              <div
+                className="contact-intro"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(
+                    page?.content ||
+                      page?.description ||
+                      "Have questions about booking, private guides, or custom itineraries? Reach our 24/7 Cairo operations team.",
+                  ),
+                }}
+              />
+
+              <div className="contact-items-list">
+                <div className="contact-item">
+                  <div className="icon-pill" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </div>
+                  <div className="item-detail">
+                    <strong>Phone Support</strong>
+                    {siteContact.phones.map((phone) => (
+                      <p key={phone.href}>
+                        <a href={phone.href}>{phone.display}</a>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="contact-item">
+                  <div className="icon-pill" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                    </svg>
+                  </div>
+                  <div className="item-detail">
+                    <strong>WhatsApp Hotline</strong>
+                    <p>
+                      <a href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
+                        {siteContact.whatsapp.display}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="contact-item">
+                  <div className="icon-pill" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div className="item-detail">
+                    <strong>Email Inquiries</strong>
+                    {emails.map((email) => (
+                      <p key={email}>
+                        <a href={`mailto:${email}`}>{email}</a>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="contact-item">
+                  <div className="icon-pill" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div className="item-detail">
+                    <strong>Head Office</strong>
+                    {settings?.locationUrl ? (
+                      <p>
+                        <a href={settings.locationUrl} target="_blank" rel="noreferrer">
+                          {siteContact.address}
+                        </a>
+                      </p>
+                    ) : (
+                      <p>{siteContact.address}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="contact-form-card">
+              <h2>Send a Message</h2>
+              <p className="form-subtitle">Fill out the form below and an Egypt specialist will reply promptly.</p>
+              <ContactForm locale={locale} />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function AboutPage({
+  page,
+  title,
+  locale,
+  faqs,
+  team,
+}: {
+  page: ApiPage | null;
+  title: string;
+  image: string;
+  locale: Locale;
+  faqs: ApiPage[];
+  team: TeamMember[];
+}) {
   const copy = uiCopy(locale);
   const gallery = page?.gallery || [];
   const goals = [
-    ["Mission", metaHtml(page, "mission")],
-    ["Vision", metaHtml(page, "vision")],
+    ["Our Mission", metaHtml(page, "mission")],
+    ["Our Vision", metaHtml(page, "vision")],
   ].filter((item) => item[1]);
 
   return (
     <main>
-      <PageHero title={title} image={image} />
-      <section className="about-intro container-shell">
-        <div>
-          <p className="eyebrow">Since 1970</p>
-          <h2>Sun Pyramids Tours</h2>
-          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(metaHtml(page, "about-sun-pyramids") || page?.content) }} />
-        </div>
-        <Image src={String(page?.feature_1 || gallery[0] || "/images/aboutusmainbanner.png")} alt={title} width={720} height={520} />
-      </section>
-      <section className="about-gallery">
-        {gallery.slice(0, 4).map((item) => (
-          <Image key={item} src={item} alt="Sun Pyramids team and guests" width={460} height={320} />
-        ))}
-      </section>
-      <section className="about-goals container-shell">
-        {goals.map(([goalTitle, html]) => (
-          <article key={goalTitle}>
-            <h3>{goalTitle}</h3>
-            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />
-          </article>
-        ))}
-      </section>
-      <section className="team-section container-shell">
-        <div className="section-heading original-heading">
-          <div>
-            <h2>{copy.team}</h2>
-            <p>The people behind your Egypt journey</p>
+      <EditorialHeroCompact title={title} eyebrow="Heritage Since 1970" locale={locale} />
+
+      <section className="editorial-main-section">
+        <div className="editorial-container">
+          <div className="editorial-story-section">
+            <div className="story-content">
+              <span className="story-eyebrow">Pioneering Egypt Exploration</span>
+              <h2>Sun Pyramids Tours</h2>
+              <div
+                className="story-body editorial-prose"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(metaHtml(page, "about-sun-pyramids") || page?.content),
+                }}
+              />
+            </div>
+            <div className="story-media">
+              <Image
+                src={String(page?.feature_1 || gallery[0] || "/images/aboutusmainbanner.png")}
+                alt={title}
+                fill
+                sizes="(max-width: 920px) 100vw, 50vw"
+              />
+            </div>
           </div>
+
+          {goals.length > 0 && (
+            <div className="editorial-goals-grid">
+              {goals.map(([goalTitle, html]) => (
+                <article className="goal-card" key={goalTitle}>
+                  <h3>{goalTitle}</h3>
+                  <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />
+                </article>
+              ))}
+            </div>
+          )}
+
+          {team.length > 0 && (
+            <section className="editorial-team-section">
+              <div className="team-header">
+                <h2>{copy.team || "Meet Our Dedicated Team"}</h2>
+                <p>The Egyptologists, trip designers, and hospitality leaders behind your journey.</p>
+              </div>
+              <div className="editorial-team-grid">
+                {team.map((member) => (
+                  <article className="team-card" key={`${member.name}-${member.position}`}>
+                    <div className="team-photo-wrap">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    </div>
+                    <h3>{member.name}</h3>
+                    <p>{member.position}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <FaqTeaser faqs={faqs} locale={locale} />
         </div>
-        <div className="team-grid">
-          {team.map((member) => (
-            <article className="team-card" key={`${member.name}-${member.position}`}>
-              <Image src={member.image} alt={member.name} width={260} height={300} />
-              <h3>{member.name}</h3>
-              <p>{member.position}</p>
-            </article>
-          ))}
-        </div>
-        {!team.length ? <p className="muted">Team information is temporarily unavailable.</p> : null}
       </section>
-      <FaqTeaser faqs={faqs} locale={locale} />
     </main>
   );
 }
 
-function FaqPage({ title, image, faqs, locale }: { title: string; image: string; faqs: ApiPage[]; locale: Locale }) {
+function FaqPage({
+  title,
+  faqs,
+  locale,
+}: {
+  title: string;
+  image: string;
+  faqs: ApiPage[];
+  locale: Locale;
+}) {
   return (
     <main>
-      <PageHero title={title} image={image} />
-      <section className="faq-list container-shell">
-        {faqs.map((faq) => (
-          <details key={faq.id} className="faq-item">
-            <summary>{String(faq.question || faq.title || "Question")}</summary>
-            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }} />
-          </details>
-        ))}
+      <EditorialHeroCompact title={title} eyebrow="Help Center & Advice" locale={locale} />
+      <section className="editorial-main-section">
+        <div className="editorial-container">
+          <div className="editorial-faq-container">
+            <div className="editorial-faq-list">
+              {faqs.map((faq) => (
+                <details className="editorial-faq-item" key={faq.id}>
+                  <summary>
+                    <span>{String(faq.question || faq.title || "Question")}</span>
+                    <span className="faq-icon" aria-hidden="true" />
+                  </summary>
+                  <div
+                    className="faq-answer"
+                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }}
+                  />
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
       <NeedHelp locale={locale} />
     </main>
   );
 }
 
-function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
+function EventsPage({
+  page,
+  title,
+  image,
+  categories,
+  locale,
+}: {
+  page: ApiPage | null;
+  title: string;
+  image: string;
+  categories: ApiPage[];
+  locale: Locale;
+}) {
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },
     { label: title },
@@ -268,17 +458,36 @@ function EventsPage({ page, title, image, categories, locale }: { page: ApiPage 
   );
 }
 
-
-function PlannerPage({ page, title, image, route, locale }: { page: ApiPage | null; title: string; image: string; route: "make-your-trip" | "rent-car"; locale: Locale }) {
+function PlannerPage({
+  page,
+  title,
+  image,
+  route,
+  locale,
+}: {
+  page: ApiPage | null;
+  title: string;
+  image: string;
+  route: "make-your-trip" | "rent-car";
+  locale: Locale;
+}) {
   const isCar = route === "rent-car";
   return (
     <main>
-      <PageHero title={title} image={image} />
+      <section
+        className="original-page-hero"
+        style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${image})` }}
+      >
+        <h1>{title}</h1>
+      </section>
       <section className="planner-layout container-shell">
         <div>
           <p className="eyebrow">{isCar ? "Private transfers" : "Tailor made travel"}</p>
           <h2>{isCar ? "Rent A Car" : "Make Your Trip"}</h2>
-          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }} />
+          <div
+            className="content-prose"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
+          />
         </div>
         <PlannerRequestFlow route={route} locale={locale} />
       </section>
@@ -290,7 +499,6 @@ function PlannerPage({ page, title, image, route, locale }: { page: ApiPage | nu
 function ImpactPage({
   page,
   title,
-  image,
   route,
   locale,
   tours,
@@ -306,30 +514,69 @@ function ImpactPage({
   blogs: ApiPage[];
   faqs: ApiPage[];
 }) {
+  const isSustainability = route === "sustainability";
+  const eyebrow = isSustainability ? "Responsible Travel & Eco Commitment" : "Inclusive Travel Worldwide";
+  const illustration = isSustainability ? "/images/certification.png" : "/images/wheelChair.png";
+
   return (
     <main>
-      <PageHero title={title} image={image} />
-      <section className="impact-overview container-shell">
-        <div>
-          <p className="eyebrow">{route === "sustainability" ? "Responsible travel" : "Accessible travel"}</p>
-          <h2>{title}</h2>
-          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }} />
+      <EditorialHeroCompact title={title} eyebrow={eyebrow} locale={locale} />
+      <section className="editorial-main-section">
+        <div className="editorial-container">
+          <div className="editorial-story-section">
+            <div className="story-content">
+              <span className="story-eyebrow">{isSustainability ? "Sustainable Journeys" : "Accessible Egypt"}</span>
+              <h2>{title}</h2>
+              <div
+                className="story-body editorial-prose"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
+              />
+            </div>
+            <div className="story-media">
+              <Image
+                src={illustration}
+                alt={title}
+                fill
+                sizes="(max-width: 920px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+
+          {tours.length > 0 && (
+            <section className="editorial-related-section">
+              <div className="section-header">
+                <h2>Recommended Experiences</h2>
+                <Link className="see-more" href={withLocale("/trips", locale)}>
+                  View all &rarr;
+                </Link>
+              </div>
+              <div className="discovery-grid">
+                {tours.slice(0, 3).map((tour) => (
+                  <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {blogs.length > 0 && (
+            <section className="editorial-related-section">
+              <div className="section-header">
+                <h2>Related Articles & Travel Tips</h2>
+                <Link className="see-more" href={withLocale("/blogs/all-blogs", locale)}>
+                  All articles &rarr;
+                </Link>
+              </div>
+              <div className="discovery-grid">
+                {blogs.slice(0, 3).map((blog) => (
+                  <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <FaqTeaser faqs={faqs} locale={locale} />
         </div>
-        <Image src={route === "sustainability" ? "/images/certification.png" : "/images/wheelChair.png"} alt={title} width={520} height={420} />
       </section>
-      {tours.length ? (
-        <section className="section-pad container-shell">
-          <div className="section-heading original-heading"><div><h2>Related Tours</h2><p>Recommended experiences from Sun Pyramids</p></div></div>
-          <div className="grid-cards">{tours.slice(0, 4).map((tour) => <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />)}</div>
-        </section>
-      ) : null}
-      {blogs.length ? (
-        <section className="section-pad container-shell">
-          <div className="section-heading original-heading"><div><h2>Related Blogs</h2><p>Helpful guides before you travel</p></div></div>
-          <div className="grid-cards blog-grid">{blogs.slice(0, 4).map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} />)}</div>
-        </section>
-      ) : null}
-      <FaqTeaser faqs={faqs} locale={locale} />
     </main>
   );
 }
@@ -348,18 +595,28 @@ function GalleryStrip({ gallery }: { gallery: string[] }) {
 function FaqTeaser({ faqs, locale = "en" }: { faqs: ApiPage[]; locale?: Locale }) {
   if (!faqs.length) return null;
   return (
-    <section className="faq-teaser container-shell">
-      <div className="section-heading original-heading">
-        <div><h2>Frequently Asked Questions</h2><p>Answers for your next Egypt trip</p></div>
-        <Link className="see-more-link" href={withLocale("/faqs", locale)}>See more</Link>
+    <section className="editorial-related-section">
+      <div className="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <Link className="see-more" href={withLocale("/faqs", locale)}>
+          See all FAQs &rarr;
+        </Link>
       </div>
-      <div className="faq-list">
-        {faqs.slice(0, 5).map((faq) => (
-          <details key={faq.id} className="faq-item">
-            <summary>{String(faq.question || faq.title || "Question")}</summary>
-            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }} />
-          </details>
-        ))}
+      <div className="editorial-faq-container">
+        <div className="editorial-faq-list">
+          {faqs.slice(0, 5).map((faq) => (
+            <details key={faq.id} className="editorial-faq-item">
+              <summary>
+                <span>{String(faq.question || faq.title || "Question")}</span>
+                <span className="faq-icon" aria-hidden="true" />
+              </summary>
+              <div
+                className="faq-answer"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }}
+              />
+            </details>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -367,13 +624,30 @@ function FaqTeaser({ faqs, locale = "en" }: { faqs: ApiPage[]; locale?: Locale }
 
 function NeedHelp({ locale = "en" }: { locale?: Locale }) {
   return (
-    <section className="need-help-band">
-      <div className="container-shell">
-        <div>
-          <p className="eyebrow">Need Our Help?</p>
-          <h2>We would be happy to help you plan your trip</h2>
-        </div>
-        <Link className="btn-primary" href={withLocale("/contact-us", locale)}>Contact Us</Link>
+    <section className="editorial-related-section" style={{ background: "var(--spt-surface)" }}>
+      <div className="editorial-container" style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
+        <span className="editorial-eyebrow">Need Guidance?</span>
+        <h2 style={{ fontSize: "2rem", fontWeight: 700, margin: "0.5rem 0 1rem", color: "var(--spt-ink)" }}>
+          We would be happy to help you plan your trip
+        </h2>
+        <p style={{ color: "var(--spt-muted)", lineHeight: 1.6, marginBottom: "1.75rem" }}>
+          Contact our local team directly for customized itineraries, private requests, or any questions.
+        </p>
+        <Link
+          className="btn-primary"
+          href={withLocale("/contact-us", locale)}
+          style={{
+            display: "inline-flex",
+            padding: "0.85rem 2rem",
+            background: "var(--spt-amber)",
+            color: "#fff",
+            borderRadius: 999,
+            fontWeight: 700,
+            textDecoration: "none",
+          }}
+        >
+          Contact Us
+        </Link>
       </div>
     </section>
   );
