@@ -78,6 +78,8 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [isTop, setIsTop] = useState(true);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const isHome = pathname === "/" || pathname === `/${locale}`;
   const firstStyle = isHome && isTop;
@@ -97,11 +99,46 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
     };
   }, [handleScroll]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const menuButton = menuButtonRef.current;
+    const focusable = drawerRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+    );
+    document.body.style.overflow = "hidden";
+    focusable?.[0]?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+      menuButton?.focus();
+    };
+  }, [menuOpen]);
+
   const openLangModal = useCallback(() => setLangOpen(true), []);
   const closeLangModal = useCallback(() => setLangOpen(false), []);
 
   return (
-    <header className={`site-header ${isHome ? "site-header-home" : ""}`}>
+    <header className={`site-header ${isHome ? "site-header-home" : ""} ${firstStyle ? "site-header-at-top" : ""}`}>
       <div className="header-main">
         <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" className="header-logo">
           <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={190} height={54} priority />
@@ -136,7 +173,15 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
           <Link className="signin-action" href={withLocale("/auth/sign-in", locale)}>
             {copy.signIn}
           </Link>
-          <button className="circle-action menu-action" type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          <button
+            aria-controls="mobile-navigation"
+            aria-expanded={menuOpen}
+            aria-label="Open menu"
+            className="circle-action menu-action"
+            onClick={() => setMenuOpen(true)}
+            ref={menuButtonRef}
+            type="button"
+          >
             <span aria-hidden="true">☰</span>
           </button>
         </div>
@@ -178,8 +223,17 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
       ) : null}
 
       {menuOpen ? (
-        <div className="mobile-drawer-backdrop" role="dialog" aria-modal="true" onClick={() => setMenuOpen(false)}>
-          <div className="mobile-drawer" onClick={(event) => event.stopPropagation()}>
+        <div className="mobile-drawer-backdrop" role="presentation" onMouseDown={(event) => {
+          if (event.target === event.currentTarget) setMenuOpen(false);
+        }}>
+          <div
+            aria-label="Site navigation"
+            aria-modal="true"
+            className="mobile-drawer"
+            id="mobile-navigation"
+            ref={drawerRef}
+            role="dialog"
+          >
             <div className="mobile-drawer-head">
               <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} />
               <button className="circle-action" type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
@@ -187,13 +241,21 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
               </button>
             </div>
             <nav className="mobile-links" aria-label="Mobile navigation">
-              {[...mainNavLinks, ["rentCar", "/rent-car"] as const, ...tourLinks, ["makeTrip", "/make-your-trip"] as const, ["specialOffer", "/trips?main=special-offers"] as const].map(
-                ([key, href]) => (
-                  <Link key={`${key}-${href}`} href={withLocale(href, locale)} onClick={() => setMenuOpen(false)}>
-                    {copy[key]}
-                  </Link>
-                ),
-              )}
+              {[...mainNavLinks, ["rentCar", "/rent-car"] as const].map(([key, href]) => (
+                <Link key={`${key}-${href}`} href={withLocale(href, locale)} onClick={() => setMenuOpen(false)}>
+                  {copy[key]}<span aria-hidden="true">↗</span>
+                </Link>
+              ))}
+              <details className="mobile-tour-group">
+                <summary>{copy.egyptTours}<span aria-hidden="true">+</span></summary>
+                <div>
+                  {tourLinks.map(([key, href]) => (
+                    <Link key={href} href={withLocale(href, locale)} onClick={() => setMenuOpen(false)}>{copy[key]}</Link>
+                  ))}
+                </div>
+              </details>
+              <Link className="mobile-drawer-cta" href={withLocale("/make-your-trip", locale)} onClick={() => setMenuOpen(false)}>{copy.makeTrip}</Link>
+              <Link href={withLocale("/trips?main=special-offers", locale)} onClick={() => setMenuOpen(false)}>{copy.specialOffer}<span aria-hidden="true">↗</span></Link>
             </nav>
             <div className="mobile-drawer-lang">
               <LanguageCurrencyTrigger

@@ -21,14 +21,14 @@ function priceOf(tour: Tour) {
   return tour.price ?? tour.start_from ?? tour.adult_price;
 }
 
-export function TourCard({ tour, locale = "en" }: { tour: Tour; locale?: Locale }) {
+export function TourCard({ tour, locale = "en", className = "" }: { tour: Tour; locale?: Locale; className?: string }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
   const description = tour.short_description || tour.description || title;
   const price = priceOf(tour);
 
   return (
-    <article className="tour-card">
+    <article className={`tour-card ${className}`.trim()}>
       <Link href={tourPath(slug, locale)}>
         <div className="tour-card-media">
           <Image src={imageOf(tour)} alt={title} fill sizes="(max-width: 768px) 100vw, 25vw" />

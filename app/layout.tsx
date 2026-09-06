@@ -4,6 +4,7 @@ import { HtmlLangSynchronizer } from "@/components/HtmlLangSynchronizer";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 import { isLocale } from "@/lib/locales";
 import "./globals.scss";
+import "@/styles/batch-one.scss";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sunpyramidstours.com"),

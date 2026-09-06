@@ -11,11 +11,14 @@ export async function SiteShell({ children, locale = "en", settings: providedSet
   const settings = providedSettings ?? await getPublicSiteSettings(locale);
   return (
     <CurrencyProvider>
-      <Header locale={locale} siteTitle={settings.siteTitle} />
-      {children}
-      <WhatsAppButton />
-      <Footer locale={locale} settings={settings} />
-      <BottomBar locale={locale} />
+      <div className="site-shell-v2">
+        <a className="skip-link" href="#site-content">Skip to main content</a>
+        <Header locale={locale} siteTitle={settings.siteTitle} />
+        <div id="site-content" tabIndex={-1}>{children}</div>
+        <aside aria-label="Direct support"><WhatsAppButton /></aside>
+        <Footer locale={locale} settings={settings} />
+        <BottomBar locale={locale} />
+      </div>
     </CurrencyProvider>
   );
 }

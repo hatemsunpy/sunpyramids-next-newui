@@ -13,7 +13,7 @@ export function HomeHeroMedia({ images, alt }: { images: string[]; alt: string }
     if (count < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => setActive((current) => (current + 1) % count), 5000);
     return () => window.clearInterval(timer);
-  }, [count, active]);
+  }, [count]);
 
   return (
     <>
