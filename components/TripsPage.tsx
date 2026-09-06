@@ -13,7 +13,6 @@ type ActiveFilters = {
   category?: string;
   destination?: string;
   title?: string;
-  order?: string;
   page?: number;
 };
 
@@ -46,7 +45,6 @@ export function TripsPage({
   if (active.main) paginationQuery.set("main", active.main);
   if (active.destination) paginationQuery.set("destination", active.destination);
   if (active.category) paginationQuery.set("category", active.category);
-  if (active.order) paginationQuery.set("order", active.order);
 
   const totalCount = meta?.total ?? tours.length;
   const currentPage = active.page || 1;
