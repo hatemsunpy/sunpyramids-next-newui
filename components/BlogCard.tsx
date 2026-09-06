@@ -3,13 +3,13 @@ import Link from "next/link";
 import type { ApiPage, Locale } from "@/types/api";
 import { withLocale } from "@/lib/locales";
 
-export function BlogCard({ blog, locale = "en", variant = "default" }: { blog: ApiPage; locale?: Locale; variant?: "default" | "listing" }) {
+export function BlogCard({ blog, locale = "en", variant = "default", className = "" }: { blog: ApiPage; locale?: Locale; variant?: "default" | "listing"; className?: string }) {
   const slug = blog.slug || String(blog.id || "");
   const title = blog.title || blog.name || "Egypt Travel Guide";
   const image = blog.featured_image || blog.image || blog.banner || "/images/blogsHero.png";
 
   return (
-    <article className={`blog-card${variant === "listing" ? " blog-card-listing" : ""}`}>
+    <article className={`blog-card${variant === "listing" ? " blog-card-listing" : ""}${className ? ` ${className}` : ""}`}>
       <Link href={withLocale(`/blog/${slug}`, locale)}>
         <div className="blog-card-media">
           <Image src={image} alt={title} fill sizes="(max-width: 768px) 100vw, 33vw" />
