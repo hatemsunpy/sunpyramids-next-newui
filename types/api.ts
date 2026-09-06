@@ -153,5 +153,5 @@ export type Tour = ApiPage & {
     };
     pricing_groups?: { from?: number; to?: number; price?: number | string; child_price?: number | string }[];
   }[];
-  social_links?: { type?: string; image?: string; icon?: string; url?: string }[];
+  social_links?: { type?: string; image?: string; icon?: string; url?: string }[] | null;
 };

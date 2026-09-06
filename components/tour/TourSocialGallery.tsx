@@ -73,7 +73,7 @@ export function TourSocialGallery({
   locale?: Locale;
 }) {
   const copy = uiCopy(locale);
-  const galleryItems = socialLinks.flatMap((socialLink) => {
+  const galleryItems = (socialLinks ?? []).flatMap((socialLink) => {
     const galleryItem = resolveGalleryItem(socialLink);
     return galleryItem ? [galleryItem] : [];
   });
