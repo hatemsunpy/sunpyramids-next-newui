@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import type { Locale } from "@/types/api";
 import {
   apiDelete,
@@ -812,17 +812,61 @@ export async function toggleWishlist(tourId: number | string, locale: Locale = "
 }
 
 export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your-trip" | "rent-car"; locale?: Locale }) {
+  return (
+    <Suspense fallback={<div className="planner-form-card" style={{ minHeight: 480 }} />}>
+      <PlannerRequestFlowInner route={route} locale={locale} />
+    </Suspense>
+  );
+}
+
+function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-trip" | "rent-car"; locale?: Locale }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { selected } = useCurrency();
   const copy = uiCopy(locale);
+  const isCar = route === "rent-car";
+
+  // Initial query parameters parsing
+  const rawType = searchParams?.get("type") || "";
+  const initialTripType =
+    rawType === "existTime"
+      ? "exact_time"
+      : rawType === "approximateTime"
+      ? "approx_time"
+      : rawType === "notSureYet"
+      ? "not_sure"
+      : rawType === "approx_time" || rawType === "not_sure"
+      ? rawType
+      : "exact_time";
+
+  const initialCarType = rawType === "roundTrip" ? "roundTrip" : "oneWay";
+
+  const rawPicupDate = searchParams?.get("picupDate") || "";
+  const initialPickupDate = rawPicupDate.includes("T") ? rawPicupDate.split("T")[0] : rawPicupDate;
+  const initialPickupTime = rawPicupDate.includes("T") ? rawPicupDate.split("T")[1]?.slice(0, 5) : "";
+
+  const rawReturnDate = searchParams?.get("returnDate") || "";
+  const initialReturnDate = rawReturnDate.includes("T") ? rawReturnDate.split("T")[0] : rawReturnDate;
+  const initialReturnTime = rawReturnDate.includes("T") ? rawReturnDate.split("T")[1]?.slice(0, 5) : "";
+
+  const initialPickupLocation = searchParams?.get("location") || "";
+  const initialDropLocation = searchParams?.get("dropLoaction") || "";
+
+  // Interactive Form State
+  const [tripType, setTripType] = useState<"exact_time" | "approx_time" | "not_sure">(initialTripType as any);
+  const [carType, setCarType] = useState<"oneWay" | "roundTrip">(initialCarType);
+  const [adults, setAdults] = useState<number>(1);
+  const [children, setChildren] = useState<number>(0);
+  const [infants, setInfants] = useState<number>(0);
+
   const [state, setState] = useState<LoadState>("idle");
   const [message, setMessage] = useState("");
   const [locations, setLocations] = useState<any[]>([]);
   const [destinations, setDestinations] = useState<any[]>([]);
   const [countries, setCountries] = useState<any[]>([]);
-  const [pickupLocationId, setPickupLocationId] = useState("");
+  const [pickupLocationId, setPickupLocationId] = useState(initialPickupLocation);
+  const [destinationId, setDestinationId] = useState(initialDropLocation);
   const [routeMessage, setRouteMessage] = useState("");
-  const isCar = route === "rent-car";
 
   useEffect(() => {
     async function loadOptions() {
@@ -832,39 +876,66 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
           isCar ? apiGet<ApiResponse<{ data?: any[] }>>("locations?page_limit=200&order_by=id,asc", locale, false) : Promise.resolve(null),
         ]);
         setCountries(Array.isArray(countryRes.data) ? countryRes.data : []);
-        if (locationRes) setLocations(Array.isArray(locationRes.data?.data) ? locationRes.data.data : []);
+        if (locationRes) {
+          const locs = Array.isArray(locationRes.data?.data) ? locationRes.data.data : [];
+          setLocations(locs);
+          if (initialPickupLocation) {
+            setPickupLocationId(initialPickupLocation);
+            try {
+              const res = await apiPost<ApiResponse<any[]>>("car/rental/available/destinations", {
+                pickup_location_id: Number(initialPickupLocation),
+              }, locale);
+              const dests = Array.isArray(res.data) ? res.data : [];
+              setDestinations(dests);
+              if (initialDropLocation && dests.some((d: any) => String(d.id) === String(initialDropLocation))) {
+                setDestinationId(String(initialDropLocation));
+              }
+            } catch {
+              setDestinations([]);
+            }
+          }
+        }
       } catch {
         setCountries([]);
         setLocations([]);
       }
     }
     loadOptions();
-  }, [isCar, locale]);
+  }, [isCar, locale, initialPickupLocation, initialDropLocation]);
 
-  async function loadRentalDestinations(pickupId: string) {
+  async function loadRentalDestinations(pickupId: string, autoDropId?: string) {
     setPickupLocationId(pickupId);
     setRouteMessage("");
     if (!pickupId) {
       setDestinations([]);
+      setDestinationId("");
       return;
     }
     try {
       const res = await apiPost<ApiResponse<any[]>>("car/rental/available/destinations", {
         pickup_location_id: Number(pickupId),
       }, locale);
-      setDestinations(Array.isArray(res.data) ? res.data : []);
+      const dests = Array.isArray(res.data) ? res.data : [];
+      setDestinations(dests);
+      const dropToSelect = autoDropId || destinationId;
+      if (dropToSelect && dests.some((d: any) => String(d.id) === String(dropToSelect))) {
+        setDestinationId(String(dropToSelect));
+        loadRentalRoute(String(dropToSelect), pickupId);
+      }
     } catch {
       setDestinations([]);
     }
   }
 
-  async function loadRentalRoute(destinationId: string) {
+  async function loadRentalRoute(destId: string, customPickupId?: string) {
+    setDestinationId(destId);
     setRouteMessage("");
-    if (!pickupLocationId || !destinationId) return;
+    const effectivePickup = customPickupId || pickupLocationId;
+    if (!effectivePickup || !destId) return;
     try {
       const res = await apiPost<ApiResponse>("car/rental/search/for/route", {
-        pickup_location_id: Number(pickupLocationId),
-        destination_id: Number(destinationId),
+        pickup_location_id: Number(effectivePickup),
+        destination_id: Number(destId),
       }, locale);
       setRouteMessage(res.message || "Rental route is available.");
     } catch (error) {
@@ -889,14 +960,14 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
           throw new Error("Return date and time are required for round trips.");
         }
         const pickupId = String(form.get("pickupLocationId") || "");
-        const destinationId = String(form.get("destinationId") || "");
+        const dropId = String(form.get("destinationId") || "");
         await apiPost<ApiResponse>("car/rental/search/for/route", {
           pickup_location_id: Number(pickupId),
-          destination_id: Number(destinationId),
+          destination_id: Number(dropId),
         }, locale);
         const body: Record<string, unknown> = {
           pickup_location_id: pickupId,
-          destination_id: destinationId,
+          destination_id: dropId,
           pickup_date: String(form.get("pickupDate") || ""),
           pickup_time: String(form.get("pickupTime") || ""),
           oneway: form.get("type") !== "roundTrip",
@@ -921,12 +992,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
       }
 
       const token = await generateRecaptchaToken("submit");
-      const tripType = String(form.get("type") || "exact_time");
+      const submittedTripType = String(form.get("type") || "exact_time");
       const fullName = String(form.get("fullName") || "").trim();
       const [firstName = "", ...lastNameParts] = fullName.split(/\s+/).filter(Boolean);
       const body: Record<string, unknown> = {
         destination: "egypt",
-        type: tripType,
+        type: submittedTripType,
         name: fullName,
         first_name: firstName || fullName,
         last_name: lastNameParts.join(" ") || "none",
@@ -942,7 +1013,7 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
         additional_notes: String(form.get("note") || ""),
       };
       if (token) body.recaptcha_token = token;
-      if (tripType === "exact_time") {
+      if (submittedTripType === "exact_time") {
         const startDate = String(form.get("startDate") || "");
         const endDate = String(form.get("endDate") || "");
         if (!startDate || !endDate) {
@@ -950,7 +1021,7 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
         }
         body.start_date = startDate;
         body.end_date = endDate;
-      } else if (tripType === "approx_time") {
+      } else if (submittedTripType === "approx_time") {
         const month = String(form.get("month") || "");
         const days = Number(form.get("days") || 0);
         if (!month) {
@@ -978,55 +1049,562 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
   }
 
   return (
-    <form className="planner-form" onSubmit={submit}>
-      <div className="step-label">{copy.quickInfo}</div>
-      {isCar ? (
-        <>
-          <select name="type" defaultValue="oneWay"><option value="oneWay">{copy.oneWay}</option><option value="roundTrip">{copy.roundTrip}</option></select>
-          <input name="pickupDate" type="date" required />
-          <input name="pickupTime" type="time" required />
-          <select name="pickupLocationId" required onChange={(event) => loadRentalDestinations(event.currentTarget.value)}>
-            <option value="">{copy.pickupLocation}</option>
-            {locations.map((location) => <option key={location.id} value={location.id}>{location.name}</option>)}
-          </select>
-          <select name="destinationId" required onChange={(event) => loadRentalRoute(event.currentTarget.value)}>
-            <option value="">{copy.dropoffLocation}</option>
-            {destinations.map((destination) => <option key={destination.id} value={destination.id}>{destination.name}</option>)}
-          </select>
-          {routeMessage ? <p className="muted">{routeMessage}</p> : null}
-          <input name="returnDate" type="date" />
-          <input name="returnTime" type="time" />
-        </>
-      ) : (
-        <>
-          <select name="type" defaultValue="exact_time"><option value="exact_time">Exact time</option><option value="approx_time">Approximate time</option><option value="not_sure">Not sure</option></select>
-          <input name="startDate" type="date" />
-          <input name="endDate" type="date" />
-          <input name="month" placeholder="Month" />
-          <input name="days" type="number" min={1} placeholder="Days" />
-        </>
-      )}
-      <div className="step-label">{copy.personalInfo}</div>
-      <input name="fullName" placeholder={copy.fullName} required />
-      <input name="email" type="email" placeholder={copy.email} required />
-      <input name="phone" placeholder={copy.phone} required />
-      <select name="nationality" required>
-        <option value="">{copy.nationality}</option>
-        {countries.map((country) => <option key={country.id || country.name} value={country.name}>{country.name}</option>)}
-      </select>
-      <input name="adults" type="number" min={1} defaultValue={1} />
-      <input name="children" type="number" min={0} defaultValue={0} />
-      <input name="infants" type="number" min={0} defaultValue={0} />
-      {!isCar ? (
-        <>
-          <input name="minBudget" type="number" min={0} defaultValue={1000} />
-          <input name="maxBudget" type="number" min={0} defaultValue={3000} />
-          <label className="inline-check"><input name="flightOffer" type="checkbox" /> Include flight offer</label>
-          <textarea name="note" placeholder="Additional notes" rows={4} />
-        </>
-      ) : null}
-      <button className="btn-primary" type="submit" disabled={state === "loading"}>{state === "loading" ? "Submitting..." : isCar ? copy.addToCart : copy.submit}</button>
-      {message ? <p className={statusClass(state)}>{message}</p> : null}
+    <form className="planner-form-card" onSubmit={submit} aria-busy={state === "loading"}>
+      <div className="planner-card-header">
+        <h2>{isCar ? "Private Chauffeur & Vehicle Reservation" : "Design Your Tailored Egypt Itinerary"}</h2>
+        <p>
+          {isCar
+            ? "Reserve licensed, air-conditioned Egypt vehicles with professional English-speaking drivers."
+            : "Direct private planning with our Cairo operations specialists. Every detail customized to your pace."}
+        </p>
+      </div>
+
+      {/* Step 1: Scheduling / Route Setup */}
+      <fieldset className="planner-step-group">
+        <legend>
+          <span className="step-badge" aria-hidden="true">1</span>
+          <span>{isCar ? "Transfer Route & Schedule" : "Trip Type & Scheduling"}</span>
+        </legend>
+
+        {isCar ? (
+          <>
+            <div className="planner-segmented-control" role="radiogroup" aria-label={copy.tripType || "Transfer Type"}>
+              <label className={`segmented-radio-label ${carType === "oneWay" ? "is-active" : ""}`}>
+                <input
+                  type="radio"
+                  name="type"
+                  value="oneWay"
+                  checked={carType === "oneWay"}
+                  onChange={() => setCarType("oneWay")}
+                />
+                <span className="option-title">{copy.oneWay || "One Way"}</span>
+                <span className="option-caption">Single transfer</span>
+              </label>
+
+              <label className={`segmented-radio-label ${carType === "roundTrip" ? "is-active" : ""}`}>
+                <input
+                  type="radio"
+                  name="type"
+                  value="roundTrip"
+                  checked={carType === "roundTrip"}
+                  onChange={() => setCarType("roundTrip")}
+                />
+                <span className="option-title">{copy.roundTrip || "Round Trip"}</span>
+                <span className="option-caption">Return service</span>
+              </label>
+            </div>
+
+            <div className="planner-input-grid">
+              <div className="planner-field">
+                <label htmlFor="planner-pickup-loc">
+                  <span>{copy.pickupLocation || "Pickup Location"}<span className="required-mark">*</span></span>
+                </label>
+                <div className="input-wrap">
+                  <select
+                    id="planner-pickup-loc"
+                    name="pickupLocationId"
+                    required
+                    value={pickupLocationId}
+                    onChange={(e) => loadRentalDestinations(e.currentTarget.value)}
+                  >
+                    <option value="">{copy.pickupLocation || "Choose Pickup City or Terminal"}</option>
+                    {locations.map((loc) => (
+                      <option key={loc.id} value={loc.id}>
+                        {loc.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="planner-field">
+                <label htmlFor="planner-drop-loc">
+                  <span>{copy.dropoffLocation || "Destination / Dropoff"}<span className="required-mark">*</span></span>
+                </label>
+                <div className="input-wrap">
+                  <select
+                    id="planner-drop-loc"
+                    name="destinationId"
+                    required
+                    value={destinationId}
+                    disabled={!pickupLocationId || destinations.length === 0}
+                    onChange={(e) => loadRentalRoute(e.currentTarget.value)}
+                  >
+                    <option value="">
+                      {!pickupLocationId
+                        ? "Select pickup location first"
+                        : destinations.length === 0
+                        ? "Loading destinations..."
+                        : copy.dropoffLocation || "Choose Destination City"}
+                    </option>
+                    {destinations.map((dest) => (
+                      <option key={dest.id} value={dest.id}>
+                        {dest.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {routeMessage && (
+                  <p className={`route-feedback ${routeMessage.includes("available") ? "is-available" : "is-unavailable"}`}>
+                    {routeMessage}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="planner-input-grid" style={{ marginTop: "1.25rem" }}>
+              <div className="planner-field">
+                <label htmlFor="planner-pickup-date">
+                  <span>{copy.pickupDate || "Pickup Date"}<span className="required-mark">*</span></span>
+                </label>
+                <div className="input-wrap">
+                  <input
+                    id="planner-pickup-date"
+                    name="pickupDate"
+                    type="date"
+                    required
+                    defaultValue={initialPickupDate}
+                  />
+                </div>
+              </div>
+
+              <div className="planner-field">
+                <label htmlFor="planner-pickup-time">
+                  <span>Pickup Time<span className="required-mark">*</span></span>
+                </label>
+                <div className="input-wrap">
+                  <input
+                    id="planner-pickup-time"
+                    name="pickupTime"
+                    type="time"
+                    required
+                    defaultValue={initialPickupTime}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {carType === "roundTrip" && (
+              <div className="planner-input-grid" style={{ marginTop: "1.25rem" }}>
+                <div className="planner-field">
+                  <label htmlFor="planner-return-date">
+                    <span>{copy.returnDate || "Return Date"}<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-return-date"
+                      name="returnDate"
+                      type="date"
+                      required
+                      defaultValue={initialReturnDate}
+                    />
+                  </div>
+                </div>
+
+                <div className="planner-field">
+                  <label htmlFor="planner-return-time">
+                    <span>Return Time<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-return-time"
+                      name="returnTime"
+                      type="time"
+                      required
+                      defaultValue={initialReturnTime}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="planner-segmented-control" role="radiogroup" aria-label="Trip timing preference">
+              <label className={`segmented-radio-label ${tripType === "exact_time" ? "is-active" : ""}`}>
+                <input
+                  type="radio"
+                  name="type"
+                  value="exact_time"
+                  checked={tripType === "exact_time"}
+                  onChange={() => setTripType("exact_time")}
+                />
+                <span className="option-title">Specific Dates</span>
+                <span className="option-caption">Confirmed dates</span>
+              </label>
+
+              <label className={`segmented-radio-label ${tripType === "approx_time" ? "is-active" : ""}`}>
+                <input
+                  type="radio"
+                  name="type"
+                  value="approx_time"
+                  checked={tripType === "approx_time"}
+                  onChange={() => setTripType("approx_time")}
+                />
+                <span className="option-title">Flexible Month</span>
+                <span className="option-caption">Approximate window</span>
+              </label>
+
+              <label className={`segmented-radio-label ${tripType === "not_sure" ? "is-active" : ""}`}>
+                <input
+                  type="radio"
+                  name="type"
+                  value="not_sure"
+                  checked={tripType === "not_sure"}
+                  onChange={() => setTripType("not_sure")}
+                />
+                <span className="option-title">Open Itinerary</span>
+                <span className="option-caption">Still exploring</span>
+              </label>
+            </div>
+
+            {tripType === "exact_time" && (
+              <div className="planner-input-grid">
+                <div className="planner-field">
+                  <label htmlFor="planner-start-date">
+                    <span>Start / Arrival Date<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-start-date"
+                      name="startDate"
+                      type="date"
+                      required
+                      defaultValue={searchParams?.get("from") || ""}
+                    />
+                  </div>
+                </div>
+
+                <div className="planner-field">
+                  <label htmlFor="planner-end-date">
+                    <span>End / Departure Date<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-end-date"
+                      name="endDate"
+                      type="date"
+                      required
+                      defaultValue={searchParams?.get("to") || ""}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {tripType === "approx_time" && (
+              <div className="planner-input-grid">
+                <div className="planner-field">
+                  <label htmlFor="planner-month">
+                    <span>Target Month / Year<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-month"
+                      name="month"
+                      placeholder="e.g. November 2026"
+                      required
+                      defaultValue={searchParams?.get("month") || ""}
+                    />
+                  </div>
+                </div>
+
+                <div className="planner-field">
+                  <label htmlFor="planner-days">
+                    <span>Estimated Duration (Days)<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-days"
+                      name="days"
+                      type="number"
+                      min={1}
+                      placeholder="e.g. 10"
+                      required
+                      defaultValue={searchParams?.get("days") || ""}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {tripType === "not_sure" && (
+              <div className="planner-input-grid planner-input-grid--single">
+                <div className="planner-field">
+                  <label htmlFor="planner-days-open">
+                    <span>Desired Trip Length (Days)<span className="required-mark">*</span></span>
+                  </label>
+                  <div className="input-wrap">
+                    <input
+                      id="planner-days-open"
+                      name="days"
+                      type="number"
+                      min={1}
+                      placeholder="e.g. 7, 10, or 14"
+                      required
+                      defaultValue={searchParams?.get("days") || ""}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </fieldset>
+
+      {/* Step 2: Party & Budget Details */}
+      <fieldset className="planner-step-group">
+        <legend>
+          <span className="step-badge" aria-hidden="true">2</span>
+          <span>{isCar ? "Passengers & Vehicle Capacity" : "Travelers & Budget Preferences"}</span>
+        </legend>
+
+        <div className="planner-travelers-card">
+          <div className="traveler-counter-item">
+            <div className="counter-info">
+              <strong>Adults</strong>
+              <span>Age 12+</span>
+            </div>
+            <div className="counter-actions">
+              <button
+                type="button"
+                aria-label="Decrease adults"
+                disabled={adults <= 1}
+                onClick={() => setAdults((prev) => Math.max(1, prev - 1))}
+              >
+                &minus;
+              </button>
+              <span className="count-display" aria-live="polite">{adults}</span>
+              <button
+                type="button"
+                aria-label="Increase adults"
+                onClick={() => setAdults((prev) => prev + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div className="traveler-counter-item">
+            <div className="counter-info">
+              <strong>Children</strong>
+              <span>Age 2&ndash;11</span>
+            </div>
+            <div className="counter-actions">
+              <button
+                type="button"
+                aria-label="Decrease children"
+                disabled={children <= 0}
+                onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
+              >
+                &minus;
+              </button>
+              <span className="count-display" aria-live="polite">{children}</span>
+              <button
+                type="button"
+                aria-label="Increase children"
+                onClick={() => setChildren((prev) => prev + 1)}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {!isCar && (
+            <div className="traveler-counter-item">
+              <div className="counter-info">
+                <strong>Infants</strong>
+                <span>Under 2</span>
+              </div>
+              <div className="counter-actions">
+                <button
+                  type="button"
+                  aria-label="Decrease infants"
+                  disabled={infants <= 0}
+                  onClick={() => setInfants((prev) => Math.max(0, prev - 1))}
+                >
+                  &minus;
+                </button>
+                <span className="count-display" aria-live="polite">{infants}</span>
+                <button
+                  type="button"
+                  aria-label="Increase infants"
+                  onClick={() => setInfants((prev) => prev + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Hidden inputs to preserve FormData parity */}
+        <input type="hidden" name="adults" value={adults} />
+        <input type="hidden" name="children" value={children} />
+        {!isCar && <input type="hidden" name="infants" value={infants} />}
+
+        {!isCar && (
+          <div className="planner-input-grid" style={{ marginTop: "1.25rem" }}>
+            <div className="planner-field">
+              <label htmlFor="planner-min-budget">
+                <span>Estimated Budget Min (USD / person)</span>
+              </label>
+              <div className="input-wrap">
+                <input
+                  id="planner-min-budget"
+                  name="minBudget"
+                  type="number"
+                  min={0}
+                  defaultValue={1000}
+                />
+              </div>
+            </div>
+
+            <div className="planner-field">
+              <label htmlFor="planner-max-budget">
+                <span>Estimated Budget Max (USD / person)</span>
+              </label>
+              <div className="input-wrap">
+                <input
+                  id="planner-max-budget"
+                  name="maxBudget"
+                  type="number"
+                  min={0}
+                  defaultValue={3000}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!isCar && (
+          <label className="planner-checkbox-label" style={{ marginTop: "1rem" }}>
+            <input name="flightOffer" type="checkbox" />
+            <span>I would like Sun Pyramids to assist with domestic & international flight options</span>
+          </label>
+        )}
+      </fieldset>
+
+      {/* Step 3: Contact & Special Requests */}
+      <fieldset className="planner-step-group">
+        <legend>
+          <span className="step-badge" aria-hidden="true">3</span>
+          <span>Lead Guest & Contact Details</span>
+        </legend>
+
+        <div className="planner-input-grid">
+          <div className="planner-field">
+            <label htmlFor="planner-fullname">
+              <span>{copy.fullName || "Full Name"}<span className="required-mark">*</span></span>
+            </label>
+            <div className="input-wrap">
+              <input
+                id="planner-fullname"
+                name="fullName"
+                placeholder="Jane Doe"
+                autoComplete="name"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="planner-field">
+            <label htmlFor="planner-email">
+              <span>{copy.email || "Email Address"}<span className="required-mark">*</span></span>
+            </label>
+            <div className="input-wrap">
+              <input
+                id="planner-email"
+                name="email"
+                type="email"
+                placeholder="jane@example.com"
+                autoComplete="email"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="planner-input-grid" style={{ marginTop: "1.25rem" }}>
+          <div className="planner-field">
+            <label htmlFor="planner-phone">
+              <span>{copy.phone || "Phone Number"}<span className="required-mark">*</span></span>
+              <span className="field-hint">With country code</span>
+            </label>
+            <div className="input-wrap">
+              <input
+                id="planner-phone"
+                name="phone"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                autoComplete="tel"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="planner-field">
+            <label htmlFor="planner-nationality">
+              <span>{copy.nationality || "Nationality"}<span className="required-mark">*</span></span>
+            </label>
+            <div className="input-wrap">
+              <select id="planner-nationality" name="nationality" required defaultValue="">
+                <option value="" disabled>{copy.nationality || "Select your country"}</option>
+                {countries.map((country) => (
+                  <option key={country.id || country.name} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {!isCar && (
+          <div className="planner-field" style={{ marginTop: "1.25rem" }}>
+            <label htmlFor="planner-note">
+              <span>Special Wishes, Preferred Sites or Dietary Requirements</span>
+            </label>
+            <div className="input-wrap">
+              <textarea
+                id="planner-note"
+                name="note"
+                placeholder="Tell us about places you want to visit (e.g. Abu Simbel, Nile Cruise, White Desert), pace of travel, or any specific interests..."
+                rows={4}
+              />
+            </div>
+          </div>
+        )}
+      </fieldset>
+
+      {/* Submit Bar */}
+      <div className="planner-submit-bar">
+        <button
+          className="btn-submit-planner"
+          type="submit"
+          disabled={state === "loading"}
+        >
+          {state === "loading" ? (
+            <span>Securing Request...</span>
+          ) : (
+            <span>{isCar ? (copy.addToCart || "Book Private Transfer") : "Request Custom Itinerary &rarr;"}</span>
+          )}
+        </button>
+
+        {message && (
+          <div
+            className={`status-alert ${state === "error" ? "is-error" : "is-success"}`}
+            role="alert"
+            aria-live="polite"
+          >
+            {message}
+          </div>
+        )}
+
+        <p className="form-disclaimer">
+          Free revisions &bull; 100% Tailor-Made &bull; Direct Cairo operations team confirmation &bull; No obligation
+        </p>
+      </div>
     </form>
   );
 }

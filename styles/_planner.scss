@@ -1,0 +1,846 @@
+// =============================================================================
+// Sun Pyramids Tours — Batch 4: Search & Trip Planning Experience Styles
+// =============================================================================
+
+.site-shell-v2 {
+  // ---------------------------------------------------------------------------
+  // 1. Planner Hero Header
+  // ---------------------------------------------------------------------------
+  .planner-hero {
+    position: relative;
+    padding-top: clamp(2rem, 4.5vw, 3.75rem);
+    padding-bottom: clamp(2.5rem, 5.5vw, 4.5rem);
+    background: linear-gradient(180deg, #f8f9fc 0%, var(--spt-ground) 100%);
+    border-bottom: 1px solid var(--spt-border);
+
+    .planner-hero-inner {
+      max-width: var(--spt-shell);
+      margin-inline: auto;
+      padding-inline: var(--spt-gutter);
+    }
+
+    .planner-breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--spt-muted);
+      margin-bottom: 1.25rem;
+
+      a {
+        color: var(--spt-anchor);
+        text-decoration: none;
+        transition: color 150ms ease;
+
+        &:hover {
+          color: var(--spt-anchor-deep);
+          text-decoration: underline;
+        }
+      }
+
+      .separator {
+        color: #9aa3af;
+        user-select: none;
+      }
+
+      .current {
+        color: var(--spt-ink);
+        font-weight: 500;
+      }
+    }
+
+    .planner-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--spt-anchor);
+      background: var(--spt-anchor-soft);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .planner-title {
+      font-size: clamp(2.1rem, 4vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.16;
+      color: var(--spt-ink);
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .planner-lead {
+      font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+      line-height: 1.6;
+      color: var(--spt-muted);
+      max-width: 820px;
+      margin: 0 0 1.75rem;
+    }
+
+    .planner-trust-pills {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: clamp(0.75rem, 2vw, 1.75rem);
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.07);
+
+      .trust-pill-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--spt-ink);
+
+        svg {
+          width: 18px;
+          height: 18px;
+          color: var(--spt-anchor);
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 2. Planner Main Layout & Container
+  // ---------------------------------------------------------------------------
+  .planner-main-section {
+    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+    padding-bottom: var(--spt-section);
+    background: var(--spt-ground);
+
+    .planner-container {
+      max-width: var(--spt-shell);
+      margin-inline: auto;
+      padding-inline: var(--spt-gutter);
+    }
+
+    .planner-layout-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      gap: clamp(2rem, 3.5vw, 3.5rem);
+      align-items: start;
+
+      @media (max-width: 1080px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 3. Planner Form Card & Step Groups
+  // ---------------------------------------------------------------------------
+  .planner-form-card {
+    background: var(--spt-surface);
+    border: 1px solid var(--spt-border);
+    border-radius: var(--spt-radius-panel);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.05);
+
+    .planner-card-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--spt-border);
+
+      h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--spt-ink);
+        margin: 0 0 0.5rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+        color: var(--spt-muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    .planner-step-group {
+      border: 1px solid #eef1f6;
+      background: #fafbfe;
+      border-radius: var(--spt-radius-card);
+      padding: clamp(1.25rem, 2.5vw, 2rem);
+      margin-bottom: 2rem;
+
+      legend {
+        float: left;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--spt-ink);
+        margin-bottom: 1.25rem;
+
+        .step-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: var(--spt-anchor);
+          color: #ffffff;
+          font-size: 0.82rem;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 4. Segmented Picker (Trip Type / Rental Mode)
+  // ---------------------------------------------------------------------------
+  .planner-segmented-control {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+
+    .segmented-radio-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1rem;
+      background: var(--spt-surface);
+      border: 2px solid var(--spt-border);
+      border-radius: var(--spt-radius-sm);
+      cursor: pointer;
+      text-align: center;
+      transition: all 180ms ease;
+      user-select: none;
+
+      input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .option-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--spt-ink);
+        transition: color 180ms ease;
+      }
+
+      .option-caption {
+        font-size: 0.78rem;
+        color: var(--spt-muted);
+        margin-top: 0.2rem;
+      }
+
+      &:hover {
+        border-color: #b8c7eb;
+        background: #fdfefe;
+      }
+
+      &.is-active {
+        border-color: var(--spt-anchor);
+        background: var(--spt-anchor-soft);
+
+        .option-title {
+          color: var(--spt-anchor-deep);
+        }
+      }
+
+      &:focus-within {
+        outline: 2px solid var(--spt-focus);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 5. Input Controls & Grid Rows
+  // ---------------------------------------------------------------------------
+  .planner-input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+
+    &--single {
+      grid-template-columns: 1fr;
+    }
+
+    &--three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+
+  .planner-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+
+    label,
+    .field-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--spt-ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .required-mark {
+        color: #e53e3e;
+        margin-left: 0.2rem;
+      }
+
+      .field-hint {
+        font-size: 0.76rem;
+        font-weight: 500;
+        color: var(--spt-muted);
+      }
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .input-icon {
+        position: absolute;
+        left: 1rem;
+        width: 18px;
+        height: 18px;
+        color: #8a94a6;
+        pointer-events: none;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        background: var(--spt-surface);
+        border: 1px solid var(--spt-border);
+        border-radius: var(--spt-radius-sm);
+        padding: 0.85rem 1rem;
+        font-size: 0.95rem;
+        color: var(--spt-ink);
+        font-family: inherit;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+        min-height: 48px;
+
+        &::placeholder {
+          color: #9aa3af;
+        }
+
+        &:focus {
+          outline: none;
+          border-color: var(--spt-anchor);
+          box-shadow: 0 0 0 3px rgba(22, 58, 150, 0.15);
+        }
+
+        &:disabled {
+          background: #f1f3f7;
+          cursor: not-allowed;
+          color: #8c95a2;
+        }
+      }
+
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+
+      &.has-icon input,
+      &.has-icon select {
+        padding-left: 2.75rem;
+      }
+    }
+
+    .route-feedback {
+      font-size: 0.84rem;
+      margin-top: 0.35rem;
+      font-weight: 500;
+
+      &.is-available {
+        color: #0d8a4e;
+      }
+
+      &.is-unavailable {
+        color: #d9383a;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 6. Accessible Traveler Steppers
+  // ---------------------------------------------------------------------------
+  .planner-travelers-card {
+    background: var(--spt-surface);
+    border: 1px solid var(--spt-border);
+    border-radius: var(--spt-radius-sm);
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+
+    .traveler-counter-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      background: #f8fafc;
+      border-radius: 8px;
+
+      .counter-info {
+        strong {
+          display: block;
+          font-size: 0.92rem;
+          color: var(--spt-ink);
+        }
+        span {
+          font-size: 0.76rem;
+          color: var(--spt-muted);
+        }
+      }
+
+      .counter-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+
+        button {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 1px solid var(--spt-border);
+          background: var(--spt-surface);
+          color: var(--spt-ink);
+          font-weight: 700;
+          font-size: 1.1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 150ms ease;
+
+          &:hover:not(:disabled) {
+            background: var(--spt-anchor);
+            border-color: var(--spt-anchor);
+            color: #ffffff;
+          }
+
+          &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+          }
+
+          &:focus-visible {
+            outline: 2px solid var(--spt-focus);
+            outline-offset: 2px;
+          }
+        }
+
+        .count-display {
+          min-width: 24px;
+          text-align: center;
+          font-weight: 700;
+          font-size: 1rem;
+          color: var(--spt-ink);
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 7. Checkbox & Switch Styles
+  // ---------------------------------------------------------------------------
+  .planner-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--spt-ink);
+    user-select: none;
+    margin-top: 0.5rem;
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      accent-color: var(--spt-anchor);
+      cursor: pointer;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 8. Submission Bar & Conversion CTAs
+  // ---------------------------------------------------------------------------
+  .planner-submit-bar {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--spt-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .btn-submit-planner {
+      width: 100%;
+      min-height: 54px;
+      padding: 1rem 2rem;
+      background: var(--spt-amber);
+      color: #ffffff;
+      font-size: 1.08rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      transition: background 180ms ease, transform 150ms ease, box-shadow 180ms ease;
+      box-shadow: 0 4px 16px rgba(247, 149, 29, 0.35);
+
+      &:hover:not(:disabled) {
+        background: var(--spt-amber-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(247, 149, 29, 0.45);
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--spt-focus);
+        outline-offset: 3px;
+      }
+    }
+
+    .status-alert {
+      padding: 0.9rem 1.25rem;
+      border-radius: var(--spt-radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.45;
+
+      &.is-error {
+        background: #fef2f2;
+        border: 1px solid #fee2e2;
+        color: #991b1b;
+      }
+
+      &.is-success {
+        background: #f0fdf4;
+        border: 1px solid #dcfce7;
+        color: #166534;
+      }
+    }
+
+    .form-disclaimer {
+      font-size: 0.82rem;
+      color: var(--spt-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 9. Concierge Sticky Sidebar
+  // ---------------------------------------------------------------------------
+  .planner-sidebar {
+    position: sticky;
+    top: 6.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .concierge-card {
+      background: var(--spt-surface);
+      border: 1px solid var(--spt-border);
+      border-radius: var(--spt-radius-card);
+      padding: clamp(1.5rem, 2.5vw, 2rem);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+
+      .concierge-badge {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--spt-anchor);
+        background: var(--spt-anchor-soft);
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        display: inline-block;
+        margin-bottom: 0.75rem;
+      }
+
+      h3 {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--spt-ink);
+        margin: 0 0 0.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: var(--spt-muted);
+        line-height: 1.55;
+        margin: 0 0 1.5rem;
+      }
+
+      .concierge-contact-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+
+        .btn-concierge-wa {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          background: #25d366;
+          color: #ffffff;
+          padding: 0.75rem 1rem;
+          border-radius: 999px;
+          font-size: 0.92rem;
+          font-weight: 700;
+          text-decoration: none;
+          transition: background 150ms ease, transform 150ms ease;
+
+          &:hover {
+            background: #20bd5a;
+            transform: translateY(-1px);
+          }
+        }
+
+        .btn-concierge-phone {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          background: var(--spt-surface);
+          border: 1px solid var(--spt-border);
+          color: var(--spt-ink);
+          padding: 0.75rem 1rem;
+          border-radius: 999px;
+          font-size: 0.92rem;
+          font-weight: 600;
+          text-decoration: none;
+          transition: border-color 150ms ease;
+
+          &:hover {
+            border-color: var(--spt-anchor);
+            color: var(--spt-anchor);
+          }
+        }
+      }
+
+      .concierge-perks {
+        border-top: 1px solid var(--spt-border);
+        padding-top: 1.25rem;
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+
+        li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.65rem;
+          font-size: 0.86rem;
+          color: var(--spt-ink);
+          line-height: 1.45;
+
+          svg {
+            width: 18px;
+            height: 18px;
+            color: #0d8a4e;
+            flex-shrink: 0;
+            margin-top: 1px;
+          }
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 10. Book Egypt Trip Landing Redesign
+  // ---------------------------------------------------------------------------
+  .book-trip-page {
+    .book-trip-hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: clamp(3.5rem, 7vw, 6rem) var(--spt-gutter);
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(13, 25, 48, 0.88) 0%, rgba(13, 25, 48, 0.65) 50%, rgba(13, 25, 48, 0.35) 100%);
+      }
+
+      .hero-content {
+        position: relative;
+        max-width: 680px;
+        color: #ffffff;
+
+        .eyebrow {
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--spt-amber);
+          margin-bottom: 0.75rem;
+        }
+
+        h1 {
+          font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+          font-weight: 800;
+          line-height: 1.15;
+          margin: 0 0 1.25rem;
+          color: #ffffff;
+        }
+
+        p {
+          font-size: 1.12rem;
+          line-height: 1.6;
+          color: #e2e8f0;
+          margin-bottom: 2rem;
+        }
+
+        .hero-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+
+          .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 999px;
+            background: #25d366;
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 150ms ease;
+
+            &:hover {
+              transform: translateY(-1px);
+            }
+          }
+
+          .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.9rem 1.8rem;
+            border-radius: 999px;
+            background: var(--spt-amber);
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 150ms ease;
+
+            &:hover {
+              transform: translateY(-1px);
+            }
+          }
+        }
+      }
+    }
+
+    .book-trip-pillars {
+      padding: var(--spt-section) var(--spt-gutter);
+      background: var(--spt-surface);
+
+      .pillars-grid {
+        max-width: var(--spt-shell);
+        margin-inline: auto;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(1.5rem, 2.5vw, 2.5rem);
+
+        @media (max-width: 840px) {
+          grid-template-columns: 1fr;
+        }
+
+        .pillar-card {
+          padding: 2rem;
+          background: #f8fafc;
+          border: 1px solid var(--spt-border);
+          border-radius: var(--spt-radius-card);
+
+          h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--spt-ink);
+            margin: 0 0 0.65rem;
+          }
+
+          p {
+            font-size: 0.92rem;
+            color: var(--spt-muted);
+            line-height: 1.6;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .book-trip-consultation {
+      padding: var(--spt-section) var(--spt-gutter);
+      background: var(--spt-ground);
+
+      .consultation-shell {
+        max-width: 820px;
+        margin-inline: auto;
+        background: var(--spt-surface);
+        border: 1px solid var(--spt-border);
+        border-radius: var(--spt-radius-panel);
+        padding: clamp(2rem, 4vw, 3.5rem);
+        box-shadow: 0 10px 36px rgba(0, 0, 0, 0.05);
+
+        .section-header {
+          text-align: center;
+          margin-bottom: 2rem;
+
+          h2 {
+            font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+            font-weight: 800;
+            color: var(--spt-ink);
+            margin: 0 0 0.5rem;
+          }
+
+          p {
+            font-size: 1rem;
+            color: var(--spt-muted);
+          }
+        }
+      }
+    }
+  }
+}
