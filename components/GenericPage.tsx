@@ -391,24 +391,12 @@ function FaqPage({
           </div>
         </div>
       </section>
-      <NeedHelp locale={locale} />
+      <EditorialNeedHelp locale={locale} />
     </main>
   );
 }
 
-function EventsPage({
-  page,
-  title,
-  image,
-  categories,
-  locale,
-}: {
-  page: ApiPage | null;
-  title: string;
-  image: string;
-  categories: ApiPage[];
-  locale: Locale;
-}) {
+function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },
     { label: title },
@@ -458,36 +446,18 @@ function EventsPage({
   );
 }
 
-function PlannerPage({
-  page,
-  title,
-  image,
-  route,
-  locale,
-}: {
-  page: ApiPage | null;
-  title: string;
-  image: string;
-  route: "make-your-trip" | "rent-car";
-  locale: Locale;
-}) {
+function PlannerPage({ page, title, image, route, locale }: { page: ApiPage | null; title: string; image: string; route: "make-your-trip" | "rent-car"; locale: Locale }) {
   const isCar = route === "rent-car";
   return (
     <main>
-      <section
-        className="original-page-hero"
-        style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${image})` }}
-      >
+      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${image})` }}>
         <h1>{title}</h1>
       </section>
       <section className="planner-layout container-shell">
         <div>
           <p className="eyebrow">{isCar ? "Private transfers" : "Tailor made travel"}</p>
           <h2>{isCar ? "Rent A Car" : "Make Your Trip"}</h2>
-          <div
-            className="content-prose"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
-          />
+          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }} />
         </div>
         <PlannerRequestFlow route={route} locale={locale} />
       </section>
@@ -622,7 +592,7 @@ function FaqTeaser({ faqs, locale = "en" }: { faqs: ApiPage[]; locale?: Locale }
   );
 }
 
-function NeedHelp({ locale = "en" }: { locale?: Locale }) {
+function EditorialNeedHelp({ locale = "en" }: { locale?: Locale }) {
   return (
     <section className="editorial-related-section" style={{ background: "var(--spt-surface)" }}>
       <div className="editorial-container" style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
@@ -648,6 +618,20 @@ function NeedHelp({ locale = "en" }: { locale?: Locale }) {
         >
           Contact Us
         </Link>
+      </div>
+    </section>
+  );
+}
+
+function NeedHelp({ locale = "en" }: { locale?: Locale }) {
+  return (
+    <section className="need-help-band">
+      <div className="container-shell">
+        <div>
+          <p className="eyebrow">Need Our Help?</p>
+          <h2>We would be happy to help you plan your trip</h2>
+        </div>
+        <Link className="btn-primary" href={withLocale("/contact-us", locale)}>Contact Us</Link>
       </div>
     </section>
   );
