@@ -391,24 +391,12 @@ function FaqPage({
           </div>
         </div>
       </section>
-      <NeedHelp locale={locale} />
+      <EditorialNeedHelp locale={locale} />
     </main>
   );
 }
 
-function EventsPage({
-  page,
-  title,
-  image,
-  categories,
-  locale,
-}: {
-  page: ApiPage | null;
-  title: string;
-  image: string;
-  categories: ApiPage[];
-  locale: Locale;
-}) {
+function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },
     { label: title },
@@ -461,7 +449,6 @@ function EventsPage({
 function PlannerPage({
   page,
   title,
-  image,
   route,
   locale,
 }: {
@@ -472,26 +459,85 @@ function PlannerPage({
   locale: Locale;
 }) {
   const isCar = route === "rent-car";
+  const eyebrow = isCar
+    ? "Private Transfers & Chauffeur Services"
+    : "Bespoke Private Egypt Itineraries";
+  const leadDescription =
+    page?.short_description ||
+    page?.description ||
+    (isCar
+      ? "Reliable, air-conditioned vehicle transfers across Cairo, Luxor, Aswan, Hurghada, and Alexandria with licensed English-speaking drivers."
+      : "Tell our certified Egyptologists and trip designers what you want to experience. We craft your personalized journey with zero hassle.");
+
   return (
-    <main>
-      <section
-        className="original-page-hero"
-        style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${image})` }}
-      >
-        <h1>{title}</h1>
-      </section>
-      <section className="planner-layout container-shell">
-        <div>
-          <p className="eyebrow">{isCar ? "Private transfers" : "Tailor made travel"}</p>
-          <h2>{isCar ? "Rent A Car" : "Make Your Trip"}</h2>
-          <div
-            className="content-prose"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
-          />
+    <main className="planner-page">
+      <header className="planner-hero">
+        <div className="planner-hero-inner">
+          <nav className="planner-breadcrumb" aria-label="Breadcrumb">
+            <Link href={withLocale("/", locale)}>Home</Link>
+            <span className="separator" aria-hidden="true">›</span>
+            <span className="current" aria-current="page">{title}</span>
+          </nav>
+
+          <span className="planner-eyebrow">{eyebrow}</span>
+          <h1 className="planner-title">{title}</h1>
+          <p className="planner-lead">{leadDescription}</p>
         </div>
-        <PlannerRequestFlow route={route} locale={locale} />
+      </header>
+
+      <section className="planner-main-section">
+        <div className="planner-container">
+          <div className="planner-layout-grid">
+            <div className="planner-main-column">
+              {page?.content && (
+                <div
+                  className="editorial-prose"
+                  style={{ marginBottom: "2rem" }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
+                />
+              )}
+              <PlannerRequestFlow route={route} locale={locale} />
+            </div>
+
+            <aside className="planner-sidebar">
+              <div className="concierge-card">
+                <span className="concierge-badge">Local Support</span>
+                <h3>Need Guidance?</h3>
+                <p>
+                  We would be happy to help you plan your trip. Contact our local team directly for customized itineraries, private requests, or any questions.
+                </p>
+
+                <div className="concierge-contact-actions">
+                  <a
+                    className="btn-concierge-wa"
+                    href={siteContact.whatsapp.contactUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                      <path d="M20.52 3.48A11.93 11.93 0 0 0 12.06 0C5.46 0 .09 5.37.09 11.97c0 2.11.55 4.17 1.6 5.99L0 24l6.2-1.63a11.9 11.9 0 0 0 5.86 1.52h.01c6.6 0 11.97-5.37 11.97-11.97 0-3.2-.1.25-1.25-3.52-4.44zM12.07 21.88h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.88 9.88 0 0 1-1.52-5.27c0-5.46 4.45-9.91 9.92-9.91 2.65 0 5.14 1.03 7.01 2.9 1.87 1.88 2.9 4.37 2.9 7.02 0 5.46-4.45 9.9-9.92 9.9zm5.43-7.42c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.68-1.64-.93-2.25-.25-.6-.5-.52-.68-.53l-.58-.01c-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.51 0 1.48 1.08 2.91 1.23 3.11.15.2 2.13 3.25 5.15 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35z" />
+                    </svg>
+                    <span>Chat on WhatsApp</span>
+                  </a>
+
+                  {siteContact.phones[0] && (
+                    <a className="btn-concierge-phone" href={siteContact.phones[0].href}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                      </svg>
+                      <span>Call {siteContact.phones[0].display}</span>
+                    </a>
+                  )}
+
+                  <Link className="btn-concierge-contact" href={withLocale("/contact-us", locale)}>
+                    Contact Us
+                  </Link>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
       </section>
-      <NeedHelp locale={locale} />
     </main>
   );
 }
@@ -622,7 +668,7 @@ function FaqTeaser({ faqs, locale = "en" }: { faqs: ApiPage[]; locale?: Locale }
   );
 }
 
-function NeedHelp({ locale = "en" }: { locale?: Locale }) {
+function EditorialNeedHelp({ locale = "en" }: { locale?: Locale }) {
   return (
     <section className="editorial-related-section" style={{ background: "var(--spt-surface)" }}>
       <div className="editorial-container" style={{ textAlign: "center", maxWidth: 680, margin: "0 auto" }}>
@@ -648,6 +694,20 @@ function NeedHelp({ locale = "en" }: { locale?: Locale }) {
         >
           Contact Us
         </Link>
+      </div>
+    </section>
+  );
+}
+
+function NeedHelp({ locale = "en" }: { locale?: Locale }) {
+  return (
+    <section className="need-help-band">
+      <div className="container-shell">
+        <div>
+          <p className="eyebrow">Need Our Help?</p>
+          <h2>We would be happy to help you plan your trip</h2>
+        </div>
+        <Link className="btn-primary" href={withLocale("/contact-us", locale)}>Contact Us</Link>
       </div>
     </section>
   );
