@@ -11,6 +11,7 @@ import { TourPageLayout } from "@/components/tour/TourPageLayout";
 import { TourPageNavigation } from "@/components/tour/TourPageNavigation";
 import { TourSeasonPrices } from "@/components/tour/TourSeasonPrices";
 import { TourSocialGallery } from "@/components/tour/TourSocialGallery";
+import { TourSpecularButtons } from "@/components/tour/TourSpecularButtons";
 import type { Locale, Tour } from "@/types/api";
 
 export function TourPage({
@@ -39,6 +40,7 @@ export function TourPage({
 
   return (
     <main className="tour-page tour-page-redesign">
+      <TourSpecularButtons />
       <TourBreadcrumb title={title} locale={locale} />
       <section className="tour-page-shell">
         <div className="tour-hero-stage">
