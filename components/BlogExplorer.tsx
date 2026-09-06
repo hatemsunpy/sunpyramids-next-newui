@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BlogCard } from "@/components/BlogCard";
+import { EmptyState } from "@/components/EmptyState";
 import { apiGet } from "@/lib/client-api";
 import { blogCopy } from "@/lib/blog-copy";
 import type { BlogListing } from "@/lib/data";
@@ -122,7 +123,7 @@ export function BlogExplorer({
         </form>
 
         <div className="blogs-filter-row">
-          <div className="blogs-tags" aria-label={labels.popularTags}>
+          <div className="blogs-tags" role="group" aria-label={labels.popularTags}>
             <span className="blogs-tags-label">{labels.popularTags}</span>
             {categories.map((categoryTag) => {
               const slug = categoryTag.slug || String(categoryTag.id || "");
@@ -147,10 +148,26 @@ export function BlogExplorer({
       </section>
 
       <section className="blogs-results" aria-busy={pending}>
+        <h2 className="blogs-results-title">Latest travel stories</h2>
         <div className="blogs-grid">
           {blogs.map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} variant="listing" />)}
         </div>
-        {!blogs.length && !pending ? <p className="blogs-empty">{labels.empty}</p> : null}
+        {!blogs.length && !pending ? (
+          <EmptyState
+            title="No articles found"
+            description={labels.empty}
+            actionLabel="Reset search & filters"
+            onAction={() => {
+              setSearchInput("");
+              setTitle("");
+              setCategory("");
+              setOrder("");
+              updateTitleQuery("");
+              void loadBlogs({ page: 1, title: "", category: "", order: "asc" });
+            }}
+          />
+        ) : null}
+
         {failed ? <p className="blogs-error" role="alert">Something went wrong. Please try again.</p> : null}
         {currentPage < lastPage ? (
           <div className="blogs-see-more">

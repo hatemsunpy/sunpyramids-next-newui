@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { ApiPage, Locale, PublicSiteSettings, TeamMember, Tour } from "@/types/api";
 import { ContactForm } from "@/components/ContactForm";
 import { DestinationCard } from "@/components/DestinationCard";
+import { DiscoveryHero } from "@/components/DiscoveryHero";
+import { EmptyState } from "@/components/EmptyState";
 import { TourCard } from "@/components/TourCard";
 import { BlogCard } from "@/components/BlogCard";
 import { PlannerRequestFlow } from "@/components/CustomerFlows";
@@ -217,26 +219,55 @@ function FaqPage({ title, image, faqs, locale }: { title: string; image: string;
 }
 
 function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
+  const breadcrumbs = [
+    { label: "Home", href: withLocale("/", locale) },
+    { label: title },
+  ];
+
   return (
     <main>
-      <PageHero title={title} image={image} />
-      {page?.short_description ? (
-        <section className="event-description container-shell">
-          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.short_description) }} />
-        </section>
-      ) : null}
-      <section className="event-grid">
-        {categories.map((category) => (
-          <article className="event-card" key={category.id || category.slug}>
-            <DestinationCard destination={category} basePath="/event" locale={locale} />
-            <Link className="event-read-more" href={withLocale(`/event/${category.slug || category.id}`, locale)}>Read More</Link>
-          </article>
-        ))}
+      <DiscoveryHero
+        title={title}
+        breadcrumbs={breadcrumbs}
+        eyebrow="Egypt Annual Celebrations"
+        description={
+          page?.short_description ||
+          page?.description ||
+          "Experience Egypt's rich cultural calendar, sound and light spectacles, and seasonal festivities."
+        }
+        totalCount={categories.length > 0 ? categories.length : undefined}
+        bgImage={image}
+      />
+
+      <section className="discovery-section">
+        <div className="container-shell">
+          {categories.length > 0 ? (
+            <div className="destination-mosaic-grid">
+              {categories.map((category) => (
+                <DestinationCard
+                  key={category.id || category.slug}
+                  destination={category}
+                  basePath="/event"
+                  locale={locale}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No events currently scheduled"
+              description="Check back soon for upcoming Egypt events, concerts, and cultural spectacles."
+              actionLabel="Explore all Egypt tours"
+              actionHref={withLocale("/trips", locale)}
+            />
+          )}
+        </div>
       </section>
+
       <GalleryStrip gallery={page?.gallery || []} />
     </main>
   );
 }
+
 
 function PlannerPage({ page, title, image, route, locale }: { page: ApiPage | null; title: string; image: string; route: "make-your-trip" | "rent-car"; locale: Locale }) {
   const isCar = route === "rent-car";

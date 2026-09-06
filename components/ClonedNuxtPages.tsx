@@ -6,6 +6,8 @@ import { BlogCard } from "@/components/BlogCard";
 import { ContactForm } from "@/components/ContactForm";
 import { AccountFlow, AuthFlow, CartFlow } from "@/components/CustomerFlows";
 import { DestinationCard } from "@/components/DestinationCard";
+import { DiscoveryHero } from "@/components/DiscoveryHero";
+import { EmptyState } from "@/components/EmptyState";
 import { PaymentCallbackKind, PaymentCallbackStatus } from "@/components/PaymentCallbackStatus";
 import { TourCard } from "@/components/TourCard";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
@@ -175,21 +177,77 @@ export function TravelGuidePage({
   categoryBasePath?: string;
   locale?: Locale;
 }) {
+  const pageTitle = page?.title || page?.name || "Egypt Travel Guide";
+  const isRoot = categoryBasePath === "/egypt-travel-guide";
+  const breadcrumbs = [
+    { label: "Home", href: withLocale("/", locale) },
+    { label: "Egypt Travel Guide", href: !isRoot ? withLocale("/egypt-travel-guide", locale) : undefined },
+    ...(!isRoot ? [{ label: pageTitle }] : []),
+  ];
+  const totalCount = categories.length + (blogs?.length ?? 0);
+
   return (
     <main>
-      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${page?.banner || "/images/blogsHero.png"})` }}>
-        <h1>{page?.title || "Egypt Travel Guide"}</h1>
+      <DiscoveryHero
+        title={pageTitle}
+        breadcrumbs={breadcrumbs}
+        eyebrow="Local Insights & Guides"
+        description={
+          page?.short_description ||
+          page?.description ||
+          "Essential travel advice, historical insights, and destination tips directly from our Cairo team."
+        }
+        totalCount={totalCount > 0 ? totalCount : undefined}
+        bgImage={page?.banner || "/images/blogsHero.png"}
+      />
+
+      <section className="discovery-section">
+        <div className="container-shell" style={{ display: "grid", gap: "2.5rem" }}>
+          {categories.length > 0 && (
+            <div>
+              <h2 style={{ margin: "0 0 1.25rem", fontSize: "1.45rem", fontWeight: 700, color: "var(--spt-ink)" }}>
+                {isRoot ? "Explore Destination Guides" : "Topics & Regions"}
+              </h2>
+              <div className="destination-mosaic-grid">
+                {categories.map((category) => (
+                  <DestinationCard
+                    key={category.id || category.slug}
+                    destination={category}
+                    basePath={categoryBasePath}
+                    locale={locale}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {blogs && blogs.length > 0 && (
+            <div>
+              <h2 style={{ margin: "0 0 1.25rem", fontSize: "1.45rem", fontWeight: 700, color: "var(--spt-ink)" }}>
+                Featured Articles & Advice
+              </h2>
+              <div className="discovery-grid">
+                {blogs.map((blog) => (
+                  <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {categories.length === 0 && (!blogs || blogs.length === 0) && (
+            <EmptyState
+              title="No guide topics found"
+              description="We are actively writing new guides for this region. Explore our other destinations or search our tours."
+              actionLabel="Explore Egypt tours"
+              actionHref={withLocale("/trips", locale)}
+            />
+          )}
+        </div>
       </section>
-      <section className="faq-search-section"><div className="container-shell"><input placeholder="Search Egypt travel guide" /></div></section>
-      {categories.length ? (
-        <section className="destination-grid-section">
-          {categories.map((category) => <DestinationCard key={category.id || category.slug} destination={category} basePath={categoryBasePath} locale={locale} />)}
-        </section>
-      ) : null}
-      {blogs?.length ? <section className="section-pad container-shell grid-cards blog-grid">{blogs.map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} />)}</section> : null}
     </main>
   );
 }
+
 
 export function EventDetailPage({ event, relatedTours, locale = "en" }: { event: ApiPage | null; relatedTours: Tour[]; locale?: Locale }) {
   const title = event?.title || event?.name || "Egypt Event";

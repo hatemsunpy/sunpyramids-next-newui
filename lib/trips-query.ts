@@ -5,12 +5,14 @@ export type TripsSearchParams = Record<string, string | string[] | undefined>;
 function first(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] || "" : value || "";
 }
-
 export function tripsRequest(searchParams: TripsSearchParams, taxonomy: TripTaxonomy) {
-  const query = new URLSearchParams({ exists: "wishlisted", order_by: "display_order,asc" });
+  const requestedOrder = first(searchParams.order);
+  const order = requestedOrder === "desc" || requestedOrder === "asc" ? requestedOrder : "";
+  const orderBy = order === "desc" ? "display_order,desc" : "display_order,asc";
+  const query = new URLSearchParams({ exists: "wishlisted", order_by: orderBy });
   const main = first(searchParams.main);
   const category = first(searchParams.category);
-  const destination = first(searchParams.destination);
+  const destination = first(searchParams.destination) || first(searchParams.distination);
   const title = first(searchParams.title).trim();
   const page = Math.max(1, Number(first(searchParams.page)) || 1);
 
@@ -29,5 +31,5 @@ export function tripsRequest(searchParams: TripsSearchParams, taxonomy: TripTaxo
   if (destination) query.append("destinations.slug[]", destination);
   if (title) query.set("title", `*${title}*`);
 
-  return { endpoint: `tours?${query.toString()}`, page, main, category, destination, title };
+  return { endpoint: `tours?${query.toString()}`, page, main, category, destination, title, order };
 }

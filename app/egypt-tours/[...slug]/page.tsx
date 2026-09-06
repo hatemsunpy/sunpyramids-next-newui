@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { DestinationCard } from "@/components/DestinationCard";
+import { DiscoveryHero } from "@/components/DiscoveryHero";
+import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { Pagination } from "@/components/Pagination";
 import { ResultCount } from "@/components/ResultCount";
 import { SiteShell } from "@/components/SiteShell";
 import { TourCard } from "@/components/TourCard";
+import { DestinationCard } from "@/components/DestinationCard";
 import { getCategoryReliable, getDestinationReliable, getDestinations, getPageReliable, getTours, tourListData, tourMeta } from "@/lib/data";
 import { formatApiError, type ApiResult } from "@/lib/api";
 import { decodePathSegment } from "@/lib/locales";
@@ -34,7 +36,6 @@ type Props = {
 function routePath(slug: string[]) {
   return `/egypt-tours/${slug.map(encodeURIComponent).join("/")}`;
 }
-
 async function resolveEgyptToursPage(slug: string[], locale: Locale): Promise<ApiResult<ApiPage | null>> {
   const root = slug[0];
   const childSlug = slug.length > 1 ? slug[slug.length - 1] : null;
@@ -51,7 +52,6 @@ async function resolveEgyptToursPage(slug: string[], locale: Locale): Promise<Ap
   if (pageSlug) return getPageReliable(pageSlug, locale);
   return getCategoryReliable(root, locale);
 }
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug.map(decodePathSegment);
   const result = await resolveEgyptToursPage(slug, "en");
@@ -104,40 +104,77 @@ export default async function Page({ params, searchParams }: Props) {
     redirect(meta.lastPage > 1 ? `${routePath(slug)}?page=${meta.lastPage}` : routePath(slug));
   }
 
+  const pageTitle = page?.title || page?.name || "Egypt Tours";
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Egypt Tours", href: slug.length > 1 ? "/egypt-tours/one-day-tours" : undefined },
+    ...(slug.length > 1 ? [{ label: pageTitle }] : []),
+  ];
+
   return (
     <SiteShell locale="en">
       <JsonLd schema={page.seo?.structure_schema} />
       <main>
-        <section
-          className="page-hero"
-          style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,.38)), url(${page?.banner || "/images/mainBanner.png"})` }}
-        >
-          <h1>{page?.title || page?.name || "Egypt Tours"}</h1>
-        </section>
-        <section className={isOneDayIndex ? "destination-grid-section" : "section-pad container-shell grid-cards"}>
-          {isOneDayIndex
-            ? items.map((destination) => (
-                <DestinationCard
-                  key={destination.id || destination.slug}
-                  destination={destination}
-                  basePath="/egypt-tours/one-day-tours"
-                  locale="en"
+        <DiscoveryHero
+          title={pageTitle}
+          breadcrumbs={breadcrumbs}
+          eyebrow={isOneDayIndex ? "Egypt Destinations" : "Curated Egypt Packages"}
+          description={page?.short_description || page?.description || page?.content}
+          totalCount={isOneDayIndex ? items.length : meta?.total}
+          bgImage={page?.banner || "/images/mainBanner.png"}
+        />
+        <section className="discovery-section">
+          <div className="container-shell">
+            {isOneDayIndex ? (
+              items.length > 0 ? (
+                <div className="destination-mosaic-grid">
+                  {items.map((destination) => (
+                    <DestinationCard
+                      key={destination.id || destination.slug}
+                      destination={destination}
+                      basePath="/egypt-tours/one-day-tours"
+                      locale="en"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  title="No destinations currently listed"
+                  description="We are updating our destinations catalog. Please check back shortly."
+                  actionLabel="Explore all tours"
+                  actionHref="/trips"
                 />
-              ))
-            : items.map((tour) => <TourCard key={tour.id || tour.slug} tour={tour} locale="en" />)}
-          {!isOneDayIndex && meta && (
-            <div className="col-span-full mt-8 flex flex-col items-center justify-between gap-4 lg:flex-row">
-              <ResultCount from={meta.from} to={meta.to} total={meta.total} />
-              {meta.lastPage > 1 && (
-                <Pagination
-                  page={currentPage}
-                  lastPage={meta.lastPage}
-                  basePath={routePath(slug)}
-                  query={new URLSearchParams()}
-                />
-              )}
-            </div>
-          )}
+              )
+            ) : items.length > 0 ? (
+              <>
+                <div className="discovery-full-grid">
+                  {items.map((tour) => (
+                    <TourCard key={tour.id || tour.slug} tour={tour as Tour} locale="en" />
+                  ))}
+                </div>
+                {meta && (
+                  <div className="discovery-pagination-bar">
+                    <ResultCount from={meta.from} to={meta.to} total={meta.total} />
+                    {meta.lastPage > 1 && (
+                      <Pagination
+                        page={currentPage}
+                        lastPage={meta.lastPage}
+                        basePath={routePath(slug)}
+                        query={new URLSearchParams()}
+                      />
+                    )}
+                  </div>
+                )}
+              </>
+            ) : (
+              <EmptyState
+                title="No tours available in this category"
+                description="We are currently updating our itinerary departures for this selection. Please browse all our Egypt tours."
+                actionLabel="Browse all Egypt tours"
+                actionHref="/trips"
+              />
+            )}
+          </div>
         </section>
       </main>
     </SiteShell>
