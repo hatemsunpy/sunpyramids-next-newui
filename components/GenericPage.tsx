@@ -482,36 +482,6 @@ function PlannerPage({
           <span className="planner-eyebrow">{eyebrow}</span>
           <h1 className="planner-title">{title}</h1>
           <p className="planner-lead">{leadDescription}</p>
-
-          <div className="planner-trust-pills">
-            <div className="trust-pill-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>100% Tailor-Made &bull; Private</span>
-            </div>
-            <div className="trust-pill-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span>24/7 Cairo Operations Support</span>
-            </div>
-            <div className="trust-pill-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-              <span>Licensed Egyptologist Specialists</span>
-            </div>
-            <div className="trust-pill-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="12" y1="1" x2="12" y2="23" />
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-              </svg>
-              <span>Direct Operator Pricing</span>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -531,10 +501,10 @@ function PlannerPage({
 
             <aside className="planner-sidebar">
               <div className="concierge-card">
-                <span className="concierge-badge">Concierge Desk</span>
-                <h3>Need Instant Advice?</h3>
+                <span className="concierge-badge">Local Support</span>
+                <h3>Need Guidance?</h3>
                 <p>
-                  Our Cairo operations specialists are available around the clock to answer transfer questions, customize multi-city routes, or discuss special family requirements.
+                  We would be happy to help you plan your trip. Contact our local team directly for customized itineraries, private requests, or any questions.
                 </p>
 
                 <div className="concierge-contact-actions">
@@ -558,34 +528,11 @@ function PlannerPage({
                       <span>Call {siteContact.phones[0].display}</span>
                     </a>
                   )}
-                </div>
 
-                <ul className="concierge-perks">
-                  <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span>100% Free Consultation & Custom Itinerary Design</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span>Guaranteed Private Air-Conditioned Vehicles</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span>English-Speaking Drivers & Certified Egyptologists</span>
-                  </li>
-                  <li>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span>Heritage Since 1970 — Trusted Local Operator</span>
-                  </li>
-                </ul>
+                  <Link className="btn-concierge-contact" href={withLocale("/contact-us", locale)}>
+                    Contact Us
+                  </Link>
+                </div>
               </div>
             </aside>
           </div>

@@ -406,7 +406,6 @@ export function MarketingLandingPage({ page, tours, locale = "en" }: { page: Api
         <div className="consultation-shell">
           <div className="section-header">
             <h2>{copy.makeTripEasy}</h2>
-            <p>Tell us your dates, group size, and wishes. Our Cairo concierge team will send a tailored proposal.</p>
           </div>
           <ContactForm locale={locale} submitLabel={copy.customItinerary} />
         </div>

@@ -812,49 +812,14 @@ export async function toggleWishlist(tourId: number | string, locale: Locale = "
 }
 
 export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your-trip" | "rent-car"; locale?: Locale }) {
-  return (
-    <Suspense fallback={<div className="planner-form-card" style={{ minHeight: 480 }} />}>
-      <PlannerRequestFlowInner route={route} locale={locale} />
-    </Suspense>
-  );
-}
-
-function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-trip" | "rent-car"; locale?: Locale }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { selected } = useCurrency();
   const copy = uiCopy(locale);
   const isCar = route === "rent-car";
 
-  // Initial query parameters parsing
-  const rawType = searchParams?.get("type") || "";
-  const initialTripType =
-    rawType === "existTime"
-      ? "exact_time"
-      : rawType === "approximateTime"
-      ? "approx_time"
-      : rawType === "notSureYet"
-      ? "not_sure"
-      : rawType === "approx_time" || rawType === "not_sure"
-      ? rawType
-      : "exact_time";
-
-  const initialCarType = rawType === "roundTrip" ? "roundTrip" : "oneWay";
-
-  const rawPicupDate = searchParams?.get("picupDate") || "";
-  const initialPickupDate = rawPicupDate.includes("T") ? rawPicupDate.split("T")[0] : rawPicupDate;
-  const initialPickupTime = rawPicupDate.includes("T") ? rawPicupDate.split("T")[1]?.slice(0, 5) : "";
-
-  const rawReturnDate = searchParams?.get("returnDate") || "";
-  const initialReturnDate = rawReturnDate.includes("T") ? rawReturnDate.split("T")[0] : rawReturnDate;
-  const initialReturnTime = rawReturnDate.includes("T") ? rawReturnDate.split("T")[1]?.slice(0, 5) : "";
-
-  const initialPickupLocation = searchParams?.get("location") || "";
-  const initialDropLocation = searchParams?.get("dropLoaction") || "";
-
-  // Interactive Form State
-  const [tripType, setTripType] = useState<"exact_time" | "approx_time" | "not_sure">(initialTripType as any);
-  const [carType, setCarType] = useState<"oneWay" | "roundTrip">(initialCarType);
+  // Interactive Form State (defaults matching baseline)
+  const [tripType, setTripType] = useState<"exact_time" | "approx_time" | "not_sure">("exact_time");
+  const [carType, setCarType] = useState<"oneWay" | "roundTrip">("oneWay");
   const [adults, setAdults] = useState<number>(1);
   const [children, setChildren] = useState<number>(0);
   const [infants, setInfants] = useState<number>(0);
@@ -864,8 +829,8 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
   const [locations, setLocations] = useState<any[]>([]);
   const [destinations, setDestinations] = useState<any[]>([]);
   const [countries, setCountries] = useState<any[]>([]);
-  const [pickupLocationId, setPickupLocationId] = useState(initialPickupLocation);
-  const [destinationId, setDestinationId] = useState(initialDropLocation);
+  const [pickupLocationId, setPickupLocationId] = useState("");
+  const [destinationId, setDestinationId] = useState("");
   const [routeMessage, setRouteMessage] = useState("");
 
   useEffect(() => {
@@ -876,34 +841,16 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
           isCar ? apiGet<ApiResponse<{ data?: any[] }>>("locations?page_limit=200&order_by=id,asc", locale, false) : Promise.resolve(null),
         ]);
         setCountries(Array.isArray(countryRes.data) ? countryRes.data : []);
-        if (locationRes) {
-          const locs = Array.isArray(locationRes.data?.data) ? locationRes.data.data : [];
-          setLocations(locs);
-          if (initialPickupLocation) {
-            setPickupLocationId(initialPickupLocation);
-            try {
-              const res = await apiPost<ApiResponse<any[]>>("car/rental/available/destinations", {
-                pickup_location_id: Number(initialPickupLocation),
-              }, locale);
-              const dests = Array.isArray(res.data) ? res.data : [];
-              setDestinations(dests);
-              if (initialDropLocation && dests.some((d: any) => String(d.id) === String(initialDropLocation))) {
-                setDestinationId(String(initialDropLocation));
-              }
-            } catch {
-              setDestinations([]);
-            }
-          }
-        }
+        if (locationRes) setLocations(Array.isArray(locationRes.data?.data) ? locationRes.data.data : []);
       } catch {
         setCountries([]);
         setLocations([]);
       }
     }
     loadOptions();
-  }, [isCar, locale, initialPickupLocation, initialDropLocation]);
+  }, [isCar, locale]);
 
-  async function loadRentalDestinations(pickupId: string, autoDropId?: string) {
+  async function loadRentalDestinations(pickupId: string) {
     setPickupLocationId(pickupId);
     setRouteMessage("");
     if (!pickupId) {
@@ -915,26 +862,19 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
       const res = await apiPost<ApiResponse<any[]>>("car/rental/available/destinations", {
         pickup_location_id: Number(pickupId),
       }, locale);
-      const dests = Array.isArray(res.data) ? res.data : [];
-      setDestinations(dests);
-      const dropToSelect = autoDropId || destinationId;
-      if (dropToSelect && dests.some((d: any) => String(d.id) === String(dropToSelect))) {
-        setDestinationId(String(dropToSelect));
-        loadRentalRoute(String(dropToSelect), pickupId);
-      }
+      setDestinations(Array.isArray(res.data) ? res.data : []);
     } catch {
       setDestinations([]);
     }
   }
 
-  async function loadRentalRoute(destId: string, customPickupId?: string) {
+  async function loadRentalRoute(destId: string) {
     setDestinationId(destId);
     setRouteMessage("");
-    const effectivePickup = customPickupId || pickupLocationId;
-    if (!effectivePickup || !destId) return;
+    if (!pickupLocationId || !destId) return;
     try {
       const res = await apiPost<ApiResponse>("car/rental/search/for/route", {
-        pickup_location_id: Number(effectivePickup),
+        pickup_location_id: Number(pickupLocationId),
         destination_id: Number(destId),
       }, locale);
       setRouteMessage(res.message || "Rental route is available.");
@@ -1163,7 +1103,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                     name="pickupDate"
                     type="date"
                     required
-                    defaultValue={initialPickupDate}
                   />
                 </div>
               </div>
@@ -1178,7 +1117,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                     name="pickupTime"
                     type="time"
                     required
-                    defaultValue={initialPickupTime}
                   />
                 </div>
               </div>
@@ -1196,7 +1134,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       name="returnDate"
                       type="date"
                       required
-                      defaultValue={initialReturnDate}
                     />
                   </div>
                 </div>
@@ -1211,7 +1148,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       name="returnTime"
                       type="time"
                       required
-                      defaultValue={initialReturnTime}
                     />
                   </div>
                 </div>
@@ -1229,7 +1165,7 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                   checked={tripType === "exact_time"}
                   onChange={() => setTripType("exact_time")}
                 />
-                <span className="option-title">Specific Dates</span>
+                <span className="option-title">Exact time</span>
                 <span className="option-caption">Confirmed dates</span>
               </label>
 
@@ -1241,7 +1177,7 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                   checked={tripType === "approx_time"}
                   onChange={() => setTripType("approx_time")}
                 />
-                <span className="option-title">Flexible Month</span>
+                <span className="option-title">Approximate time</span>
                 <span className="option-caption">Approximate window</span>
               </label>
 
@@ -1253,7 +1189,7 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                   checked={tripType === "not_sure"}
                   onChange={() => setTripType("not_sure")}
                 />
-                <span className="option-title">Open Itinerary</span>
+                <span className="option-title">Not sure</span>
                 <span className="option-caption">Still exploring</span>
               </label>
             </div>
@@ -1270,7 +1206,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       name="startDate"
                       type="date"
                       required
-                      defaultValue={searchParams?.get("from") || ""}
                     />
                   </div>
                 </div>
@@ -1285,7 +1220,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       name="endDate"
                       type="date"
                       required
-                      defaultValue={searchParams?.get("to") || ""}
                     />
                   </div>
                 </div>
@@ -1304,7 +1238,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       name="month"
                       placeholder="e.g. November 2026"
                       required
-                      defaultValue={searchParams?.get("month") || ""}
                     />
                   </div>
                 </div>
@@ -1321,7 +1254,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       min={1}
                       placeholder="e.g. 10"
                       required
-                      defaultValue={searchParams?.get("days") || ""}
                     />
                   </div>
                 </div>
@@ -1342,7 +1274,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
                       min={1}
                       placeholder="e.g. 7, 10, or 14"
                       required
-                      defaultValue={searchParams?.get("days") || ""}
                     />
                   </div>
                 </div>
@@ -1600,10 +1531,6 @@ function PlannerRequestFlowInner({ route, locale = "en" }: { route: "make-your-t
             {message}
           </div>
         )}
-
-        <p className="form-disclaimer">
-          Free revisions &bull; 100% Tailor-Made &bull; Direct Cairo operations team confirmation &bull; No obligation
-        </p>
       </div>
     </form>
   );
