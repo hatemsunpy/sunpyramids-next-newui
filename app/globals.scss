@@ -3110,6 +3110,10 @@ select {
   display: none;
 }
 
+.tour-page-redesign .tour-day summary::before {
+  content: none;
+}
+
 .tour-page-redesign .tour-day summary:hover {
   background: color-mix(in srgb, var(--tour-primary-soft) 40%, transparent);
 }
@@ -4226,6 +4230,32 @@ select {
     margin-left: calc(3.25rem + 0.8rem);
   }
 
+  .tour-page-redesign .tour-season-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .tour-page-redesign .tour-season-date {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  .tour-page-redesign .tour-season-rates {
+    min-width: 0;
+  }
+
+  .tour-page-redesign .tour-season-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+  }
+
+  .tour-page-redesign .tour-season-row strong {
+    justify-self: end;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
   .tour-page-redesign .tour-inclusions-grid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -4269,7 +4299,7 @@ select {
   }
 
   .tour-page-redesign .tour-day-body {
-    margin-left: 0;
+    margin-left: 3.25rem;
   }
 }
 
