@@ -26,7 +26,7 @@ export default async function Page({ params }: Props) {
   return (
     <SiteShell locale="en" settings={settings}>
       <JsonLd schema={tour?.seo?.structure_schema} />
-      <TourPage tour={tour} relatedTours={relatedTours} socialLinks={settings.socialLinks} locale="en" />
+      <TourPage tour={tour} relatedTours={relatedTours} locale="en" />
     </SiteShell>
   );
 }

@@ -1,19 +1,38 @@
 import Image from "next/image";
+import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { uiCopy } from "@/lib/ui-copy";
-import type { Locale, SocialLink } from "@/types/api";
+import type { Locale, Tour } from "@/types/api";
 
-const galleryItems = [
-  { image: "/images/shorts.png", icon: "/images/shorts-gallary.png", label: "YouTube Shorts", type: "shorts" },
-  { image: "/images/youtubetwo.png", icon: "/images/youtube-gallary.png", label: "YouTube", type: "youtube-video-1" },
-  { image: "/images/youtubetwo.png", icon: "/images/fb-logo.webp", label: "Facebook", type: "youtube-video-2" },
-  { image: "/images/youtubeone.png", icon: "/images/youtube-gallary.png", label: "YouTube", type: "youtube" },
-  { image: "/images/tiktok.png", icon: "/images/tiktok-gallary.png", label: "TikTok", type: "tiktok" },
-  { image: "/images/instagram.png", icon: "/images/insta-gallary.png", label: "Instagram", type: "insta-link" },
-] as const;
+type SocialGalleryItem = NonNullable<Tour["social_links"]>[number];
 
-type GalleryItem = (typeof galleryItems)[number];
+const galleryPresentation: Record<string, { image: string; icon: string; label: string }> = {
+  shorts: { image: "/images/shorts.png", icon: "/images/shorts-gallary.png", label: "YouTube Shorts" },
+  "youtube-video-1": { image: "/images/youtubeone.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
+  "youtube-video-2": { image: "/images/youtubetwo.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
+  youtube: { image: "/images/youtubeone.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
+  facebook: { image: "/images/youtubetwo.png", icon: "/images/fb-logo.webp", label: "Facebook" },
+  tiktok: { image: "/images/tiktok.png", icon: "/images/tiktok-gallary.png", label: "TikTok" },
+  "insta-link": { image: "/images/instagram.png", icon: "/images/insta-gallary.png", label: "Instagram" },
+  instagram: { image: "/images/instagram.png", icon: "/images/insta-gallary.png", label: "Instagram" },
+};
 
-function GalleryArtwork({ galleryItem }: { galleryItem: GalleryItem }) {
+function resolveGalleryItem(socialLink: SocialGalleryItem) {
+  const presentation = socialLink.type ? galleryPresentation[socialLink.type] : undefined;
+  const image = socialLink.image || presentation?.image;
+  if (!image) return null;
+
+  return {
+    image,
+    icon: socialLink.icon || presentation?.icon,
+    label: presentation?.label || socialLink.type || "Social media",
+    type: socialLink.type || "social-media",
+    url: socialLink.url,
+  };
+}
+
+type ResolvedGalleryItem = NonNullable<ReturnType<typeof resolveGalleryItem>>;
+
+function GalleryArtwork({ galleryItem }: { galleryItem: ResolvedGalleryItem }) {
   return (
     <>
       <Image
@@ -24,35 +43,42 @@ function GalleryArtwork({ galleryItem }: { galleryItem: GalleryItem }) {
         sizes="(max-width: 767px) 78vw, (max-width: 1180px) 38vw, 21vw"
         loading="lazy"
       />
-      <Image className="tour-social-icon" src={galleryItem.icon} alt="" width={72} height={72} />
+      {galleryItem.icon ? (
+        <Image className="tour-social-icon" src={galleryItem.icon} alt="" width={72} height={72} />
+      ) : null}
     </>
   );
 }
 
-function SocialGalleryCard({ galleryItem, url }: { galleryItem: GalleryItem; url?: string }) {
+function SocialGalleryCard({ galleryItem }: { galleryItem: ResolvedGalleryItem }) {
   const artwork = <GalleryArtwork galleryItem={galleryItem} />;
   return (
-    <li className="tour-social-card">
-      {url ? (
-        <a className="tour-social-card-media" href={url} target="_blank" rel="noreferrer" aria-label={`View ${galleryItem.label} journey`}>
+    <article className="tour-social-card" role="group" aria-roledescription="slide" aria-label={galleryItem.label}>
+      {galleryItem.url ? (
+        <a className="tour-social-card-media" href={galleryItem.url} target="_blank" rel="noreferrer" aria-label={`View ${galleryItem.label} journey`}>
           {artwork}
         </a>
       ) : (
         <div className="tour-social-card-media">{artwork}</div>
       )}
-    </li>
+    </article>
   );
 }
 
 export function TourSocialGallery({
-  socialLinks,
+  socialLinks = [],
   locale = "en",
 }: {
-  socialLinks: SocialLink[];
+  socialLinks?: Tour["social_links"];
   locale?: Locale;
 }) {
   const copy = uiCopy(locale);
-  const socialUrls = new Map(socialLinks.map((socialLink) => [socialLink.type, socialLink.url]));
+  const galleryItems = socialLinks.flatMap((socialLink) => {
+    const galleryItem = resolveGalleryItem(socialLink);
+    return galleryItem ? [galleryItem] : [];
+  });
+
+  if (!galleryItems.length) return null;
 
   return (
     <section className="tour-social-gallery" aria-labelledby="tour-social-gallery-title">
@@ -61,11 +87,11 @@ export function TourSocialGallery({
           <h2 id="tour-social-gallery-title">{copy.galleryTitle}</h2>
           <p>{copy.galleryDescription}</p>
         </div>
-        <ul className="tour-social-scroll" aria-label={copy.galleryTitle}>
-          {galleryItems.map((galleryItem) => (
-            <SocialGalleryCard key={galleryItem.type} galleryItem={galleryItem} url={socialUrls.get(galleryItem.type)} />
+        <SwipeCarousel className="tour-social-scroll" ariaLabel={copy.galleryTitle}>
+          {galleryItems.map((galleryItem, index) => (
+            <SocialGalleryCard key={`${galleryItem.type}-${index}`} galleryItem={galleryItem} />
           ))}
-        </ul>
+        </SwipeCarousel>
       </div>
     </section>
   );

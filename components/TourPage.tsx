@@ -11,17 +11,15 @@ import { TourPageLayout } from "@/components/tour/TourPageLayout";
 import { TourPageNavigation } from "@/components/tour/TourPageNavigation";
 import { TourSeasonPrices } from "@/components/tour/TourSeasonPrices";
 import { TourSocialGallery } from "@/components/tour/TourSocialGallery";
-import type { Locale, SocialLink, Tour } from "@/types/api";
+import type { Locale, Tour } from "@/types/api";
 
 export function TourPage({
   tour,
   relatedTours = [],
-  socialLinks = [],
   locale = "en",
 }: {
   tour: Tour | null;
   relatedTours?: Tour[];
-  socialLinks?: SocialLink[];
   locale?: Locale;
 }) {
   const title = tour?.title || tour?.name || "";
@@ -83,7 +81,7 @@ export function TourPage({
 
       {tour?.is_inquiry ? null : tour?.seasons?.length ? <TourSeasonPrices seasons={tour.seasons} /> : null}
 
-      <TourSocialGallery socialLinks={socialLinks} locale={locale} />
+      <TourSocialGallery socialLinks={tour?.social_links} locale={locale} />
       <RelatedTours tours={relatedTours} locale={locale} />
       <MakeYourTripCTA tour={tour} locale={locale} />
     </main>
