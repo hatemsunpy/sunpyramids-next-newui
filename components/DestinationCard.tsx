@@ -18,14 +18,27 @@ export function DestinationCard({
 }) {
   const slug = destination.slug || String(destination.id || "");
   const title = destination.title || destination.name || "Egypt Destination";
-  const image = destination.featured_image || destination.image || destination.banner || "/images/mainBanner.png";
+  const image =
+    destination.featured_image ||
+    destination.image ||
+    destination.banner ||
+    "/images/mainBanner.png";
   const Heading = headingLevel === 3 ? "h3" : "h2";
 
   return (
     <article className={`destination-card ${className}`.trim()}>
       <Link href={withLocale(`${basePath}/${slug}`, locale)}>
-        <Image src={image} alt="" fill sizes="(max-width: 768px) 50vw, 25vw" />
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          loading="lazy"
+        />
         <Heading>{title}</Heading>
+        <span className="dest-cta" aria-hidden="true">
+          Explore Tours &rarr;
+        </span>
       </Link>
     </article>
   );
