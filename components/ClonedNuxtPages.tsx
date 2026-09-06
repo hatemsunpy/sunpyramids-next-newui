@@ -203,6 +203,13 @@ export function TravelGuidePage({
 
       <section className="discovery-section">
         <div className="container-shell" style={{ display: "grid", gap: "2.5rem" }}>
+          {page?.content && (
+            <article
+              className="editorial-prose"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
+            />
+          )}
+
           {categories.length > 0 && (
             <div>
               <h2 style={{ margin: "0 0 1.25rem", fontSize: "1.45rem", fontWeight: 700, color: "var(--spt-ink)" }}>
@@ -249,25 +256,86 @@ export function TravelGuidePage({
 }
 
 
-export function EventDetailPage({ event, relatedTours, locale = "en" }: { event: ApiPage | null; relatedTours: Tour[]; locale?: Locale }) {
+export function EventDetailPage({
+  event,
+  relatedTours,
+  locale = "en",
+}: {
+  event: ApiPage | null;
+  relatedTours: Tour[];
+  locale?: Locale;
+}) {
   const title = event?.title || event?.name || "Egypt Event";
+  const image = event?.banner || event?.featured_image || event?.image || "/images/eventsHero.png";
+  const breadcrumbs = [
+    { label: "Home", href: withLocale("/", locale) },
+    { label: "Events", href: withLocale("/events", locale) },
+    { label: title },
+  ];
+
   return (
-    <main>
-      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${event?.banner || event?.featured_image || "/images/eventsHero.png"})` }}>
-        <h1>{title}</h1>
+    <main className="event-detail-page">
+      <header className="editorial-hero">
+        <div className="editorial-hero-inner">
+          <nav className="editorial-breadcrumb" aria-label="Breadcrumb">
+            <Link href={withLocale("/", locale)}>Home</Link>
+            <span className="separator" aria-hidden="true">›</span>
+            <Link href={withLocale("/events", locale)}>Events</Link>
+            <span className="separator" aria-hidden="true">›</span>
+            <span className="current" aria-current="page">{title}</span>
+          </nav>
+
+          <span className="editorial-eyebrow">Cultural Celebration</span>
+          <h1 className="editorial-title">{title}</h1>
+
+          {image && (
+            <div className="editorial-lead-media">
+              <Image
+                src={image}
+                alt={title}
+                fill
+                priority
+                sizes="(max-width: 1440px) 100vw, 1440px"
+              />
+            </div>
+          )}
+        </div>
+      </header>
+
+      <section className="editorial-main-section">
+        <div className="editorial-container">
+          <div className="editorial-event-layout">
+            <article
+              className="editorial-prose"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(event?.description || event?.content) }}
+            />
+
+            <aside className="event-booking-panel">
+              <p className="panel-eyebrow">Event Attendance</p>
+              <h3>Plan Your Visit</h3>
+              <ContactForm locale={locale} submitLabel="Inquire About Event" />
+            </aside>
+          </div>
+        </div>
       </section>
-      <section className="event-detail-layout container-shell">
-        <article>
-          <h2>{title}</h2>
-          <div className="content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(event?.description || event?.content) }} />
-        </article>
-        <aside className="booking-panel">
-          <p className="eyebrow">Event details</p>
-          <h3>{title}</h3>
-          <ContactForm locale={locale} />
-        </aside>
-      </section>
-      {relatedTours.length ? <section className="section-pad container-shell"><div className="grid-cards">{relatedTours.slice(0, 4).map((tour) => <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />)}</div></section> : null}
+
+      {relatedTours.length > 0 && (
+        <section className="editorial-related-section">
+          <div className="editorial-container">
+            <div className="section-header">
+              <h2>Related Tours & Experiences</h2>
+              <Link className="see-more" href={withLocale("/trips", locale)}>
+                View all tours &rarr;
+              </Link>
+            </div>
+            <div className="discovery-grid">
+              {relatedTours.slice(0, 3).map((tour) => (
+                <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

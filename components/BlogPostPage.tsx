@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BlogCard } from "@/components/BlogCard";
 import { BlogTableOfContents, type BlogHeading } from "@/components/BlogTableOfContents";
@@ -64,79 +65,215 @@ function formatDate(dateValue: string | null | undefined, locale: Locale) {
 function AdventureCard({ locale }: { locale: Locale }) {
   const copy = blogPostCopy(locale);
   return (
-    <aside className="blog-post-adventure">
-      <div className="blog-post-adventure-art">
-        <h2>{copy.plan}</h2>
-        <DeferredBlogAdventureMedia />
+    <aside className="editorial-adventure-card">
+      <div className="card-eyebrow">{copy.plan || "Egypt Adventures"}</div>
+      <h3 className="card-title">Experience Egypt Beyond the Pages</h3>
+      <p className="card-text">
+        Private, tailored itineraries guided by licensed Egyptologists since 1970.
+      </p>
+      <div className="card-actions">
+        <Link className="btn-primary" href={withLocale("/make-your-trip", locale)}>
+          {copy.make || "Design Your Trip"}
+        </Link>
+        <Link className="btn-outline" href={withLocale("/trips", locale)}>
+          {copy.explore || "Explore All Tours"}
+        </Link>
       </div>
-      <div className="blog-post-adventure-actions">
-        <Link className="btn-outline" href={withLocale("/trips", locale)}>{copy.explore}</Link>
-        <Link className="btn-primary" href={withLocale("/make-your-trip", locale)}>{copy.make}</Link>
-      </div>
+      <DeferredBlogAdventureMedia />
     </aside>
   );
 }
 
-function BlogPostHeader({ blog, title, image, date, locale }: { blog: ApiPage; title: string; image: string; date: string; locale: Locale }) {
+function BlogPostHeader({
+  blog,
+  title,
+  image,
+  date,
+  locale,
+}: {
+  blog: ApiPage;
+  title: string;
+  image: string;
+  date: string;
+  locale: Locale;
+}) {
   const copy = blogPostCopy(locale);
-  return <>
-    <nav className="blog-post-breadcrumb" aria-label="Breadcrumb">
-      <Link href={withLocale("/", locale)}>{copy.home}</Link><span aria-hidden="true">›</span>
-      <Link href={withLocale("/blogs/all-blogs", locale)}>{copy.blogs}</Link><span aria-hidden="true">›</span>
-      <span>{title}</span>
-    </nav>
-    <section className="blog-post-hero" style={{ backgroundImage: `linear-gradient(90deg, rgba(8,19,37,.5), rgba(8,19,37,.12)), url("${image}")` }}>
-      <div><h1>{title}</h1>{date ? <time dateTime={blog.published_at || blog.created_at || undefined}>{date}</time> : null}</div>
-    </section>
-  </>;
+  const primaryCategory = blog.categories?.[0]?.title || blog.categories?.[0]?.name;
+
+  return (
+    <header className="editorial-hero">
+      <div className="editorial-hero-inner">
+        <nav className="editorial-breadcrumb" aria-label="Breadcrumb">
+          <Link href={withLocale("/", locale)}>{copy.home}</Link>
+          <span className="separator" aria-hidden="true">›</span>
+          <Link href={withLocale("/blogs/all-blogs", locale)}>{copy.blogs}</Link>
+          {primaryCategory && (
+            <>
+              <span className="separator" aria-hidden="true">›</span>
+              <span>{primaryCategory}</span>
+            </>
+          )}
+          <span className="separator" aria-hidden="true">›</span>
+          <span className="current" aria-current="page">{title}</span>
+        </nav>
+
+        <span className="editorial-eyebrow">
+          {primaryCategory || "Travel Journal"}
+        </span>
+
+        <h1 className="editorial-title">{title}</h1>
+
+        <div className="editorial-meta">
+          {date && (
+            <span className="meta-item">
+              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <time dateTime={blog.published_at || blog.created_at || undefined}>{date}</time>
+            </span>
+          )}
+        </div>
+
+        {blog.short_description && (
+          <p className="editorial-standfirst">{blog.short_description}</p>
+        )}
+
+        {image && (
+          <div className="editorial-lead-media">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              priority
+              sizes="(max-width: 1440px) 100vw, 1440px"
+            />
+          </div>
+        )}
+      </div>
+    </header>
+  );
 }
 
-function BlogPostArticle({ title, html, headings, locale }: { title: string; html: string; headings: BlogHeading[]; locale: Locale }) {
+function BlogPostArticle({
+  html,
+  headings,
+  locale,
+}: {
+  html: string;
+  headings: BlogHeading[];
+  locale: Locale;
+}) {
   const copy = blogPostCopy(locale);
-  return <section className="blog-post-layout">
-    <article className="blog-post-article">
-      <h2 className="blog-post-title">{title}</h2>
-      <div className="blog-post-prose" dangerouslySetInnerHTML={{ __html: html }} />
-    </article>
-    <div className="blog-post-sidebar">
-      {headings.length ? <aside className="blog-post-toc"><h2>{copy.contents}</h2><BlogTableOfContents headings={headings} /></aside> : null}
-      <AdventureCard locale={locale} />
-    </div>
-  </section>;
+  return (
+    <section className="editorial-main-section">
+      <div className="editorial-container">
+        <div className="editorial-layout">
+          <article className="editorial-prose" dangerouslySetInnerHTML={{ __html: html }} />
+
+          <div className="editorial-sidebar">
+            {headings.length > 0 && (
+              <aside className="editorial-toc-card">
+                <h2 className="toc-title">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                  </svg>
+                  <span>{copy.contents || "Table of Contents"}</span>
+                </h2>
+                <BlogTableOfContents headings={headings} />
+              </aside>
+            )}
+
+            <AdventureCard locale={locale} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function RelatedTours({ blog, locale }: { blog: ApiPage; locale: Locale }) {
   const tours = blog.related_tours || [];
   if (!tours.length) return null;
-  return <section className="blog-post-section blog-post-related-tours">
-    <h2>{blogPostCopy(locale).relatedTours}</h2>
-    <div className="blog-post-card-track blog-post-tour-track">
-      {tours.slice(0, 6).map((tour) => <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />)}
-    </div>
-  </section>;
+  return (
+    <section className="editorial-related-section">
+      <div className="editorial-container">
+        <div className="section-header">
+          <h2>{blogPostCopy(locale).relatedTours || "Recommended Tours"}</h2>
+          <Link className="see-more" href={withLocale("/trips", locale)}>
+            View all tours &rarr;
+          </Link>
+        </div>
+        <div className="discovery-grid">
+          {tours.slice(0, 3).map((tour) => (
+            <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function BlogPostFaqs({ faqs, locale }: { faqs: ApiPage[]; locale: Locale }) {
   const copy = blogPostCopy(locale);
-  return <section className="blog-post-section blog-post-faqs">
-    <div className="blog-post-section-heading"><h2>{copy.faqs}</h2><Link href={withLocale("/faqs", locale)}>{copy.seeMore}</Link></div>
-    {faqs.length ? <div className="faq-list">{faqs.map((faq) => (
-      <details className="faq-item" key={String(faq.id || faq.question || faq.title)}>
-        <summary>{String(faq.question || faq.title || "Question")}</summary>
-        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }} />
-      </details>
-    ))}</div> : <p className="blog-post-empty">{copy.noFaqs}</p>}
-  </section>;
+  if (!faqs.length) return null;
+
+  return (
+    <section className="editorial-related-section">
+      <div className="editorial-container">
+        <div className="editorial-faq-container">
+          <div className="section-header">
+            <h2>{copy.faqs || "Frequently Asked Questions"}</h2>
+            <Link className="see-more" href={withLocale("/faqs", locale)}>
+              {copy.seeMore || "Browse all FAQs"} &rarr;
+            </Link>
+          </div>
+          <div className="editorial-faq-list">
+            {faqs.map((faq) => (
+              <details className="editorial-faq-item" key={String(faq.id || faq.question || faq.title)}>
+                <summary>
+                  <span>{String(faq.question || faq.title || "Question")}</span>
+                  <span className="faq-icon" aria-hidden="true" />
+                </summary>
+                <div
+                  className="faq-answer"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.answer || faq.description) }}
+                />
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function RelatedBlogs({ blogs, locale }: { blogs: ApiPage[]; locale: Locale }) {
   if (!blogs.length) return null;
-  return <section className="blog-post-related-blogs"><div className="blog-post-section">
-    <h2>{blogPostCopy(locale).relatedBlogs}</h2>
-    <div className="blog-post-card-track blog-post-blog-track">
-      {blogs.slice(0, 5).map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} variant="listing" />)}
-    </div>
-  </div></section>;
+  return (
+    <section className="editorial-related-section">
+      <div className="editorial-container">
+        <div className="section-header">
+          <h2>{blogPostCopy(locale).relatedBlogs || "Related Articles"}</h2>
+          <Link className="see-more" href={withLocale("/blogs/all-blogs", locale)}>
+            Explore journal &rarr;
+          </Link>
+        </div>
+        <div className="discovery-grid">
+          {blogs.slice(0, 3).map((blog) => (
+            <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} variant="listing" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export function BlogPostPage({
@@ -158,13 +295,13 @@ export function BlogPostPage({
   return (
     <main className="blog-post-page">
       <BlogPostHeader blog={blog} title={title} image={image} date={date} locale={locale} />
-      <BlogPostArticle title={title} html={html} headings={headings} locale={locale} />
+      <BlogPostArticle html={html} headings={headings} locale={locale} />
       <RelatedTours blog={blog} locale={locale} />
       <BlogPostFaqs faqs={faqs} locale={locale} />
       <RelatedBlogs blogs={relatedBlogs} locale={locale} />
       <section className="home-help-section blog-post-help">
         <div className="home-help-panel">
-          <h2>{homeCopy(locale).needHelp}</h2>
+          <h2>{homeCopy(locale).needHelp || "Need Help Planning?"}</h2>
           <HomeNeedHelpForm locale={locale} />
         </div>
       </section>

@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { Locale, TripTaxonomy } from "@/types/api";
 import { withLocale } from "@/lib/locales";
 import { uiCopy } from "@/lib/ui-copy";
@@ -12,7 +11,6 @@ type ActiveFilters = {
   category?: string;
   destination?: string;
   title?: string;
-  order?: string;
   page?: number;
 };
 
@@ -27,8 +25,6 @@ export function TripsFilterSidebar({
   locale?: Locale;
   totalResults?: number;
 }) {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
   const copy = uiCopy(locale);
   const tripsPath = withLocale("/trips", locale);
 
@@ -108,7 +104,6 @@ export function TripsFilterSidebar({
       category: active.category || "",
       destination: active.destination || "",
       title: active.title || "",
-      order: active.order || "",
     };
 
     if (key === "main") {
@@ -124,7 +119,6 @@ export function TripsFilterSidebar({
 
     const params = new URLSearchParams();
     if (next.title) params.set("title", next.title);
-    if (next.order) params.set("order", next.order);
     if (next.main) params.set("main", next.main);
     if (next.destination) params.set("destination", next.destination);
     if (next.category) params.set("category", next.category);
@@ -139,22 +133,8 @@ export function TripsFilterSidebar({
     if (keyToRemove !== "main" && active.main) params.set("main", active.main);
     if (keyToRemove !== "destination" && active.destination) params.set("destination", active.destination);
     if (keyToRemove !== "category" && active.category) params.set("category", active.category);
-    if (active.order) params.set("order", active.order);
     const qs = params.toString();
     return `${tripsPath}${qs ? `?${qs}` : ""}`;
-  };
-
-  const handleSortChange = (newOrder: string) => {
-    const params = new URLSearchParams();
-    if (active.title) params.set("title", active.title);
-    if (active.main) params.set("main", active.main);
-    if (active.destination) params.set("destination", active.destination);
-    if (active.category) params.set("category", active.category);
-    if (newOrder) params.set("order", newOrder);
-    const qs = params.toString();
-    startTransition(() => {
-      router.push(`${tripsPath}${qs ? `?${qs}` : ""}`, { scroll: false });
-    });
   };
 
   const activeMainCategory = taxonomy.allCategories.find(
@@ -343,21 +323,6 @@ export function TripsFilterSidebar({
             <span>Filters</span>
             {activeFilterCount > 0 && <span className="badge">{activeFilterCount}</span>}
           </button>
-
-          {/* Sort Control */}
-          <div className="sort-control">
-            <label htmlFor="trips-sort-select" className="sr-only">
-              Sort tours
-            </label>
-            <select
-              id="trips-sort-select"
-              value={active.order || "asc"}
-              onChange={(e) => handleSortChange(e.target.value)}
-            >
-              <option value="asc">A to Z</option>
-              <option value="desc">Z to A</option>
-            </select>
-          </div>
         </div>
       </div>
 
