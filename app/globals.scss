@@ -3880,9 +3880,6 @@ select {
 
 .tour-page-redesign .tour-gallery-viewer {
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100vw;
   max-width: none;
   height: 100vh;
@@ -3891,6 +3888,12 @@ select {
   padding: 0;
   background: #081126;
   color: #ffffff;
+}
+
+.tour-page-redesign .tour-gallery-viewer[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tour-page-redesign .tour-gallery-viewer::backdrop {
