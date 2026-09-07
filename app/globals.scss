@@ -3872,6 +3872,12 @@ select {
   opacity: 0;
 }
 
+/* Keep gallery navigation anchored to the image while specular effects stay relative. */
+.tour-page-redesign .tour-gallery-main .tour-gallery-arrow,
+.tour-page-redesign .tour-gallery-main .tour-gallery-expand {
+  position: absolute;
+}
+
 /* Focus indicators */
 .tour-page-redesign button:focus-visible,
 .tour-page-redesign a:focus-visible,
