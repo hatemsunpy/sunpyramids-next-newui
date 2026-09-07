@@ -11,6 +11,8 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const viewerRef = useRef<HTMLDialogElement>(null);
+  const mobileThumbnailsRef = useRef<HTMLDivElement>(null);
+  const viewerThumbnailsRef = useRef<HTMLDivElement>(null);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
   const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image]).filter((image): image is string => Boolean(image));
   const previewLimit = 3;
@@ -40,6 +42,20 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
     if (isViewerOpen && !viewer.open) viewer.showModal();
     if (!isViewerOpen && viewer.open) viewer.close();
   }, [isViewerOpen]);
+
+  useEffect(() => {
+    const rails = [mobileThumbnailsRef.current, isViewerOpen ? viewerThumbnailsRef.current : null];
+
+    rails.forEach((rail) => {
+      if (!rail || rail.clientWidth === 0) return;
+      const thumbnail = rail.querySelector<HTMLButtonElement>(`[data-gallery-index="${active}"]`);
+      if (!thumbnail) return;
+
+      rail.scrollTo({
+        left: Math.max(0, thumbnail.offsetLeft - (rail.clientWidth - thumbnail.offsetWidth) / 2),
+      });
+    });
+  }, [active, isViewerOpen]);
 
   function navigateGalleryWithKeyboard(event: React.KeyboardEvent) {
     if (event.key === "ArrowLeft") showPhoto(active - 1);
@@ -98,6 +114,25 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
         </span>
       </div>
+      {gallery.length > 1 ? (
+        <div className="tour-gallery-mobile-thumbnails">
+          <GalleryThumbnailRail
+            active={active}
+            gallery={gallery}
+            onSelect={showPhoto}
+            railRef={mobileThumbnailsRef}
+            sizes="4rem"
+          />
+          <button
+            className="tour-gallery-thumbnail-next"
+            type="button"
+            onClick={() => showPhoto(active + 1)}
+            aria-label="Next photo"
+          >
+            <ChevronIcon direction="next" />
+          </button>
+        </div>
+      ) : null}
       {previewIndexes.length ? (
         <div className={`tour-gallery-previews tour-gallery-previews-${previewIndexes.length}`}>
           {previewIndexes.map((index, i) => {
@@ -160,9 +195,50 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           </div>
           <button className="tour-gallery-viewer-arrow tour-gallery-viewer-prev" type="button" onClick={() => showPhoto(active - 1)} aria-label="Previous photo"><ChevronIcon direction="previous" /></button>
           <button className="tour-gallery-viewer-arrow tour-gallery-viewer-next" type="button" onClick={() => showPhoto(active + 1)} aria-label="Next photo"><ChevronIcon direction="next" /></button>
+          <div className="tour-gallery-viewer-thumbnails">
+            <GalleryThumbnailRail
+              active={active}
+              gallery={gallery}
+              onSelect={showPhoto}
+              railRef={viewerThumbnailsRef}
+              sizes="4.5rem"
+            />
+          </div>
         </div>
       </dialog>
     </section>
+  );
+}
+
+function GalleryThumbnailRail({
+  active,
+  gallery,
+  onSelect,
+  railRef,
+  sizes,
+}: {
+  active: number;
+  gallery: string[];
+  onSelect: (index: number) => void;
+  railRef: React.RefObject<HTMLDivElement | null>;
+  sizes: string;
+}) {
+  return (
+    <div ref={railRef} className="tour-gallery-thumbnail-rail" aria-label="Choose a tour photo">
+      {gallery.map((src, index) => (
+        <button
+          key={`thumbnail-${src}-${index}`}
+          type="button"
+          className={`tour-gallery-thumbnail ${index === active ? "is-active" : ""}`}
+          data-gallery-index={index}
+          onClick={() => onSelect(index)}
+          aria-label={`View photo ${index + 1}`}
+          aria-pressed={index === active}
+        >
+          <Image src={src} alt="" fill sizes={sizes} loading="lazy" />
+        </button>
+      ))}
+    </div>
   );
 }
 
