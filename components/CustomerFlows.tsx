@@ -249,32 +249,96 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
     window.location.href = clientApiUrl(endpoint);
   }
 
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(withLocale("/", locale));
+    }
+  }
+
   const isPasswordMode = mode.includes("password") || mode === "sign-in" || mode === "sign-up";
 
   return (
-    <div className="auth-form-wrap">
-      <p className="eyebrow">Sun Pyramids Tours</p>
-      <h1>{title}</h1>
+    <div className={`auth-form-wrap auth-mode-${mode}`}>
+      <nav className="auth-nav-row" aria-label="Page navigation">
+        <button type="button" className="auth-nav-back" onClick={handleBack} aria-label={copy.back || "Back"}>
+          <span aria-hidden="true">←</span>
+          <span>{copy.back || "Back"}</span>
+        </button>
+        <Link href={withLocale("/", locale)} className="auth-nav-home" aria-label={copy.home || "Home"}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span>{copy.home || "Home"}</span>
+        </Link>
+      </nav>
+      <div className="auth-heading">
+        <p className="eyebrow">Sun Pyramids Tours</p>
+        <h1>{title}</h1>
+      </div>
       {mode === "sign-in" || mode === "sign-up" ? (
         <div className="social-row">
-          <button type="button" onClick={() => socialRedirect("auth/google/redirect")}>Google</button>
-          <button type="button" onClick={() => socialRedirect("auth/facebook/redirect")}>Facebook</button>
+          <button type="button" onClick={() => socialRedirect("auth/google/redirect")}>
+            <Image src="/images/google.png" alt="" width={20} height={20} aria-hidden="true" />
+            Google
+          </button>
+          <button type="button" onClick={() => socialRedirect("auth/facebook/redirect")}>
+            <Image src="/images/facebook-logo.webp" alt="" width={20} height={20} aria-hidden="true" />
+            Facebook
+          </button>
+          <div className="auth-divider" aria-hidden="true" />
         </div>
       ) : null}
-      <form className="auth-form" onSubmit={submit}>
-        {mode === "sign-up" ? <input name="name" placeholder={copy.fullName} required /> : null}
+      <form className="auth-form" onSubmit={submit} aria-describedby={message ? "auth-form-message" : undefined}>
+        {mode === "sign-up" ? (
+          <div className="auth-field">
+            <label htmlFor="auth-name">{copy.fullName}</label>
+            <input id="auth-name" name="name" placeholder={copy.fullName} autoComplete="name" required />
+          </div>
+        ) : null}
         {mode === "confirm-code" || mode === "create-password" || mode === "reset-password" ? (
-          <input name="email" type="email" placeholder={copy.email} defaultValue={params.get("email") || ""} required />
+          <div className="auth-field">
+            <label htmlFor="auth-email">{copy.email}</label>
+            <input id="auth-email" name="email" type="email" placeholder={copy.email} defaultValue={params.get("email") || ""} autoComplete="email" required />
+          </div>
         ) : null}
         {mode === "sign-in" || mode === "sign-up" || mode === "forget-password" ? (
-          <input name="email" type="email" placeholder={copy.email} defaultValue={mode === "sign-in" ? rememberEmail : ""} required />
+          <div className="auth-field">
+            <label htmlFor="auth-email">{copy.email}</label>
+            <input id="auth-email" name="email" type="email" placeholder={copy.email} defaultValue={mode === "sign-in" ? rememberEmail : ""} autoComplete="email" required />
+          </div>
         ) : null}
-        {mode === "confirm-code" ? <input name="otp" placeholder="Confirmation code" inputMode="numeric" minLength={6} maxLength={6} required /> : null}
-        {mode === "reset-password" ? <input name="token" placeholder="Reset token" defaultValue={params.get("token") || ""} required /> : null}
-        {mode === "create-password" ? <input name="otp" placeholder="Confirmation code" defaultValue={params.get("otp") || ""} required /> : null}
-        {isPasswordMode ? <input name="password" type="password" placeholder={copy.password} minLength={8} required /> : null}
+        {mode === "confirm-code" ? (
+          <div className="auth-field auth-code-field">
+            <label htmlFor="auth-otp">Confirmation code</label>
+            <input id="auth-otp" name="otp" placeholder="Confirmation code" inputMode="numeric" minLength={6} maxLength={6} autoComplete="one-time-code" required />
+          </div>
+        ) : null}
+        {mode === "reset-password" ? (
+          <div className="auth-field auth-code-field">
+            <label htmlFor="auth-token">Reset token</label>
+            <input id="auth-token" name="token" placeholder="Reset token" defaultValue={params.get("token") || ""} required />
+          </div>
+        ) : null}
+        {mode === "create-password" ? (
+          <div className="auth-field auth-code-field">
+            <label htmlFor="auth-otp">Confirmation code</label>
+            <input id="auth-otp" name="otp" placeholder="Confirmation code" defaultValue={params.get("otp") || ""} required />
+          </div>
+        ) : null}
+        {isPasswordMode ? (
+          <div className="auth-field">
+            <label htmlFor="auth-password">{copy.password}</label>
+            <input id="auth-password" name="password" type="password" placeholder={copy.password} autoComplete={mode === "sign-in" ? "current-password" : "new-password"} minLength={8} required />
+          </div>
+        ) : null}
         {mode === "sign-up" || mode === "create-password" || mode === "reset-password" ? (
-          <input name="confirmPassword" type="password" placeholder={copy.confirmPassword} minLength={8} required />
+          <div className="auth-field">
+            <label htmlFor="auth-confirm-password">{copy.confirmPassword}</label>
+            <input id="auth-confirm-password" name="confirmPassword" type="password" placeholder={copy.confirmPassword} autoComplete="new-password" minLength={8} required />
+          </div>
         ) : null}
         {mode === "sign-in" ? (
           <label className="inline-check">
@@ -290,12 +354,12 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
           {state === "loading" ? "Please wait..." : title}
         </button>
       </form>
-      {message ? <p className={statusClass(state)}>{message}</p> : null}
-      <div className="auth-links">
-        <Link href={withLocale("/auth/sign-in", locale)}>{copy.signIn}</Link>
-        <Link href={withLocale("/auth/sign-up", locale)}>{copy.createAccount}</Link>
-        <Link href={withLocale("/auth/forget-password", locale)}>{copy.forgetPassword}</Link>
-      </div>
+      {message ? <p id="auth-form-message" className={statusClass(state)} role={state === "error" ? "alert" : "status"}>{message}</p> : null}
+      <nav className="auth-links" aria-label="Account access">
+        <Link href={withLocale("/auth/sign-in", locale)} className={mode === "sign-in" ? "is-active" : undefined} aria-current={mode === "sign-in" ? "page" : undefined}>{copy.signIn}</Link>
+        <Link href={withLocale("/auth/sign-up", locale)} className={mode === "sign-up" ? "is-active" : undefined} aria-current={mode === "sign-up" ? "page" : undefined}>{copy.createAccount}</Link>
+        <Link href={withLocale("/auth/forget-password", locale)} className={mode === "forget-password" ? "is-active" : undefined} aria-current={mode === "forget-password" ? "page" : undefined}>{copy.forgetPassword}</Link>
+      </nav>
     </div>
   );
 }
@@ -422,42 +486,73 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
   }
 
   return (
-    <div className="account-card">
+    <div className="account-card" aria-busy={state === "loading"}>
       <div className="account-card-head">
-        <p className="eyebrow">Account area</p>
+        <div>
+          <p className="eyebrow">Account area</p>
+          {isAuthenticated && user?.name ? <h2>{String(user.name)}</h2> : null}
+        </div>
         {isAuthenticated ? <button className="btn-outline" type="button" onClick={logout}>{copy.signOut}</button> : null}
       </div>
       {!isAuthenticated ? (
-        <>
+        <div className="account-empty-state">
           <h2>Sign in required</h2>
           <p className="muted">Sign in to sync your bookings, favourites, profile settings, and checkout activity.</p>
           <Link className="btn-primary" href={withLocale("/auth/sign-in", locale)}>{copy.signIn}</Link>
-        </>
+        </div>
       ) : view === "settings" || view === "profile" ? (
         <div className="account-profile-forms">
-        <form className="profile-image-form" onSubmit={uploadProfileImage}>
-          {user?.image ? <Image src={String(user.image)} alt={String(user.name || copy.myProfile)} width={96} height={96} /> : null}
-          <input name="image" type="file" accept="image/*" required />
-          <button className="btn-outline" type="submit" disabled={state === "loading"}>Update profile image</button>
-        </form>
-        <form className="form-grid account-form" onSubmit={updateProfile}>
-          <input name="fullName" placeholder={copy.fullName} defaultValue={user?.name || ""} required />
-          <input name="email" type="email" placeholder={copy.email} defaultValue={user?.email || ""} readOnly aria-readonly="true" />
-          <input name="phone" placeholder={copy.phone} defaultValue={user?.phone || ""} />
-          <input name="birthDate" type="date" defaultValue={user?.birthdate || ""} />
-          <input name="nationality" placeholder={copy.nationality} defaultValue={user?.nationality || ""} />
-          <input name="password" type="password" placeholder={copy.password} minLength={8} />
-          <input name="confirmPassword" type="password" placeholder={copy.confirmPassword} minLength={8} />
-          <button className="btn-primary" type="submit" disabled={state === "loading"}>{copy.saveChanges}</button>
-          {message ? <p className={statusClass(state)}>{message}</p> : null}
-        </form>
+          <form className="profile-image-form" onSubmit={uploadProfileImage} aria-label="Profile image">
+            <div className="profile-avatar">
+              {user?.image ? <Image src={String(user.image)} alt={String(user.name || copy.myProfile)} width={96} height={96} /> : <span aria-hidden="true">{String(user?.name || copy.myProfile).charAt(0)}</span>}
+            </div>
+            <div className="profile-image-control">
+              <label htmlFor="profile-image">Profile image</label>
+              <input id="profile-image" name="image" type="file" accept="image/*" required />
+            </div>
+            <button className="btn-outline" type="submit" disabled={state === "loading"}>Update profile image</button>
+          </form>
+          <form className="form-grid account-form" onSubmit={updateProfile} aria-describedby={message ? "profile-form-message" : undefined}>
+            <div className="account-field">
+              <label htmlFor="profile-name">{copy.fullName}</label>
+              <input id="profile-name" name="fullName" placeholder={copy.fullName} defaultValue={user?.name || ""} autoComplete="name" required />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-email">{copy.email}</label>
+              <input id="profile-email" name="email" type="email" placeholder={copy.email} defaultValue={user?.email || ""} autoComplete="email" readOnly aria-readonly="true" />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-phone">{copy.phone}</label>
+              <input id="profile-phone" name="phone" placeholder={copy.phone} defaultValue={user?.phone || ""} autoComplete="tel" />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-birthdate">{copy.birthDate}</label>
+              <input id="profile-birthdate" name="birthDate" type="date" defaultValue={user?.birthdate || ""} autoComplete="bday" />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-nationality">{copy.nationality}</label>
+              <input id="profile-nationality" name="nationality" placeholder={copy.nationality} defaultValue={user?.nationality || ""} autoComplete="country-name" />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-password">{copy.password}</label>
+              <input id="profile-password" name="password" type="password" placeholder={copy.password} autoComplete="new-password" minLength={8} />
+            </div>
+            <div className="account-field">
+              <label htmlFor="profile-confirm-password">{copy.confirmPassword}</label>
+              <input id="profile-confirm-password" name="confirmPassword" type="password" placeholder={copy.confirmPassword} autoComplete="new-password" minLength={8} />
+            </div>
+            <div className="account-form-actions">
+              <button className="btn-primary" type="submit" disabled={state === "loading"}>{copy.saveChanges}</button>
+              {message ? <p id="profile-form-message" className={statusClass(state)} role={state === "error" ? "alert" : "status"}>{message}</p> : null}
+            </div>
+          </form>
         </div>
       ) : (
-        <>
+        <section className="account-collection">
           <h2>{view === "bookings" ? copy.myBookings : copy.myFavorites}</h2>
-          {state === "loading" ? <p className="muted">Loading...</p> : null}
-          {state === "error" ? <p className="form-message error">{message}</p> : null}
-          {state !== "loading" && items.length === 0 ? <p className="muted">{view === "bookings" ? "There are no bookings." : "The wishlist is empty."}</p> : null}
+          {state === "loading" ? <p className="muted" role="status">Loading...</p> : null}
+          {state === "error" ? <p className="form-message error" role="alert">{message}</p> : null}
+          {state !== "loading" && items.length === 0 ? <p className="account-empty-copy muted">{view === "bookings" ? "There are no bookings." : "The wishlist is empty."}</p> : null}
           {items.length ? (
             <div className="account-list">
               {items.map((item, index) => (
@@ -468,7 +563,7 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
               ))}
             </div>
           ) : null}
-        </>
+        </section>
       )}
     </div>
   );
