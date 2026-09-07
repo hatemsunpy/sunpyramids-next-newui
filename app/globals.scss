@@ -2469,6 +2469,60 @@ select {
   background: rgba(8, 17, 38, 0.76);
 }
 
+.tour-page-redesign .tour-gallery-mobile-thumbnails {
+  display: none;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail-rail {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  gap: 0.5rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: 0.25rem;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: none;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail {
+  position: relative;
+  width: 4.5rem;
+  height: 4.5rem;
+  flex: 0 0 4.5rem;
+  overflow: hidden;
+  scroll-snap-align: center;
+  border: 2px solid transparent;
+  border-radius: 0.7rem;
+  padding: 0;
+  background: #dbe2ef;
+  cursor: pointer;
+  opacity: 0.72;
+  transition: border-color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail img {
+  object-fit: cover;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail:is(:hover, :focus-visible) {
+  opacity: 1;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail.is-active {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--tour-primary);
+  opacity: 1;
+}
+
+.tour-page-redesign .tour-gallery-thumbnail-next {
+  display: none;
+}
+
 .tour-page-redesign .tour-gallery-empty {
   display: grid;
   place-items: center;
@@ -3923,6 +3977,20 @@ select {
   object-fit: contain;
 }
 
+.tour-page-redesign .tour-gallery-viewer-thumbnails {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  padding: 2.75rem 4.75rem 1rem;
+  background: linear-gradient(180deg, transparent, rgba(8, 17, 38, 0.88));
+}
+
+.tour-page-redesign .tour-gallery-viewer-thumbnails .tour-gallery-thumbnail-rail {
+  padding: 0.2rem;
+}
+
 .tour-page-redesign .tour-gallery-viewer-toolbar {
   position: absolute;
   top: 0;
@@ -4186,15 +4254,55 @@ select {
   .tour-page-redesign .tour-gallery {
     position: relative;
     display: block;
-    height: clamp(22rem, 100vw, 29rem);
+    height: auto;
   }
 
   .tour-page-redesign .tour-gallery-main {
-    height: 100%;
+    height: clamp(22rem, 100vw, 29rem);
   }
 
   .tour-page-redesign .tour-gallery-previews {
     display: none;
+  }
+
+  .tour-page-redesign .tour-gallery-mobile-thumbnails {
+    position: relative;
+    display: block;
+    padding: 0.6rem 3.8rem 0.6rem 0.65rem;
+    background: #ffffff;
+  }
+
+  .tour-page-redesign .tour-gallery-mobile-thumbnails .tour-gallery-thumbnail {
+    width: 4rem;
+    height: 4rem;
+    flex-basis: 4rem;
+  }
+
+  .tour-page-redesign button.tour-gallery-thumbnail-next {
+    position: absolute;
+    top: 50%;
+    right: 0.6rem;
+    z-index: 3;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid rgba(8, 17, 38, 0.16);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--tour-primary);
+    box-shadow: 0 8px 22px rgba(8, 17, 38, 0.14);
+    transform: translateY(-50%);
+  }
+
+  .tour-page-redesign .tour-gallery-thumbnail-next svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .tour-page-redesign .tour-gallery-main::after {
@@ -4411,6 +4519,10 @@ select {
 
 @media (max-width: 430px) {
   .tour-page-redesign .tour-gallery {
+    height: auto;
+  }
+
+  .tour-page-redesign .tour-gallery-main {
     height: 23rem;
   }
 
