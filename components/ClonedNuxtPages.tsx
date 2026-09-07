@@ -67,19 +67,32 @@ export function AccountPage({ view = "profile", locale = "en" }: { view?: string
 export function CartClonePage({ checkout = false, locale = "en" }: { checkout?: boolean; locale?: Locale }) {
   const copy = uiCopy(locale);
   return (
-    <main>
-      <section className="original-page-hero" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(/images/Cairo_Egypt_Unsplash.png)" }}>
-        <h1>{checkout ? copy.checkout : copy.cart}</h1>
+    <main className="commerce-page">
+      <section className="commerce-hero">
+        <div className="commerce-hero-inner">
+          <nav className="commerce-breadcrumb" aria-label="Breadcrumb">
+            <Link href={withLocale("/", locale)}>{copy.home}</Link>
+            <span className="separator">/</span>
+            {checkout ? (
+              <>
+                <Link href={withLocale("/cart", locale)}>{copy.cart}</Link>
+                <span className="separator">/</span>
+                <span className="current">{copy.checkout}</span>
+              </>
+            ) : (
+              <span className="current">{copy.cart}</span>
+            )}
+          </nav>
+          <p className="commerce-eyebrow">{checkout ? "Secure Booking" : "Your Itinerary"}</p>
+          <h1>{checkout ? copy.checkout : copy.cart}</h1>
+          <p className="commerce-hero-subtitle">
+            {checkout
+              ? "Complete your reservation with licensed local guides and 100% private customized itineraries."
+              : "Review your selected Egypt experiences, tailor private party details, or apply a promotional code."}
+          </p>
+        </div>
       </section>
-      <section className="cart-layout container-shell">
-        <CartFlow checkout={checkout} locale={locale} />
-        <aside className="cart-summary">
-          <h3>{copy.summary}</h3>
-          <p>{copy.subtotal}</p>
-          <strong>$0.00</strong>
-          {!checkout ? <Link className="btn-primary" href={withLocale("/cart/checkout", locale)}>{copy.checkout}</Link> : null}
-        </aside>
-      </section>
+      <CartFlow checkout={checkout} locale={locale} />
     </main>
   );
 }

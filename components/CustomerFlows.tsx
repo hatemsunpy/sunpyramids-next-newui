@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
 import type { Locale } from "@/types/api";
 import {
   apiDelete,
@@ -22,6 +22,7 @@ import { parseLocalCalendarDate } from "@/lib/local-date";
 import { generateRecaptchaToken } from "@/lib/recaptcha";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { uiCopy } from "@/lib/ui-copy";
+import { siteContact } from "@/lib/site-contact";
 
 type ApiResponse<T = any> = {
   status?: boolean;
@@ -478,11 +479,13 @@ function CartTourEditor({
   locale,
   disabled,
   onSubmit,
+  onCancel,
 }: {
   item: any;
   locale: Locale;
   disabled: boolean;
   onSubmit: (event: FormEvent<HTMLFormElement>, item: any) => void;
+  onCancel?: () => void;
 }) {
   const copy = uiCopy(locale);
   const { format } = useCurrency();
@@ -510,12 +513,58 @@ function CartTourEditor({
     };
   }, [locale, slug]);
 
+  const itemId = item.id || item.tour?.id || "editor";
+
   return (
-    <form className="cart-inline-form" onSubmit={(event) => onSubmit(event, item)}>
-      <input name="startDate" type="date" defaultValue={String(item.start_date || "").slice(0, 10)} aria-label={copy.date} />
-      <input name="adults" type="number" min={1} defaultValue={item.adults || 1} aria-label={copy.adults} />
-      <input name="children" type="number" min={0} defaultValue={item.children || 0} aria-label={copy.children} />
-      <input name="infants" type="number" min={0} defaultValue={item.infants || 0} aria-label={copy.infants} />
+    <form className="cart-editor-panel" onSubmit={(event) => onSubmit(event, item)}>
+      <p className="cart-editor-title">
+        <span>✏️</span> Edit Tour Details & Add-ons
+      </p>
+      <div className="editor-grid">
+        <div className="editor-field">
+          <label htmlFor={`startDate-${itemId}`}>{copy.date}</label>
+          <input
+            id={`startDate-${itemId}`}
+            name="startDate"
+            type="date"
+            defaultValue={String(item.start_date || "").slice(0, 10)}
+            aria-label={copy.date}
+          />
+        </div>
+        <div className="editor-field">
+          <label htmlFor={`adults-${itemId}`}>{copy.adults} (12+)</label>
+          <input
+            id={`adults-${itemId}`}
+            name="adults"
+            type="number"
+            min={1}
+            defaultValue={item.adults || 1}
+            aria-label={copy.adults}
+          />
+        </div>
+        <div className="editor-field">
+          <label htmlFor={`children-${itemId}`}>{copy.children} (6-11)</label>
+          <input
+            id={`children-${itemId}`}
+            name="children"
+            type="number"
+            min={0}
+            defaultValue={item.children || 0}
+            aria-label={copy.children}
+          />
+        </div>
+        <div className="editor-field">
+          <label htmlFor={`infants-${itemId}`}>{copy.infants} (&lt;6)</label>
+          <input
+            id={`infants-${itemId}`}
+            name="infants"
+            type="number"
+            min={0}
+            defaultValue={item.infants || 0}
+            aria-label={copy.infants}
+          />
+        </div>
+      </div>
       {options.length ? (
         <fieldset className="cart-option-fieldset">
           <legend>{copy.addOns}</legend>
@@ -525,19 +574,35 @@ function CartTourEditor({
               const childPrice = Number(option?.child_price || 0);
               return (
                 <label key={option.id} className="tour-addon">
-                  <input name="options" type="checkbox" value={option.id} defaultChecked={selectedOptionIds.includes(Number(option.id))} />
-                  <span className="tour-addon-name">{option.name}</span>
-                  <span className="tour-addon-price">
-                    {format(adultPrice)} {copy.adults}
-                    {childPrice ? ` · ${format(childPrice)} ${copy.children}` : ""}
-                  </span>
+                  <input
+                    name="options"
+                    type="checkbox"
+                    value={option.id}
+                    defaultChecked={selectedOptionIds.includes(Number(option.id))}
+                  />
+                  <div className="tour-addon-content">
+                    <span className="tour-addon-name">{option.name}</span>
+                    <span className="tour-addon-price">
+                      {format(adultPrice)} {copy.adults}
+                      {childPrice ? ` · ${format(childPrice)} ${copy.children}` : ""}
+                    </span>
+                  </div>
                 </label>
               );
             })}
           </div>
         </fieldset>
       ) : null}
-      <button className="btn-outline" type="submit" disabled={disabled}>{copy.saveEdits}</button>
+      <div className="editor-actions">
+        <button className="btn-save-edits" type="submit" disabled={disabled}>
+          {copy.saveEdits}
+        </button>
+        {onCancel && (
+          <button className="btn-cancel-edit" type="button" onClick={onCancel}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
@@ -553,6 +618,8 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
   const [hasToken, setHasToken] = useState(false);
   const [coupon, setCoupon] = useState<any>(null);
   const [couponCode, setCouponCode] = useState("");
+  const [editingItemId, setEditingItemId] = useState<string | number | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<"card" | "paypal">("card");
 
   async function loadCart(tokenExists = hasToken) {
     setState("loading");
@@ -631,6 +698,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
         options,
       }, locale, hasToken);
       await loadCart(hasToken);
+      setEditingItemId(null);
       setMessage(res.message || copy.saveEdits);
     } catch (error) {
       setState("error");
@@ -730,76 +798,475 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     }
   }
 
+  const subtotal = useMemo(() => {
+    return cart.reduce((sum, item) => sum + (cartItemTotal(item) ?? 0), 0);
+  }, [cart]);
+
+  const discountPercent = Number(coupon?.value || 0);
+  const discountAmount = discountPercent > 0 ? subtotal * (discountPercent / 100) : 0;
+  const grandTotal = Math.max(0, subtotal - discountAmount);
+
+  const orderSummaryAside = (
+    <aside className="commerce-aside">
+      <div className="order-summary-card">
+        <div className="summary-header">
+          <h3>{copy.summary}</h3>
+          <span className="summary-item-badge">
+            {cart.length} {cart.length === 1 ? "Item" : "Items"}
+          </span>
+        </div>
+
+        {cart.length > 0 ? (
+          <div className="summary-items-list">
+            {cart.map((item, idx) => {
+              const itemTotal = cartItemTotal(item);
+              const title = item.tour?.title || item.title || item.name || `${copy.cart} ${idx + 1}`;
+              const travelersText = `${item.adults || 1} ${copy.adults}${item.children ? `, ${item.children} ${copy.children}` : ""}`;
+              return (
+                <div key={item.id || idx} className="summary-item-row">
+                  <div className="item-info">
+                    <span className="item-name">{title}</span>
+                    <span className="item-sub">
+                      {item.start_date ? String(item.start_date).slice(0, 10) + " · " : ""}
+                      {travelersText}
+                    </span>
+                  </div>
+                  <div className="item-price">
+                    {itemTotal !== null ? format(itemTotal) : "—"}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+
+        <div className="summary-calculations">
+          <div className="calc-row">
+            <span>{copy.subtotal}</span>
+            <strong>{format(subtotal)}</strong>
+          </div>
+
+          {discountAmount > 0 ? (
+            <div className="calc-row discount-row">
+              <span>{copy.discount} ({discountPercent}%)</span>
+              <strong>-{format(discountAmount)}</strong>
+            </div>
+          ) : null}
+
+          <div className="calc-divider" />
+
+          <div className="total-row">
+            <div className="total-label">
+              <strong>{copy.total}</strong>
+              <small>Taxes & fees included</small>
+            </div>
+            <span className="total-amount">{format(grandTotal)}</span>
+          </div>
+        </div>
+
+        {cart.length > 0 ? (
+          <div className="summary-coupon-area">
+            {coupon?.value ? (
+              <div className="applied-coupon-pill">
+                <span>✓ {copy.discount} {coupon.value}% Applied</span>
+                <button
+                  type="button"
+                  className="btn-remove-coupon"
+                  onClick={clearValidatedCoupon}
+                  aria-label="Remove coupon"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <form className="coupon-input-group" onSubmit={applyCoupon}>
+                <input
+                  name="couponCode"
+                  placeholder={copy.addCouponCode}
+                  value={couponCode}
+                  onChange={(event) => {
+                    if (coupon || checkoutData?.discountID) clearValidatedCoupon();
+                    setCouponCode(event.target.value);
+                  }}
+                  aria-label={copy.addCouponCode}
+                />
+                <button
+                  className="btn-apply-coupon"
+                  type="submit"
+                  disabled={state === "loading" || !couponCode.trim()}
+                >
+                  {copy.apply}
+                </button>
+              </form>
+            )}
+            {state === "error" && message && !checkout ? (
+              <p className="coupon-error-text" role="alert">{message}</p>
+            ) : null}
+          </div>
+        ) : null}
+
+        {!checkout && cart.length > 0 ? (
+          <div className="summary-actions-area">
+            <Link className="btn-proceed-checkout" href={withLocale("/cart/checkout", locale)}>
+              {copy.checkout} →
+            </Link>
+          </div>
+        ) : null}
+
+        <div className="summary-concierge-help">
+          <span className="concierge-title">Cairo Operations Support</span>
+          <div className="concierge-links">
+            <a
+              href={siteContact.whatsapp.contactUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="whatsapp-link"
+              aria-label={`WhatsApp ${siteContact.whatsapp.display}`}
+            >
+              <span>💬 WhatsApp</span>
+            </a>
+            <span>·</span>
+            {siteContact.phones[0] ? (
+              <a href={siteContact.phones[0].href} aria-label={`Call ${siteContact.phones[0].display}`}>
+                <span>📞 {siteContact.phones[0].display}</span>
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+
   if (checkout) {
     return (
-      <div className="cart-empty checkout-form-card">
-        <p className="eyebrow">{copy.billingDetails}</p>
-        <h2>{copy.checkout}</h2>
-        <form className="form-grid" onSubmit={checkoutSubmit}>
-          <input name="fullName" placeholder={copy.fullName} required />
-          <input name="email" type="email" placeholder={copy.email} required />
-          <input name="phone" placeholder={copy.phone} required />
-          <input name="country" placeholder={copy.country} required />
-          <input name="state" placeholder={copy.state} required />
-          <input name="pickupLocation" placeholder={copy.pickupLocation} />
-          <select name="paymentMethod" defaultValue="card" required aria-label={copy.paymentMethod}>
-            <option value="card">{copy.card}</option>
-            <option value="paypal">{copy.paypal}</option>
-          </select>
-          <textarea name="note" placeholder={copy.note} rows={4} />
-          <button className="btn-primary" type="submit" disabled={state === "loading" || !selected}>{state === "loading" ? copy.checkoutLoading : copy.checkoutNow}</button>
-        </form>
-        {!selected && state !== "loading" ? <p className="form-message error">Currency options are temporarily unavailable. Checkout is paused.</p> : null}
-        {message ? <p className={statusClass(state)}>{message}</p> : null}
+      <div className="commerce-layout">
+        <div className="commerce-main">
+          <form className="checkout-form-container" onSubmit={checkoutSubmit}>
+            {/* Step 1: Lead Traveler */}
+            <section className="checkout-section-card">
+              <div className="section-header">
+                <span className="step-number">1</span>
+                <h2>Lead Traveler Details</h2>
+              </div>
+              <div className="form-grid-two-col">
+                <div className="form-group">
+                  <label htmlFor="checkout-fullName">{copy.fullName} <span className="req">*</span></label>
+                  <input id="checkout-fullName" name="fullName" placeholder={copy.fullName} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="checkout-email">{copy.email} <span className="req">*</span></label>
+                  <input id="checkout-email" name="email" type="email" placeholder={copy.email} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="checkout-phone">{copy.phone} <span className="req">*</span></label>
+                  <input id="checkout-phone" name="phone" type="tel" placeholder={copy.phone} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="checkout-country">{copy.country} <span className="req">*</span></label>
+                  <input id="checkout-country" name="country" placeholder={copy.country} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="checkout-state">{copy.state} <span className="req">*</span></label>
+                  <input id="checkout-state" name="state" placeholder={copy.state} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="checkout-pickupLocation">{copy.pickupLocation}</label>
+                  <input id="checkout-pickupLocation" name="pickupLocation" placeholder="Hotel name or address" />
+                </div>
+              </div>
+            </section>
+
+            {/* Step 2: Payment Method */}
+            <section className="checkout-section-card">
+              <div className="section-header">
+                <span className="step-number">2</span>
+                <h2>{copy.paymentMethod}</h2>
+              </div>
+              <div className="payment-methods-stack" role="radiogroup" aria-label={copy.paymentMethod}>
+                <label className={`payment-method-card ${selectedPayment === "card" ? "is-selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="card"
+                    checked={selectedPayment === "card"}
+                    onChange={() => setSelectedPayment("card")}
+                    required
+                  />
+                  <div className="payment-method-details">
+                    <div className="payment-method-top">
+                      <span className="method-name">{copy.card}</span>
+                      <div className="payment-badges">
+                        <span className="card-pill visa">Visa</span>
+                        <span className="card-pill mc">MasterCard</span>
+                        <span className="card-pill amex">Amex</span>
+                      </div>
+                    </div>
+                    <p className="payment-method-desc">
+                      Pay securely with your credit or debit card via licensed gateway (Card Method ID 9).
+                    </p>
+                  </div>
+                </label>
+
+                <label className={`payment-method-card ${selectedPayment === "paypal" ? "is-selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="paypal"
+                    checked={selectedPayment === "paypal"}
+                    onChange={() => setSelectedPayment("paypal")}
+                    required
+                  />
+                  <div className="payment-method-details">
+                    <div className="payment-method-top">
+                      <span className="method-name">{copy.paypal}</span>
+                      <div className="payment-badges">
+                        <span className="card-pill paypal">PayPal</span>
+                      </div>
+                    </div>
+                    <p className="payment-method-desc">
+                      Fast, protected checkout directly using your PayPal balance or linked bank.
+                    </p>
+                  </div>
+                </label>
+              </div>
+            </section>
+
+            {/* Step 3: Special Requests & Notes */}
+            <section className="checkout-section-card">
+              <div className="section-header">
+                <span className="step-number">3</span>
+                <h2>Special Requests & Notes (Optional)</h2>
+              </div>
+              <div className="form-group full-width">
+                <label htmlFor="checkout-note">{copy.note}</label>
+                <textarea
+                  id="checkout-note"
+                  name="note"
+                  placeholder="Share flight details, dietary requirements, or special preferences..."
+                  rows={4}
+                />
+              </div>
+            </section>
+
+            {/* Submit Action Bar */}
+            <div className="checkout-submit-bar">
+              <button
+                className="btn-checkout-submit"
+                type="submit"
+                disabled={state === "loading" || !selected}
+              >
+                {state === "loading" ? (
+                  <>
+                    <span className="spinner" aria-hidden="true" />
+                    <span>{copy.checkoutLoading}</span>
+                  </>
+                ) : (
+                  <span>{copy.checkoutNow} →</span>
+                )}
+              </button>
+
+              <div className="checkout-security-notice">
+                <span>🔒 256-Bit SSL Encrypted · Instant Booking Confirmation · Licensed Ministry of Tourism Operator</span>
+              </div>
+
+              {!selected && state !== "loading" ? (
+                <div className="checkout-error-banner" role="alert">
+                  Currency options are temporarily unavailable. Checkout is paused.
+                </div>
+              ) : null}
+
+              {message && state === "error" ? (
+                <div className="checkout-error-banner" role="alert">
+                  {message}
+                </div>
+              ) : null}
+            </div>
+          </form>
+        </div>
+
+        {orderSummaryAside}
       </div>
     );
   }
 
   return (
-    <div className="cart-empty">
-      <p className="eyebrow">{copy.cart}</p>
-      <h2>{copy.cart}</h2>
-      {state === "loading" ? <p className="muted">{copy.loadingCart}</p> : null}
-      {state === "error" ? <p className="form-message error">{message}</p> : null}
-      {state !== "loading" && cart.length === 0 ? <p className="muted">{copy.emptyCart}</p> : null}
-      {cart.length ? (
-        <div className="account-list">
-          {cart.map((item, index) => {
-            const itemTotal = cartItemTotal(item);
-            return (
-            <article key={item.id || index}>
-              <strong>{item.tour?.title || item.title || item.name || `${copy.cart} ${index + 1}`}</strong>
-              {itemTotal !== null ? <span>{copy.total}: {format(itemTotal)}</span> : null}
-              {item.type === "tour" || item.tour ? (
-                <CartTourEditor item={item} locale={locale} disabled={state === "loading"} onSubmit={editTourCartItem} />
-              ) : null}
-              <button className="btn-outline" type="button" onClick={() => removeCartItem(item)} disabled={state === "loading"}>{copy.delete}</button>
-            </article>
-            );
-          })}
-        </div>
-      ) : null}
-      {cart.length ? (
-        <form className="cart-inline-form" onSubmit={applyCoupon}>
-          <input
-            name="couponCode"
-            placeholder={copy.addCouponCode}
-            value={couponCode}
-            onChange={(event) => {
-              if (coupon || checkoutData?.discountID) clearValidatedCoupon();
-              setCouponCode(event.target.value);
-            }}
-          />
-          <button className="btn-outline" type="submit" disabled={state === "loading"}>{copy.apply}</button>
-          {coupon?.value ? <span>{copy.discount}: {coupon.value}%</span> : null}
-        </form>
-      ) : null}
-      <div className="status-actions">
-        <Link className="btn-primary" href={withLocale("/trips", locale)}>{copy.exploreTours}</Link>
-        {cart.length ? <Link className="btn-outline" href={withLocale("/cart/checkout", locale)}>{copy.checkout}</Link> : null}
-        {cart.length ? <button className="btn-outline" type="button" onClick={clearCart}>{copy.clearAll}</button> : null}
+    <div className="commerce-layout">
+      <div className="commerce-main">
+        {state === "loading" && cart.length === 0 ? (
+          <div className="cart-empty-card">
+            <p className="muted">{copy.loadingCart}</p>
+          </div>
+        ) : null}
+
+        {state !== "loading" && cart.length === 0 ? (
+          <div className="cart-empty-card">
+            <div className="cart-empty-icon" aria-hidden="true">🛒</div>
+            <h2>Your Cart is Empty</h2>
+            <p>You haven&apos;t added any Egypt tours, Nile cruises, or transfers to your itinerary yet.</p>
+            <Link className="btn-explore-tours" href={withLocale("/trips", locale)}>
+              {copy.exploreTours} →
+            </Link>
+          </div>
+        ) : null}
+
+        {cart.length > 0 ? (
+          <>
+            <div className="cart-header-bar">
+              <div className="cart-count-badge">
+                <span>Selected Experiences</span>
+                <span className="count-pill">{cart.length}</span>
+              </div>
+              <button
+                className="btn-clear-cart"
+                type="button"
+                onClick={clearCart}
+                disabled={state === "loading"}
+              >
+                <span>🗑️</span> {copy.clearAll}
+              </button>
+            </div>
+
+            <div className="cart-items-stack" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              {cart.map((item, index) => {
+                const itemTotal = cartItemTotal(item);
+                const isTour = item.type === "tour" || !!item.tour;
+                const itemId = item.id || item.tour?.id || index;
+                const isEditing = editingItemId === itemId;
+                const title = item.tour?.title || item.title || item.name || `${copy.cart} ${index + 1}`;
+                const imageSrc = item.tour?.image || item.image || "/images/Cairo_Egypt_Unsplash.png";
+                const adults = Number(item.adults) || 1;
+                const children = Number(item.children) || 0;
+                const infants = Number(item.infants) || 0;
+
+                return (
+                  <article key={itemId} className="cart-item-card">
+                    <div className="cart-item-main">
+                      <div className="cart-item-thumb">
+                        <Image
+                          src={imageSrc}
+                          alt={title}
+                          width={140}
+                          height={100}
+                          style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                        />
+                      </div>
+
+                      <div className="cart-item-info">
+                        <span className="cart-item-badge">
+                          {isTour ? "Private Guided Tour" : "Car Transfer"}
+                        </span>
+                        <h3 className="cart-item-title">
+                          {item.tour?.slug ? (
+                            <Link href={withLocale(`/tours/${item.tour.slug}`, locale)}>
+                              {title}
+                            </Link>
+                          ) : (
+                            <span>{title}</span>
+                          )}
+                        </h3>
+
+                        <div className="cart-item-meta">
+                          {item.start_date ? (
+                            <span className="meta-chip">
+                              📅 {String(item.start_date).slice(0, 10)}
+                            </span>
+                          ) : null}
+                          <span className="meta-chip">
+                            👥 {adults} {copy.adults}
+                            {children ? `, ${children} ${copy.children}` : ""}
+                            {infants ? `, ${infants} ${copy.infants}` : ""}
+                          </span>
+                        </div>
+
+                        {Array.isArray(item.options) && item.options.length > 0 ? (
+                          <div className="cart-item-options-list">
+                            {item.options.map((opt: any) => (
+                              <span key={opt.id} className="option-tag">
+                                + {opt.name}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+
+                      <div className="cart-item-pricing">
+                        <span className="price-label">Price</span>
+                        <span className="price-amount">
+                          {itemTotal !== null ? format(itemTotal) : "—"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="cart-item-actions-bar">
+                      {isTour ? (
+                        <button
+                          className="btn-toggle-editor"
+                          type="button"
+                          onClick={() => setEditingItemId(isEditing ? null : itemId)}
+                          aria-expanded={isEditing}
+                        >
+                          <span>{isEditing ? "Close Details" : "Customize Details / Add-ons"}</span>
+                          <span className={`chevron-icon ${isEditing ? "is-open" : ""}`} aria-hidden="true">▾</span>
+                        </button>
+                      ) : <span />}
+
+                      <button
+                        className="btn-remove-item"
+                        type="button"
+                        onClick={() => removeCartItem(item)}
+                        disabled={state === "loading"}
+                        aria-label={`${copy.delete} ${title}`}
+                      >
+                        <span>✕</span> {copy.delete}
+                      </button>
+                    </div>
+
+                    {isTour && isEditing ? (
+                      <CartTourEditor
+                        item={item}
+                        locale={locale}
+                        disabled={state === "loading"}
+                        onSubmit={editTourCartItem}
+                        onCancel={() => setEditingItemId(null)}
+                      />
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="cart-reassurance-strip">
+              <div className="reassurance-box">
+                <div className="box-icon" aria-hidden="true">🏛️</div>
+                <div className="box-text">
+                  <h4>100% Private Tours</h4>
+                  <p>Private air-conditioned vehicle & dedicated Egyptologist guide.</p>
+                </div>
+              </div>
+              <div className="reassurance-box">
+                <div className="box-icon" aria-hidden="true">💎</div>
+                <div className="box-text">
+                  <h4>Transparent Pricing</h4>
+                  <p>All taxes included. Zero card surcharges or surprise fees.</p>
+                </div>
+              </div>
+              <div className="reassurance-box">
+                <div className="box-icon" aria-hidden="true">📜</div>
+                <div className="box-text">
+                  <h4>Licensed Operator</h4>
+                  <p>Official Egyptian Ministry of Tourism licensed agency.</p>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : null}
+
+        {message && state !== "error" ? (
+          <p className="form-message" style={{ marginTop: "1rem" }}>{message}</p>
+        ) : null}
       </div>
-      {message && state !== "error" ? <p className="form-message">{message}</p> : null}
+
+      {orderSummaryAside}
     </div>
   );
 }
