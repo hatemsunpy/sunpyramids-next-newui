@@ -2517,7 +2517,7 @@ select {
 
 .tour-page-redesign .tour-gallery-count {
   position: absolute;
-  right: calc(23.5% + 2rem);
+  right: 5.5rem;
   bottom: 1.25rem;
   z-index: 5;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -3930,10 +3930,6 @@ select {
 
   .tour-page-redesign .tour-gallery {
     grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.62fr);
-  }
-
-  .tour-page-redesign .tour-gallery-count {
-    right: calc(38% + 4.5rem);
   }
 
   .tour-page-redesign .tour-page-grid {
