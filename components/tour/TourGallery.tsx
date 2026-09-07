@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTourActions } from "@/components/tour/TourActions";
 import type { Locale, Tour } from "@/types/api";
 
 export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Locale }) {
   const [active, setActive] = useState(0);
   const [thumbnailsReady, setThumbnailsReady] = useState(false);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  const viewerRef = useRef<HTMLDialogElement>(null);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
   const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image]).filter((image): image is string => Boolean(image));
   const previewLimit = 3;
@@ -22,6 +24,22 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
     if (!gallery.length) return;
     setActive((index + gallery.length) % gallery.length);
   }
+
+  function openViewer(index = active) {
+    showPhoto(index);
+    setIsViewerOpen(true);
+  }
+
+  function closeViewer() {
+    setIsViewerOpen(false);
+  }
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    if (isViewerOpen && !viewer.open) viewer.showModal();
+    if (!isViewerOpen && viewer.open) viewer.close();
+  }, [isViewerOpen]);
 
   function navigateGalleryWithKeyboard(event: React.KeyboardEvent) {
     if (event.key === "ArrowLeft") showPhoto(active - 1);
@@ -90,8 +108,8 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
                 key={`preview-${src}-${index}`}
                 type="button"
                 className={`tour-gallery-preview react-bits-glare ${isLastWithMore ? "has-more-badge" : ""}`}
-                onClick={() => showPhoto(index)}
-                aria-label={`View photo ${index + 1}`}
+                onClick={() => isLastWithMore ? openViewer(index) : showPhoto(index)}
+                aria-label={isLastWithMore ? "Open full tour photo gallery" : `View photo ${index + 1}`}
               >
                 {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" /> : null}
                 {isLastWithMore ? (
@@ -106,6 +124,44 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         </div>
       ) : null}
       {actionMessage ? <p className="tour-gallery-message" role="status">{actionMessage}</p> : null}
+      <dialog
+        ref={viewerRef}
+        className="tour-gallery-viewer"
+        aria-labelledby="tour-gallery-viewer-title"
+        onCancel={(event) => { event.preventDefault(); closeViewer(); }}
+        onClose={() => setIsViewerOpen(false)}
+        onClick={(event) => { if (event.target === event.currentTarget) closeViewer(); }}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowLeft") {
+            event.stopPropagation();
+            showPhoto(active - 1);
+          }
+          if (event.key === "ArrowRight") {
+            event.stopPropagation();
+            showPhoto(active + 1);
+          }
+        }}
+      >
+        <div className="tour-gallery-viewer-inner">
+          <h2 id="tour-gallery-viewer-title" className="sr-only">Tour photo gallery</h2>
+          <div className="tour-gallery-viewer-media">
+            <Image
+              key={`viewer-${gallery[active]}-${active}`}
+              src={gallery[active]}
+              alt={`${tour?.title || tour?.name || "Tour"} photo ${active + 1}`}
+              fill
+              sizes="92vw"
+              className="tour-gallery-viewer-image"
+            />
+          </div>
+          <div className="tour-gallery-viewer-toolbar">
+            <span aria-live="polite"><strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}</span>
+            <button className="tour-gallery-viewer-close" type="button" onClick={closeViewer} autoFocus aria-label="Close photo gallery">×</button>
+          </div>
+          <button className="tour-gallery-viewer-arrow tour-gallery-viewer-prev" type="button" onClick={() => showPhoto(active - 1)} aria-label="Previous photo"><ChevronIcon direction="previous" /></button>
+          <button className="tour-gallery-viewer-arrow tour-gallery-viewer-next" type="button" onClick={() => showPhoto(active + 1)} aria-label="Next photo"><ChevronIcon direction="next" /></button>
+        </div>
+      </dialog>
     </section>
   );
 }
