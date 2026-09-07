@@ -808,44 +808,6 @@
         color: var(--spt-ink);
       }
 
-      .payment-badges {
-        display: flex;
-        gap: 0.35rem;
-
-        .card-pill {
-          display: inline-flex;
-          align-items: center;
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-size: 0.68rem;
-          font-weight: 800;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-          background-color: #f1f5f9;
-          color: #475569;
-          border: 1px solid #cbd5e1;
-
-          &.visa {
-            color: #1a1f71;
-          }
-          &.mc {
-            color: #eb001b;
-          }
-          &.amex {
-            color: #006fcf;
-          }
-          &.paypal {
-            color: #003087;
-          }
-        }
-      }
-    }
-
-    .payment-method-desc {
-      font-size: 0.85rem;
-      color: var(--spt-muted);
-      line-height: 1.4;
-      margin: 0;
     }
   }
 
@@ -893,20 +855,6 @@
         border-top-color: #ffffff;
         border-radius: 50%;
         animation: sptSpin 700ms linear infinite;
-      }
-    }
-
-    .checkout-security-notice {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--spt-muted);
-      text-align: center;
-
-      svg {
-        color: #10b981;
       }
     }
 
@@ -1121,19 +1069,6 @@
         color: #065f46;
         font-weight: 600;
         margin-top: 0.5rem;
-
-        .btn-remove-coupon {
-          background: none;
-          border: none;
-          color: #dc2626;
-          font-size: 0.75rem;
-          cursor: pointer;
-          font-weight: 700;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
       }
 
       .coupon-error-text {
@@ -1212,59 +1147,6 @@
           &.whatsapp-link {
             color: #059669;
           }
-        }
-      }
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // 10. Reassurance Strip on Cart Page
-  // ---------------------------------------------------------------------------
-  .cart-reassurance-strip {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 1rem;
-
-    @media (max-width: 640px) {
-      grid-template-columns: 1fr;
-    }
-
-    .reassurance-box {
-      background: var(--spt-surface);
-      border: 1px solid var(--spt-border);
-      border-radius: 12px;
-      padding: 1rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-
-      .box-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
-        background-color: var(--spt-anchor-soft);
-        color: var(--spt-anchor);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-      }
-
-      .box-text {
-        h4 {
-          font-size: 0.88rem;
-          font-weight: 700;
-          color: var(--spt-ink);
-          margin: 0 0 0.15rem 0;
-        }
-
-        p {
-          font-size: 0.78rem;
-          color: var(--spt-muted);
-          line-height: 1.35;
-          margin: 0;
         }
       }
     }

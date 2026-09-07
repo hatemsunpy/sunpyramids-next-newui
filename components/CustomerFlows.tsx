@@ -858,7 +858,6 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
           <div className="total-row">
             <div className="total-label">
               <strong>{copy.total}</strong>
-              <small>Taxes & fees included</small>
             </div>
             <span className="total-amount">{format(grandTotal)}</span>
           </div>
@@ -866,39 +865,30 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
 
         {cart.length > 0 ? (
           <div className="summary-coupon-area">
+            <form className="coupon-input-group" onSubmit={applyCoupon}>
+              <input
+                name="couponCode"
+                placeholder={copy.addCouponCode}
+                value={couponCode}
+                onChange={(event) => {
+                  if (coupon || checkoutData?.discountID) clearValidatedCoupon();
+                  setCouponCode(event.target.value);
+                }}
+                aria-label={copy.addCouponCode}
+              />
+              <button
+                className="btn-apply-coupon"
+                type="submit"
+                disabled={state === "loading" || !couponCode.trim()}
+              >
+                {copy.apply}
+              </button>
+            </form>
             {coupon?.value ? (
               <div className="applied-coupon-pill">
-                <span>✓ {copy.discount} {coupon.value}% Applied</span>
-                <button
-                  type="button"
-                  className="btn-remove-coupon"
-                  onClick={clearValidatedCoupon}
-                  aria-label="Remove coupon"
-                >
-                  Remove
-                </button>
+                <span>✓ {copy.discount} {coupon.value}%</span>
               </div>
-            ) : (
-              <form className="coupon-input-group" onSubmit={applyCoupon}>
-                <input
-                  name="couponCode"
-                  placeholder={copy.addCouponCode}
-                  value={couponCode}
-                  onChange={(event) => {
-                    if (coupon || checkoutData?.discountID) clearValidatedCoupon();
-                    setCouponCode(event.target.value);
-                  }}
-                  aria-label={copy.addCouponCode}
-                />
-                <button
-                  className="btn-apply-coupon"
-                  type="submit"
-                  disabled={state === "loading" || !couponCode.trim()}
-                >
-                  {copy.apply}
-                </button>
-              </form>
-            )}
+            ) : null}
             {state === "error" && message && !checkout ? (
               <p className="coupon-error-text" role="alert">{message}</p>
             ) : null}
@@ -914,7 +904,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
         ) : null}
 
         <div className="summary-concierge-help">
-          <span className="concierge-title">Cairo Operations Support</span>
+          <span className="concierge-title">{copy.contactInfo}</span>
           <div className="concierge-links">
             <a
               href={siteContact.whatsapp.contactUrl}
@@ -946,7 +936,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
             <section className="checkout-section-card">
               <div className="section-header">
                 <span className="step-number">1</span>
-                <h2>Lead Traveler Details</h2>
+                <h2>{copy.billingDetails}</h2>
               </div>
               <div className="form-grid-two-col">
                 <div className="form-group">
@@ -971,7 +961,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                 </div>
                 <div className="form-group">
                   <label htmlFor="checkout-pickupLocation">{copy.pickupLocation}</label>
-                  <input id="checkout-pickupLocation" name="pickupLocation" placeholder="Hotel name or address" />
+                  <input id="checkout-pickupLocation" name="pickupLocation" placeholder={copy.pickupLocation} />
                 </div>
               </div>
             </section>
@@ -995,15 +985,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                   <div className="payment-method-details">
                     <div className="payment-method-top">
                       <span className="method-name">{copy.card}</span>
-                      <div className="payment-badges">
-                        <span className="card-pill visa">Visa</span>
-                        <span className="card-pill mc">MasterCard</span>
-                        <span className="card-pill amex">Amex</span>
-                      </div>
                     </div>
-                    <p className="payment-method-desc">
-                      Pay securely with your credit or debit card via licensed gateway (Card Method ID 9).
-                    </p>
                   </div>
                 </label>
 
@@ -1019,13 +1001,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                   <div className="payment-method-details">
                     <div className="payment-method-top">
                       <span className="method-name">{copy.paypal}</span>
-                      <div className="payment-badges">
-                        <span className="card-pill paypal">PayPal</span>
-                      </div>
                     </div>
-                    <p className="payment-method-desc">
-                      Fast, protected checkout directly using your PayPal balance or linked bank.
-                    </p>
                   </div>
                 </label>
               </div>
@@ -1035,14 +1011,14 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
             <section className="checkout-section-card">
               <div className="section-header">
                 <span className="step-number">3</span>
-                <h2>Special Requests & Notes (Optional)</h2>
+                <h2>{copy.note}</h2>
               </div>
               <div className="form-group full-width">
                 <label htmlFor="checkout-note">{copy.note}</label>
                 <textarea
                   id="checkout-note"
                   name="note"
-                  placeholder="Share flight details, dietary requirements, or special preferences..."
+                  placeholder={copy.note}
                   rows={4}
                 />
               </div>
@@ -1064,10 +1040,6 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                   <span>{copy.checkoutNow} →</span>
                 )}
               </button>
-
-              <div className="checkout-security-notice">
-                <span>🔒 256-Bit SSL Encrypted · Instant Booking Confirmation · Licensed Ministry of Tourism Operator</span>
-              </div>
 
               {!selected && state !== "loading" ? (
                 <div className="checkout-error-banner" role="alert">
@@ -1101,8 +1073,8 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
         {state !== "loading" && cart.length === 0 ? (
           <div className="cart-empty-card">
             <div className="cart-empty-icon" aria-hidden="true">🛒</div>
-            <h2>Your Cart is Empty</h2>
-            <p>You haven&apos;t added any Egypt tours, Nile cruises, or transfers to your itinerary yet.</p>
+            <h2>{copy.cart}</h2>
+            <p className="muted">{copy.emptyCart}</p>
             <Link className="btn-explore-tours" href={withLocale("/trips", locale)}>
               {copy.exploreTours} →
             </Link>
@@ -1113,7 +1085,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
           <>
             <div className="cart-header-bar">
               <div className="cart-count-badge">
-                <span>Selected Experiences</span>
+                <span>{copy.cart}</span>
                 <span className="count-pill">{cart.length}</span>
               </div>
               <button
@@ -1153,7 +1125,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
 
                       <div className="cart-item-info">
                         <span className="cart-item-badge">
-                          {isTour ? "Private Guided Tour" : "Car Transfer"}
+                          {isTour ? copy.tours : copy.rentCar}
                         </span>
                         <h3 className="cart-item-title">
                           {item.tour?.slug ? (
@@ -1190,7 +1162,6 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                       </div>
 
                       <div className="cart-item-pricing">
-                        <span className="price-label">Price</span>
                         <span className="price-amount">
                           {itemTotal !== null ? format(itemTotal) : "—"}
                         </span>
@@ -1205,7 +1176,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                           onClick={() => setEditingItemId(isEditing ? null : itemId)}
                           aria-expanded={isEditing}
                         >
-                          <span>{isEditing ? "Close Details" : "Customize Details / Add-ons"}</span>
+                          <span>{isEditing ? copy.back : copy.addOns}</span>
                           <span className={`chevron-icon ${isEditing ? "is-open" : ""}`} aria-hidden="true">▾</span>
                         </button>
                       ) : <span />}
@@ -1233,30 +1204,6 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                   </article>
                 );
               })}
-            </div>
-
-            <div className="cart-reassurance-strip">
-              <div className="reassurance-box">
-                <div className="box-icon" aria-hidden="true">🏛️</div>
-                <div className="box-text">
-                  <h4>100% Private Tours</h4>
-                  <p>Private air-conditioned vehicle & dedicated Egyptologist guide.</p>
-                </div>
-              </div>
-              <div className="reassurance-box">
-                <div className="box-icon" aria-hidden="true">💎</div>
-                <div className="box-text">
-                  <h4>Transparent Pricing</h4>
-                  <p>All taxes included. Zero card surcharges or surprise fees.</p>
-                </div>
-              </div>
-              <div className="reassurance-box">
-                <div className="box-icon" aria-hidden="true">📜</div>
-                <div className="box-text">
-                  <h4>Licensed Operator</h4>
-                  <p>Official Egyptian Ministry of Tourism licensed agency.</p>
-                </div>
-              </div>
             </div>
           </>
         ) : null}

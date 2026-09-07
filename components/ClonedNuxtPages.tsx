@@ -83,13 +83,8 @@ export function CartClonePage({ checkout = false, locale = "en" }: { checkout?: 
               <span className="current">{copy.cart}</span>
             )}
           </nav>
-          <p className="commerce-eyebrow">{checkout ? "Secure Booking" : "Your Itinerary"}</p>
+          <p className="commerce-eyebrow">{checkout ? copy.billingDetails : copy.cart}</p>
           <h1>{checkout ? copy.checkout : copy.cart}</h1>
-          <p className="commerce-hero-subtitle">
-            {checkout
-              ? "Complete your reservation with licensed local guides and 100% private customized itineraries."
-              : "Review your selected Egypt experiences, tailor private party details, or apply a promotional code."}
-          </p>
         </div>
       </section>
       <CartFlow checkout={checkout} locale={locale} />
