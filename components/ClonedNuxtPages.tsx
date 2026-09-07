@@ -30,13 +30,21 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
     <main className="auth-clone">
       <section className="auth-panel">
         <div className="auth-top">
-          <Link href={withLocale("/", locale)}><Image src="/images/Artboard 5.png" alt="Sun Pyramids" width={86} height={86} /></Link>
+          <Link className="auth-brand" href={withLocale("/", locale)}>
+            <Image src="/images/Artboard 5.png" alt="Sun Pyramids Tours" width={86} height={86} priority />
+          </Link>
         </div>
-        <Suspense fallback={<div className="auth-form-wrap"><p className="eyebrow">Sun Pyramids Tours</p><h1>{copy.myProfile}</h1></div>}>
+        <Suspense fallback={<div className="auth-form-wrap auth-form-loading"><span aria-hidden="true" /><h1>{copy.myProfile}</h1></div>}>
           <AuthFlow mode={mode} locale={locale} />
         </Suspense>
       </section>
-      <section className="auth-image"><Image src="/images/authHero.png" alt="Egypt travel" fill sizes="50vw" /></section>
+      <section className="auth-image" aria-hidden="true">
+        <Image src="/images/Cairo_Egypt_Unsplash.png" alt="" fill sizes="(max-width: 1023px) 0px, 48vw" priority />
+        <div className="auth-image-caption">
+          <span>{copy.egyptTours}</span>
+          <strong>Sun Pyramids Tours</strong>
+        </div>
+      </section>
     </main>
   );
 }
@@ -44,19 +52,30 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
 export function AccountPage({ view = "profile", locale = "en" }: { view?: string; locale?: Locale }) {
   const copy = uiCopy(locale);
   const heading = view === "bookings" ? copy.myBookings : view === "favourites" ? copy.myFavorites : copy.myProfile;
+  const accountLinks = [
+    { label: copy.personalInfo, href: "/profile", active: view === "profile" },
+    { label: copy.myBookings, href: "/profile/bookings", active: view === "bookings" },
+    { label: copy.myFavorites, href: "/profile/favourites", active: view === "favourites" },
+    { label: copy.myProfile, href: "/profile/settings", active: view === "settings" },
+  ];
   return (
     <main className="account-page">
-      <section className="original-page-hero" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(/images/authHero.png)" }}>
-        <h1>{heading}</h1>
+      <section className="account-hero">
+        <div className="container-shell">
+          <p>Sun Pyramids Tours</p>
+          <h1>{heading}</h1>
+        </div>
       </section>
       <section className="account-layout container-shell">
-        <aside>
-          {[
-            [copy.myProfile, "/profile"],
-            [copy.myBookings, "/profile/bookings"],
-            [copy.myFavorites, "/profile/favourites"],
-            [copy.myProfile, "/profile/settings"],
-          ].map(([label, href]) => <Link key={href} href={withLocale(href, locale)}>{label}</Link>)}
+        <aside className="account-navigation">
+          <nav aria-label="Account navigation">
+            {accountLinks.map(({ label, href, active }) => (
+              <Link key={href} href={withLocale(href, locale)} className={active ? "is-active" : undefined} aria-current={active ? "page" : undefined}>
+                <span>{label}</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </nav>
         </aside>
         <AccountFlow view={view} locale={locale} />
       </section>

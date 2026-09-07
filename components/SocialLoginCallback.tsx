@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -31,10 +32,12 @@ export function SocialLoginCallback({ locale = "en" }: { locale?: Locale }) {
   }, [locale, params, router]);
 
   return (
-    <main className="payment-status">
-      <section className="status-card">
+    <main className="social-auth-status">
+      <section className="social-auth-panel" aria-busy={!error}>
+        <Image src="/images/Artboard 5.png" alt="Sun Pyramids Tours" width={86} height={86} priority />
+        <span className={error ? "social-auth-mark is-error" : "social-auth-mark"} aria-hidden="true" />
         <h1>{error ? "Social login failed" : "Completing social login"}</h1>
-        <p className={error ? "form-message error" : "muted"}>{error || "Please wait while your session is created."}</p>
+        <p className={error ? "form-message error" : "muted"} role={error ? "alert" : "status"}>{error || "Please wait while your session is created."}</p>
         {error ? <Link className="btn-primary" href={withLocale("/auth/sign-in", locale)}>Return to sign in</Link> : null}
       </section>
     </main>
