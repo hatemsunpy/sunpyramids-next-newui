@@ -249,10 +249,31 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
     window.location.href = clientApiUrl(endpoint);
   }
 
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(withLocale("/", locale));
+    }
+  }
+
   const isPasswordMode = mode.includes("password") || mode === "sign-in" || mode === "sign-up";
 
   return (
     <div className={`auth-form-wrap auth-mode-${mode}`}>
+      <nav className="auth-nav-row" aria-label="Page navigation">
+        <button type="button" className="auth-nav-back" onClick={handleBack} aria-label={copy.back || "Back"}>
+          <span aria-hidden="true">←</span>
+          <span>{copy.back || "Back"}</span>
+        </button>
+        <Link href={withLocale("/", locale)} className="auth-nav-home" aria-label={copy.home || "Home"}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span>{copy.home || "Home"}</span>
+        </Link>
+      </nav>
       <div className="auth-heading">
         <p className="eyebrow">Sun Pyramids Tours</p>
         <h1>{title}</h1>
