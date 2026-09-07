@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import type { Locale } from "@/types/api";
 import { setCookie } from "@/lib/client-api";
 import { withLocale } from "@/lib/locales";
+import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
 
 export function SocialLoginCallback({ locale = "en" }: { locale?: Locale }) {
   const params = useSearchParams();
@@ -34,7 +35,7 @@ export function SocialLoginCallback({ locale = "en" }: { locale?: Locale }) {
   return (
     <main className="social-auth-status">
       <section className="social-auth-panel" aria-busy={!error}>
-        <Image src="/images/Artboard 5.png" alt="Sun Pyramids Tours" width={86} height={86} priority />
+        <Image src={APPROVED_BRAND_LOGO} alt="Sun Pyramids Tours" width={180} height={51} priority />
         <span className={error ? "social-auth-mark is-error" : "social-auth-mark"} aria-hidden="true" />
         <h1>{error ? "Social login failed" : "Completing social login"}</h1>
         <p className={error ? "form-message error" : "muted"} role={error ? "alert" : "status"}>{error || "Please wait while your session is created."}</p>

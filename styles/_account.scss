@@ -4,7 +4,7 @@
   --account-ink: #1d1f1f;
   --account-muted: #596273;
   --account-ground: #eeeeee;
-  --account-focus: #4d78e5;
+  --account-focus: #163a96;
   display: grid;
   grid-template-columns: minmax(32rem, 0.92fr) minmax(28rem, 1.08fr);
   min-height: 100svh;
@@ -25,16 +25,15 @@
 
   .auth-brand {
     display: inline-flex;
-    min-width: 4.5rem;
-    min-height: 4.5rem;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 0.75rem;
   }
 
   .auth-brand img {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: auto;
+    max-width: 180px;
+    height: 48px;
     object-fit: contain;
   }
 
@@ -335,7 +334,7 @@
   --account-ink: #1d1f1f;
   --account-muted: #596273;
   --account-ground: #eeeeee;
-  --account-focus: #4d78e5;
+  --account-focus: #163a96;
   min-height: 70vh;
   background: var(--account-ground);
   color: var(--account-ink);
@@ -700,8 +699,9 @@
   }
 
   .social-auth-panel > img {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: auto;
+    max-width: 180px;
+    height: 48px;
     object-fit: contain;
   }
 
@@ -773,7 +773,7 @@
   }
 
   .btn-primary:focus-visible {
-    outline: 2px solid #4d78e5;
+    outline: 2px solid var(--account-blue, #163a96);
     outline-offset: 3px;
   }
 }

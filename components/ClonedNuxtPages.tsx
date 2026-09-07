@@ -13,7 +13,7 @@ import { TourCard } from "@/components/TourCard";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
-import { siteContact } from "@/lib/site-contact";
+import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 import { uiCopy } from "@/lib/ui-copy";
 
 const bookTripGallery = [
@@ -31,7 +31,7 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
       <section className="auth-panel">
         <div className="auth-top">
           <Link className="auth-brand" href={withLocale("/", locale)}>
-            <Image src="/images/Artboard 5.png" alt="Sun Pyramids Tours" width={86} height={86} priority />
+            <Image src={APPROVED_BRAND_LOGO} alt="Sun Pyramids Tours" width={180} height={51} priority />
           </Link>
         </div>
         <Suspense fallback={<div className="auth-form-wrap auth-form-loading"><span aria-hidden="true" /><h1>{copy.myProfile}</h1></div>}>
