@@ -543,7 +543,7 @@ function CartTourEditor({
           />
         </div>
         <div className="editor-field">
-          <label htmlFor={`children-${itemId}`}>{copy.children} (6-11)</label>
+          <label htmlFor={`children-${itemId}`}>{copy.children} (3 - 11)</label>
           <input
             id={`children-${itemId}`}
             name="children"
@@ -554,7 +554,7 @@ function CartTourEditor({
           />
         </div>
         <div className="editor-field">
-          <label htmlFor={`infants-${itemId}`}>{copy.infants} (&lt;6)</label>
+          <label htmlFor={`infants-${itemId}`}>{copy.infants} (0 - 2)</label>
           <input
             id={`infants-${itemId}`}
             name="infants"
