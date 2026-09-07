@@ -76,6 +76,9 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           <button type="button" onClick={shareTour} aria-label="Share tour"><ShareIcon /></button>
         </div>
         <a className="tour-gallery-expand" href={gallery[active]} target="_blank" rel="noreferrer" aria-label="Open current photo"><ExpandIcon /></a>
+        <span className="tour-gallery-count" aria-live="polite">
+          <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
+        </span>
       </div>
       {previewIndexes.length ? (
         <div className={`tour-gallery-previews tour-gallery-previews-${previewIndexes.length}`}>
@@ -102,9 +105,6 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           })}
         </div>
       ) : null}
-      <span className="tour-gallery-count" aria-live="polite">
-        <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
-      </span>
       {actionMessage ? <p className="tour-gallery-message" role="status">{actionMessage}</p> : null}
     </section>
   );
