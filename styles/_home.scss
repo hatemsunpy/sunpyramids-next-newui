@@ -75,7 +75,7 @@
 .home-hero-v2 {
   position: relative;
   width: 100%;
-  min-height: min(680px, 75svh);
+  min-height: min(820px, 86svh);
   margin-inline: 0;
   overflow: hidden;
   border-radius: 0;
@@ -114,12 +114,12 @@
   position: relative;
   z-index: 2;
   display: flex;
-  min-height: min(680px, 75svh);
+  min-height: min(820px, 86svh);
   flex-direction: column;
   justify-content: center;
   width: min(calc(100% - clamp(2rem, 6.4vw, 6rem)), 1390px);
   margin-inline: auto;
-  padding: 8rem 0 4rem;
+  padding: 9rem 0 5rem;
 }
 
 .home-hero-v2__copy {
@@ -359,7 +359,7 @@
 .home-hero-v2 .hero-dots {
   z-index: 3;
   right: clamp(1.2rem, 3vw, 2.5rem);
-  bottom: 3.5rem;
+  bottom: 4rem;
   left: auto;
 }
 
@@ -1274,12 +1274,12 @@
 
 @media (max-width: 1180px) {
   .home-hero-v2 {
-    min-height: 580px;
+    min-height: 720px;
   }
 
   .home-hero-v2__inner {
-    min-height: 580px;
-    padding-top: 6rem;
+    min-height: 720px;
+    padding-top: 7.5rem;
   }
 
   .home-page--redesign .home-search-fields {
@@ -1330,7 +1330,7 @@
 @media (max-width: 900px) {
   .home-hero-v2,
   .home-hero-v2__inner {
-    min-height: 500px;
+    min-height: 620px;
   }
 
   .home-page--redesign .home-search-fields {
@@ -1444,14 +1444,14 @@
 
   .home-hero-v2 {
     width: 100%;
-    min-height: 420px;
+    min-height: 520px;
     border-radius: 0;
   }
 
   .home-hero-v2__inner {
-    min-height: 420px;
+    min-height: 520px;
     width: calc(100% - 2rem);
-    padding: 5.5rem 0 3rem;
+    padding: 6.5rem 0 3.5rem;
   }
 
   .home-hero-v2__veil {
