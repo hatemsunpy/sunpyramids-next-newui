@@ -62,6 +62,106 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return metadataFromPage(result.value, routePath(slug), "en");
 }
 
+async function NileCruisesIndex({ slug }: { slug: string[] }) {
+  // Production renders the nile-cruises CATEGORY children
+  // (Standard / Deluxe / Superior / Luxury) as cards, while the hero + SEO
+  // come from the `nile-cruises` marketing page (banner cruise1.webp).
+  const [pageResult, categoryResult, toursResponse] = await Promise.all([
+    resolveEgyptToursPage(slug, "en"),
+    getCategoryReliable("nile-cruises", "en"),
+    getTours("tours?categories.slug=nile-cruises&order_by=display_order,asc", "en", 12, 1),
+  ]);
+  if (!pageResult.ok) {
+    if (pageResult.reason === "not_found") notFound();
+    throw new Error(`Failed to fetch egypt-tours page "${slug.join("/")}": ${formatApiError(pageResult)}`);
+  }
+  const page = pageResult.value;
+  if (!page) notFound();
+
+  const rawChildren =
+    (categoryResult.ok
+      ? (categoryResult.value as ApiPage & { children?: ApiPage[] })
+      : null
+    )?.children ?? [];
+  const orderOf = (item: ApiPage) =>
+    typeof item.display_order === "number" ? item.display_order : 999;
+  const children = [...rawChildren].sort(
+    (a, b) => orderOf(a) - orderOf(b) || (a.id ?? 0) - (b.id ?? 0),
+  );
+
+  const pageTitle = page?.title || page?.name || "Nile Cruises";
+  const breadcrumbs = [{ label: "Home", href: "/" }, { label: "Egypt Tours" }, { label: pageTitle }];
+
+  // Fallback to the previous tours listing if the category has no children.
+  if (children.length === 0) {
+    const tours = tourListData(toursResponse as ApiList<Tour> | null);
+    const meta = tourMeta(toursResponse as ApiList<Tour> | null);
+    return (
+      <SiteShell locale="en">
+        <JsonLd schema={page.seo?.structure_schema} />
+        <main>
+          <DiscoveryHero
+            title={pageTitle}
+            breadcrumbs={breadcrumbs}
+            eyebrow="Curated Egypt Packages"
+            description={page?.short_description || page?.description || page?.content}
+            totalCount={meta?.total}
+            bgImage={page?.banner || "/images/mainBanner.png"}
+          />
+          <section className="discovery-section">
+            <div className="container-shell">
+              {tours.length > 0 ? (
+                <div className="discovery-full-grid">
+                  {tours.map((tour) => (
+                    <TourCard key={tour.id || tour.slug} tour={tour as Tour} locale="en" />
+                  ))}
+                </div>
+              ) : (
+                <EmptyState
+                  title="No tours available in this category"
+                  description="We are currently updating our itinerary departures for this selection. Please browse all our Egypt tours."
+                  actionLabel="Browse all Egypt tours"
+                  actionHref="/trips"
+                />
+              )}
+            </div>
+          </section>
+        </main>
+      </SiteShell>
+    );
+  }
+
+  return (
+    <SiteShell locale="en">
+      <JsonLd schema={page.seo?.structure_schema} />
+      <main>
+        <DiscoveryHero
+          title={pageTitle}
+          breadcrumbs={breadcrumbs}
+          eyebrow="Nile Cruise Collection"
+          description={page?.short_description || page?.description || page?.content}
+          totalCount={children.length}
+          bgImage={page?.banner || "/images/mainBanner.png"}
+        />
+        <section className="discovery-section">
+          <div className="container-shell">
+            <div className="destination-mosaic-grid">
+              {children.map((child) => (
+                <DestinationCard
+                  key={child.id || child.slug}
+                  destination={child}
+                  basePath="/egypt-tours/nile-cruises"
+                  locale="en"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+    </SiteShell>
+  );
+}
+
 export default async function Page({ params, searchParams }: Props) {
   const slug = (await params).slug.map(decodePathSegment);
   const query = await searchParams;
@@ -72,8 +172,13 @@ export default async function Page({ params, searchParams }: Props) {
   );
   const isOneDayRoute = slug[0] === "one-day-tours";
   const isOneDayIndex = isOneDayRoute && slug.length === 1;
+  const isNileCruisesIndex = slug.length === 1 && slug[0] === "nile-cruises";
   const filterSlug = slug.at(-1) || slug[0];
   const limit = isOneDayRoute ? 24 : 12;
+
+  if (isNileCruisesIndex) {
+    return <NileCruisesIndex slug={slug} />;
+  }
   const [pageResult, itemsResponse] = await Promise.all([
     resolveEgyptToursPage(slug, "en"),
     isOneDayIndex
