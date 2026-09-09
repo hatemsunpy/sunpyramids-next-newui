@@ -905,7 +905,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     <aside className="commerce-aside">
       <div className="order-summary-card">
         <div className="summary-header">
-          <h3>{copy.summary}</h3>
+          <h2>{copy.summary}</h2>
           <span className="summary-item-badge">
             {cart.length} {cart.length === 1 ? "Item" : "Items"}
           </span>
@@ -1222,7 +1222,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                         <span className="cart-item-badge">
                           {isTour ? copy.tours : copy.rentCar}
                         </span>
-                        <h3 className="cart-item-title">
+                        <h2 className="cart-item-title">
                           {item.tour?.slug ? (
                             <Link href={withLocale(`/tours/${item.tour.slug}`, locale)}>
                               {title}
@@ -1230,7 +1230,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                           ) : (
                             <span>{title}</span>
                           )}
-                        </h3>
+                        </h2>
 
                         <div className="cart-item-meta">
                           {item.start_date ? (

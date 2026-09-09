@@ -1,14 +1,14 @@
 .auth-clone {
-  --account-blue: #163a96;
-  --account-amber: #f7951d;
-  --account-ink: #1d1f1f;
-  --account-muted: #596273;
-  --account-ground: #eeeeee;
-  --account-focus: #163a96;
+  --account-blue: var(--spt-link);
+  --account-amber: var(--spt-amber);
+  --account-ink: var(--spt-ink);
+  --account-muted: var(--spt-muted);
+  --account-ground: var(--spt-ground);
+  --account-focus: var(--spt-focus);
   display: grid;
   grid-template-columns: minmax(32rem, 0.92fr) minmax(28rem, 1.08fr);
   min-height: 100svh;
-  background: #ffffff;
+  background: var(--spt-surface);
   color: var(--account-ink);
 
   .auth-panel {
@@ -87,7 +87,7 @@
   .auth-nav-back:hover,
   .auth-nav-home:hover {
     color: var(--account-blue);
-    background: #f4f6fb;
+    background: var(--spt-surface-soft);
   }
 
   .auth-nav-home svg {
@@ -129,7 +129,7 @@
     gap: 0.65rem;
     border: 1px solid rgba(29, 31, 31, 0.32);
     border-radius: 999px;
-    background: #ffffff;
+    background: var(--spt-surface);
     color: var(--account-ink);
     font-weight: 700;
     cursor: pointer;
@@ -138,7 +138,7 @@
 
   .social-row button:hover {
     border-color: var(--account-blue);
-    background: #f4f6fb;
+    background: var(--spt-surface-soft);
     color: var(--account-blue);
   }
 
@@ -170,7 +170,7 @@
     min-height: 3.35rem;
     border: 1px solid rgba(29, 31, 31, 0.36);
     border-radius: 0.75rem;
-    background: #ffffff;
+    background: var(--spt-surface);
     color: var(--account-ink);
     padding: 0.85rem 1rem;
     outline: 0;
@@ -178,13 +178,13 @@
   }
 
   .auth-form input:not([type="checkbox"])::placeholder {
-    color: #6b7280;
+    color: var(--spt-muted);
     opacity: 1;
   }
 
   .auth-form input:not([type="checkbox"]):focus-visible {
     border-color: var(--account-focus);
-    background: #ffffff;
+    background: var(--spt-surface);
     box-shadow: 0 0 0 4px #e9eefc;
   }
 
@@ -217,7 +217,7 @@
     margin-top: 0.25rem;
     border: 0;
     background: var(--account-amber);
-    color: var(--account-ink);
+    color: #1d1f1f;
     cursor: pointer;
   }
 
@@ -274,7 +274,7 @@
     height: 100svh;
     min-height: 38rem;
     overflow: hidden;
-    background: var(--account-blue);
+    background: var(--spt-anchor-brand);
     padding: 0;
   }
 
@@ -329,12 +329,12 @@
 }
 
 .account-page {
-  --account-blue: #163a96;
-  --account-amber: #f7951d;
-  --account-ink: #1d1f1f;
-  --account-muted: #596273;
-  --account-ground: #eeeeee;
-  --account-focus: #163a96;
+  --account-blue: var(--spt-link);
+  --account-amber: var(--spt-amber);
+  --account-ink: var(--spt-ink);
+  --account-muted: var(--spt-muted);
+  --account-ground: var(--spt-ground);
+  --account-focus: var(--spt-focus);
   min-height: 70vh;
   background: var(--account-ground);
   color: var(--account-ink);
@@ -380,7 +380,7 @@
     align-self: start;
     border: 1px solid rgba(29, 31, 31, 0.18);
     border-radius: 1rem;
-    background: #ffffff;
+    background: var(--spt-surface);
     padding: 0.55rem;
   }
 
@@ -403,12 +403,12 @@
   }
 
   .account-navigation a:hover {
-    background: #f4f6fb;
+    background: var(--spt-surface-soft);
     color: var(--account-blue);
   }
 
   .account-navigation a.is-active {
-    background: var(--account-blue);
+    background: var(--spt-anchor-brand);
     color: #ffffff;
   }
 
@@ -424,7 +424,7 @@
     min-width: 0;
     border: 1px solid rgba(29, 31, 31, 0.18);
     border-radius: 1rem;
-    background: #ffffff;
+    background: var(--spt-surface);
     padding: clamp(1.25rem, 3vw, 2.25rem);
     animation: accountPanelReveal 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -461,7 +461,7 @@
     min-height: 2.75rem;
     border: 1px solid rgba(29, 31, 31, 0.32);
     border-radius: 999px;
-    background: #ffffff;
+    background: var(--spt-surface);
     color: var(--account-blue);
     padding: 0.7rem 1rem;
     cursor: pointer;
@@ -469,7 +469,7 @@
 
   .account-card .btn-outline:hover {
     border-color: var(--account-blue);
-    background: #f4f6fb;
+    background: var(--spt-surface-soft);
     color: var(--account-blue);
   }
 
@@ -532,7 +532,7 @@
     margin-right: 0.75rem;
     border: 1px solid rgba(29, 31, 31, 0.32);
     border-radius: 999px;
-    background: #ffffff;
+    background: var(--spt-surface);
     color: var(--account-blue);
     padding: 0.55rem 0.9rem;
     font-weight: 700;
@@ -556,7 +556,7 @@
     min-height: 3.25rem;
     border: 1px solid rgba(29, 31, 31, 0.36);
     border-radius: 0.75rem;
-    background: #ffffff;
+    background: var(--spt-surface);
     color: var(--account-ink);
     padding: 0.8rem 0.95rem;
     outline: 0;
@@ -564,7 +564,7 @@
   }
 
   .account-field input::placeholder {
-    color: #6b7280;
+    color: var(--spt-muted);
     opacity: 1;
   }
 
@@ -574,7 +574,7 @@
   }
 
   .account-field input:read-only {
-    background: #f4f6f8;
+    background: var(--spt-surface-soft);
     color: var(--account-muted);
     cursor: not-allowed;
   }
@@ -593,7 +593,7 @@
     min-height: 3.15rem;
     border: 0;
     background: var(--account-amber);
-    color: var(--account-ink);
+    color: #1d1f1f;
   }
 
   .account-form-actions .btn-primary:hover,
@@ -677,13 +677,13 @@
 }
 
 .social-auth-status {
-  --account-blue: #163a96;
-  --account-amber: #f7951d;
-  --account-ink: #1d1f1f;
+  --account-blue: var(--spt-link);
+  --account-amber: var(--spt-amber);
+  --account-ink: var(--spt-ink);
   display: grid;
   min-height: 100svh;
   place-items: center;
-  background: #eeeeee;
+  background: var(--spt-ground);
   padding: 1rem;
 
   .social-auth-panel {
@@ -691,7 +691,7 @@
     width: min(100%, 32rem);
     justify-items: center;
     border-radius: 1rem;
-    background: #ffffff;
+    background: var(--spt-surface);
     padding: clamp(1.5rem, 6vw, 3rem);
     text-align: center;
     box-shadow: 0 8px 8px rgba(13, 28, 65, 0.1);
@@ -764,7 +764,7 @@
     min-height: 3rem;
     margin-top: 1.5rem;
     background: var(--account-amber);
-    color: var(--account-ink);
+    color: #1d1f1f;
   }
 
   .btn-primary:hover {

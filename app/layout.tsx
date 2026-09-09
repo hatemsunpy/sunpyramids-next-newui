@@ -6,6 +6,18 @@ import { isLocale } from "@/lib/locales";
 import "./globals.scss";
 import "@/styles/batch-one.scss";
 
+const themeScript = `(() => {
+  let saved;
+  try {
+    saved = localStorage.getItem("sunpyramids-theme");
+  } catch {}
+  const theme = saved === "light" || saved === "dark"
+    ? saved
+    : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
+})();`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://sunpyramidstours.com"),
   title: {
@@ -25,7 +37,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const routeLocale = (await headers()).get("x-sunpyramids-route-locale") || "en";
   const lang = isLocale(routeLocale) ? routeLocale : "en";
   return (
-    <html lang={lang}>
+    <html lang={lang} data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <HtmlLangSynchronizer />
         <noscript>

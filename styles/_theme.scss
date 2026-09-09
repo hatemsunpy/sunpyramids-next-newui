@@ -1,0 +1,177 @@
+html {
+  background: var(--spt-ground);
+}
+
+body {
+  background: var(--spt-ground);
+  color: var(--spt-ink);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--spt-amber) 72%, transparent);
+  color: #1d1f1f;
+}
+
+:where(input, textarea, select) {
+  color-scheme: inherit;
+}
+
+:root[data-theme="dark"] {
+  --third: var(--spt-ground);
+  --text-dark: var(--spt-ink);
+  --text-light: var(--spt-muted);
+}
+
+.lc-modal {
+  border: 1px solid var(--spt-border);
+  background: var(--spt-surface-raised);
+  color: var(--spt-ink);
+}
+
+.lc-modal-backdrop {
+  background: var(--spt-overlay);
+}
+
+.lc-modal-close,
+.lc-tile {
+  color: var(--spt-ink);
+}
+
+.lc-modal-close {
+  border-color: var(--spt-border);
+}
+
+.lc-modal-close:hover {
+  background: var(--spt-ink);
+  color: var(--spt-surface);
+}
+
+.lc-label {
+  color: var(--spt-muted);
+}
+
+.lc-tile:hover {
+  background: var(--spt-surface-soft);
+  color: var(--spt-link);
+}
+
+.lc-tile-active,
+.lc-tile-active:hover {
+  background: var(--spt-anchor-brand);
+  color: #ffffff;
+}
+
+:root[data-theme="dark"] .site-shell-v2 {
+  .btn-clear-cart,
+  .btn-clear-cart:hover:not(:disabled) {
+    color: var(--spt-danger-text);
+  }
+  .summary-concierge-help .whatsapp-link {
+    color: var(--spt-success-text);
+  }
+  :where(input, textarea, select):not([type="radio"]):not([type="checkbox"]),
+  .home-search-fields input:not([type="radio"]),
+  .home-search-fields select {
+    border-color: var(--spt-border);
+    background-color: var(--spt-surface-raised);
+    color: var(--spt-ink);
+  }
+
+  :where(input, textarea)::placeholder {
+    color: var(--spt-muted);
+  }
+
+  .home-help-panel-v2 .home-help-form input {
+    background: #ffffff;
+    color: #1d1f1f;
+  }
+
+  .home-signature-grid .tour-card--feature,
+  .home-editorial-grid .blog-card--lead,
+  .home-plan-section__media,
+  .home-help-panel-v2,
+  .discovery-hero,
+  .book-trip-hero,
+  .account-hero {
+    color: #ffffff;
+  }
+
+  .home-page--redesign .home-partners img {
+    background: #ffffff;
+  }
+
+  .bottom-bar {
+    border-color: var(--spt-border);
+    background: var(--spt-surface-raised);
+    color: var(--spt-muted);
+  }
+}
+
+:root[data-theme="dark"] .auth-clone,
+:root[data-theme="dark"] .account-page,
+:root[data-theme="dark"] .social-auth-status {
+  .auth-nav-row,
+  .account-navigation,
+  .account-card,
+  .social-auth-panel {
+    border-color: var(--spt-border);
+  }
+
+  .social-row button,
+  .auth-form input:not([type="checkbox"]),
+  .account-navigation,
+  .account-card,
+  .account-card .btn-outline,
+  .account-field input,
+  .account-field input:read-only,
+  .social-auth-panel {
+    border-color: var(--spt-border);
+    background: var(--spt-surface-raised);
+    color: var(--account-ink);
+  }
+
+  .auth-nav-back:hover,
+  .auth-nav-home:hover,
+  .social-row button:hover,
+  .account-navigation a:hover,
+  .account-card .btn-outline:hover {
+    background: var(--spt-surface-soft);
+  }
+
+  .auth-form input:not([type="checkbox"]):focus-visible,
+  .account-field input:focus-visible {
+    background: var(--spt-surface-raised);
+  }
+
+  .auth-brand img,
+  .social-auth-panel > img {
+    border-radius: var(--spt-radius-sm);
+    background: #ffffff;
+    padding: 0.2rem 0.35rem;
+  }
+}
+
+:root[data-theme="dark"] .payment-status {
+  background: var(--spt-ground);
+  color: var(--spt-ink);
+
+  .status-card {
+    border: 1px solid var(--spt-border);
+    background: var(--spt-surface);
+  }
+
+  .btn-outline {
+    border-color: var(--spt-border);
+    background: var(--spt-surface-raised);
+    color: var(--spt-ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

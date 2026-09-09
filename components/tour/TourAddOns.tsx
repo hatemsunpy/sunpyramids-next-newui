@@ -66,7 +66,7 @@ export function TourBookingAddOns({ options, selected, optionsTotal, onChange }:
   const [expanded, setExpanded] = useState(true);
   return (
     <section className="tour-booking-amount" aria-labelledby="tour-booking-amount-title">
-      <h4 id="tour-booking-amount-title">Amount</h4>
+      <h3 id="tour-booking-amount-title">Amount</h3>
       <div className="tour-booking-addons-head">
         <div>
           <strong>Add-ons</strong>

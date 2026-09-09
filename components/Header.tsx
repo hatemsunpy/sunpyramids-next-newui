@@ -5,65 +5,108 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/types/api";
-import { withLocale } from "@/lib/locales";
+import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { uiCopy } from "@/lib/ui-copy";
 import { homeCopy } from "@/lib/home-copy";
 import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
 
 const tourLinks = [
-  ["oneDay", "/egypt-tours/one-day-tours"], ["multiDays", "/egypt-tours/multi-days-tours"],
-  ["nileCruises", "/egypt-tours/nile-cruises"], ["shoreExcursions", "/egypt-tours/shore-excursions"],
+  ["oneDay", "/egypt-tours/one-day-tours"],
+  ["multiDays", "/egypt-tours/multi-days-tours"],
+  ["nileCruises", "/egypt-tours/nile-cruises"],
+  ["shoreExcursions", "/egypt-tours/shore-excursions"],
 ] as const;
 
-const mainNavLinks = [
-  ["home", "/"], ["about", "/about-us"], ["contact", "/contact-us"],
-  ["blogs", "/blogs/all-blogs"], ["events", "/events"],
+const primaryNavLinks = [
+  ["home", "/"],
+  ["egyptTours", null],
+  ["rentCar", "/rent-car"],
+  ["about", "/about-us"],
+  ["contact", "/contact-us"],
+  ["blogs", "/blogs/all-blogs"],
+  ["events", "/events"],
 ] as const;
 
-const secondaryNavLinks = [
-  ["home", "/"], ["rentCar", "/rent-car"], ["about", "/about-us"], ["contact", "/contact-us"],
-  ["blogs", "/blogs/all-blogs"], ["events", "/events"],
-] as const;
+const themeLabels: Record<Locale, { toggle: string; light: string; dark: string }> = {
+  en: { toggle: "Toggle color theme", light: "Light mode", dark: "Dark mode" },
+  fr: { toggle: "Basculer le thème de couleur", light: "Mode clair", dark: "Mode sombre" },
+  de: { toggle: "Farbmodus wechseln", light: "Heller Modus", dark: "Dunkler Modus" },
+  it: { toggle: "Cambia tema colore", light: "Modalità chiara", dark: "Modalità scura" },
+  pt: { toggle: "Alternar tema de cor", light: "Modo claro", dark: "Modo escuro" },
+  es: { toggle: "Cambiar tema de color", light: "Modo claro", dark: "Modo oscuro" },
+  zh: { toggle: "切换颜色主题", light: "浅色模式", dark: "深色模式" },
+};
 
-function NavDropdown({ locale }: { locale: Locale }) {
+function ArrowIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 6l4 4-4 4" /></svg>;
+}
+
+function SearchIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 4.5 4.5" /></svg>;
+}
+
+function CartIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M3 4h2l1.8 10h10.8l2-7H6" /><circle cx="9" cy="19" r="1.25" /><circle cx="17" cy="19" r="1.25" /></svg>;
+}
+
+function MenuIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" /></svg>;
+}
+
+function CloseIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" /></svg>;
+}
+
+function isActivePath(pathname: string, href: string) {
+  const currentPath = stripLocale(pathname).replace(/\/$/, "") || "/";
+  const targetPath = href.replace(/\/$/, "") || "/";
+  if (targetPath === "/blogs/all-blogs" && currentPath.startsWith("/blog/")) return true;
+  if (targetPath === "/events" && currentPath.startsWith("/event/")) return true;
+  return targetPath === "/" ? currentPath === "/" : currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
+}
+
+function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string }) {
   const copy = uiCopy(locale);
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const active = tourLinks.some(([, href]) => isActivePath(pathname, href)) || stripLocale(pathname).startsWith("/tour/");
 
-  // Close when focus leaves the dropdown (button or panel) entirely.
   const handleBlur = () => {
-    if (!containerRef.current) return;
     requestAnimationFrame(() => {
-      if (containerRef.current && !containerRef.current.contains(document.activeElement)) {
-        setOpen(false);
-      }
+      if (containerRef.current && !containerRef.current.contains(document.activeElement)) setOpen(false);
     });
   };
 
   return (
-    <div
-      className={`dropdown ${open ? "dropdown-open" : ""}`}
-      ref={containerRef}
-      onBlur={handleBlur}
-    >
+    <div className={`dropdown ${open ? "dropdown-open" : ""} ${active ? "nav-item-active" : ""}`} ref={containerRef} onBlur={handleBlur}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          containerRef.current?.querySelector("button")?.focus();
+        }
+      }}>
       <button
         type="button"
+        aria-current={active ? "page" : undefined}
         aria-expanded={open}
         aria-haspopup="true"
-        onClick={() => setOpen((v) => !v)}
-        onFocus={() => setOpen(true)}
+        onClick={() => setOpen((value) => !value)}
         onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
+          if (event.key === "Escape") {
+            setOpen(false);
+            event.currentTarget.focus();
+          }
         }}
       >
-        {copy.egyptTours} <span aria-hidden="true">⌄</span>
+        {copy.egyptTours}
+        <svg className="dropdown-chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" /></svg>
       </button>
       <div className="dropdown-panel">
         {tourLinks.map(([key, href]) => (
-          <Link key={href} href={withLocale(href, locale)}>
-            {copy[key]}
-            <span aria-hidden="true">›</span>
+          <Link key={href} href={withLocale(href, locale)} aria-current={isActivePath(pathname, href) ? "page" : undefined} onClick={() => setOpen(false)}>
+            {copy[key]}<ArrowIcon />
           </Link>
         ))}
       </div>
@@ -73,6 +116,7 @@ function NavDropdown({ locale }: { locale: Locale }) {
 
 export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitle?: string | null }) {
   const copy = uiCopy(locale);
+  const currentThemeLabels = themeLabels[locale];
   const home = homeCopy(locale);
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,22 +124,20 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
   const [isTop, setIsTop] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
-
   const isHome = pathname === "/" || pathname === `/${locale}`;
   const firstStyle = isHome && isTop;
 
   const handleScroll = useCallback(() => {
     const mobile = window.innerWidth < 512;
-    const top = window.scrollY < (mobile ? window.innerHeight - 440 : window.innerHeight);
-    setIsTop(top);
+    setIsTop(window.scrollY < (mobile ? window.innerHeight - 440 : window.innerHeight));
   }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
-    const id = window.requestAnimationFrame(handleScroll);
+    const frame = window.requestAnimationFrame(handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.cancelAnimationFrame(id);
+      window.cancelAnimationFrame(frame);
     };
   }, [handleScroll]);
 
@@ -103,18 +145,23 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
     if (!menuOpen) return;
     const previousOverflow = document.body.style.overflow;
     const menuButton = menuButtonRef.current;
-    const focusable = drawerRef.current?.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
-    );
+    const getFocusable = () => Array.from(drawerRef.current?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), summary, input, [tabindex]:not([tabindex="-1"])',
+    ) ?? []).filter((element) => element.getClientRects().length > 0);
+    const shell = document.querySelector(".site-shell-v2");
+    const background = Array.from(shell?.children ?? []).filter((element) => element.tagName !== "HEADER") as HTMLElement[];
+    const previousInert = background.map((element) => element.inert);
+    background.forEach((element) => { element.inert = true; });
     document.body.style.overflow = "hidden";
-    focusable?.[0]?.focus();
+    getFocusable()[0]?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setMenuOpen(false);
         return;
       }
-      if (event.key !== "Tab" || !focusable?.length) return;
+      const focusable = getFocusable();
+      if (event.key !== "Tab" || !focusable.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
@@ -129,142 +176,97 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      background.forEach((element, index) => { element.inert = previousInert[index]; });
       document.removeEventListener("keydown", handleKeyDown);
       menuButton?.focus();
     };
   }, [menuOpen]);
 
+  const closeMenu = () => setMenuOpen(false);
   const openLangModal = useCallback(() => setLangOpen(true), []);
   const closeLangModal = useCallback(() => setLangOpen(false), []);
 
+  const renderPrimaryNavigation = (mobile = false) => primaryNavLinks.map(([key, href]) => {
+    if (href === null) {
+      if (!mobile) return <NavDropdown key={key} locale={locale} pathname={pathname} />;
+      const toursActive = tourLinks.some(([, tourHref]) => isActivePath(pathname, tourHref)) || stripLocale(pathname).startsWith("/tour/");
+      return (
+        <details className={`mobile-tour-group ${toursActive ? "nav-item-active" : ""}`} key={key}>
+          <summary aria-current={toursActive ? "page" : undefined}>
+            <span>{copy.egyptTours}</span>
+            <svg aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" /></svg>
+          </summary>
+          <div>
+            {tourLinks.map(([tourKey, tourHref]) => (
+              <Link key={tourHref} href={withLocale(tourHref, locale)} aria-current={isActivePath(pathname, tourHref) ? "page" : undefined} onClick={closeMenu}>
+                {copy[tourKey]}<ArrowIcon />
+              </Link>
+            ))}
+          </div>
+        </details>
+      );
+    }
+
+    const active = isActivePath(pathname, href);
+    return (
+      <Link key={href} href={withLocale(href, locale)} aria-current={active ? "page" : undefined} onClick={mobile ? closeMenu : undefined}>
+        <span>{copy[key]}</span>{mobile ? <ArrowIcon /> : null}
+      </Link>
+    );
+  });
+
   return (
-    <header className={`site-header ${isHome ? "site-header-home" : ""} ${firstStyle ? "site-header-at-top" : ""}`}>
-      <div className="header-main">
-        <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" className="header-logo">
-          <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={190} height={54} priority />
-        </Link>
-
-        {firstStyle ? (
-          <nav className="header-inline-nav" aria-label="Main navigation">
-            {mainNavLinks.slice(0, 1).map(([key, href]) => (
-              <Link key={href} href={withLocale(href, locale)}>
-                {copy[key]}
-              </Link>
-            ))}
-            <NavDropdown locale={locale} />
-            {mainNavLinks.slice(1).map(([key, href]) => (
-              <Link key={href} href={withLocale(href, locale)}>
-                {copy[key]}
-              </Link>
-            ))}
-          </nav>
-        ) : (
+    <header className={`site-header ${isHome ? "site-header-home" : ""} ${firstStyle ? "site-header-at-top" : ""} ${menuOpen || langOpen ? "site-header-modal-open" : ""}`}>
+      <div className="header-frame">
+        <div className="header-main">
+          <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" className="header-logo">
+            <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={190} height={54} priority />
+          </Link>
           <form className="header-search" action={withLocale("/trips", locale)}>
-            <span aria-hidden="true">⌕</span>
-            <input name="title" placeholder={copy.search} aria-label={copy.search} />
+            <SearchIcon /><input name="title" placeholder={copy.search} aria-label={copy.search} />
           </form>
-        )}
-
-        <div className="header-actions">
-          <LanguageCurrencyTrigger locale={locale} onClick={openLangModal} />
-          <Link className="circle-action" href={withLocale("/cart", locale)} aria-label="Cart">
-            <span aria-hidden="true">▱</span>
-          </Link>
-          <Link className="signin-action" href={withLocale("/auth/sign-in", locale)}>
-            {copy.signIn}
-          </Link>
-          <button
-            aria-controls="mobile-navigation"
-            aria-expanded={menuOpen}
-            aria-label="Open menu"
-            className="circle-action menu-action"
-            onClick={() => setMenuOpen(true)}
-            ref={menuButtonRef}
-            type="button"
-          >
-            <span aria-hidden="true">☰</span>
-          </button>
+          <div className="header-actions">
+            <LanguageCurrencyTrigger locale={locale} onClick={openLangModal} />
+            <ThemeToggle className="header-theme-toggle" labels={currentThemeLabels} />
+            <Link className="circle-action cart-action" href={withLocale("/cart", locale)} aria-label="Cart"><CartIcon /></Link>
+            <Link className="signin-action" href={withLocale("/auth/sign-in", locale)}>{copy.signIn}</Link>
+            <button aria-controls="mobile-navigation" aria-expanded={menuOpen} aria-label="Open menu" className="circle-action menu-action" onClick={() => setMenuOpen(true)} ref={menuButtonRef} type="button"><MenuIcon /></button>
+          </div>
+        </div>
+        <div className="header-nav-row">
+          <nav className="desktop-nav" aria-label="Primary navigation">{renderPrimaryNavigation()}</nav>
+          <div className="header-conversion-actions">
+            <Link className="special-offer-link" href={withLocale("/trips?main=special-offers", locale)}>{copy.specialOffer}</Link>
+            <Link className="make-trip-action" href={withLocale("/make-your-trip", locale)}>{copy.makeTrip}<ArrowIcon /></Link>
+          </div>
         </div>
       </div>
 
       {firstStyle ? (
         <div className="promo-strip original-strip">
           <p>{home.promoTitle}</p>
-          <Link className="btn-primary" href={withLocale("/egypt-tours/multi-days-tours", locale)}>
-            {home.promoButton}
-          </Link>
-        </div>
-      ) : null}
-
-      {!firstStyle ? (
-        <div className="header-nav-row">
-          <nav className="desktop-nav" aria-label="Main navigation">
-            {secondaryNavLinks.slice(0, 1).map(([key, href]) => (
-              <Link key={href} href={withLocale(href, locale)}>
-                {copy[key]}
-              </Link>
-            ))}
-            <NavDropdown locale={locale} />
-            {secondaryNavLinks.slice(1).map(([key, href]) => (
-              <Link key={href} href={withLocale(href, locale)}>
-                {copy[key]}
-              </Link>
-            ))}
-            <Link className="special-offer-link" href={withLocale("/trips?main=special-offers", locale)}>
-              <span aria-hidden="true">✥</span>
-              {copy.specialOffer}
-            </Link>
-          </nav>
-
-          <Link className="make-trip-action" href={withLocale("/make-your-trip", locale)}>
-            {copy.makeTrip}
-          </Link>
+          <Link className="btn-primary" href={withLocale("/egypt-tours/multi-days-tours", locale)}>{home.promoButton}</Link>
         </div>
       ) : null}
 
       {menuOpen ? (
-        <div className="mobile-drawer-backdrop" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setMenuOpen(false);
-        }}>
-          <div
-            aria-label="Site navigation"
-            aria-modal="true"
-            className="mobile-drawer"
-            id="mobile-navigation"
-            ref={drawerRef}
-            role="dialog"
-          >
+        <div className="mobile-drawer-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeMenu(); }}>
+          <div aria-label="Site navigation" aria-modal="true" className="mobile-drawer" id="mobile-navigation" ref={drawerRef} role="dialog">
             <div className="mobile-drawer-head">
-              <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} />
-              <button className="circle-action" type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                ×
-              </button>
+              <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" onClick={closeMenu}><Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} /></Link>
+              <button className="circle-action" type="button" onClick={closeMenu} aria-label="Close menu"><CloseIcon /></button>
             </div>
-            <nav className="mobile-links" aria-label="Mobile navigation">
-              {[...mainNavLinks, ["rentCar", "/rent-car"] as const].map(([key, href]) => (
-                <Link key={`${key}-${href}`} href={withLocale(href, locale)} onClick={() => setMenuOpen(false)}>
-                  {copy[key]}<span aria-hidden="true">↗</span>
-                </Link>
-              ))}
-              <details className="mobile-tour-group">
-                <summary>{copy.egyptTours}<span aria-hidden="true">+</span></summary>
-                <div>
-                  {tourLinks.map(([key, href]) => (
-                    <Link key={href} href={withLocale(href, locale)} onClick={() => setMenuOpen(false)}>{copy[key]}</Link>
-                  ))}
-                </div>
-              </details>
-              <Link className="mobile-drawer-cta" href={withLocale("/make-your-trip", locale)} onClick={() => setMenuOpen(false)}>{copy.makeTrip}</Link>
-              <Link href={withLocale("/trips?main=special-offers", locale)} onClick={() => setMenuOpen(false)}>{copy.specialOffer}<span aria-hidden="true">↗</span></Link>
-            </nav>
-            <div className="mobile-drawer-lang">
-              <LanguageCurrencyTrigger
-                locale={locale}
-                onClick={() => {
-                  setMenuOpen(false);
-                  openLangModal();
-                }}
-              />
+            <form className="mobile-drawer-search" action={withLocale("/trips", locale)}><SearchIcon /><input name="title" placeholder={copy.search} aria-label={copy.search} /></form>
+            <nav className="mobile-links" aria-label="Primary navigation">{renderPrimaryNavigation(true)}</nav>
+            <div className="mobile-drawer-utilities">
+              <ThemeToggle labels={currentThemeLabels} withLabel />
+              <LanguageCurrencyTrigger locale={locale} onClick={() => { closeMenu(); openLangModal(); }} />
+              <Link href={withLocale("/cart", locale)} onClick={closeMenu}><CartIcon /><span>{copy.cart}</span></Link>
+              <Link href={withLocale("/auth/sign-in", locale)} onClick={closeMenu}><span>{copy.signIn}</span><ArrowIcon /></Link>
+            </div>
+            <div className="mobile-drawer-actions">
+              <Link href={withLocale("/trips?main=special-offers", locale)} onClick={closeMenu}>{copy.specialOffer}</Link>
+              <Link className="mobile-drawer-cta" href={withLocale("/make-your-trip", locale)} onClick={closeMenu}>{copy.makeTrip}<ArrowIcon /></Link>
             </div>
           </div>
         </div>
