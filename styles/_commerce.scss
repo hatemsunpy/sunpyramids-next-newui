@@ -15,7 +15,7 @@
     position: relative;
     padding-top: clamp(2rem, 4vw, 3.25rem);
     padding-bottom: clamp(2rem, 4vw, 3.25rem);
-    background: linear-gradient(180deg, #f8f9fc 0%, #edf1f8 100%);
+    background: linear-gradient(180deg, var(--spt-surface-soft) 0%, var(--spt-ground) 100%);
     border-bottom: 1px solid var(--spt-border);
 
     .commerce-hero-inner {
@@ -34,12 +34,12 @@
       margin-bottom: 1rem;
 
       a {
-        color: var(--spt-anchor);
+        color: var(--spt-link);
         text-decoration: none;
         transition: color 150ms ease;
 
         &:hover {
-          color: var(--spt-anchor-deep);
+          color: var(--spt-link);
           text-decoration: underline;
         }
       }
@@ -63,7 +63,7 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--spt-anchor);
+      color: var(--spt-link);
       margin-bottom: 0.5rem;
     }
 
@@ -152,7 +152,7 @@
         align-items: center;
         justify-content: center;
         background: var(--spt-anchor-soft);
-        color: var(--spt-anchor);
+        color: var(--spt-link);
         font-size: 0.82rem;
         font-weight: 700;
         min-width: 24px;
@@ -205,7 +205,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--spt-anchor);
+      color: var(--spt-link);
       font-size: 2rem;
     }
 
@@ -230,7 +230,7 @@
       justify-content: center;
       gap: 0.5rem;
       background-color: var(--spt-amber);
-      color: #ffffff;
+      color: #1d1f1f;
       font-weight: 700;
       font-size: 1rem;
       padding: 0.85rem 1.85rem;
@@ -323,7 +323,7 @@
         padding: 2px 8px;
         border-radius: 4px;
         background-color: var(--spt-anchor-soft);
-        color: var(--spt-anchor);
+        color: var(--spt-link);
       }
 
       .cart-item-title {
@@ -337,7 +337,7 @@
           color: inherit;
           text-decoration: none;
           &:hover {
-            color: var(--spt-anchor);
+            color: var(--spt-link);
           }
         }
       }
@@ -355,7 +355,7 @@
           gap: 0.35rem;
 
           svg {
-            color: var(--spt-anchor);
+            color: var(--spt-link);
             flex-shrink: 0;
           }
         }
@@ -369,8 +369,8 @@
 
         .option-tag {
           font-size: 0.75rem;
-          background: #f1f5f9;
-          color: #334155;
+          background: var(--spt-surface-soft);
+          color: var(--spt-muted);
           padding: 2px 7px;
           border-radius: 4px;
           border: 1px solid #e2e8f0;
@@ -413,7 +413,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #fafbfd;
+      background-color: var(--spt-surface-soft);
       border-top: 1px solid var(--spt-border);
       padding: 0.65rem 1.25rem;
 
@@ -425,12 +425,12 @@
         border: none;
         font-size: 0.85rem;
         font-weight: 600;
-        color: var(--spt-anchor);
+        color: var(--spt-link);
         cursor: pointer;
         padding: 0.3rem 0;
 
         &:hover {
-          color: var(--spt-anchor-deep);
+          color: var(--spt-link);
           text-decoration: underline;
         }
 
@@ -474,7 +474,7 @@
   // ---------------------------------------------------------------------------
   .cart-editor-panel {
     border-top: 1px solid var(--spt-border);
-    background-color: #fbfcfe;
+    background-color: var(--spt-surface-soft);
     padding: 1.25rem;
 
     .cart-editor-title {
@@ -510,7 +510,7 @@
       label {
         font-size: 0.8rem;
         font-weight: 600;
-        color: #475569;
+        color: var(--spt-muted);
       }
 
       input[type="date"],
@@ -520,7 +520,7 @@
         padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
         color: var(--spt-ink);
-        background: #ffffff;
+        background: var(--spt-surface);
         border: 1px solid var(--spt-border);
         border-radius: 8px;
         outline: none;
@@ -537,7 +537,7 @@
       border: 1px solid var(--spt-border);
       border-radius: 10px;
       padding: 1rem;
-      background: #ffffff;
+      background: var(--spt-surface);
       margin-bottom: 1.25rem;
 
       legend {
@@ -560,12 +560,12 @@
         padding: 0.65rem 0.75rem;
         border: 1px solid #e2e8f0;
         border-radius: 8px;
-        background: #f8fafc;
+        background: var(--spt-surface-soft);
         cursor: pointer;
         transition: border-color 150ms ease, background-color 150ms ease;
 
         &:hover {
-          background-color: #f1f5f9;
+          background-color: var(--spt-surface-soft);
           border-color: #cbd5e1;
         }
 
@@ -591,7 +591,7 @@
 
         .tour-addon-price {
           font-size: 0.78rem;
-          color: var(--spt-anchor);
+          color: var(--spt-link);
           font-weight: 600;
         }
       }
@@ -638,7 +638,7 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #f1f5f9;
+          background-color: var(--spt-surface-soft);
           color: var(--spt-ink);
         }
       }
@@ -712,7 +712,7 @@
       label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: #334155;
+        color: var(--spt-muted);
 
         .req {
           color: #dc2626;
@@ -726,7 +726,7 @@
         padding: 0.75rem 0.85rem;
         font-size: 0.92rem;
         color: var(--spt-ink);
-        background: #ffffff;
+        background: var(--spt-surface);
         border: 1px solid var(--spt-border);
         border-radius: 8px;
         outline: none;
@@ -765,18 +765,18 @@
     padding: 1.15rem;
     border: 2px solid var(--spt-border);
     border-radius: 12px;
-    background: #ffffff;
+    background: var(--spt-surface);
     cursor: pointer;
     transition: all 180ms ease;
 
     &:hover {
       border-color: #b9c8e8;
-      background-color: #fafbfd;
+      background-color: var(--spt-surface-soft);
     }
 
     &.is-selected {
       border-color: var(--spt-anchor);
-      background-color: #f7f9fe;
+      background-color: var(--spt-surface-soft);
       box-shadow: 0 0 0 1px var(--spt-anchor);
     }
 
@@ -829,7 +829,7 @@
       padding: 0.95rem 1.5rem;
       font-size: 1.1rem;
       font-weight: 800;
-      color: #ffffff;
+      color: #1d1f1f;
       background-color: var(--spt-amber);
       border: none;
       border-radius: 12px;
@@ -884,13 +884,13 @@
 
     .summary-header {
       padding: 1.25rem 1.5rem;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafd 100%);
+      background: linear-gradient(180deg, var(--spt-surface) 0%, var(--spt-surface-soft) 100%);
       border-bottom: 1px solid var(--spt-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
 
-      h3 {
+      h2 {
         font-size: 1.15rem;
         font-weight: 800;
         color: var(--spt-ink);
@@ -901,7 +901,7 @@
         font-size: 0.78rem;
         font-weight: 700;
         background: var(--spt-anchor-soft);
-        color: var(--spt-anchor);
+        color: var(--spt-link);
         padding: 3px 8px;
         border-radius: 999px;
       }
@@ -959,7 +959,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 0.95rem;
-        color: #475569;
+        color: var(--spt-muted);
 
         &.discount-row {
           color: #059669;
@@ -1003,7 +1003,7 @@
         .total-amount {
           font-size: 1.55rem;
           font-weight: 800;
-          color: var(--spt-anchor);
+          color: var(--spt-link);
           line-height: 1;
         }
       }
@@ -1012,7 +1012,7 @@
     // Coupon box inside summary
     .summary-coupon-area {
       padding: 1rem 1.5rem;
-      background-color: #fafbfd;
+      background-color: var(--spt-surface-soft);
       border-top: 1px solid var(--spt-border);
       border-bottom: 1px solid var(--spt-border);
 
@@ -1025,7 +1025,7 @@
           height: 38px;
           padding: 0.4rem 0.75rem;
           font-size: 0.85rem;
-          background: #ffffff;
+          background: var(--spt-surface);
           border: 1px solid var(--spt-border);
           border-radius: 8px;
           outline: none;
@@ -1094,7 +1094,7 @@
         padding: 0.85rem 1.25rem;
         font-size: 1.05rem;
         font-weight: 800;
-        color: #ffffff;
+        color: #1d1f1f;
         background-color: var(--spt-amber);
         border: none;
         border-radius: 10px;
@@ -1112,7 +1112,7 @@
     // Reassurance concierge inside summary
     .summary-concierge-help {
       padding: 1rem 1.5rem;
-      background-color: #f8fafc;
+      background-color: var(--spt-surface-soft);
       border-top: 1px solid var(--spt-border);
       display: flex;
       flex-direction: column;
@@ -1133,7 +1133,7 @@
         font-size: 0.85rem;
 
         a {
-          color: var(--spt-anchor);
+          color: var(--spt-link);
           font-weight: 600;
           text-decoration: none;
           display: inline-flex;
@@ -1145,7 +1145,7 @@
           }
 
           &.whatsapp-link {
-            color: #059669;
+            color: var(--spt-link);
           }
         }
       }
@@ -1162,10 +1162,10 @@
   align-items: center;
   justify-content: center;
   padding: 3rem 1.5rem;
-  background-color: #f8fafc;
+  background-color: var(--spt-surface-soft);
 
   .status-card {
-    background: #ffffff;
+    background: var(--spt-surface);
     border: 1px solid #e2e8f0;
     border-radius: 20px;
     padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 2.5rem);
@@ -1179,7 +1179,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #163a96;
+      color: var(--spt-link);
       margin: 0 0 1.5rem 0;
     }
 
@@ -1216,14 +1216,14 @@
     h1 {
       font-size: 1.65rem;
       font-weight: 800;
-      color: #1e293b;
+      color: var(--spt-ink);
       line-height: 1.25;
       margin: 0 0 0.75rem 0;
     }
 
     .muted {
       font-size: 0.95rem;
-      color: #64748b;
+      color: var(--spt-muted);
       line-height: 1.5;
       margin: 0 0 2rem 0;
     }
@@ -1257,7 +1257,7 @@
         justify-content: center;
         background: none;
         border: 1px solid #cbd5e1;
-        color: #475569;
+        color: var(--spt-muted);
         font-size: 0.95rem;
         font-weight: 600;
         padding: 0.85rem 1.5rem;
@@ -1266,8 +1266,8 @@
         transition: background-color 150ms ease, color 150ms ease;
 
         &:hover {
-          background-color: #f1f5f9;
-          color: #1e293b;
+          background-color: var(--spt-surface-soft);
+          color: var(--spt-ink);
         }
       }
     }

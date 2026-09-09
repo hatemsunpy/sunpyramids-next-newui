@@ -69,7 +69,7 @@ select {
 }
 
 ::-webkit-scrollbar-track {
-  background: #e2e8f0;
+  background: var(--spt-scrollbar-track);
 }
 
 .container-shell {
@@ -181,7 +181,7 @@ select {
   border: 1px solid rgba(238, 238, 238, 0.9);
   border-radius: 999px;
   padding: 0.9rem 1.1rem;
-  background: #fff;
+  background: var(--spt-surface);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -279,11 +279,11 @@ select {
 }
 
 .special-offer-link {
-  color: var(--secondary) !important;
+  color: var(--spt-link);
 }
 
 .make-trip-action {
-  color: var(--primary);
+  color: var(--spt-link);
   border-color: var(--primary);
   font-weight: 600;
 }
@@ -352,7 +352,7 @@ select {
   visibility: hidden;
   transform: translateY(6px);
   transition: 160ms ease;
-  background: #fff;
+  background: var(--spt-surface);
   border-radius: 0 0 1rem 1rem;
   padding: 0.75rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.095);
@@ -374,7 +374,7 @@ select {
 }
 
 .dropdown-panel a:hover {
-  color: var(--primary);
+  color: var(--spt-link);
   background: #eeeeee;
 }
 
@@ -416,7 +416,7 @@ select {
 
 .mobile-drawer {
   width: min(82vw, 25rem);
-  background: #fff;
+  background: var(--spt-surface);
   padding: 2rem 1rem calc(2rem + 4.5rem);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -442,7 +442,7 @@ select {
 }
 
 .mobile-links a:hover {
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
 }
 
 .lc-modal-backdrop {
@@ -457,7 +457,7 @@ select {
 }
 
 .lc-modal {
-  background: #fff;
+  background: var(--spt-surface);
   border-radius: 1.5rem;
   padding: 1.5rem 2rem 2rem;
   width: min(100%, 34rem);
@@ -527,8 +527,8 @@ select {
 }
 
 .lc-tile:hover {
-  color: var(--primary);
-  background: #f9fafb;
+  color: var(--spt-link);
+  background: var(--spt-surface-soft);
 }
 
 .lc-tile-active,
@@ -719,13 +719,13 @@ select {
   text-align: center;
   border: 1px solid #eeeeee;
   border-radius: 24px;
-  background: #fafafa;
+  background: var(--spt-surface-soft);
   transition: background 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
 .hero-stats div:hover {
   transform: translateY(-4px) scale(1.02);
-  background: #fff;
+  background: var(--spt-surface);
   box-shadow: 0 8px 24px rgba(0, 0, 0, .1);
 }
 
@@ -749,7 +749,7 @@ select {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   color: var(--text-dark);
   border-radius: 1.75rem;
   padding: 1rem;
@@ -774,9 +774,9 @@ select {
 .shortcut-tabs span {
   flex: 1;
   border-radius: 999px;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
   padding: 0.6rem 0.75rem;
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
@@ -790,7 +790,7 @@ select {
   border-radius: 1rem;
   padding: 1rem;
   outline: 0;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .shortcut-panel input:focus,
@@ -821,12 +821,12 @@ select {
 
 .original-heading p {
   margin: 0.35rem 0 0;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-weight: 500;
 }
 
 .see-more-link {
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
@@ -845,7 +845,7 @@ select {
 .blog-card,
 .content-card {
   overflow: hidden;
-  background: #fff;
+  background: var(--spt-surface);
   border-radius: 1rem;
   border: 1px solid #eeeeee;
   transition: transform 180ms ease, box-shadow 180ms ease;
@@ -892,7 +892,7 @@ select {
 .tour-card-summary {
   min-height: 2.8em;
   margin: 0 0 1rem;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.93rem;
 }
 
@@ -905,9 +905,9 @@ select {
 
 .tour-card-meta span {
   border-radius: 999px;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
   padding: 0.4rem 0.7rem;
-  color: #555;
+  color: var(--spt-muted);
   font-size: 0.82rem;
 }
 
@@ -928,12 +928,12 @@ select {
 .tour-card-bottom span,
 .tour-card-bottom p {
   margin: 0;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.82rem;
 }
 
 .tour-card-bottom strong {
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: 1.15rem;
 }
 
@@ -945,7 +945,7 @@ select {
 }
 
 .blog-card-body div {
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.93rem;
   line-height: 1.6;
 }
@@ -955,7 +955,7 @@ select {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.5rem;
   padding: 4rem clamp(1rem, 4vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .destination-card {
@@ -1008,7 +1008,7 @@ select {
 }
 
 .muted {
-  color: #6b7280;
+  color: var(--spt-muted);
 }
 
 .footer {
@@ -1018,7 +1018,7 @@ select {
 }
 
 .original-destination-band {
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .make-trip-section {
@@ -1040,12 +1040,12 @@ select {
   min-height: 120px;
 }
 
-.home-search-panel { position: relative; left: 50%; z-index: 30; display: grid; width: min(calc(100vw - 6rem), 74rem); padding: 1.4rem 2.5rem 2.2rem; transform: translateX(-50%); border-radius: 1.75rem; background: #fff; color: var(--text-dark); box-shadow: 0 16px 50px rgba(0, 0, 0, .2); }
+.home-search-panel { position: relative; left: 50%; z-index: 30; display: grid; width: min(calc(100vw - 6rem), 74rem); padding: 1.4rem 2.5rem 2.2rem; transform: translateX(-50%); border-radius: 1.75rem; background: var(--spt-surface); color: var(--text-dark); box-shadow: 0 16px 50px rgba(0, 0, 0, .2); }
 .home-search-tabs { display: flex; align-items: flex-end; gap: .45rem; margin: -3.25rem 0 .45rem 3rem; }
 .home-search-tabs button { min-height: 52px; padding: .8rem 2.1rem; border: 0; border-radius: 1rem; background: #ececec; color: var(--text-dark); font-size: 1rem; font-weight: 600; cursor: pointer; transition: background .15s, color .15s; }
-.home-search-tabs button.is-active { background: #fff; color: var(--primary); }
+.home-search-tabs button.is-active { background: var(--spt-surface); color: var(--spt-link); }
 .home-search-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 1.25rem; align-items: stretch; }
-.home-search-fields > label { display: grid; gap: .1rem; align-content: center; min-width: 0; margin: 0; padding: .7rem 1.6rem; border: 1px solid #e9e9e9; border-radius: 999px; background: #fff; text-align: left; transition: border-color .15s ease; }
+.home-search-fields > label { display: grid; gap: .1rem; align-content: center; min-width: 0; margin: 0; padding: .7rem 1.6rem; border: 1px solid #e9e9e9; border-radius: 999px; background: var(--spt-surface); text-align: left; transition: border-color .15s ease; }
 .home-search-fields > label:focus-within { border-color: var(--primary); }
 .home-search-fields > label span { color: var(--text-dark); font-size: .95rem; font-weight: 600; }
 .home-search-fields input, .home-search-fields select { min-height: 30px; width: 100%; border: 0; padding: 0; background: transparent; color: var(--text-dark); outline: none; font-weight: 500; }
@@ -1055,7 +1055,7 @@ select {
 .home-search-fields fieldset { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 2.75rem; min-width: 0; margin: 0; padding: .35rem 0; border: 0; grid-column: 1 / -1; }
 .home-search-question { margin-right: .5rem; color: #9096a0; font-size: 1.15rem; font-weight: 700; white-space: nowrap; }
 .home-search-fields fieldset label { display: inline-flex; align-items: center; gap: .55rem; font-weight: 600; color: var(--text-dark); cursor: pointer; white-space: nowrap; transition: color .15s ease; }
-.home-search-fields fieldset input[type="radio"] { display: inline-grid; place-content: center; flex: 0 0 auto; width: 1.35rem; height: 1.35rem; min-height: 0; margin: 0; border: 2px solid var(--secondary); border-radius: 50%; background: #fff; appearance: none; cursor: pointer; }
+.home-search-fields fieldset input[type="radio"] { display: inline-grid; place-content: center; flex: 0 0 auto; width: 1.35rem; height: 1.35rem; min-height: 0; margin: 0; border: 2px solid var(--secondary); border-radius: 50%; background: var(--spt-surface); appearance: none; cursor: pointer; }
 .home-search-fields fieldset input[type="radio"]::before { content: ""; width: .68rem; height: .68rem; border-radius: 50%; background: var(--secondary); transform: scale(0); transition: transform .15s ease; }
 .home-search-fields fieldset input[type="radio"]:checked::before { transform: scale(1); }
 .home-search-fields fieldset input[type="radio"]:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
@@ -1070,28 +1070,28 @@ select {
 .home-centered-heading { text-align: center; }
 .home-centered-heading h2 { margin: 0; font-size: clamp(2rem, 3.5vw, 3rem); }
 .home-centered-heading p { margin: .55rem 0 0; color: var(--text-light); font-size: 1.05rem; }
-.home-filter-pills { display: flex; justify-content: center; gap: .5rem; margin: 2rem auto; padding: .3rem; overflow-x: auto; width: max-content; max-width: 100%; background: #f1f1f1; border-radius: 999px; }
+.home-filter-pills { display: flex; justify-content: center; gap: .5rem; margin: 2rem auto; padding: .3rem; overflow-x: auto; width: max-content; max-width: 100%; background: var(--spt-surface-soft); border-radius: 999px; }
 .home-filter-pills a, .home-filter-pills button { flex: 0 0 auto; padding: .7rem 1.1rem; border: 0; background: transparent; border-radius: 999px; font: inherit; font-weight: 600; color: var(--text-dark); cursor: pointer; }
 .home-filter-pills a.is-active, .home-filter-pills button.is-active { background: var(--primary); color: #fff; }
 .home-filter-empty { grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; color: var(--text-light); font-weight: 600; }
 .tour-card-skeleton { min-height: 320px; border-radius: 16px; background: linear-gradient(100deg, #f1f1f1 40%, #fafafa 50%, #f1f1f1 60%); background-size: 200% 100%; animation: skeleton-shimmer 1.2s ease-in-out infinite; }
 @keyframes skeleton-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
-.home-how-section { padding: 4.5rem 1rem; background: #fff; }
+.home-how-section { padding: 4.5rem 1rem; background: var(--spt-surface); }
 .home-booking-steps { display: flex; align-items: center; margin-top: 3rem; }
 .home-step-wrap { display: flex; flex: 1; align-items: center; gap: 1rem; }
 .home-step { width: 100%; min-height: 240px; padding: 2rem 1.25rem; border: 1px solid #ddd; border-radius: 24px; text-align: center; }
-.home-step strong { display: block; margin: 0 auto 1rem; color: var(--primary); font-size: 4rem; line-height: 1; }
+.home-step strong { display: block; margin: 0 auto 1rem; color: var(--spt-link); font-size: 4rem; line-height: 1; }
 .home-step h3 { margin: 0 0 .7rem; font-size: 1.55rem; }
-.home-step p { margin: 0; color: #666; line-height: 1.65; }
+.home-step p { margin: 0; color: var(--spt-muted); line-height: 1.65; }
 .home-step-wrap > img { width: 72px; height: auto; object-fit: contain; }
-.home-highlights-section { background: #fff; }
+.home-highlights-section { background: var(--spt-surface); }
 .home-highlight-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr); gap: 1.25rem; margin-top: 3rem; padding: 0 max(1rem, calc((100vw - 1280px) / 2)); overflow-x: auto; scroll-snap-type: x mandatory; }
 .home-highlight-card { position: relative; height: 320px; overflow: hidden; border-radius: 16px; scroll-snap-align: start; }
 .home-highlight-card img { object-fit: cover; transition: transform .25s ease; }
 .home-highlight-card:hover img { transform: scale(1.04); }
 .home-highlight-card::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(0,0,0,.72)); }
 .home-highlight-card span { position: absolute; z-index: 1; left: 1rem; bottom: 1rem; color: #fff; font-size: 1.3rem; font-weight: 700; }
-.home-certification-section { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .6fr); align-items: center; gap: 4rem; padding: 4rem max(1rem, calc((100vw - 1280px) / 2)); background: #fff; }
+.home-certification-section { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .6fr); align-items: center; gap: 4rem; padding: 4rem max(1rem, calc((100vw - 1280px) / 2)); background: var(--spt-surface); }
 .home-certification-section h2 { max-width: 850px; margin: 0 0 1.5rem; font-size: clamp(2.2rem, 4vw, 3.5rem); line-height: 1.18; }
 .home-certification-section h2 span { color: var(--secondary); }
 .home-certification-section p { max-width: 760px; margin: 0 0 2rem; color: #444; font-size: 1.2rem; line-height: 1.65; }
@@ -1103,7 +1103,7 @@ select {
 .home-social-gallery article > img:first-child,
 .home-social-gallery article > a > img:first-child { object-fit: cover; }
 .home-social-gallery .home-gallery-icon { position: absolute; z-index: 1; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 12px; object-fit: contain; }
-.home-faq-section { display: grid; grid-template-columns: minmax(260px, .75fr) minmax(0, 1.25fr); gap: 5rem; padding: 4rem max(1rem, calc((100vw - 1280px) / 2)); background: #fff; }
+.home-faq-section { display: grid; grid-template-columns: minmax(260px, .75fr) minmax(0, 1.25fr); gap: 5rem; padding: 4rem max(1rem, calc((100vw - 1280px) / 2)); background: var(--spt-surface); }
 .home-faq-title { min-height: 180px; background: url('/images/mark.svg') no-repeat right center / contain; }
 .home-faq-title h2 { margin: 0 0 1.5rem; font-size: clamp(2rem, 3.5vw, 3rem); }
 .home-help-section { padding-top: 4rem; padding-bottom: 4rem; }
@@ -1111,10 +1111,10 @@ select {
 .home-help-panel h2 { margin: 0 0 2.5rem; text-align: center; font-size: clamp(2rem, 4vw, 3rem); }
 .home-help-form { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 1rem; align-items: end; }
 .home-help-form label span { display: block; margin-bottom: .4rem; font-weight: 600; }
-.home-help-form input { width: 100%; min-height: 56px; padding: .8rem 1rem; border: 1px solid rgba(255,255,255,.65); border-radius: 10px; background: #fff; color: #151515; }
+.home-help-form input { width: 100%; min-height: 56px; padding: .8rem 1rem; border: 1px solid rgba(255,255,255,.65); border-radius: 10px; background: var(--spt-surface); color: var(--spt-ink); }
 .home-help-form button { min-height: 56px; }
 .home-help-form p { grid-column: 1 / -1; margin: 0; color: #fff; }
-.home-partners { display: flex; align-items: center; gap: 2.5rem; padding: 2rem max(1rem, calc((100vw - 1280px) / 2)); overflow-x: auto; background: #fff; }
+.home-partners { display: flex; align-items: center; gap: 2.5rem; padding: 2rem max(1rem, calc((100vw - 1280px) / 2)); overflow-x: auto; background: var(--spt-surface); }
 .home-partners img { flex: 0 0 auto; width: 110px; height: 72px; object-fit: contain; }
 
 @media (max-width: 900px) {
@@ -1270,7 +1270,7 @@ select {
 
 .original-content-section {
   padding-block: 4rem;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .eyebrow {
@@ -1293,7 +1293,7 @@ select {
 }
 
 .about-intro {
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .about-intro h2,
@@ -1318,7 +1318,7 @@ select {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   padding: 2rem clamp(1rem, 4vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .about-gallery img,
@@ -1341,7 +1341,7 @@ select {
 .contact-info-panel,
 .planner-form,
 .faq-item {
-  background: #fff;
+  background: var(--spt-surface);
   border: 1px solid #eeeeee;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -1349,7 +1349,7 @@ select {
 
 .about-goals h3 {
   margin: 0 0 0.75rem;
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: 1.5rem;
 }
 
@@ -1368,13 +1368,13 @@ select {
   width: 100%;
   height: auto;
   border-radius: 1rem;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
   object-fit: cover;
 }
 
 .faq-search-section {
   padding: 2rem clamp(1rem, 4vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .faq-search-section input {
@@ -1404,13 +1404,13 @@ select {
 
 .faq-item div {
   margin-top: 1rem;
-  color: #6b7280;
+  color: var(--spt-muted);
   line-height: 1.7;
 }
 
 .event-description {
   padding-block: 3rem 1rem;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 1.1rem;
   line-height: 1.8;
 }
@@ -1462,7 +1462,7 @@ select {
 }
 
 .step-label {
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 800;
 }
 
@@ -1473,12 +1473,12 @@ select {
 }
 
 .contact-methods a {
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
 .impact-overview {
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .need-help-band {
@@ -1492,7 +1492,7 @@ select {
   justify-content: space-between;
   gap: 1.5rem;
   border-radius: 1rem;
-  background: #fff url("/images/linearNeedHelp.png") right center/auto 100% no-repeat;
+  background: var(--spt-surface) url("/images/linearNeedHelp.png") right center/auto 100% no-repeat;
   padding: 2rem;
 }
 
@@ -1505,7 +1505,7 @@ select {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: 100vh;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .auth-panel {
@@ -1544,7 +1544,7 @@ select {
 .auth-links {
   grid-template-columns: repeat(3, max-content);
   margin-top: 1.25rem;
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
@@ -1559,9 +1559,9 @@ select {
 .btn-outline {
   border: 1px solid #eeeeee;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   padding: 0.9rem 1rem;
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 800;
   cursor: pointer;
 }
@@ -1575,7 +1575,7 @@ select {
 
 .form-message {
   margin: 1rem 0 0;
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
@@ -1611,7 +1611,7 @@ select {
   align-self: start;
   border: 1px solid #eeeeee;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   padding: 1rem;
 }
 
@@ -1622,8 +1622,8 @@ select {
 }
 
 .account-layout aside a:hover {
-  background: #f7f7f7;
-  color: var(--primary);
+  background: var(--spt-surface-soft);
+  color: var(--spt-link);
 }
 
 .account-card,
@@ -1632,7 +1632,7 @@ select {
 .status-card {
   border: 1px solid #eeeeee;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   padding: 1.5rem;
 }
 
@@ -1679,7 +1679,7 @@ select {
 }
 
 .cart-summary strong {
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: 2rem;
 }
 
@@ -1744,7 +1744,7 @@ select {
   grid-template-columns: 20rem minmax(0, 1fr);
   gap: 1.5rem;
   padding: 3rem clamp(1rem, 4vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .trips-filter {
@@ -1762,7 +1762,7 @@ select {
 
 .trips-filter h3 {
   margin: 1rem 0 0.25rem;
-  color: var(--primary);
+  color: var(--spt-link);
 }
 
 .trips-filter h3:first-child {
@@ -1772,7 +1772,7 @@ select {
 .trips-filter > span,
 .trips-filter a {
   border-radius: 999px;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
   padding: 0.65rem 0.85rem;
   font-weight: 600;
 }
@@ -1839,7 +1839,7 @@ select {
 
 .team-card p {
   margin: 0 1rem 1.25rem;
-  color: #666;
+  color: var(--spt-muted);
 }
 
 .trips-filter a {
@@ -1851,11 +1851,11 @@ select {
 
 .trips-filter a.is-active {
   background: #e9eefc;
-  color: var(--primary);
+  color: var(--spt-link);
 }
 
 .trips-filter small {
-  color: #666;
+  color: var(--spt-muted);
   font-size: 0.75rem;
 }
 
@@ -1940,7 +1940,7 @@ select {
 .landing-contact {
   border: 1px solid #eeeeee;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   padding: 1.5rem;
 }
 
@@ -1970,7 +1970,7 @@ select {
 }
 
 .form-card {
-  background: #fff;
+  background: var(--spt-surface);
   border: 1px solid #eeeeee;
   border-radius: 1.25rem;
   padding: 1.5rem;
@@ -1991,7 +1991,7 @@ select {
   position: sticky;
   top: 7rem;
   align-self: start;
-  background: #fff;
+  background: var(--spt-surface);
   border: 1px solid #eeeeee;
   border-radius: 1.25rem;
   padding: 1.25rem;
@@ -2179,8 +2179,8 @@ select {
     gap: .5rem;
     border: 1px solid #eee;
     border-radius: 24px;
-    background: #fafafa;
-    color: var(--primary);
+    background: var(--spt-surface-soft);
+    color: var(--spt-link);
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
   }
@@ -2216,7 +2216,7 @@ select {
     padding: .75rem .5rem;
     border: 1px solid rgba(165, 165, 165, .3);
     border-radius: 24px;
-    background: #fafafa;
+    background: var(--spt-surface-soft);
     text-align: center;
   }
 
@@ -2227,7 +2227,7 @@ select {
   }
 
   .home-mobile-statistics span {
-    color: #6b7280;
+    color: var(--spt-muted);
     font-size: .65rem;
     font-weight: 500;
   }
@@ -2249,7 +2249,7 @@ select {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.25rem;
-    background: #fff;
+    background: var(--spt-surface);
     padding: 0.5rem 1rem 1rem;
     box-shadow: 0 0 16px #0000001a;
   }
@@ -2262,7 +2262,7 @@ select {
   }
 
   .bottom-icon {
-    color: var(--primary);
+    color: var(--spt-link);
     font-size: 1.2rem;
   }
 }
@@ -2271,7 +2271,7 @@ select {
 .tour-page {
   --tour-gutter: clamp(1rem, 5.55vw, 5rem);
   --tour-navy: var(--primary);
-  --tour-blue-soft: #e9eefc;
+  --tour-blue-soft: var(--spt-anchor-soft);
   --tour-gold: var(--secondary);
   --tour-ground: var(--third);
   --tour-line: var(--third);
@@ -2282,16 +2282,16 @@ select {
 
 /* Tour detail — full visual redesign pilot (scoped overrides) */
 .tour-page-redesign {
-  --tour-primary: #173a96;
+  --tour-primary: var(--spt-anchor-brand);
   --tour-primary-hover: #122d73;
-  --tour-action: #f8951d;
+  --tour-action: var(--spt-amber);
   --tour-action-hover: #e08312;
-  --tour-primary-soft: #eef3ff;
-  --tour-surface: #ffffff;
-  --tour-surface-cool: #f8fafd;
-  --tour-ink: #111827;
-  --tour-muted: #4b5563;
-  --tour-border-subtle: #dbe3ee;
+  --tour-primary-soft: var(--spt-anchor-soft);
+  --tour-surface: var(--spt-surface);
+  --tour-surface-cool: var(--spt-surface-soft);
+  --tour-ink: var(--spt-ink);
+  --tour-muted: var(--spt-muted);
+  --tour-border-subtle: var(--spt-border);
   --tour-focus: #4d78e5;
   --tour-section-space: clamp(4.5rem, 8vw, 7.5rem);
   --tour-hero-width: min(calc(100% - 3rem), 1480px);
@@ -2318,7 +2318,7 @@ select {
 }
 
 .tour-page-redesign .tour-breadcrumb a {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   text-decoration: none;
   transition: color 150ms ease;
 }
@@ -2527,7 +2527,7 @@ select {
   display: grid;
   place-items: center;
   background: var(--tour-primary);
-  color: var(--tour-surface);
+  color: #ffffff;
 }
 
 .tour-page-redesign .tour-gallery-empty p {
@@ -2597,7 +2597,7 @@ select {
   border-radius: 999px;
   padding: 0.55rem 0.9rem;
   background: var(--tour-surface);
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-weight: 600;
   font-size: 0.85rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
@@ -2743,7 +2743,7 @@ select {
   border: 1px solid var(--tour-border-subtle);
   border-radius: 0.875rem;
   padding: 0.35rem 0.5rem;
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--tour-surface);
   backdrop-filter: blur(14px);
   box-shadow: 0 6px 20px rgba(23, 58, 150, 0.06);
 }
@@ -2776,12 +2776,12 @@ select {
 }
 
 .tour-page-redesign .tour-page-nav-link:hover {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   background: var(--tour-primary-soft);
 }
 
 .tour-page-redesign .tour-page-nav-link.is-active {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   background: var(--tour-primary-soft);
   font-weight: 700;
 }
@@ -2834,7 +2834,7 @@ select {
 .tour-page-redesign .tour-editorial-heading h2,
 .tour-page-redesign .tour-section-heading h2 {
   margin: 0;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(2.1rem, 3.4vw, 3.4rem);
   line-height: 1.05;
   letter-spacing: -0.026em;
@@ -2885,7 +2885,7 @@ select {
 .tour-page-redesign .tour-info-icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--tour-primary);
+  color: var(--spt-link);
 }
 
 .tour-page-redesign .tour-info-label {
@@ -2896,7 +2896,7 @@ select {
 
 .tour-page-redesign .tour-info-value {
   grid-column: 2;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
   font-weight: 700;
   line-height: 1.25;
@@ -2939,14 +2939,14 @@ select {
 }
 
 .tour-page-redesign .tour-overview-card strong {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: 1.1rem;
   font-weight: 700;
 }
 
 .tour-page-redesign .content-prose {
   max-width: var(--tour-reading-width);
-  color: #2e3440;
+  color: var(--spt-muted);
   font-size: clamp(1rem, 1.15vw, 1.08rem);
   line-height: 1.82;
   text-wrap: pretty;
@@ -2988,13 +2988,13 @@ select {
 .tour-page-redesign .tour-destination-story-item:not(.has-image) {
   border: 1px solid var(--tour-border-subtle);
   background: var(--tour-primary-soft);
-  color: var(--tour-primary);
+  color: var(--spt-link);
   box-shadow: none;
 }
 
 .tour-page-redesign .tour-destination-story-item:not(.has-image) .tour-destination-step,
 .tour-page-redesign .tour-destination-story-item:not(.has-image) h3 {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   text-shadow: none;
 }
 
@@ -3175,7 +3175,7 @@ select {
 }
 
 .tour-page-redesign .tour-day-index {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(2.2rem, 3.8vw, 3.4rem);
   font-weight: 800;
   line-height: 1;
@@ -3196,7 +3196,7 @@ select {
 }
 
 .tour-page-redesign .tour-day-summary-copy > span {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(1.1rem, 1.7vw, 1.4rem);
   font-weight: 700;
   line-height: 1.28;
@@ -3209,7 +3209,7 @@ select {
   place-items: center;
   border-radius: 50%;
   background: var(--tour-primary-soft);
-  color: var(--tour-primary);
+  color: var(--spt-link);
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms ease;
 }
 
@@ -3253,7 +3253,7 @@ select {
 }
 
 .tour-page-redesign .tour-inclusions-grid .tour-collapsible-head h2 {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(1.4rem, 2vw, 1.85rem);
   font-weight: 700;
 }
@@ -3362,7 +3362,7 @@ select {
 }
 
 .tour-page-redesign .tour-addon.is-selected .tour-addon-name {
-  color: var(--tour-primary);
+  color: var(--spt-link);
 }
 
 .tour-page-redesign .tour-addon-badge {
@@ -3370,7 +3370,7 @@ select {
   border-radius: 999px;
   padding: 0.15rem 0.55rem;
   background: var(--tour-primary-soft);
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: 0.72rem;
   font-weight: 600;
 }
@@ -3385,7 +3385,7 @@ select {
   display: flex;
   align-items: baseline;
   gap: 0.2rem;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-weight: 700;
   font-size: 1.15rem;
   white-space: nowrap;
@@ -3425,7 +3425,7 @@ select {
 }
 
 .tour-page-redesign .tour-price-current {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: clamp(2.2rem, 3.4vw, 2.9rem);
   font-weight: 700;
 }
@@ -3445,7 +3445,7 @@ select {
   border-radius: 0;
   padding: 0.75rem 0.5rem;
   background: transparent;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-weight: 600;
   font-size: 0.9rem;
   text-align: center;
@@ -3460,7 +3460,7 @@ select {
 .tour-page-redesign .tour-booking-actions a:hover,
 .tour-page-redesign .tour-booking-secondary:hover {
   background: var(--tour-primary-soft);
-  color: var(--tour-primary);
+  color: var(--spt-link);
 }
 
 /* ==========================================================================
@@ -3551,7 +3551,7 @@ select {
 
 .tour-page-redesign .tour-related-header h3 {
   margin: 0;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: 1.2rem;
   line-height: 1.3;
   font-weight: 700;
@@ -3586,7 +3586,7 @@ select {
 }
 
 .tour-page-redesign .tour-related-price-val {
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: 1.25rem;
   font-weight: 700;
 }
@@ -3603,7 +3603,7 @@ select {
   place-items: center;
   border-radius: 50%;
   background: var(--tour-primary-soft);
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-weight: 700;
   transition: transform 180ms ease, background 180ms ease;
 }
@@ -3733,8 +3733,8 @@ select {
   gap: 0.75rem;
   border-radius: 999px;
   padding: 0.85rem 1.65rem;
-  background: #ffffff;
-  color: var(--tour-primary);
+  background: var(--spt-surface);
+  color: var(--spt-link);
   font-weight: 700;
   font-size: 0.96rem;
   text-decoration: none;
@@ -3763,7 +3763,7 @@ select {
 .tour-page-redesign .tour-make-trip-form-title {
   display: block;
   margin-bottom: 1.25rem;
-  color: var(--tour-primary);
+  color: var(--spt-link);
   font-size: 1.15rem;
   font-weight: 700;
 }
@@ -4161,7 +4161,7 @@ select {
   .tour-page-redesign .tour-booking-close {
     display: grid;
     background: var(--tour-primary-soft);
-    color: var(--tour-primary);
+    color: var(--spt-link);
   }
 
   .tour-page-redesign .tour-mobile-booking-bar {
@@ -4174,7 +4174,7 @@ select {
   }
 
   .tour-page-redesign .tour-mobile-booking-bar strong {
-    color: var(--tour-primary);
+    color: var(--spt-link);
   }
 
   .tour-page-redesign .tour-mobile-booking-bar span {
@@ -4269,7 +4269,7 @@ select {
     position: relative;
     display: block;
     padding: 0.6rem 3.8rem 0.6rem 0.65rem;
-    background: #ffffff;
+    background: var(--spt-surface);
   }
 
   .tour-page-redesign .tour-gallery-mobile-thumbnails .tour-gallery-thumbnail {
@@ -4289,8 +4289,8 @@ select {
     place-items: center;
     border: 1px solid rgba(8, 17, 38, 0.16);
     border-radius: 999px;
-    background: #ffffff;
-    color: var(--tour-primary);
+    background: var(--spt-surface);
+    color: var(--spt-link);
     box-shadow: 0 8px 22px rgba(8, 17, 38, 0.14);
     transform: translateY(-50%);
   }
@@ -4360,7 +4360,7 @@ select {
   }
 
   .tour-page-redesign .tour-hero-context {
-    color: var(--tour-primary);
+    color: var(--spt-link);
     text-shadow: none;
   }
 
@@ -4372,7 +4372,7 @@ select {
 
   .tour-page-redesign .tour-page-title {
     max-width: none;
-    color: var(--tour-primary);
+    color: var(--spt-link);
     font-size: clamp(2.1rem, 9vw, 3.2rem);
     line-height: 1.02;
     text-shadow: none;
@@ -4567,13 +4567,13 @@ select {
   padding-inline: var(--tour-gutter);
   border-bottom: 1px solid var(--tour-line);
   background: rgba(255, 255, 255, 0.96);
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.86rem;
   white-space: nowrap;
 }
 
 .tour-breadcrumb a {
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 600;
 }
 
@@ -4596,7 +4596,7 @@ select {
 .tour-page-title {
   max-width: 22ch;
   margin: 0;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: clamp(2.5rem, 4.2vw, 4.75rem);
   font-weight: 700;
   letter-spacing: normal;
@@ -4731,8 +4731,8 @@ select {
 .tour-gallery-actions button {
   width: 3.1rem;
   height: 3.1rem;
-  background: #fff;
-  color: var(--tour-navy);
+  background: var(--spt-surface);
+  color: var(--spt-link);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.095);
   transition: background 180ms ease, color 180ms ease, transform 180ms ease;
 }
@@ -4811,7 +4811,7 @@ select {
 .tour-gallery-message,
 .tour-booking-status {
   margin: 0;
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: 0.85rem;
 }
 
@@ -4825,7 +4825,7 @@ select {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
   border-block: 1px solid var(--tour-line);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .tour-info-card {
@@ -4846,7 +4846,7 @@ select {
 .tour-info-icon {
   width: 1.8rem;
   height: 1.8rem;
-  color: var(--tour-navy);
+  color: var(--spt-link);
 }
 
 .tour-info-label {
@@ -4856,7 +4856,7 @@ select {
 
 .tour-info-value {
   grid-column: 1 / -1;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -4875,7 +4875,7 @@ select {
 }
 
 .tour-collapsible-head h2 {
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: clamp(1.75rem, 2.6vw, 2.5rem);
   font-weight: 700;
   letter-spacing: normal;
@@ -4898,8 +4898,8 @@ select {
   background: transparent;
   border: 1px solid var(--tour-line);
   border-radius: 50%;
-  background: #fff;
-  color: var(--tour-navy);
+  background: var(--spt-surface);
+  color: var(--spt-link);
   font-size: 1rem;
   cursor: pointer;
   transition: transform 200ms ease;
@@ -4934,7 +4934,7 @@ select {
 }
 
 .tour-overview-card strong {
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: 1.2rem;
   font-weight: 700;
 }
@@ -4953,7 +4953,7 @@ select {
   height: 13rem;
   border-radius: 1rem;
   overflow: hidden;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
 }
 
 .tour-highlights-map img {
@@ -4968,7 +4968,7 @@ select {
   align-items: center;
   gap: 0.5rem;
   background: var(--secondary);
-  color: var(--text-dark);
+  color: #1d1f1f;
   border: 0;
   border-radius: 999px;
   padding: 0.6rem 1rem;
@@ -4995,7 +4995,7 @@ select {
   height: min(50.5rem, calc(100vh - 1rem));
   overflow: hidden;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--spt-surface);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
 }
 
@@ -5021,7 +5021,7 @@ select {
   place-items: center;
   border: 1px solid #d8dadd;
   border-radius: 50%;
-  background: #fff;
+  background: var(--spt-surface);
   color: var(--text-dark);
   font-size: 1.35rem;
   line-height: 1;
@@ -5081,7 +5081,7 @@ select {
 }
 
 .tour-destinations-price-row span {
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.85rem;
 }
 
@@ -5159,11 +5159,11 @@ select {
   height: 1rem;
   border: 3px solid var(--text-dark);
   border-radius: 50%;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .tour-destinations-list button.is-active {
-  color: var(--primary);
+  color: var(--spt-link);
 }
 
 .tour-destinations-list button.is-active .tour-destination-marker {
@@ -5189,7 +5189,7 @@ select {
   justify-content: space-between;
   padding: 0.875rem 1rem;
   background: var(--tour-blue-soft);
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-weight: 700;
   cursor: pointer;
   list-style: none;
@@ -5202,7 +5202,7 @@ select {
 .tour-attraction ul {
   margin: 0;
   padding: 1rem 1rem 1rem 2rem;
-  color: #6b7280;
+  color: var(--spt-muted);
 }
 
 .tour-attraction li {
@@ -5243,8 +5243,8 @@ select {
   padding: 1rem 1.1rem;
   border: 1px solid var(--tour-line);
   border-radius: 1rem 1rem 0 0;
-  background: #fff;
-  color: var(--tour-navy);
+  background: var(--spt-surface);
+  color: var(--spt-link);
   font-weight: 700;
   cursor: pointer;
   list-style: none;
@@ -5287,7 +5287,7 @@ select {
   border: 1px solid var(--tour-line);
   border-radius: 1rem;
   padding: 1.5rem;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .tour-bullet-list {
@@ -5315,7 +5315,7 @@ select {
   margin-top: 0.15rem;
   border-radius: 50%;
   border: 1.5px solid var(--primary);
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -5353,13 +5353,13 @@ select {
 }
 
 .tour-addon-price {
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
 .tour-booking-card {
   position: relative;
-  background: #fff;
+  background: var(--spt-surface);
   border: 0;
   border-radius: 1rem;
   padding: 1.75rem;
@@ -5382,7 +5382,7 @@ select {
 
 .tour-inquiry-title {
   margin: 0 0 0.5rem;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-dark);
@@ -5405,12 +5405,12 @@ select {
 .tour-booking-label {
   display: block;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--spt-muted);
   margin-bottom: 0.25rem;
 }
 
 .tour-price-current {
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: clamp(2rem, 3vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -5428,7 +5428,7 @@ select {
 
 .tour-booking-assurance {
   margin: 0 0 1.35rem;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 0.9rem;
   line-height: 1.45;
 }
@@ -5447,25 +5447,25 @@ select {
 
 .tour-field span {
   font-size: 0.85rem;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-weight: 700;
 }
 
 .tour-field input,
 .tour-counter-controls input {
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--spt-border);
   border-radius: 1rem;
   padding: 0.875rem 1rem;
   font: inherit;
   outline: 0;
-  background: #fff;
-  color: var(--text-dark);
-  color-scheme: light;
+  background: var(--spt-surface);
+  color: var(--spt-ink);
+  color-scheme: inherit;
 }
 
 .tour-field input:focus {
-  border-color: #4d78e5;
-  box-shadow: 0 0 0 4px #e9eefc;
+  border-color: var(--spt-focus);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--spt-focus) 22%, transparent);
 }
 
 .tour-booking-card .tour-field input {
@@ -5510,7 +5510,7 @@ select {
   height: 2.75rem;
   border: 0;
   border-radius: 50%;
-  background: #fff;
+  background: var(--spt-surface);
   font-size: 1.125rem;
   cursor: pointer;
 }
@@ -5527,7 +5527,7 @@ select {
 
 .tour-booking-amount h4 {
   margin: 0;
-  color: #6b7280;
+  color: var(--spt-muted);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -5548,7 +5548,7 @@ select {
   border: 0;
   padding: 0;
   background: transparent;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font: inherit;
   font-size: 0.75rem;
   cursor: pointer;
@@ -5579,7 +5579,7 @@ select {
 }
 
 .tour-booking-addon-list strong {
-  color: var(--primary);
+  color: var(--spt-link);
   white-space: nowrap;
 }
 
@@ -5593,7 +5593,7 @@ select {
 }
 
 .tour-booking-total strong {
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: 1.75rem;
   font-variant-numeric: tabular-nums;
 }
@@ -5602,7 +5602,7 @@ select {
 .tour-mobile-booking-bar .btn-primary {
   min-height: 3.5rem;
   background: var(--secondary);
-  color: var(--text-dark);
+  color: #1d1f1f;
 }
 
 .tour-booking-card .btn-primary:hover,
@@ -5637,7 +5637,7 @@ select {
 }
 
 .tour-right-help {
-  background: #fff;
+  background: var(--spt-surface);
   border: 1px solid #eeeeee;
   border-radius: 1rem;
   padding: 1.25rem;
@@ -5670,7 +5670,7 @@ select {
 .tour-section-heading h2,
 .tour-make-trip h2 {
   margin: 0;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-size: clamp(2rem, 3.5vw, 3.4rem);
   font-weight: 700;
   letter-spacing: normal;
@@ -5694,14 +5694,14 @@ select {
 }
 
 .tour-season-card {
-  background: #fff;
+  background: var(--spt-surface);
   border-radius: 1rem;
   padding: 1.25rem;
 }
 
 .tour-season-date {
   min-height: 3.2rem;
-  color: var(--tour-navy);
+  color: var(--spt-link);
   font-weight: 700;
   line-height: 1.35;
   margin: 0 0 1rem;
@@ -5721,7 +5721,7 @@ select {
 
 .tour-social-gallery {
   padding: clamp(4rem, 7vw, 6.5rem) 0;
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .tour-social-gallery h2 {
@@ -5864,7 +5864,7 @@ select {
     position: sticky;
     top: 0;
     z-index: 3;
-    background: #fff;
+    background: var(--spt-surface);
   }
 
   .tour-destinations-layout {
@@ -5938,7 +5938,7 @@ select {
     place-items: center;
     border: 0;
     border-radius: 50%;
-    background: #f3f4f6;
+    background: var(--spt-surface-soft);
     color: var(--text-dark);
     font-size: 1.5rem;
     cursor: pointer;
@@ -5957,7 +5957,7 @@ select {
     gap: 1rem;
     border-top: 1px solid var(--tour-line);
     padding: 0.8rem 1rem max(0.8rem, env(safe-area-inset-bottom));
-    background: #fff;
+    background: var(--spt-surface);
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
   }
 
@@ -5969,7 +5969,7 @@ select {
   .tour-mobile-booking-bar span { font-size: 0.85rem; }
 
   .tour-mobile-booking-bar strong {
-    color: var(--tour-navy);
+    color: var(--spt-link);
     font-size: clamp(1.55rem, 7vw, 2rem);
   }
 
@@ -6038,7 +6038,7 @@ select {
   .tour-breadcrumb {
     min-height: 56px;
     padding-inline: 1rem;
-    background: #fff;
+    background: var(--spt-surface);
     font-size: 1rem;
   }
 
@@ -6253,7 +6253,7 @@ select {
 
 .blogs-page {
   --blogs-gutter: clamp(1rem, 5.55vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .blogs-page-hero {
@@ -6284,7 +6284,7 @@ select {
   gap: 1rem;
   border-radius: 1.75rem;
   padding: 2rem;
-  background: #f9fafb;
+  background: var(--spt-surface-soft);
 }
 
 .blogs-search-field {
@@ -6297,7 +6297,7 @@ select {
   border: 1px solid #4d78e5;
   border-radius: 999px;
   padding: 0 1.25rem;
-  background: #fff;
+  background: var(--spt-surface);
   transition: box-shadow 180ms ease;
 }
 
@@ -6373,7 +6373,7 @@ select {
   border: 0;
   border-radius: 999px;
   padding: 0.55rem 1.5rem;
-  background: #f7f7f7;
+  background: var(--spt-surface-soft);
   color: var(--text-dark);
   cursor: pointer;
   white-space: nowrap;
@@ -6386,7 +6386,7 @@ select {
 
 .blogs-tags button.is-selected {
   background: #e9eefc;
-  color: var(--primary);
+  color: var(--spt-link);
 }
 
 .blogs-tags button:focus-visible,
@@ -6403,7 +6403,7 @@ select {
   border: 1px solid rgba(29, 31, 31, 0.35);
   border-radius: 999px;
   padding: 0 2.4rem 0 1.15rem;
-  background: #fff;
+  background: var(--spt-surface);
   color: var(--text-dark);
   cursor: pointer;
 }
@@ -6508,7 +6508,7 @@ select {
 
 .blogs-faq-section .faq-item {
   padding: 1.15rem 1.25rem;
-  background: #f9fafb;
+  background: var(--spt-surface-soft);
 }
 
 .blogs-help-section {
@@ -6671,7 +6671,7 @@ select {
 /* Dynamic blog post parity */
 .blog-post-page {
   --post-gutter: clamp(1rem, 5.55vw, 5rem);
-  background: #fff;
+  background: var(--spt-surface);
   color: var(--text-dark);
 }
 
@@ -6688,7 +6688,7 @@ select {
 }
 
 .blog-post-breadcrumb a {
-  color: var(--primary);
+  color: var(--spt-link);
   font-weight: 600;
 }
 
@@ -6743,7 +6743,7 @@ select {
 
 .blog-post-title {
   margin: 0 0 2rem;
-  color: var(--primary);
+  color: var(--spt-link);
   font-size: clamp(1.75rem, 2.6vw, 2.5rem);
   line-height: 1.2;
 }
@@ -6827,7 +6827,7 @@ select {
 .blog-post-toc,
 .blog-post-adventure {
   border-radius: 2rem;
-  background: #f9fafb;
+  background: var(--spt-surface-soft);
   overflow: hidden;
 }
 
@@ -6885,7 +6885,7 @@ select {
 .blog-post-toc-links a:hover,
 .blog-post-toc-links a.is-active {
   background: #e9eefc;
-  color: var(--primary);
+  color: var(--spt-link);
 }
 
 .blog-post-toc-links a.is-active::before {
@@ -7008,7 +7008,7 @@ select {
 }
 
 .blog-post-related-blogs {
-  background: #f9fafb;
+  background: var(--spt-surface-soft);
 }
 
 .blog-post-blog-track {
@@ -7016,7 +7016,7 @@ select {
 }
 
 .blog-post-blog-track .blog-card {
-  background: #fff;
+  background: var(--spt-surface);
 }
 
 .blog-post-blog-track .blog-card-media {
@@ -7190,7 +7190,7 @@ select {
     align-items: end;
     gap: 0;
     padding: 0.45rem max(0.35rem, env(safe-area-inset-right, 0px)) max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.35rem, env(safe-area-inset-left, 0px));
-    background: #fff;
+    background: var(--spt-surface);
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.12);
   }
 

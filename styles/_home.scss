@@ -26,7 +26,7 @@
 .section-heading-v2 h2 {
   max-width: 18ch;
   margin: 0;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(2rem, 4vw, 4rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
@@ -61,7 +61,7 @@
   min-height: 44px;
   flex: 0 0 auto;
   border-bottom: 1px solid currentColor;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 0.9rem;
   font-weight: 700;
   transition: color 180ms ease, gap 180ms var(--spt-ease);
@@ -69,7 +69,7 @@
 
 .section-heading-link:hover {
   gap: 2rem;
-  color: var(--spt-anchor-deep);
+  color: var(--spt-link);
 }
 
 .home-hero-v2 {
@@ -189,7 +189,7 @@
 
 .home-page--redesign .home-search-tabs button.is-active {
   background: var(--spt-anchor-soft);
-  color: var(--spt-anchor);
+  color: var(--spt-link);
 }
 
 .home-page--redesign .home-search-fields {
@@ -219,7 +219,7 @@
 
 .home-page--redesign .home-search-fields > :is(label, fieldset) > span,
 .home-page--redesign .home-search-question {
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -246,7 +246,7 @@
 }
 
 .home-page--redesign .home-search-fields fieldset label:has(input:checked) {
-  color: var(--spt-anchor);
+  color: var(--spt-link);
 }
 
 .home-page--redesign .home-search-fields input:not([type="radio"]),
@@ -348,7 +348,7 @@
 }
 
 .home-trust-rail strong {
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(1.55rem, 3vw, 2.35rem);
   line-height: 1;
 }
@@ -436,8 +436,8 @@
 
 .site-shell-v2 .tour-card-meta span {
   border-radius: 999px;
-  background: #f2f4f7;
-  color: #4b525b;
+  background: var(--spt-surface-soft);
+  color: var(--spt-muted);
   padding: 0.35rem 0.55rem;
   font-size: 0.68rem;
   font-weight: 600;
@@ -465,7 +465,7 @@
 }
 
 .site-shell-v2 .tour-card-bottom strong {
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 1.1rem;
 }
 
@@ -560,7 +560,7 @@
   border: 1px solid var(--spt-border);
   border-radius: 999px;
   padding: 0.35rem;
-  background: #f7f8fb;
+  background: var(--spt-surface-soft);
   scrollbar-width: none;
 }
 
@@ -608,7 +608,7 @@
 .home-filter-empty {
   grid-column: 1 / -1;
   border-radius: var(--spt-radius-card);
-  background: #f7f8fb;
+  background: var(--spt-surface-soft);
   padding: 3rem;
   color: var(--spt-muted);
   text-align: center;
@@ -675,7 +675,7 @@
 .home-plan-section__form > h2 {
   max-width: 10ch;
   margin: 0 0 2.5rem;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(2.2rem, 4vw, 4rem);
   line-height: 0.96;
   letter-spacing: -0.035em;
@@ -696,7 +696,7 @@
   min-height: 82px;
   border: 1px solid var(--spt-border);
   border-radius: var(--spt-radius-sm);
-  background: #f7f8fb;
+  background: var(--spt-surface-soft);
 }
 
 .home-plan-section .home-search-fields fieldset,
@@ -740,7 +740,7 @@
 .home-how-intro h2 {
   max-width: 8ch;
   margin: 0;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(2.4rem, 5vw, 5rem);
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -774,7 +774,7 @@
 }
 
 .home-booking-steps-v2 li > span:first-child {
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 1.05rem;
   font-weight: 700;
 }
@@ -798,7 +798,7 @@
   place-items: center;
   border-radius: 50%;
   background: var(--spt-anchor-soft);
-  color: var(--spt-anchor);
+  color: var(--spt-link);
 }
 
 .home-destination-mosaic {
@@ -926,7 +926,7 @@
 
 .home-editorial-grid .blog-card-body p {
   margin: 0 0 0.65rem;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 0.72rem;
   font-weight: 700;
 }
@@ -952,7 +952,7 @@
 .home-certification-section-v2 h2 {
   max-width: 15ch;
   margin: 0 0 2rem;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(2.1rem, 4.5vw, 4.7rem);
   line-height: 0.96;
   letter-spacing: -0.04em;
@@ -1044,7 +1044,7 @@
 .home-faq-intro h2 {
   max-width: 9ch;
   margin: 0 0 2rem;
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: clamp(2.5rem, 5vw, 5rem);
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -1085,7 +1085,7 @@
   place-items: center;
   border-radius: 50%;
   background: var(--spt-anchor-soft);
-  color: var(--spt-anchor);
+  color: var(--spt-link);
   font-size: 1.25rem;
   transition: rotate 200ms var(--spt-ease), background 200ms ease, color 200ms ease;
 }
