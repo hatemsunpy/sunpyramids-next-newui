@@ -31,25 +31,15 @@ export function ThemeToggle({ className = "", labels, withLabel = false }: { cla
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useLayoutEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-
     const syncButton = () => {
       buttonRef.current?.setAttribute("aria-pressed", String(currentTheme() === "dark"));
     };
 
-    const syncSystemTheme = (event: MediaQueryListEvent) => {
-      if (storedTheme()) return;
-      applyTheme(event.matches ? "dark" : "light");
-      syncButton();
-    };
-
     applyTheme(currentTheme());
     syncButton();
-    media.addEventListener("change", syncSystemTheme);
     window.addEventListener(THEME_EVENT, syncButton);
 
     return () => {
-      media.removeEventListener("change", syncSystemTheme);
       window.removeEventListener(THEME_EVENT, syncButton);
     };
   }, []);

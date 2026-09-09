@@ -11,9 +11,7 @@ const themeScript = `(() => {
   try {
     saved = localStorage.getItem("sunpyramids-theme");
   } catch {}
-  const theme = saved === "light" || saved === "dark"
-    ? saved
-    : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const theme = saved === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = theme;
   document.documentElement.style.colorScheme = theme;
 })();`;
