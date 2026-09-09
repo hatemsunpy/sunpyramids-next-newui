@@ -71,30 +71,82 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
   const copy = uiCopy(locale);
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = tourLinks.some(([, href]) => isActivePath(pathname, href)) || stripLocale(pathname).startsWith("/tour/");
 
-  const handleBlur = () => {
-    requestAnimationFrame(() => {
-      if (containerRef.current && !containerRef.current.contains(document.activeElement)) setOpen(false);
-    });
+  const clearCloseTimeout = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
+  const handleMouseEnter = () => {
+    clearCloseTimeout();
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    clearCloseTimeout();
+    timeoutRef.current = setTimeout(() => {
+      setOpen(false);
+    }, 180);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      clearCloseTimeout();
+    };
+  }, []);
+
+  const handleFocusOut = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (!containerRef.current?.contains(event.relatedTarget as Node)) {
+      setOpen(false);
+    }
   };
 
   return (
-    <div className={`dropdown ${open ? "dropdown-open" : ""} ${active ? "nav-item-active" : ""}`} ref={containerRef} onBlur={handleBlur}
+    <div
+      className={`dropdown ${open ? "dropdown-open" : ""} ${active ? "nav-item-active" : ""}`}
+      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onBlur={handleFocusOut}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
+          clearCloseTimeout();
           setOpen(false);
           containerRef.current?.querySelector("button")?.focus();
         }
-      }}>
+      }}
+    >
       <button
         type="button"
         aria-current={active ? "page" : undefined}
         aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((value) => !value)}
+        aria-haspopup="menu"
+        onClick={() => {
+          clearCloseTimeout();
+          setOpen((value) => !value);
+        }}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
+            clearCloseTimeout();
             setOpen(false);
             event.currentTarget.focus();
           }
@@ -103,9 +155,18 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
         {copy.egyptTours}
         <svg className="dropdown-chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" /></svg>
       </button>
-      <div className="dropdown-panel">
+      <div className="dropdown-panel" role="menu">
         {tourLinks.map(([key, href]) => (
-          <Link key={href} href={withLocale(href, locale)} aria-current={isActivePath(pathname, href) ? "page" : undefined} onClick={() => setOpen(false)}>
+          <Link
+            key={href}
+            href={withLocale(href, locale)}
+            role="menuitem"
+            aria-current={isActivePath(pathname, href) ? "page" : undefined}
+            onClick={() => {
+              clearCloseTimeout();
+              setOpen(false);
+            }}
+          >
             {copy[key]}<ArrowIcon />
           </Link>
         ))}
