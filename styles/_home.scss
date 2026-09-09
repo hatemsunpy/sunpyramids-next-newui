@@ -75,7 +75,7 @@
 .home-hero-v2 {
   position: relative;
   width: 100%;
-  min-height: min(900px, 100svh);
+  min-height: min(680px, 75svh);
   margin-inline: 0;
   overflow: hidden;
   border-radius: 0;
@@ -114,17 +114,17 @@
   position: relative;
   z-index: 2;
   display: flex;
-  min-height: min(900px, 100svh);
+  min-height: min(680px, 75svh);
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   width: min(calc(100% - clamp(2rem, 6.4vw, 6rem)), 1390px);
   margin-inline: auto;
-  padding: 12rem 0 3.25rem;
+  padding: 8rem 0 4rem;
 }
 
 .home-hero-v2__copy {
   max-width: 810px;
-  margin-bottom: clamp(2rem, 5vh, 4rem);
+  margin-bottom: 0;
 }
 
 .home-hero-v2__copy p {
@@ -145,6 +145,13 @@
   letter-spacing: -0.04em;
   text-wrap: balance;
   text-shadow: 0 2px 8px rgb(0 0 0 / 24%);
+}
+
+.home-search-bridge {
+  position: relative;
+  z-index: 5;
+  width: min(calc(100% - clamp(2rem, 6.4vw, 6rem)), 1040px);
+  margin: -2.75rem auto 0;
 }
 
 .home-hero-v2__search {
@@ -352,7 +359,7 @@
 .home-hero-v2 .hero-dots {
   z-index: 3;
   right: clamp(1.2rem, 3vw, 2.5rem);
-  bottom: 2rem;
+  bottom: 3.5rem;
   left: auto;
 }
 
@@ -378,8 +385,9 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   min-height: 112px;
-  margin-top: -1.5rem;
+  margin-top: 1.75rem;
   overflow: hidden;
+  border: 1px solid var(--spt-border);
   border-radius: var(--spt-radius-card);
   background: var(--spt-surface);
   box-shadow: 0 8px 24px rgb(16 31 64 / 12%);
@@ -1266,12 +1274,12 @@
 
 @media (max-width: 1180px) {
   .home-hero-v2 {
-    min-height: 900px;
+    min-height: 580px;
   }
 
   .home-hero-v2__inner {
-    min-height: 900px;
-    padding-top: 10rem;
+    min-height: 580px;
+    padding-top: 6rem;
   }
 
   .home-page--redesign .home-search-fields {
@@ -1322,7 +1330,7 @@
 @media (max-width: 900px) {
   .home-hero-v2,
   .home-hero-v2__inner {
-    min-height: 930px;
+    min-height: 500px;
   }
 
   .home-page--redesign .home-search-fields {
@@ -1436,14 +1444,14 @@
 
   .home-hero-v2 {
     width: 100%;
-    min-height: 855px;
+    min-height: 420px;
     border-radius: 0;
   }
 
   .home-hero-v2__inner {
-    min-height: 855px;
+    min-height: 420px;
     width: calc(100% - 2rem);
-    padding: 7.25rem 0 5.75rem;
+    padding: 5.5rem 0 3rem;
   }
 
   .home-hero-v2__veil {
@@ -1519,11 +1527,17 @@
     display: none;
   }
 
+  .home-search-bridge {
+    width: calc(100% - 1.5rem);
+    margin-top: -2.25rem;
+  }
+
   .home-trust-rail {
     grid-template-columns: repeat(2, 1fr);
     min-height: 0;
-    margin-top: -0.25rem;
-    border-radius: 0;
+    margin-top: 1.25rem;
+    border: 1px solid var(--spt-border);
+    border-radius: var(--spt-radius-card);
     box-shadow: none;
   }
 
