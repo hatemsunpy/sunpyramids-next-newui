@@ -114,6 +114,7 @@
 
 .site-shell-v2 .dropdown {
   position: relative;
+  z-index: 30;
 }
 
 .site-shell-v2 .dropdown-panel {
@@ -125,7 +126,7 @@
   gap: 0;
   width: 460px;
   translate: -50% 0;
-  overflow: hidden;
+  overflow: visible;
   border: 0;
   border-radius: var(--spt-radius-card);
   background: var(--spt-surface);
@@ -136,9 +137,12 @@
   pointer-events: none;
   transform: translateY(-8px);
   transition: opacity 180ms ease, transform 180ms var(--spt-ease), visibility 180ms ease;
+  z-index: 100;
 }
 
-.site-shell-v2 .dropdown-open .dropdown-panel {
+.site-shell-v2 .dropdown-open .dropdown-panel,
+.site-shell-v2 .dropdown:hover .dropdown-panel,
+.site-shell-v2 .dropdown:focus-within .dropdown-panel {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -243,6 +247,8 @@
 }
 
 .site-shell-v2 .promo-strip {
+  position: relative;
+  z-index: 5;
   width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
   min-height: 42px;
   margin: 0.45rem auto 0;
