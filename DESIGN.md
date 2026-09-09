@@ -254,8 +254,8 @@ The form language is gently rounded and practical: `10px` utility controls, `12p
 
 ### Theme Preference
 - The root `html[data-theme]` attribute is the single styling switch. The persisted key is exactly `sunpyramids-theme`, and its only valid explicit values are `light` and `dark`.
-- **System first, explicit choice wins:** With no stored choice, resolve and continue following `prefers-color-scheme`. Once the visitor chooses a theme, persist it and stop following system changes until that stored choice is removed.
-- A synchronous head bootstrap resolves the stored or system theme before body content is painted, updates both `data-theme` and `color-scheme`, and suppresses expected hydration mismatch. This prevents a wrong-theme flash without a React provider.
+- **Light first, explicit toggle wins:** The default primary theme is always `light`. When a visitor explicitly clicks the toggle to switch to `dark`, persist `sunpyramids-theme = "dark"` and preserve that choice.
+- A synchronous head bootstrap resolves the stored theme before body content is painted (defaulting to `light`), updates both `data-theme` and `color-scheme`, and suppresses expected hydration mismatch. This prevents a wrong-theme flash without a React provider.
 - The toggle is a real button with a localized accessible label, synchronized `aria-pressed`, and theme-appropriate sun/moon state. Visible Light/Dark copy is localized in the mobile sheet for every supported locale (`en`, `fr`, `de`, `it`, `pt`, `es`, `zh`); utility labels must remain locale-aware and icon-only controls must keep accessible names.
 - Theme preference is presentation-only: it adds no provider, runtime package, API request, production-data snapshot, cache rule, ISR behavior, or backend ownership change.
 
@@ -284,7 +284,7 @@ The form language is gently rounded and practical: `10px` utility controls, `12p
 - **Do** keep the light-theme global page background at `#eeeeee`. The migration-era `#f9fafb` divergence has been reconciled.
 - **Do** mark active navigation with `aria-current` and the restrained Amber route indicator; never rely on color alone.
 - **Do** preserve focus trapping, Escape/backdrop dismissal, background inertness, scroll locking, and trigger focus restoration in the mobile navigation sheet.
-- **Do** honor the system theme until the visitor explicitly chooses one, then preserve that choice under `sunpyramids-theme`.
+- **Do** default to the light theme, and preserve explicit theme choices under `sunpyramids-theme`.
 
 ### Don't:
 - **Don't** reintroduce the unused legacy `--theme-color: #ff4c3b`. It is not part of the rendered production palette.
