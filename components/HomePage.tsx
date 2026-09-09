@@ -84,15 +84,16 @@ export function HomePage({
             <p>{copy.heroKicker}</p>
             <h1>{copy.heroTitle}</h1>
           </div>
-          <div className="home-hero-v2__search">
-            <HomeSearchShortcuts locale={locale} destinations={highlights} />
-          </div>
         </div>
         <nav className="home-mobile-shortcuts" aria-label="Quick trip actions">
           <Link href={withLocale("/make-your-trip", locale)}><ShortcutIcon type="make" /><strong>{copy.makeTripShort}</strong></Link>
           <Link href={withLocale("/trips", locale)}><ShortcutIcon type="find" /><strong>{copy.findTripShort}</strong></Link>
           <Link href={withLocale("/rent-car", locale)}><ShortcutIcon type="car" /><strong>{copy.rentCarShort}</strong></Link>
         </nav>
+      </section>
+
+      <section className="home-search-bridge container-shell" aria-label="Search and plan your trip">
+        <HomeSearchShortcuts locale={locale} destinations={highlights} />
       </section>
 
       <section className="home-trust-rail container-shell" aria-label="Sun Pyramids Tours statistics">
