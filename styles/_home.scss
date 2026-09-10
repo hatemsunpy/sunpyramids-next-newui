@@ -1504,9 +1504,24 @@
 
   .home-page--redesign .home-search-fields fieldset {
     max-width: 100%;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
+    min-height: auto;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.85rem;
+    padding: 0.55rem 0.75rem;
+    overflow: visible;
+  }
+
+  .home-page--redesign .home-search-fields fieldset label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.74rem;
+    line-height: 1.2;
+    cursor: pointer;
+    white-space: nowrap;
   }
 
   .home-page--redesign .home-search-fields fieldset .home-search-question {
