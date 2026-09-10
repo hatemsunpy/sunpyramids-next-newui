@@ -13,6 +13,7 @@ import { HomePopularTours } from "@/components/HomePopularTours";
 import { HomeHeroMedia } from "@/components/HomeHeroMedia";
 import { TravelPartners } from "@/components/TravelPartners";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
+import { HomeUpcomingEvents } from "@/components/HomeUpcomingEvents";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { homeCopy } from "@/lib/home-copy";
 
@@ -43,6 +44,7 @@ export function HomePage({
   blogs,
   faqs,
   socialLinks,
+  events = [],
   locale = "en",
 }: {
   page: ApiPage | null;
@@ -53,6 +55,7 @@ export function HomePage({
   blogs: ApiPage[];
   faqs: ApiPage[];
   socialLinks: SocialLink[];
+  events?: ApiPage[];
   locale?: Locale;
 }) {
   const copy = homeCopy(locale);
@@ -153,6 +156,8 @@ export function HomePage({
           </SwipeCarousel>
         </section>
       ) : null}
+
+      <HomeUpcomingEvents events={events} locale={locale} />
 
       <section className="home-how-section-v2">
         <div className="container-shell home-how-layout">

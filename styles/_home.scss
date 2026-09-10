@@ -782,6 +782,257 @@
   overflow: visible;
 }
 
+.home-events-section {
+  padding-block: var(--spt-section);
+}
+
+.home-events-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+
+  .section-heading-v2 {
+    margin-bottom: 0;
+  }
+}
+
+.home-events-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-events-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home-events-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--spt-border);
+  background: var(--spt-surface);
+  color: var(--spt-ink);
+  cursor: pointer;
+  transition: all 180ms ease;
+
+  &:hover:not(:disabled) {
+    background: var(--spt-surface-soft);
+    border-color: var(--spt-link);
+    color: var(--spt-link);
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.home-events-track {
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.home-events-track--grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.home-events-track--carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .event-card-v2 {
+    width: calc((100% - 2 * clamp(1rem, 2vw, 1.5rem)) / 3);
+    min-width: calc((100% - 2 * clamp(1rem, 2vw, 1.5rem)) / 3);
+    scroll-snap-align: start;
+  }
+}
+
+.event-card-v2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--spt-radius-card);
+  background: var(--spt-surface);
+  border: 1px solid var(--spt-border);
+  overflow: hidden;
+  transition: transform 240ms var(--spt-ease), box-shadow 240ms ease, border-color 240ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgb(16 31 64 / 12%);
+    border-color: var(--spt-amber);
+
+    .event-card-v2__media img {
+      transform: scale(1.06);
+    }
+
+    .event-card-v2__title {
+      color: var(--spt-link);
+    }
+
+    .event-card-v2__cta {
+      gap: 0.75rem;
+      color: var(--spt-amber);
+
+      svg {
+        transform: translateX(4px);
+      }
+    }
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--spt-surface-soft);
+
+    img {
+      object-fit: cover;
+      transition: transform 600ms var(--spt-ease);
+    }
+  }
+
+  &__gradient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(8, 18, 44, 0.25) 0%, transparent 40%, rgba(8, 18, 44, 0.5) 100%);
+  }
+
+  &__date-badge {
+    position: absolute;
+    top: 0.85rem;
+    inset-inline-start: 0.85rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.65rem;
+    min-width: 52px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    text-align: center;
+    line-height: 1;
+  }
+
+  &__date-day {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #08122c;
+    letter-spacing: -0.02em;
+  }
+
+  &__date-month {
+    margin-top: 0.2rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--spt-amber);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__date-year {
+    margin-top: 0.15rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.25rem;
+  }
+
+  &__location {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--spt-muted);
+
+    svg {
+      flex-shrink: 0;
+      color: var(--spt-amber);
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__title {
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.05rem, 1.25vw, 1.22rem);
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--spt-ink);
+    letter-spacing: -0.015em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 180ms ease;
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--spt-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--spt-link);
+    transition: gap 200ms ease, color 200ms ease;
+
+    svg {
+      transition: transform 200ms ease;
+    }
+  }
+}
+
 .home-how-section-v2 {
   background: var(--spt-surface);
   padding-block: var(--spt-section);
@@ -1327,6 +1578,15 @@
   .home-social-gallery-v2 article {
     scroll-snap-align: start;
   }
+
+  .home-events-track--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-events-track--carousel .event-card-v2 {
+    width: min(50vw, 360px);
+    min-width: min(50vw, 360px);
+  }
 }
 
 @media (max-width: 900px) {
@@ -1624,7 +1884,8 @@
   .home-signature-grid,
   .home-page--redesign .home-tour-grid,
   .home-offers-track,
-  .home-destination-mosaic {
+  .home-destination-mosaic,
+  .home-events-track {
     display: flex;
     width: calc(100% + 1rem);
     gap: 0.8rem;
@@ -1637,13 +1898,15 @@
   .home-signature-grid::-webkit-scrollbar,
   .home-page--redesign .home-tour-grid::-webkit-scrollbar,
   .home-offers-track::-webkit-scrollbar,
-  .home-destination-mosaic::-webkit-scrollbar {
+  .home-destination-mosaic::-webkit-scrollbar,
+  .home-events-track::-webkit-scrollbar {
     display: none;
   }
 
   .home-signature-grid .tour-card,
   .home-page--redesign .home-tour-grid .tour-card,
-  .home-offers-track .tour-card {
+  .home-offers-track .tour-card,
+  .home-events-track .event-card-v2 {
     display: block;
     width: min(79vw, 305px);
     min-width: min(79vw, 305px);

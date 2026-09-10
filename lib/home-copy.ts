@@ -76,7 +76,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Send Request",
     "fullName": "Full Name",
     "nationality": "Nationality",
-    "phone": "Phone"
+    "phone": "Phone",
+    "upcomingEventsTitle": "Upcoming Events in Egypt",
+    "upcomingEventsDescription": "Experience Egypt's rich cultural calendar, festivals, and unforgettable spectacles",
+    "exploreEvent": "Explore Event"
   },
   "fr": {
     "seasonalTitle": "Un Noël inoubliable en Égypte",
@@ -148,7 +151,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Envoyer une demande",
     "fullName": "Nom complet",
     "nationality": "Nationalité",
-    "phone": "Téléphone"
+    "phone": "Téléphone",
+    "upcomingEventsTitle": "Événements à venir en Égypte",
+    "upcomingEventsDescription": "Découvrez le riche calendrier culturel, les festivals et les spectacles inoubliables de l'Égypte",
+    "exploreEvent": "Explorer l'événement"
   },
   "de": {
     "seasonalTitle": "Unvergessliche Weihnachten in Ägypten",
@@ -221,7 +227,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Anfrage senden",
     "fullName": "Vollständiger Name",
     "nationality": "Staatsangehörigkeit",
-    "phone": "Telefon"
+    "phone": "Telefon",
+    "upcomingEventsTitle": "Kommende Veranstaltungen in Ägypten",
+    "upcomingEventsDescription": "Erleben Sie Ägyptens reichen Kulturkalender, Feste und unvergessliche Spektakel",
+    "exploreEvent": "Event entdecken"
   },
   "it": {
     "seasonalTitle": "Un Natale da ricordare in Egitto",
@@ -293,7 +302,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Invia Richiesta",
     "fullName": "Nome completo",
     "nationality": "Nazionalità",
-    "phone": "Telefono"
+    "phone": "Telefono",
+    "upcomingEventsTitle": "Prossimi eventi in Egitto",
+    "upcomingEventsDescription": "Vivi il ricco calendario culturale dell'Egitto, festival e spettacoli indimenticabili",
+    "exploreEvent": "Esplora l'evento"
   },
   "pt": {
     "seasonalTitle": "Um Natal Inesquecível no Egito",
@@ -365,7 +377,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Enviar Pedido",
     "fullName": "Nome completo",
     "nationality": "Nacionalidade",
-    "phone": "Telefone"
+    "phone": "Telefone",
+    "upcomingEventsTitle": "Próximos Eventos no Egito",
+    "upcomingEventsDescription": "Experimente o rico calendário cultural do Egito, festivais e espetáculos inesquecíveis",
+    "exploreEvent": "Explorar Evento"
   },
   "es": {
     "seasonalTitle": "Una Navidad inolvidable en Egipto",
@@ -438,7 +453,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Enviar solicitud",
     "fullName": "Nombre completo",
     "nationality": "Nacionalidad",
-    "phone": "Teléfono"
+    "phone": "Teléfono",
+    "upcomingEventsTitle": "Próximos Eventos en Egipto",
+    "upcomingEventsDescription": "Disfrute del rico calendario cultural, festivales y espectáculos inolvidables de Egipto",
+    "exploreEvent": "Explorar Evento"
   },
   "zh": {
     "seasonalTitle": "埃及难忘圣诞之旅",
@@ -510,7 +528,10 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "发送请求",
     "fullName": "全名",
     "nationality": "国籍",
-    "phone": "电话"
+    "phone": "电话",
+    "upcomingEventsTitle": "埃及即将举办的活动",
+    "upcomingEventsDescription": "体验埃及丰富的文化节庆、节日与难忘的奇观盛事",
+    "exploreEvent": "探索活动"
   }
 };
 
