@@ -359,9 +359,10 @@
 
 .home-hero-v2 .hero-dots {
   z-index: 3;
-  right: clamp(1.2rem, 3vw, 2.5rem);
+  left: 50%;
+  right: auto;
   bottom: 4.5rem;
-  left: auto;
+  transform: translateX(-50%);
 }
 
 .home-hero-v2 .hero-dot {
@@ -1451,8 +1452,9 @@
 
   .home-hero-v2__inner {
     min-height: 580px;
-    width: calc(100% - 2rem);
+    width: 100%;
     padding: 7.5rem 0 4rem;
+    padding-inline: 3.25rem 1.25rem;
   }
 
   .home-hero-v2__veil {
@@ -1534,9 +1536,54 @@
     font-size: 0.8rem;
   }
 
-  .home-hero-v2 .hero-arrow,
+  .home-hero-v2 .hero-arrow {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    top: 48%;
+    transform: translateY(-50%);
+    z-index: 5;
+    border: 1px solid rgb(255 255 255 / 45%);
+    background: rgb(13 24 48 / 45%);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-hero-v2 .hero-arrow svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .home-hero-v2 .hero-arrow-prev {
+    left: 0.5rem;
+  }
+
+  .home-hero-v2 .hero-arrow-next {
+    right: 0.5rem;
+  }
+
   .home-hero-v2 .hero-dots {
-    display: none;
+    display: flex;
+    z-index: 5;
+    bottom: 3.5rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    gap: 0.35rem;
+  }
+
+  .home-hero-v2 .hero-dot {
+    width: 16px;
+    height: 3px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 48%);
+  }
+
+  .home-hero-v2 .hero-dot-active {
+    width: 30px;
+    background: var(--spt-amber);
   }
 
   .home-hero-v2 .home-mobile-shortcuts {

@@ -37,6 +37,9 @@
   ],
   "exclude": [
     "node_modules",
-    "nuxt_sunpyramids"
+    "nuxt_sunpyramids",
+    "tests",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }
