@@ -243,6 +243,7 @@
   display: grid;
   align-content: center;
   gap: 0.15rem;
+  cursor: pointer;
 }
 
 .home-page--redesign .home-search-fields > :is(label, fieldset) > span,

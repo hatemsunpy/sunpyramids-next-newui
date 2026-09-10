@@ -59,6 +59,17 @@ select {
   font: inherit;
 }
 
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+input[data-native-type] {
+  cursor: pointer;
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

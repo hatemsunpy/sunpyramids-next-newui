@@ -527,7 +527,18 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
             </div>
             <div className="account-field">
               <label htmlFor="profile-birthdate">{copy.birthDate}</label>
-              <input id="profile-birthdate" name="birthDate" type="date" defaultValue={user?.birthdate || ""} autoComplete="bday" />
+              <input
+                id="profile-birthdate"
+                name="birthDate"
+                type="date"
+                defaultValue={user?.birthdate || ""}
+                autoComplete="bday"
+                onClick={(e) => {
+                  try {
+                    e.currentTarget.showPicker?.();
+                  } catch {}
+                }}
+              />
             </div>
             <div className="account-field">
               <label htmlFor="profile-nationality">{copy.nationality}</label>
@@ -624,6 +635,11 @@ function CartTourEditor({
             type="date"
             defaultValue={String(item.start_date || "").slice(0, 10)}
             aria-label={copy.date}
+            onClick={(e) => {
+              try {
+                e.currentTarget.showPicker?.();
+              } catch {}
+            }}
           />
         </div>
         <div className="editor-field">
@@ -1612,6 +1628,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     name="pickupDate"
                     type="date"
                     required
+                    onClick={(e) => {
+                      try {
+                        e.currentTarget.showPicker?.();
+                      } catch {}
+                    }}
                   />
                 </div>
               </div>
@@ -1626,6 +1647,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     name="pickupTime"
                     type="time"
                     required
+                    onClick={(e) => {
+                      try {
+                        e.currentTarget.showPicker?.();
+                      } catch {}
+                    }}
                   />
                 </div>
               </div>
@@ -1643,6 +1669,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                       name="returnDate"
                       type="date"
                       required
+                      onClick={(e) => {
+                        try {
+                          e.currentTarget.showPicker?.();
+                        } catch {}
+                      }}
                     />
                   </div>
                 </div>
@@ -1657,6 +1688,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                       name="returnTime"
                       type="time"
                       required
+                      onClick={(e) => {
+                        try {
+                          e.currentTarget.showPicker?.();
+                        } catch {}
+                      }}
                     />
                   </div>
                 </div>
@@ -1715,6 +1751,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                       name="startDate"
                       type="date"
                       required
+                      onClick={(e) => {
+                        try {
+                          e.currentTarget.showPicker?.();
+                        } catch {}
+                      }}
                     />
                   </div>
                 </div>
@@ -1729,6 +1770,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                       name="endDate"
                       type="date"
                       required
+                      onClick={(e) => {
+                        try {
+                          e.currentTarget.showPicker?.();
+                        } catch {}
+                      }}
                     />
                   </div>
                 </div>
