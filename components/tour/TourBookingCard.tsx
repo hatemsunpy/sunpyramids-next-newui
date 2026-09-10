@@ -144,7 +144,17 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
               <span className="tour-booking-step-number" aria-hidden="true">1</span>
               <label className="tour-field">
                 <span>Choose your date</span>
-                <input type="date" value={date} onChange={(event) => setDate(event.target.value)} required />
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(event) => setDate(event.target.value)}
+                  onClick={(event) => {
+                    try {
+                      event.currentTarget.showPicker?.();
+                    } catch {}
+                  }}
+                  required
+                />
               </label>
             </div>
 

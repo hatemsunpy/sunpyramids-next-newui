@@ -18,12 +18,34 @@ function listData<T>(response: ApiListResponse<T>): T[] {
 
 function DateTimeField({ name, placeholder, nativeType }: { name: string; placeholder: string; nativeType: "date" | "datetime-local" }) {
   const [type, setType] = useState<"text" | "date" | "datetime-local">("text");
+
+  const activateAndOpen = (el: HTMLInputElement) => {
+    if (el.type !== nativeType) {
+      el.type = nativeType;
+      setType(nativeType);
+    }
+    try {
+      if (typeof el.showPicker === "function") {
+        el.showPicker();
+      }
+    } catch {}
+  };
+
   return (
     <input
       name={name}
+      data-native-type={nativeType}
       onBlur={(event) => { if (!event.target.value) setType("text"); }}
       onChange={(event) => { if (event.target.value) setType(nativeType); }}
-      onFocus={() => setType(nativeType)}
+      onFocus={(event) => {
+        if (event.target.type !== nativeType) {
+          event.target.type = nativeType;
+          setType(nativeType);
+        }
+      }}
+      onClick={(event) => {
+        activateAndOpen(event.currentTarget);
+      }}
       placeholder={placeholder}
       required
       type={type}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { HtmlLangSynchronizer } from "@/components/HtmlLangSynchronizer";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
+import { DatePickerEnhancer } from "@/components/DatePickerEnhancer";
 import { isLocale } from "@/lib/locales";
 import "./globals.scss";
 import "@/styles/batch-one.scss";
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       </head>
       <body>
         <HtmlLangSynchronizer />
+        <DatePickerEnhancer />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KDF33T7"
