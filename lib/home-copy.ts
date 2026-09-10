@@ -76,7 +76,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Send Request",
     "fullName": "Full Name",
     "nationality": "Nationality",
-    "phone": "Phone"
+    "phone": "Phone",
+    "upcomingEventsEyebrow": "Upcoming Events",
+    "upcomingEventsTitle": "Top Upcoming Tourist Events and Occasions in Egypt",
+    "upcomingEventsDescription": "Discover our latest scheduled events and join us for an unforgettable experience. Book your spot today!",
+    "viewAllEvents": "View All Events",
+    "countdownToday": "Today",
+    "countdownTomorrow": "Tomorrow",
+    "countdownInDays": "In {days} days",
+    "previousEvents": "Previous events",
+    "nextEvents": "Next events"
   },
   "fr": {
     "seasonalTitle": "Un Noël inoubliable en Égypte",
@@ -148,7 +157,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Envoyer une demande",
     "fullName": "Nom complet",
     "nationality": "Nationalité",
-    "phone": "Téléphone"
+    "phone": "Téléphone",
+    "upcomingEventsEyebrow": "Événements à venir",
+    "upcomingEventsTitle": "Principaux événements et occasions touristiques à venir en Égypte",
+    "upcomingEventsDescription": "Découvrez nos derniers événements programmés et rejoignez-nous pour une expérience inoubliable. Réservez votre place dès aujourd'hui !",
+    "viewAllEvents": "Voir tous les événements",
+    "countdownToday": "Aujourd'hui",
+    "countdownTomorrow": "Demain",
+    "countdownInDays": "Dans {days} jours",
+    "previousEvents": "Événements précédents",
+    "nextEvents": "Événements suivants"
   },
   "de": {
     "seasonalTitle": "Unvergessliche Weihnachten in Ägypten",
@@ -221,7 +239,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Anfrage senden",
     "fullName": "Vollständiger Name",
     "nationality": "Staatsangehörigkeit",
-    "phone": "Telefon"
+    "phone": "Telefon",
+    "upcomingEventsEyebrow": "Kommende Veranstaltungen",
+    "upcomingEventsTitle": "Top bevorstehende touristische Veranstaltungen und Anlässe in Ägypten",
+    "upcomingEventsDescription": "Entdecken Sie unsere neuesten geplanten Veranstaltungen und begleiten Sie uns zu einem unvergesslichen Erlebnis. Sichern Sie sich noch heute Ihren Platz!",
+    "viewAllEvents": "Alle Veranstaltungen ansehen",
+    "countdownToday": "Heute",
+    "countdownTomorrow": "Morgen",
+    "countdownInDays": "In {days} Tagen",
+    "previousEvents": "Vorherige Veranstaltungen",
+    "nextEvents": "Nächste Veranstaltungen"
   },
   "it": {
     "seasonalTitle": "Un Natale da ricordare in Egitto",
@@ -293,7 +320,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Invia Richiesta",
     "fullName": "Nome completo",
     "nationality": "Nazionalità",
-    "phone": "Telefono"
+    "phone": "Telefono",
+    "upcomingEventsEyebrow": "Prossimi eventi",
+    "upcomingEventsTitle": "I migliori eventi e occasioni turistiche imminenti in Egitto",
+    "upcomingEventsDescription": "Scopri i nostri ultimi eventi in programma e unisciti a noi per un'esperienza indimenticabile. Prenota il tuo posto oggi stesso!",
+    "viewAllEvents": "Visualizza tutti gli eventi",
+    "countdownToday": "Oggi",
+    "countdownTomorrow": "Domani",
+    "countdownInDays": "Tra {days} giorni",
+    "previousEvents": "Eventi precedenti",
+    "nextEvents": "Eventi successivi"
   },
   "pt": {
     "seasonalTitle": "Um Natal Inesquecível no Egito",
@@ -365,7 +401,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Enviar Pedido",
     "fullName": "Nome completo",
     "nationality": "Nacionalidade",
-    "phone": "Telefone"
+    "phone": "Telefone",
+    "upcomingEventsEyebrow": "Próximos Eventos",
+    "upcomingEventsTitle": "Principais eventos e ocasiões turísticas futuras no Egito",
+    "upcomingEventsDescription": "Descubra nossos últimos eventos programados e junte-se a nós para uma experiência inesquecível. Reserve seu lugar hoje mesmo!",
+    "viewAllEvents": "Ver todos os eventos",
+    "countdownToday": "Hoje",
+    "countdownTomorrow": "Amanhã",
+    "countdownInDays": "Em {days} dias",
+    "previousEvents": "Eventos anteriores",
+    "nextEvents": "Próximos eventos"
   },
   "es": {
     "seasonalTitle": "Una Navidad inolvidable en Egipto",
@@ -438,7 +483,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "Enviar solicitud",
     "fullName": "Nombre completo",
     "nationality": "Nacionalidad",
-    "phone": "Teléfono"
+    "phone": "Teléfono",
+    "upcomingEventsEyebrow": "Próximos Eventos",
+    "upcomingEventsTitle": "Los principales eventos y ocasiones turísticas en Egipto",
+    "upcomingEventsDescription": "Descubra nuestros últimos eventos programados y únase a nosotros para vivir una experiencia inolvidable. ¡Reserve su lugar hoy mismo!",
+    "viewAllEvents": "Ver todos los eventos",
+    "countdownToday": "Hoy",
+    "countdownTomorrow": "Mañana",
+    "countdownInDays": "En {days} días",
+    "previousEvents": "Eventos anteriores",
+    "nextEvents": "Próximos eventos"
   },
   "zh": {
     "seasonalTitle": "埃及难忘圣诞之旅",
@@ -510,7 +564,16 @@ const copies: Record<Locale, HomeCopy> = {
     "sendRequest": "发送请求",
     "fullName": "全名",
     "nationality": "国籍",
-    "phone": "电话"
+    "phone": "电话",
+    "upcomingEventsEyebrow": "即将举行的活动",
+    "upcomingEventsTitle": "埃及即将举行的热门旅游活动与盛会",
+    "upcomingEventsDescription": "探索我们最新的日程安排活动，加入我们共度难忘体验。立即预订您的席位！",
+    "viewAllEvents": "查看所有活动",
+    "countdownToday": "今天",
+    "countdownTomorrow": "明天",
+    "countdownInDays": "{days} 天后",
+    "previousEvents": "上一组活动",
+    "nextEvents": "下一组活动"
   }
 };
 
@@ -523,4 +586,16 @@ export function homeCopy(locale: Locale): HomeCopy {
     },
   });
 }
+
+export function formatEventCountdown(
+  days: number | null | undefined,
+  copy: HomeCopy,
+): string | null {
+  if (days === null || days === undefined || days < 0) return null;
+  if (days === 0) return copy.countdownToday || "Today";
+  if (days === 1) return copy.countdownTomorrow || "Tomorrow";
+  const template = copy.countdownInDays || "In {days} days";
+  return template.replace("{days}", String(days));
+}
+
 
