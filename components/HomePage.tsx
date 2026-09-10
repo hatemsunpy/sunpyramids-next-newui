@@ -180,7 +180,7 @@ export function HomePage({
             {highlights.slice(0, 7).map((destination, index) => (
               <DestinationCard
                 basePath="/egypt-tours/one-day-tours"
-                className={index === 0 || index === 4 ? "destination-card--wide" : ""}
+                className={index === 0 || index === 5 || index === 6 ? "destination-card--wide" : ""}
                 destination={destination}
                 headingLevel={3}
                 key={destination.id || destination.slug}

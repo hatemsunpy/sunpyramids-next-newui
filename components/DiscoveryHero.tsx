@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { sanitizeHtml } from "@/lib/sanitize-html";
 import type { ReactNode } from "react";
+import type { Locale } from "@/types/api";
+import { DiscoveryHeroDescription } from "@/components/DiscoveryHeroDescription";
 
 export type BreadcrumbItem = {
   label: string;
@@ -16,6 +17,7 @@ export function DiscoveryHero({
   metaBadges = [],
   bgImage,
   children,
+  locale = "en",
 }: {
   title: string;
   breadcrumbs?: BreadcrumbItem[];
@@ -25,6 +27,7 @@ export function DiscoveryHero({
   metaBadges?: string[];
   bgImage?: string | null;
   children?: ReactNode;
+  locale?: Locale | string;
 }) {
   const bannerImage = bgImage || "/images/mainBanner.png";
 
@@ -59,10 +62,7 @@ export function DiscoveryHero({
         <h1>{title}</h1>
 
         {description && (
-          <div
-            className="discovery-hero-desc"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }}
-          />
+          <DiscoveryHeroDescription description={description} locale={locale} />
         )}
 
         {(totalCount !== undefined && totalCount !== null || metaBadges.length > 0) && (
