@@ -879,11 +879,11 @@
   background: var(--spt-anchor-deep);
 }
 
-.site-shell-v2 .destination-card--wide {
+.home-destination-mosaic .destination-card--wide {
   grid-column: span 2;
 }
 
-.site-shell-v2 .destination-card:first-child {
+.home-destination-mosaic .destination-card:first-child {
   grid-row: span 2;
 }
 

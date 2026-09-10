@@ -97,16 +97,54 @@
       max-width: 900px;
     }
 
+    .discovery-hero-desc-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 780px;
+    }
+
     .discovery-hero-desc {
       margin: 0;
-      max-width: 720px;
+      max-width: 780px;
       font-size: clamp(0.95rem, 1.2vw, 1.08rem);
       line-height: 1.6;
-      color: rgba(255, 255, 255, 0.88);
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 
       p {
-        margin: 0;
+        margin: 0 0 0.5rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      &.is-clamped {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+
+    .discovery-hero-desc-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--spt-amber);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 180ms ease, opacity 180ms ease;
+
+      &:hover {
+        opacity: 0.85;
       }
     }
 
