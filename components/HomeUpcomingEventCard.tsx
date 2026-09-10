@@ -54,7 +54,7 @@ export function HomeUpcomingEventCard({ event, locale = "en" }: Props) {
 
   return (
     <article className="upcoming-event-card-wrapper">
-      <Link href={detailHref} className="upcoming-event-card">
+      <Link href={detailHref} className="upcoming-event-card" draggable={false}>
         <div className="upcoming-event-media">
           <Image
             src={image}
@@ -62,6 +62,7 @@ export function HomeUpcomingEventCard({ event, locale = "en" }: Props) {
             fill
             sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 33vw"
             loading="lazy"
+            draggable={false}
           />
           <div className="upcoming-event-gradient" aria-hidden="true" />
         </div>
