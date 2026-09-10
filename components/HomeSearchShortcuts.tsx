@@ -126,7 +126,22 @@ export function HomeSearchShortcuts({ locale = "en", destinations, modeOnly }: {
         <div className="home-search-fields home-search-make-fields">
           <fieldset aria-label={copy.whenTravelling} role="radiogroup"><span className="home-search-question">{copy.whenTravelling}</span><label><input checked={makeType === "existTime"} name="makeType" onChange={() => setMakeType("existTime")} type="radio" /> {copy.exactTime}</label><label><input checked={makeType === "approximateTime"} name="makeType" onChange={() => setMakeType("approximateTime")} type="radio" /> {copy.approximateTime}</label><label><input checked={makeType === "notSureYet"} name="makeType" onChange={() => setMakeType("notSureYet")} type="radio" /> {copy.notSureYet}</label></fieldset>
           {makeType === "existTime" ? <><label><span>{copy.from}</span><DateTimeField name="fromDate" nativeType="date" placeholder={copy.selectStartDate} /></label><label><span>{copy.to}</span><DateTimeField name="toDate" nativeType="date" placeholder={copy.selectEndDate} /></label></> : null}
-          {makeType === "approximateTime" ? <label><span>{copy.selectMonth}</span><input name="month" required type="month" aria-label={copy.selectExpectedMonth} /></label> : null}
+          {makeType === "approximateTime" ? (
+            <label>
+              <span>{copy.selectMonth}</span>
+              <input
+                name="month"
+                required
+                type="month"
+                aria-label={copy.selectExpectedMonth}
+                onClick={(e) => {
+                  try {
+                    e.currentTarget.showPicker?.();
+                  } catch {}
+                }}
+              />
+            </label>
+          ) : null}
           {makeType === "notSureYet" ? <label><span>{copy.manyDays}</span><input min="1" name="days" required type="number" placeholder={copy.manyDays} /></label> : null}
           <button className="btn-primary" type="submit">{copy.makeTripShort}</button>
         </div>
