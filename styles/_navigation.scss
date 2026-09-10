@@ -1,6 +1,12 @@
 .site-shell-v2 .site-header {
-  background: color-mix(in srgb, var(--spt-surface-raised) 96%, transparent);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--spt-ink) 10%, transparent);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.site-shell-v2 .site-header > * {
+  pointer-events: auto;
 }
 
 .site-shell-v2 .site-header-modal-open {

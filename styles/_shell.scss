@@ -42,9 +42,15 @@
   top: 0;
   z-index: var(--spt-z-header);
   border: 0;
-  background: rgb(255 255 255 / 97%);
-  box-shadow: 0 1px 0 rgb(29 31 31 / 8%);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
   transition: background 240ms ease, box-shadow 240ms ease, padding 240ms ease;
+}
+
+.site-shell-v2 .site-header > * {
+  pointer-events: auto;
 }
 
 .site-shell-v2 .site-header-home {
