@@ -18,11 +18,12 @@ export function DestinationCard({
 }) {
   const slug = destination.slug || String(destination.id || "");
   const title = destination.title || destination.name || "Egypt Destination";
-  const image =
+  const rawImage =
     destination.featured_image ||
     destination.image ||
     destination.banner ||
     "/images/mainBanner.png";
+  const image = rawImage.startsWith("http") ? encodeURI(rawImage) : rawImage;
   const Heading = headingLevel === 3 ? "h3" : "h2";
 
   return (
