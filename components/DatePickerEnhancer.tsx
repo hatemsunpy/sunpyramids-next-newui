@@ -35,10 +35,12 @@ export function DatePickerEnhancer() {
       const target = event.target as HTMLElement | null;
       if (!target) return;
 
-      // 1. Direct click on date / datetime / time input
+      // 1. Direct click on date / month / week / datetime / time input
       if (target instanceof HTMLInputElement) {
         if (
           target.type === "date" ||
+          target.type === "month" ||
+          target.type === "week" ||
           target.type === "datetime-local" ||
           target.type === "time" ||
           target.getAttribute("data-native-type")
@@ -58,7 +60,7 @@ export function DatePickerEnhancer() {
         }
         if (!input) {
           input = label.querySelector<HTMLInputElement>(
-            'input[type="date"], input[type="datetime-local"], input[type="time"], input[data-native-type]'
+            'input[type="date"], input[type="month"], input[type="week"], input[type="datetime-local"], input[type="time"], input[data-native-type]'
           );
         }
         if (input) {
@@ -73,7 +75,7 @@ export function DatePickerEnhancer() {
       );
       if (container) {
         const input = container.querySelector<HTMLInputElement>(
-          'input[type="date"], input[type="datetime-local"], input[type="time"], input[data-native-type]'
+          'input[type="date"], input[type="month"], input[type="week"], input[type="datetime-local"], input[type="time"], input[data-native-type]'
         );
         if (input) {
           safeOpenPicker(input);
