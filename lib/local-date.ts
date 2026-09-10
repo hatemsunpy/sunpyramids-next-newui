@@ -47,11 +47,69 @@ export function formatCalendarDate(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-export function getYesterdayCalendarDate(referenceDate = new Date()): string {
-  const yesterday = new Date(
-    referenceDate.getFullYear(),
-    referenceDate.getMonth(),
-    referenceDate.getDate() - 1,
-  );
-  return formatCalendarDate(yesterday);
+/**
+ * Return current calendar year, month (1-based), and day in Africa/Cairo timezone.
+ */
+export function getCairoCalendarDate(referenceDate = new Date()): {
+  year: number;
+  month: number;
+  day: number;
+} {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Cairo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(referenceDate);
+
+  const year = Number(parts.find((p) => p.type === "year")?.value);
+  const month = Number(parts.find((p) => p.type === "month")?.value);
+  const day = Number(parts.find((p) => p.type === "day")?.value);
+
+  return { year, month, day };
 }
+
+/**
+ * Return yesterday's calendar date (YYYY-MM-DD) evaluated in Africa/Cairo timezone.
+ */
+export function getYesterdayCalendarDate(referenceDate = new Date()): string {
+  const { year, month, day } = getCairoCalendarDate(referenceDate);
+  const yesterdayDate = new Date(Date.UTC(year, month - 1, day - 1));
+  const y = yesterdayDate.getUTCFullYear();
+  const m = String(yesterdayDate.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(yesterdayDate.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/**
+ * Calculate the exact integer calendar day difference between an event date and
+ * today's calendar date in Africa/Cairo.
+ *
+ * Returns:
+ *  0: Event is today
+ *  1: Event is tomorrow
+ *  N: Event is in N days
+ *  <0: Event is in the past
+ *  null: Malformed date string
+ */
+export function getEventCountdownDays(
+  eventDateStr?: string,
+  referenceDate = new Date(),
+): number | null {
+  if (!eventDateStr) return null;
+  const match = /(\d{4})-(\d{1,2})-(\d{1,2})/.exec(eventDateStr);
+  if (!match) return null;
+
+  const eventYear = Number(match[1]);
+  const eventMonth = Number(match[2]);
+  const eventDay = Number(match[3]);
+
+  const { year: cairoYear, month: cairoMonth, day: cairoDay } =
+    getCairoCalendarDate(referenceDate);
+
+  const eventUtc = Date.UTC(eventYear, eventMonth - 1, eventDay);
+  const cairoUtc = Date.UTC(cairoYear, cairoMonth - 1, cairoDay);
+
+  return Math.round((eventUtc - cairoUtc) / 86400000);
+}
+
