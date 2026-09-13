@@ -45,6 +45,7 @@ export function HomePage({
   faqs,
   socialLinks,
   events = [],
+  rootCategories = [],
   locale = "en",
 }: {
   page: ApiPage | null;
@@ -56,6 +57,7 @@ export function HomePage({
   faqs: ApiPage[];
   socialLinks: SocialLink[];
   events?: ApiPage[];
+  rootCategories?: Pick<ApiPage, "slug" | "title" | "name">[];
   locale?: Locale;
 }) {
   const copy = homeCopy(locale);
@@ -96,7 +98,7 @@ export function HomePage({
       </section>
 
       <section className="home-search-bridge container-shell" aria-label="Search and plan your trip">
-        <HomeSearchShortcuts locale={locale} destinations={highlights} />
+        <HomeSearchShortcuts locale={locale} destinations={highlights} rootCategories={rootCategories} />
       </section>
 
       <section className="home-trust-rail container-shell" aria-label="Sun Pyramids Tours statistics">

@@ -12,6 +12,7 @@ type ActiveFilters = {
   destination?: string;
   title?: string;
   page?: number;
+  days?: number;
 };
 
 export function TripsFilterSidebar({
@@ -122,6 +123,8 @@ export function TripsFilterSidebar({
     if (next.main) params.set("main", next.main);
     if (next.destination) params.set("destination", next.destination);
     if (next.category) params.set("category", next.category);
+    // days is an independent AND constraint: filter interactions preserve it.
+    if (active.days) params.set("days", String(active.days));
 
     const qs = params.toString();
     return `${tripsPath}${qs ? `?${qs}` : ""}`;
@@ -133,6 +136,9 @@ export function TripsFilterSidebar({
     if (keyToRemove !== "main" && active.main) params.set("main", active.main);
     if (keyToRemove !== "destination" && active.destination) params.set("destination", active.destination);
     if (keyToRemove !== "category" && active.category) params.set("category", active.category);
+    // Removing a single pill preserves every other active constraint —
+    // including days, unless days itself is the pill being removed.
+    if (keyToRemove !== "days" && active.days) params.set("days", String(active.days));
     const qs = params.toString();
     return `${tripsPath}${qs ? `?${qs}` : ""}`;
   };
@@ -147,14 +153,23 @@ export function TripsFilterSidebar({
     (item) => String(item.id) === active.category,
   );
 
+  // The pill reflects what the user requested (e.g. "1 Day"); the unqualified
+  // days=1 Day Tour fallback remains internal API behavior, never a pill.
+  const durationLabel = active.days
+    ? (active.days === 1
+        ? copy.durationDay || "1 Day"
+        : (copy.durationDays || "{days} Days").replace("{days}", String(active.days)))
+    : "";
+
   const hasActiveFilters = Boolean(
-    active.main || active.destination || active.category || active.title,
+    active.main || active.destination || active.category || active.title || active.days,
   );
   const activeFilterCount = [
     active.main,
     active.destination,
     active.category,
     active.title,
+    active.days,
   ].filter(Boolean).length;
 
   // Filter sections markup shared between desktop sidebar and mobile sheet
@@ -374,6 +389,17 @@ export function TripsFilterSidebar({
               <span className="remove-x" aria-hidden="true">&times;</span>
             </Link>
           )}
+
+          {active.days ? (
+            <Link
+              href={clearFilterHref("days")}
+              className="active-tag"
+              title={`Remove filter "${durationLabel}"`}
+            >
+              <span>{durationLabel}</span>
+              <span className="remove-x" aria-hidden="true">&times;</span>
+            </Link>
+          ) : null}
 
           <Link href={tripsPath} className="clear-all-link">
             {copy.clearAll || "Clear all"}

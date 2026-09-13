@@ -8,6 +8,7 @@ import type { Locale } from "@/types/api";
 import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
 import { uiCopy } from "@/lib/ui-copy";
 import { homeCopy } from "@/lib/home-copy";
 import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
@@ -185,6 +186,12 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
   const [isTop, setIsTop] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  // Instance-local ownership for Basic Voice Search: each search form owns
+  // its refs, so a voice session can only ever touch its own input + form.
+  const desktopFormRef = useRef<HTMLFormElement>(null);
+  const desktopInputRef = useRef<HTMLInputElement>(null);
+  const mobileFormRef = useRef<HTMLFormElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
   const isHome = pathname === "/" || pathname === `/${locale}`;
   const firstStyle = isHome && isTop;
 
@@ -283,8 +290,9 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
           <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" className="header-logo">
             <Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={190} height={54} priority />
           </Link>
-          <form className="header-search" action={withLocale("/trips", locale)}>
-            <SearchIcon /><input name="title" placeholder={copy.search} aria-label={copy.search} />
+          <form className="header-search" action={withLocale("/trips", locale)} ref={desktopFormRef}>
+            <SearchIcon /><input name="title" ref={desktopInputRef} placeholder={copy.search} aria-label={copy.search} />
+            <VoiceSearchButton locale={locale} inputRef={desktopInputRef} formRef={desktopFormRef} />
           </form>
           <div className="header-actions">
             <LanguageCurrencyTrigger locale={locale} onClick={openLangModal} />
@@ -317,7 +325,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
               <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" onClick={closeMenu}><Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} /></Link>
               <button className="circle-action" type="button" onClick={closeMenu} aria-label="Close menu"><CloseIcon /></button>
             </div>
-            <form className="mobile-drawer-search" action={withLocale("/trips", locale)}><SearchIcon /><input name="title" placeholder={copy.search} aria-label={copy.search} /></form>
+            <form className="mobile-drawer-search" action={withLocale("/trips", locale)} ref={mobileFormRef}><SearchIcon /><input name="title" ref={mobileInputRef} placeholder={copy.search} aria-label={copy.search} /><VoiceSearchButton locale={locale} inputRef={mobileInputRef} formRef={mobileFormRef} /></form>
             <nav className="mobile-links" aria-label="Primary navigation">{renderPrimaryNavigation(true)}</nav>
             <div className="mobile-drawer-utilities">
               <ThemeToggle labels={currentThemeLabels} withLabel />
