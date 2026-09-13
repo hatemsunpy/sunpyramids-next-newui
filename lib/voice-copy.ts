@@ -95,10 +95,11 @@ const copies: Record<Locale, VoiceCopy> = {
   },
 };
 
-export const smartVoiceKeys = ["findTripVoice", "smartProcessing", "reviewReady", "heard", "applied", "recognized", "didYouMean", "chooseOne", "notFilter", "remainingRequired", "noMatch", "destination", "duration", "category", "origin", "month", "travelers", "privacy", "private", "group", "adults", "children", "days", "removeCategory", "reviewInfo"] as const;
+export const smartVoiceKeys = ["findTripVoice", "smartProcessing", "reviewReady", "heard", "applied", "recognized", "didYouMean", "chooseOne", "notFilter", "remainingRequired", "noMatch", "destination", "duration", "category", "origin", "month", "travelers", "privacy", "private", "group", "adults", "children", "days", "removeCategory", "reviewInfo", "headerVoiceReview", "resolverUnavailable", "ignoreVoiceFilter", "dismissVoiceReview", "noVoiceFilters"] as const;
 type SmartVoiceCopy = Record<(typeof smartVoiceKeys)[number], string>;
 const smartCopies: Record<Locale, SmartVoiceCopy> = {
   en: {
+    headerVoiceReview: "Confirm your voice search", resolverUnavailable: "Smart search is unavailable. Your spoken text is in the search field; you can edit it and submit manually.", ignoreVoiceFilter: "Ignore this filter", dismissVoiceReview: "Dismiss", noVoiceFilters: "No filters selected. Edit the text search or try voice again.",
     findTripVoice: "Find trip by voice", smartProcessing: "Matching trip filters…", reviewReady: "Review your trip filters before searching.",
     heard: "Heard", applied: "Current trip filters", recognized: "Recognized information and suggestions", didYouMean: "Did you mean", chooseOne: "Choose one",
     notFilter: "Not applied as a filter", remainingRequired: "Choose the remaining required fields before searching.", noMatch: "We couldn't match this to the available trip filters.",
@@ -107,6 +108,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Only current trip filters affect your search. Confirm suggestions to apply them; edit destination and duration in the fields above.",
   },
   fr: {
+    headerVoiceReview: "Confirmez votre recherche vocale", resolverUnavailable: "La recherche intelligente est indisponible. Votre texte est dans le champ de recherche ; vous pouvez le modifier et rechercher manuellement.", ignoreVoiceFilter: "Ignorer ce filtre", dismissVoiceReview: "Fermer", noVoiceFilters: "Aucun filtre sélectionné. Modifiez la recherche textuelle ou réessayez à la voix.",
     findTripVoice: "Trouver un voyage à la voix", smartProcessing: "Recherche des filtres de voyage…", reviewReady: "Vérifiez vos filtres avant de rechercher.",
     heard: "Texte entendu", applied: "Filtres actuels du voyage", recognized: "Informations reconnues et suggestions", didYouMean: "Vouliez-vous dire", chooseOne: "Choisissez une option",
     notFilter: "Non appliqué comme filtre", remainingRequired: "Complétez les champs obligatoires restants avant de rechercher.", noMatch: "Nous n'avons pas pu associer ce texte aux filtres disponibles.",
@@ -115,6 +117,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Seuls les filtres actuels influencent la recherche. Confirmez les suggestions pour les appliquer ; modifiez la destination et la durée dans les champs ci-dessus.",
   },
   de: {
+    headerVoiceReview: "Bestätigen Sie Ihre Sprachsuche", resolverUnavailable: "Die intelligente Suche ist nicht verfügbar. Ihr gesprochener Text steht im Suchfeld; Sie können ihn bearbeiten und manuell suchen.", ignoreVoiceFilter: "Diesen Filter ignorieren", dismissVoiceReview: "Schließen", noVoiceFilters: "Keine Filter ausgewählt. Bearbeiten Sie den Suchtext oder versuchen Sie die Sprachsuche erneut.",
     findTripVoice: "Reise per Sprache finden", smartProcessing: "Reisefilter werden zugeordnet…", reviewReady: "Prüfen Sie Ihre Reisefilter vor der Suche.",
     heard: "Gehört", applied: "Aktuelle Reisefilter", recognized: "Erkannte Angaben und Vorschläge", didYouMean: "Meinten Sie", chooseOne: "Wählen Sie eine Option",
     notFilter: "Nicht als Filter angewendet", remainingRequired: "Füllen Sie vor der Suche die übrigen Pflichtfelder aus.", noMatch: "Wir konnten diese Angaben keinem verfügbaren Reisefilter zuordnen.",
@@ -123,6 +126,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Nur aktuelle Reisefilter beeinflussen die Suche. Bestätigen Sie Vorschläge, um sie anzuwenden; ändern Sie Reiseziel und Dauer in den Feldern oben.",
   },
   it: {
+    headerVoiceReview: "Conferma la ricerca vocale", resolverUnavailable: "La ricerca intelligente non è disponibile. Il testo pronunciato è nel campo di ricerca; puoi modificarlo e cercare manualmente.", ignoreVoiceFilter: "Ignora questo filtro", dismissVoiceReview: "Chiudi", noVoiceFilters: "Nessun filtro selezionato. Modifica la ricerca testuale o riprova con la voce.",
     findTripVoice: "Trova un viaggio con la voce", smartProcessing: "Associazione dei filtri di viaggio…", reviewReady: "Controlla i filtri prima di cercare.",
     heard: "Testo ascoltato", applied: "Filtri attuali del viaggio", recognized: "Informazioni riconosciute e suggerimenti", didYouMean: "Intendevi", chooseOne: "Scegli un'opzione",
     notFilter: "Non applicato come filtro", remainingRequired: "Completa i campi obbligatori rimanenti prima di cercare.", noMatch: "Non siamo riusciti ad associare questo testo ai filtri disponibili.",
@@ -131,6 +135,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Solo i filtri attuali influenzano la ricerca. Conferma i suggerimenti per applicarli; modifica destinazione e durata nei campi sopra.",
   },
   pt: {
+    headerVoiceReview: "Confirme a pesquisa por voz", resolverUnavailable: "A pesquisa inteligente está indisponível. O texto falado está no campo de pesquisa; pode editá-lo e pesquisar manualmente.", ignoreVoiceFilter: "Ignorar este filtro", dismissVoiceReview: "Fechar", noVoiceFilters: "Nenhum filtro selecionado. Edite a pesquisa de texto ou tente novamente por voz.",
     findTripVoice: "Encontrar viagem por voz", smartProcessing: "A associar filtros de viagem…", reviewReady: "Reveja os filtros antes de pesquisar.",
     heard: "Texto ouvido", applied: "Filtros atuais da viagem", recognized: "Informações reconhecidas e sugestões", didYouMean: "Quis dizer", chooseOne: "Escolha uma opção",
     notFilter: "Não aplicado como filtro", remainingRequired: "Preencha os campos obrigatórios restantes antes de pesquisar.", noMatch: "Não conseguimos associar este texto aos filtros disponíveis.",
@@ -139,6 +144,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Só os filtros atuais afetam a pesquisa. Confirme as sugestões para as aplicar; altere o destino e a duração nos campos acima.",
   },
   es: {
+    headerVoiceReview: "Confirma la búsqueda por voz", resolverUnavailable: "La búsqueda inteligente no está disponible. El texto hablado está en el campo de búsqueda; puedes editarlo y buscar manualmente.", ignoreVoiceFilter: "Ignorar este filtro", dismissVoiceReview: "Cerrar", noVoiceFilters: "No hay filtros seleccionados. Edita la búsqueda de texto o prueba la voz de nuevo.",
     findTripVoice: "Encontrar viaje por voz", smartProcessing: "Buscando filtros de viaje…", reviewReady: "Revisa los filtros antes de buscar.",
     heard: "Texto escuchado", applied: "Filtros actuales del viaje", recognized: "Información reconocida y sugerencias", didYouMean: "Quisiste decir", chooseOne: "Elige una opción",
     notFilter: "No aplicado como filtro", remainingRequired: "Completa los campos obligatorios restantes antes de buscar.", noMatch: "No pudimos asociar este texto con los filtros disponibles.",
@@ -147,6 +153,7 @@ const smartCopies: Record<Locale, SmartVoiceCopy> = {
     reviewInfo: "Solo los filtros actuales afectan la búsqueda. Confirma las sugerencias para aplicarlas; modifica el destino y la duración en los campos de arriba.",
   },
   zh: {
+    headerVoiceReview: "请确认语音搜索", resolverUnavailable: "智能搜索暂不可用。识别的文字已放入搜索框，您可以编辑后手动搜索。", ignoreVoiceFilter: "忽略此筛选条件", dismissVoiceReview: "关闭", noVoiceFilters: "未选择筛选条件。请编辑搜索文字或再次使用语音。",
     findTripVoice: "语音查找行程", smartProcessing: "正在匹配行程筛选条件…", reviewReady: "搜索前请核对行程筛选条件。",
     heard: "识别到的语音", applied: "当前行程筛选条件", recognized: "识别的信息和建议", didYouMean: "您是指", chooseOne: "请选择一项",
     notFilter: "未用作筛选条件", remainingRequired: "搜索前请填写其余必填项。", noMatch: "未能将此语音匹配到可用的行程筛选条件。",
