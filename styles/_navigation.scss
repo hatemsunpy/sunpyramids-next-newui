@@ -100,6 +100,116 @@
   font: inherit;
 }
 
+.site-shell-v2 :is(.header-search, .mobile-drawer-search) {
+  position: relative;
+}
+
+.site-shell-v2 .voice-mic {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--spt-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.site-shell-v2 .voice-mic > svg {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+}
+
+.site-shell-v2 .voice-mic:hover {
+  border-color: var(--spt-anchor);
+  background: var(--spt-anchor-soft);
+  color: var(--spt-link);
+}
+
+.site-shell-v2 .voice-mic:focus-visible {
+  outline: 2px solid var(--spt-focus);
+  outline-offset: 2px;
+}
+
+.site-shell-v2 .voice-mic[aria-pressed="true"] {
+  border-color: var(--spt-amber);
+  background: var(--spt-anchor-soft);
+  color: var(--spt-amber-hover);
+}
+
+.site-shell-v2 .voice-mic.has-error {
+  border-color: var(--spt-danger-text);
+  color: var(--spt-danger-text);
+}
+
+.site-shell-v2 .voice-mic-dot {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--spt-amber);
+  animation: voice-mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes voice-mic-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+.site-shell-v2 .voice-status {
+  position: absolute;
+  top: calc(100% + 6px);
+  inset-inline-end: 0;
+  z-index: 5;
+  max-width: min(280px, 70vw);
+  border: 1px solid var(--spt-border);
+  border-radius: var(--spt-radius-sm);
+  background: var(--spt-surface-raised);
+  color: var(--spt-ink);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  padding: 0.5rem 0.65rem;
+}
+
+.site-shell-v2 .voice-status--error {
+  border-color: var(--spt-danger-text);
+}
+
+.site-shell-v2 .voice-status-preview {
+  color: var(--spt-muted);
+  font-style: italic;
+}
+
+.site-shell-v2 .voice-status-retry {
+  border: 0;
+  background: none;
+  color: var(--spt-link);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-shell-v2 .voice-mic-dot {
+    animation: none;
+  }
+
+  .site-shell-v2 .voice-mic {
+    transition: none;
+  }
+}
+
 .site-shell-v2 .header-actions {
   display: flex;
   align-items: center;

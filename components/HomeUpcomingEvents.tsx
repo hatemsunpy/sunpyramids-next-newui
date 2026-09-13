@@ -34,24 +34,28 @@ export function HomeUpcomingEvents({ events, locale = "en" }: Props) {
   return (
     <section className="home-upcoming-events-section" aria-labelledby="upcoming-events-title">
       <div className="container-shell">
-        <div className="upcoming-events-header">
-          <div className="upcoming-events-header-text">
-            {copy.upcomingEventsEyebrow && (
-              <span className="upcoming-events-eyebrow">
-                {copy.upcomingEventsEyebrow}
-              </span>
-            )}
-            <h2 id="upcoming-events-title" className="upcoming-events-title">
-              {copy.upcomingEventsTitle}
-            </h2>
-            {copy.upcomingEventsDescription && (
-              <p className="upcoming-events-description">
-                {copy.upcomingEventsDescription}
-              </p>
-            )}
-          </div>
-
-          <div className="upcoming-events-header-actions">
+        <HomeUpcomingEventsCarousel
+          totalItems={validEvents.length}
+          prevAriaLabel={copy.previousEvents}
+          nextAriaLabel={copy.nextEvents}
+          header={
+            <div className="upcoming-events-header-text">
+              {copy.upcomingEventsEyebrow && (
+                <span className="upcoming-events-eyebrow">
+                  {copy.upcomingEventsEyebrow}
+                </span>
+              )}
+              <h2 id="upcoming-events-title" className="upcoming-events-title">
+                {copy.upcomingEventsTitle}
+              </h2>
+              {copy.upcomingEventsDescription && (
+                <p className="upcoming-events-description">
+                  {copy.upcomingEventsDescription}
+                </p>
+              )}
+            </div>
+          }
+          viewAllLink={
             <Link href={allEventsHref} className="upcoming-events-view-all-link">
               <span>{copy.viewAllEvents}</span>
               <svg
@@ -69,13 +73,7 @@ export function HomeUpcomingEvents({ events, locale = "en" }: Props) {
                 <polyline points="12 5 19 12 12 19" />
               </svg>
             </Link>
-          </div>
-        </div>
-
-        <HomeUpcomingEventsCarousel
-          totalItems={validEvents.length}
-          prevAriaLabel={copy.previousEvents}
-          nextAriaLabel={copy.nextEvents}
+          }
         >
           {validEvents.map((event) => (
             <HomeUpcomingEventCard

@@ -14,6 +14,7 @@ type ActiveFilters = {
   destination?: string;
   title?: string;
   page?: number;
+  days?: number;
 };
 
 export function TripsPage({
@@ -45,6 +46,7 @@ export function TripsPage({
   if (active.main) paginationQuery.set("main", active.main);
   if (active.destination) paginationQuery.set("destination", active.destination);
   if (active.category) paginationQuery.set("category", active.category);
+  if (active.days) paginationQuery.set("days", String(active.days));
 
   const totalCount = meta?.total ?? tours.length;
   const currentPage = active.page || 1;
