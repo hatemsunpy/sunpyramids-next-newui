@@ -65,7 +65,9 @@ class FakeRecognition {
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
+  useRouter: () => ({ push: routerPush }),
 }));
+const routerPush = vi.fn();
 
 vi.mock("next/link", () => ({
   default: ({ href, children, ...rest }: { href: string; children: React.ReactNode } & Record<string, unknown>) => {
@@ -93,6 +95,7 @@ function stubSubmit(form: HTMLFormElement) {
 }
 
 beforeEach(() => {
+  vi.stubGlobal("fetch", vi.fn(async () => Response.json({ mode: "title" })));
   FakeRecognition.instances = [];
   Object.defineProperty(window, "SpeechRecognition", {
     value: FakeRecognition,
@@ -103,6 +106,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
   delete (window as unknown as Record<string, unknown>).SpeechRecognition;
 });
 
@@ -121,7 +125,7 @@ describe("Header Basic Voice Search — desktop wiring", () => {
     expect(FakeRecognition.instances).toHaveLength(1);
     expect(FakeRecognition.instances[0].lang).toBe("en-US");
 
-    act(() => FakeRecognition.instances[0].emitFinal("nile cruise"));
+    await act(async () => FakeRecognition.instances[0].emitFinal("nile cruise"));
     expect(input.value).toBe("nile cruise");
     expect(submit).toHaveBeenCalledTimes(1);
 
@@ -167,7 +171,7 @@ describe("Header Basic Voice Search — mobile drawer wiring", () => {
     fireEvent.click(within(mobile).getByRole("button", { name: /search by voice/i }));
 
     expect(FakeRecognition.instances).toHaveLength(1);
-    act(() => FakeRecognition.instances[0].emitFinal("luxor"));
+    await act(async () => FakeRecognition.instances[0].emitFinal("luxor"));
     expect(mobileInput.value).toBe("luxor");
     expect(submit).toHaveBeenCalledTimes(1);
   });
@@ -185,14 +189,14 @@ describe("Header Basic Voice Search — mobile drawer wiring", () => {
 
     // Mobile session.
     fireEvent.click(within(mobile).getByRole("button", { name: /search by voice/i }));
-    act(() => FakeRecognition.instances[0].emitFinal("aswan"));
+    await act(async () => FakeRecognition.instances[0].emitFinal("aswan"));
     expect(mobileSubmit).toHaveBeenCalledTimes(1);
     expect(desktopSubmit).not.toHaveBeenCalled();
     expect(desktopInput.value).toBe("");
 
     // Desktop session.
     fireEvent.click(within(desktop).getByRole("button", { name: /search by voice/i }));
-    act(() => FakeRecognition.instances[1].emitFinal("cairo"));
+    await act(async () => FakeRecognition.instances[1].emitFinal("cairo"));
     expect(desktopSubmit).toHaveBeenCalledTimes(1);
     expect(desktopInput.value).toBe("cairo");
     expect(mobileSubmit).toHaveBeenCalledTimes(1);

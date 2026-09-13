@@ -186,7 +186,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
   const [isTop, setIsTop] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
-  // Instance-local ownership for Basic Voice Search: each search form owns
+  // Instance-local ownership for Header Voice: each search form owns
   // its refs, so a voice session can only ever touch its own input + form.
   const desktopFormRef = useRef<HTMLFormElement>(null);
   const desktopInputRef = useRef<HTMLInputElement>(null);
@@ -250,7 +250,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
     };
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
   const openLangModal = useCallback(() => setLangOpen(true), []);
   const closeLangModal = useCallback(() => setLangOpen(false), []);
 
@@ -292,7 +292,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
           </Link>
           <form className="header-search" action={withLocale("/trips", locale)} ref={desktopFormRef}>
             <SearchIcon /><input name="title" ref={desktopInputRef} placeholder={copy.search} aria-label={copy.search} />
-            <VoiceSearchButton locale={locale} inputRef={desktopInputRef} formRef={desktopFormRef} />
+            <VoiceSearchButton key={locale} locale={locale} inputRef={desktopInputRef} formRef={desktopFormRef} />
           </form>
           <div className="header-actions">
             <LanguageCurrencyTrigger locale={locale} onClick={openLangModal} />
@@ -325,7 +325,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
               <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" onClick={closeMenu}><Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} /></Link>
               <button className="circle-action" type="button" onClick={closeMenu} aria-label="Close menu"><CloseIcon /></button>
             </div>
-            <form className="mobile-drawer-search" action={withLocale("/trips", locale)} ref={mobileFormRef}><SearchIcon /><input name="title" ref={mobileInputRef} placeholder={copy.search} aria-label={copy.search} /><VoiceSearchButton locale={locale} inputRef={mobileInputRef} formRef={mobileFormRef} /></form>
+            <form className="mobile-drawer-search" action={withLocale("/trips", locale)} ref={mobileFormRef}><SearchIcon /><input name="title" ref={mobileInputRef} placeholder={copy.search} aria-label={copy.search} /><VoiceSearchButton key={locale} locale={locale} inputRef={mobileInputRef} formRef={mobileFormRef} onNavigate={closeMenu} /></form>
             <nav className="mobile-links" aria-label="Primary navigation">{renderPrimaryNavigation(true)}</nav>
             <div className="mobile-drawer-utilities">
               <ThemeToggle labels={currentThemeLabels} withLabel />

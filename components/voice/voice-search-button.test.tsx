@@ -1,9 +1,15 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { useRef } from "react";
 import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
 import { createFakeRecorder, type FakeRecorder } from "@/tests/test-utils/fake-speech-recognizer";
 import type { Locale } from "@/types/api";
+
+const navigation = vi.hoisted(() => ({ push: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => navigation }));
+// Lifecycle tests exercise the internal resolver's explicit title-fallback response.
+// Full parser/taxonomy integration is covered in header-smart-voice.test.tsx.
+beforeEach(() => vi.stubGlobal("fetch", vi.fn(async () => Response.json({ mode: "title" }))));
 
 // Component tests for Basic Voice Search micro behavior. Every voice event
 // comes from the fake recognizer — no microphone, no permissions, no network.
@@ -56,6 +62,7 @@ function mic(container: HTMLElement, name = /search by voice/i) {
 
 afterEach(() => {
   cleanup();
+  vi.unstubAllGlobals();
 });
 
 describe("VoiceSearchButton — render/support", () => {
@@ -84,7 +91,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     expect(recorder.startAttempts()).toBe(1);
 
     act(() => recorder.emitStart());
-    act(() => recorder.emitResult({ transcript: "nile cruise", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "nile cruise", isFinal: true }));
 
     expect(input.value).toBe("nile cruise");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
@@ -96,7 +103,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     fireEvent.change(input, { target: { value: "old text" } });
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
-    act(() => recorder.emitResult({ transcript: "new query", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "new query", isFinal: true }));
     expect(input.value).toBe("new query");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
@@ -111,7 +118,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     expect(requestSubmit).not.toHaveBeenCalled();
     expect(input.value).toBe("");
 
-    act(() => recorder.emitResult({ transcript: "Nile cruise Egypt", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "Nile cruise Egypt", isFinal: true }));
     expect(input.value).toBe("Nile cruise Egypt");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
@@ -122,7 +129,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     await flushDetection();
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
-    act(() => recorder.emitResult({ transcript: "cairo", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "cairo", isFinal: true }));
     expect(requestSubmit).toHaveBeenCalledTimes(1);
 
     ui.rerender(
@@ -140,13 +147,13 @@ describe("VoiceSearchButton — final-result flow", () => {
     await flushDetection();
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
-    act(() => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
     act(() => recorder.emitEnd());
     expect(requestSubmit).toHaveBeenCalledTimes(1);
 
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
-    act(() => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
     expect(requestSubmit).toHaveBeenCalledTimes(2);
   });
 
@@ -168,7 +175,7 @@ describe("VoiceSearchButton — stop/cancel", () => {
     fireEvent.click(within(container).getByRole("button", { name: /stop listening/i }));
     expect(recorder.stopCalls()).toBe(1);
 
-    act(() => recorder.emitResult({ transcript: "aswan", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "aswan", isFinal: true }));
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
 
@@ -265,7 +272,7 @@ describe("VoiceSearchButton — cross-instance isolation", () => {
 
     fireEvent.click(within(slotA).getByRole("button", { name: /search by voice/i }));
     act(() => recA.emitStart());
-    act(() => recA.emitResult({ transcript: "giza", isFinal: true }));
+    await act(async () => recA.emitResult({ transcript: "giza", isFinal: true }));
 
     expect(inputA.value).toBe("giza");
     expect(submitA).toHaveBeenCalledTimes(1);
@@ -275,7 +282,7 @@ describe("VoiceSearchButton — cross-instance isolation", () => {
     // Reverse direction.
     fireEvent.click(within(slotB).getByRole("button", { name: /search by voice/i }));
     act(() => recB.emitStart());
-    act(() => recB.emitResult({ transcript: "luxor", isFinal: true }));
+    await act(async () => recB.emitResult({ transcript: "luxor", isFinal: true }));
 
     expect(inputB.value).toBe("luxor");
     expect(submitB).toHaveBeenCalledTimes(1);
@@ -301,7 +308,7 @@ describe("VoiceSearchButton — manual submit invalidates pending voice session"
     expect(recorder.abortCalls()).toBe(1);
 
     // Late voice result after the manual submission must not submit again.
-    act(() => recorder.emitResult({ transcript: "late voice", isFinal: true }));
+    await act(async () => recorder.emitResult({ transcript: "late voice", isFinal: true }));
     act(() => recorder.emitEnd());
     expect(manualSubmits).toBe(1);
     expect(requestSubmit).not.toHaveBeenCalled();
