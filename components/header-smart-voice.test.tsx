@@ -16,7 +16,7 @@ vi.mock("@/lib/voice/browser-speech-recognizer", () => ({
 
 let api: ReturnType<typeof createHeaderVoiceApiFixture>;
 beforeEach(() => { boundary.recorder = createFakeRecorder(); boundary.push.mockClear(); api = createHeaderVoiceApiFixture(); vi.stubGlobal("fetch", vi.fn(api.fetch)); });
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 async function flushDetection() { await act(async () => { await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve())); }); }
 async function setup(locale: Locale = "en") {
@@ -26,13 +26,106 @@ async function setup(locale: Locale = "en") {
   const submit = vi.fn(); desktop.requestSubmit = submit;
   return { desktop, input, submit };
 }
-async function say(form: HTMLFormElement, transcript: string) {
-  fireEvent.click(within(form).getByRole("button", { name: /search by voice/i }));
-  await act(async () => { boundary.recorder!.emitStart(); boundary.recorder!.emitResult({ transcript, isFinal: true }); boundary.recorder!.emitEnd(); });
+async function say(form: HTMLFormElement, transcript: string, locale: Locale = "en") {
+  fireEvent.click(within(form).getByRole("button", { name: voiceCopy(locale).voiceSearch }));
+  await act(async () => { boundary.recorder!.emitStart(); boundary.recorder!.emitResult({ transcript, isFinal: true }); });
+  fireEvent.click(within(form).getByRole("button", { name: voiceCopy(locale).stopListening }));
+  await act(async () => { boundary.recorder!.emitEnd(); });
 }
 function lastFilters() { return Object.fromEntries(new URL(boundary.push.mock.calls.at(-1)![0], "https://fixture.test").searchParams); }
 
 describe("Header Smart Voice — reported structured search defect", () => {
+  it("a simple command resolves once after quiet and the native final drain", async () => {
+    const ui = await setup(); vi.useFakeTimers();
+    fireEvent.click(within(ui.desktop).getByRole("button", { name: /search by voice/i }));
+    await act(async () => {
+      boundary.recorder!.emitStart();
+      boundary.recorder!.emitResult({ transcript: "5 days Cairo", isFinal: true });
+      await vi.advanceTimersByTimeAsync(800);
+    });
+    expect(boundary.recorder!.stopCalls()).toBe(1); expect(api.applicationRequests).toHaveLength(0);
+    await act(async () => { boundary.recorder!.emitEnd(); });
+    await act(async () => { boundary.recorder!.emitEnd(); await vi.advanceTimersByTimeAsync(30_000); });
+    expect(api.applicationRequests).toHaveLength(1); expect(boundary.push).toHaveBeenCalledOnce();
+    expect(lastFilters()).toEqual({ days: "5", destination: "cairo" });
+  });
+
+  it("desktop capture and mobile capture keep independent pending transcripts", async () => {
+    const ui = await setup();
+    fireEvent.click(within(ui.desktop).getByRole("button", { name: /search by voice/i }));
+    const desktopSession = boundary.recorder!.lastSession();
+    await act(async () => { boundary.recorder!.emitStart(); boundary.recorder!.emitResult({ transcript: "5 days Cairo", isFinal: true }); });
+    fireEvent.click(screen.getByRole("button", { name: "Open menu" })); await flushDetection();
+    const mobile = document.querySelector<HTMLFormElement>(".mobile-drawer-search")!;
+    await say(mobile, "3 days Luxor");
+    expect(api.applicationRequests).toHaveLength(1);
+    expect(JSON.parse(api.applicationRequests[0].body as string).transcript).toBe("3 days Luxor");
+    fireEvent.click(within(ui.desktop).getByRole("button", { name: /stop listening/i }));
+    await act(async () => { boundary.recorder!.emitEnd(desktopSession); });
+    expect(api.applicationRequests).toHaveLength(2);
+    expect(JSON.parse(api.applicationRequests[1].body as string).transcript).toBe("5 days Cairo");
+    expect(boundary.push).toHaveBeenCalledTimes(2);
+  });
+
+  it.each(["Escape", "unmount"])("%s during captured continuation prevents all late resolver calls", async (action) => {
+    const ui = await setup(); vi.useFakeTimers();
+    const button = within(ui.desktop).getByRole("button", { name: /search by voice/i });
+    fireEvent.click(button);
+    await act(async () => {
+      boundary.recorder!.emitStart();
+      boundary.recorder!.emitResult({ transcript: "5 day Nile cruise", isFinal: true });
+      boundary.recorder!.emitEnd();
+    });
+    if (action === "Escape") fireEvent.keyDown(button, { key: "Escape" });
+    else cleanup();
+    await act(async () => {
+      boundary.recorder!.emitResult({ transcript: "to Aswan", isFinal: true });
+      boundary.recorder!.emitEnd();
+      await vi.advanceTimersByTimeAsync(30_000);
+    });
+    expect(api.applicationRequests).toHaveLength(0); expect(boundary.push).not.toHaveBeenCalled();
+  });
+
+  it("identical structured commands in two explicit mic sessions resolve independently", async () => {
+    const ui = await setup();
+    await say(ui.desktop, "5 days Cairo");
+    expect(api.applicationRequests).toHaveLength(1);
+    await say(ui.desktop, "5 days Cairo");
+    expect(api.applicationRequests).toHaveLength(2); expect(boundary.push).toHaveBeenCalledTimes(2);
+    expect(api.applicationRequests.map((request) => JSON.parse(request.body as string))).toEqual([
+      { transcript: "5 days Cairo", locale: "en" }, { transcript: "5 days Cairo", locale: "en" },
+    ]);
+    expect(lastFilters()).toEqual({ days: "5", destination: "cairo" });
+  });
+
+  it("assembles an ended first segment and a short continuation before one resolver POST", async () => {
+    const ui = await setup();
+    vi.useFakeTimers();
+    try {
+      fireEvent.click(within(ui.desktop).getByRole("button", { name: /search by voice/i }));
+      await act(async () => {
+        boundary.recorder!.emitStart();
+        boundary.recorder!.emitResult({ transcript: "5 day Nile cruise", isFinal: true });
+        boundary.recorder!.emitEnd();
+      });
+      expect(fetch).not.toHaveBeenCalled();
+      await act(async () => { await vi.advanceTimersByTimeAsync(200); });
+      await act(async () => {
+        boundary.recorder!.emitStart();
+        boundary.recorder!.emitResult({ transcript: "to Aswan", isFinal: true });
+        boundary.recorder!.emitEnd();
+        await vi.advanceTimersByTimeAsync(1000);
+      });
+      expect(vi.mocked(fetch).mock.calls.filter(([url]) => url === "/api/voice/resolve")).toHaveLength(1);
+      expect(JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string)).toEqual({
+        transcript: "5 day Nile cruise to Aswan", locale: "en",
+      });
+      expect(lastFilters()).toEqual({ days: "5", destination: "aswan", main: "nile-cruises" });
+    } finally {
+      cleanup(); vi.useRealTimers();
+    }
+  });
+
   it.each([
     ["5 days Cairo", { days: "5", destination: "cairo" }],
     ["Cairo 5 days", { days: "5", destination: "cairo" }],
@@ -50,6 +143,23 @@ describe("Header Smart Voice — reported structured search defect", () => {
       expect(request.options?.cache).toBe("force-cache"); expect(request.options?.next?.revalidate).toBe(300);
       expect(request.options?.body).toBeUndefined(); expect(request.url).not.toContain(transcript);
     }
+  });
+
+  it("an incomplete but valid ASR transcript immediately uses only the safe structured subset", async () => {
+    const ui = await setup();
+    const resolver = vi.fn(async () => Response.json({
+      mode: "structured",
+      applicable: { days: "5", main: "nile-cruises" },
+      decisions: [],
+    }));
+    vi.stubGlobal("fetch", resolver);
+
+    await say(ui.desktop, "5 day Nile cruise");
+
+    expect(lastFilters()).toEqual({ days: "5", main: "nile-cruises" });
+    expect(boundary.push).toHaveBeenCalledOnce();
+    expect(ui.submit).not.toHaveBeenCalled();
+    expect(resolver).toHaveBeenCalledOnce();
   });
 
   it("an explicit no-structured-intent response permits ordinary title fallback", async () => {
@@ -128,14 +238,26 @@ describe("Header Smart Voice — reported structured search defect", () => {
     expect(ui.submit).not.toHaveBeenCalled(); expect(mobileSubmit).not.toHaveBeenCalled();
   });
 
-  it("French Voice preserves localized routing and the explicit speech language", async () => {
-    const ui = await setup("fr");
-    fireEvent.click(within(ui.desktop).getByRole("button", { name: voiceCopy("fr").voiceSearch }));
-    await act(async () => { boundary.recorder!.emitResult({ transcript: "5 jours Le Caire", isFinal: true }); boundary.recorder!.emitEnd(); });
-    await waitFor(() => expect(boundary.push).toHaveBeenCalledOnce());
-    expect(new URL(boundary.push.mock.calls[0][0], "https://fixture.test").pathname).toBe("/fr/trips");
-    expect(lastFilters()).toEqual({ days: "5", destination: "cairo" });
-    expect(boundary.recorder!.lastSession()!.lang).toBe("fr-FR");
+  it.each([
+    ["fr", "5 jours Le Caire", "fr-FR"],
+    ["de", "5 Tage Kairo", "de-DE"],
+    ["it", "5 giorni Cairo", "it-IT"],
+    ["pt", "5 dias Cairo", "pt-PT"],
+    ["es", "5 días El Cairo", "es-ES"],
+    ["zh", "开罗五天", "zh-CN"],
+  ] satisfies [Locale, string, string][])("%s Header Voice uses localized Basic Auto without the resolver", async (locale, transcript, language) => {
+    const ui = await setup(locale);
+
+    await say(ui.desktop, transcript, locale);
+
+    expect(ui.desktop.getAttribute("action")).toBe(`/${locale}/trips`);
+    expect(ui.input.value).toBe(transcript);
+    expect(ui.submit).toHaveBeenCalledOnce();
+    expect(boundary.push).not.toHaveBeenCalled();
+    expect(api.applicationRequests).toHaveLength(0);
+    expect(api.upstreamRequests).toHaveLength(0);
+    expect(fetch).not.toHaveBeenCalled();
+    expect(boundary.recorder!.lastSession()!.lang).toBe(language);
   });
 
   it("manual input during a pending resolution cancels it and stale response cannot navigate", async () => {

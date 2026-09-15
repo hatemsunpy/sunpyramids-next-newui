@@ -6,9 +6,11 @@ import { withLocale } from "@/lib/locales";
 import type { HeaderVoiceFilters, HeaderVoiceResolution } from "@/lib/header-voice-resolution";
 import { browserRecognizerFactory, isSpeechRecognitionSupported } from "@/lib/voice/browser-speech-recognizer";
 import { useSpeechRecognition } from "@/lib/voice/use-speech-recognition";
+import { HEADER_COMMAND_CAPTURE } from "@/lib/voice/command-speech-recognizer";
 import type { RecognizerFactory } from "@/lib/voice/speech-recognizer";
 import type { SpeechErrorCode } from "@/lib/voice/types";
 import { voiceCopy } from "@/lib/voice-copy";
+import { voiceReleasePolicy } from "@/lib/voice-release-policy";
 import type { Locale } from "@/types/api";
 
 export type VoiceSearchButtonProps = {
@@ -67,6 +69,7 @@ export function VoiceSearchButton({
     locale,
     factory ?? browserRecognizerFactory,
     isSupported ?? isSpeechRecognitionSupported,
+    HEADER_COMMAND_CAPTURE,
   );
   const { supported, status, interimTranscript, finalTranscript, error, start, stop, cancel } = voice;
   const statusId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -84,7 +87,7 @@ export function VoiceSearchButton({
 
   const active = status === "listening" || status === "starting";
 
-  // Final and onEnd can share a React batch. Resolve the final transcript
+  // Command final and onEnd can share a React batch. Resolve the transcript
   // independently of lifecycle status; stale requests cannot navigate.
   useEffect(() => {
     const text = finalTranscript.trim();
@@ -99,6 +102,11 @@ export function VoiceSearchButton({
     Promise.resolve().then(async () => {
       if (disposed) return;
       submittedSessionRef.current = session;
+      if (voiceReleasePolicy[locale].header === "basic-auto") {
+        input.value = text;
+        form.requestSubmit();
+        return;
+      }
       requestRef.current = controller;
       setResolving(true);
       const response = await fetch("/api/voice/resolve", {

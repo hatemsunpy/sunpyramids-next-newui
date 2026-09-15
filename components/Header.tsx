@@ -106,10 +106,6 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
   }, [open]);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     return () => {
       clearCloseTimeout();
     };
@@ -256,7 +252,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
 
   const renderPrimaryNavigation = (mobile = false) => primaryNavLinks.map(([key, href]) => {
     if (href === null) {
-      if (!mobile) return <NavDropdown key={key} locale={locale} pathname={pathname} />;
+      if (!mobile) return <NavDropdown key={`${key}-${pathname}`} locale={locale} pathname={pathname} />;
       const toursActive = tourLinks.some(([, tourHref]) => isActivePath(pathname, tourHref)) || stripLocale(pathname).startsWith("/tour/");
       return (
         <details className={`mobile-tour-group ${toursActive ? "nav-item-active" : ""}`} key={key}>

@@ -11,7 +11,8 @@ vi.mock("next/navigation", () => ({ useRouter: () => navigation }));
 // Full parser/taxonomy integration is covered in header-smart-voice.test.tsx.
 beforeEach(() => vi.stubGlobal("fetch", vi.fn(async () => Response.json({ mode: "title" }))));
 
-// Component tests for Basic Voice Search micro behavior. Every voice event
+// Header Smart Voice lifecycle tests with an explicit title-mode response.
+// Every voice event
 // comes from the fake recognizer — no microphone, no permissions, no network.
 
 // Flush the requestAnimationFrame used for post-mount capability detection.
@@ -60,6 +61,11 @@ function mic(container: HTMLElement, name = /search by voice/i) {
   return within(container).getByRole("button", { name });
 }
 
+async function finishCommand(container: HTMLElement, recorder: FakeRecorder) {
+  fireEvent.click(within(container).getByRole("button", { name: /stop listening/i }));
+  await act(async () => recorder.emitEnd());
+}
+
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
@@ -92,6 +98,7 @@ describe("VoiceSearchButton — final-result flow", () => {
 
     act(() => recorder.emitStart());
     await act(async () => recorder.emitResult({ transcript: "nile cruise", isFinal: true }));
+    await finishCommand(container, recorder);
 
     expect(input.value).toBe("nile cruise");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
@@ -104,6 +111,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
     await act(async () => recorder.emitResult({ transcript: "new query", isFinal: true }));
+    await finishCommand(container, recorder);
     expect(input.value).toBe("new query");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
@@ -119,6 +127,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     expect(input.value).toBe("");
 
     await act(async () => recorder.emitResult({ transcript: "Nile cruise Egypt", isFinal: true }));
+    await finishCommand(container, recorder);
     expect(input.value).toBe("Nile cruise Egypt");
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
@@ -130,6 +139,7 @@ describe("VoiceSearchButton — final-result flow", () => {
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
     await act(async () => recorder.emitResult({ transcript: "cairo", isFinal: true }));
+    await finishCommand(container, recorder);
     expect(requestSubmit).toHaveBeenCalledTimes(1);
 
     ui.rerender(
@@ -148,12 +158,14 @@ describe("VoiceSearchButton — final-result flow", () => {
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
     await act(async () => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
+    await finishCommand(container, recorder);
     act(() => recorder.emitEnd());
     expect(requestSubmit).toHaveBeenCalledTimes(1);
 
     fireEvent.click(mic(container));
     act(() => recorder.emitStart());
     await act(async () => recorder.emitResult({ transcript: "Egypt tours", isFinal: true }));
+    await finishCommand(container, recorder);
     expect(requestSubmit).toHaveBeenCalledTimes(2);
   });
 
@@ -176,6 +188,7 @@ describe("VoiceSearchButton — stop/cancel", () => {
     expect(recorder.stopCalls()).toBe(1);
 
     await act(async () => recorder.emitResult({ transcript: "aswan", isFinal: true }));
+    await act(async () => recorder.emitEnd());
     expect(requestSubmit).toHaveBeenCalledTimes(1);
   });
 
@@ -273,6 +286,7 @@ describe("VoiceSearchButton — cross-instance isolation", () => {
     fireEvent.click(within(slotA).getByRole("button", { name: /search by voice/i }));
     act(() => recA.emitStart());
     await act(async () => recA.emitResult({ transcript: "giza", isFinal: true }));
+    await finishCommand(slotA, recA);
 
     expect(inputA.value).toBe("giza");
     expect(submitA).toHaveBeenCalledTimes(1);
@@ -283,6 +297,7 @@ describe("VoiceSearchButton — cross-instance isolation", () => {
     fireEvent.click(within(slotB).getByRole("button", { name: /search by voice/i }));
     act(() => recB.emitStart());
     await act(async () => recB.emitResult({ transcript: "luxor", isFinal: true }));
+    await finishCommand(slotB, recB);
 
     expect(inputB.value).toBe("luxor");
     expect(submitB).toHaveBeenCalledTimes(1);

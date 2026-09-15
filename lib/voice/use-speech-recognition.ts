@@ -11,7 +11,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { browserRecognizerFactory, isSpeechRecognitionSupported } from "./browser-speech-recognizer";
-import type { RecognizerFactory, SpeechRecognizer } from "./speech-recognizer";
+import type { RecognizerFactory, RecognizerHandlers, SpeechRecognizer } from "./speech-recognizer";
+import { commandSpeechRecognizer, type CommandCaptureOptions } from "./command-speech-recognizer";
 import { speechLanguageFor } from "./speech-languages";
 import type { SpeechError, SpeechStatus } from "./types";
 import type { Locale } from "@/types/api";
@@ -31,6 +32,7 @@ export function useSpeechRecognition(
   locale: Locale,
   factory: RecognizerFactory = browserRecognizerFactory,
   isSupported: () => boolean = isSpeechRecognitionSupported,
+  commandCapture?: CommandCaptureOptions,
 ): UseSpeechRecognition {
   const [supported, setSupported] = useState(false);
   const [status, setStatus] = useState<SpeechStatus>("idle");
@@ -101,7 +103,7 @@ export function useSpeechRecognition(
     setInterimTranscript("");
     setFinalTranscript("");
 
-    const recognizer = factory(speechLanguageFor(locale), {
+    const handlers: RecognizerHandlers = {
       onStart: () => {
         if (sessionRef.current !== sessionId || !mountedRef.current) return;
         setStatus("listening");
@@ -133,7 +135,10 @@ export function useSpeechRecognition(
         recognizerRef.current = null;
         setStatus("idle");
       },
-    });
+    };
+    const recognizer = commandCapture
+      ? commandSpeechRecognizer(factory, speechLanguageFor(locale), handlers, commandCapture)
+      : factory(speechLanguageFor(locale), handlers);
 
     recognizerRef.current = recognizer;
     recognizer.start();

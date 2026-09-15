@@ -13,6 +13,9 @@ export type RecognitionResult = {
   // incremental result events; the implementation hands us each batch).
   transcript: string;
   isFinal: boolean;
+  // Optional complete indexed snapshot, for command capture. An index belongs
+  // to one native recognition instance, not to an entire user command.
+  segments?: { index: number; transcript: string; isFinal: boolean }[];
 };
 
 export type RecognizerHandlers = {
@@ -29,4 +32,5 @@ export interface SpeechRecognizer {
 }
 
 // A recognizer that has already been configured with a recognition language.
-export type RecognizerFactory = (lang: string, handlers: RecognizerHandlers) => SpeechRecognizer;
+export type RecognizerOptions = { continuous?: boolean; indexedResults?: boolean };
+export type RecognizerFactory = (lang: string, handlers: RecognizerHandlers, options?: RecognizerOptions) => SpeechRecognizer;
