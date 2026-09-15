@@ -1,0 +1,7284 @@
+{
+  "phase": "7.25",
+  "version": 1,
+  "exportedAt": "2026-09-15T09:22:35.080Z",
+  "privacy": {
+    "audioRecorded": false,
+    "analytics": false,
+    "productionStorage": false,
+    "thirdPartySttAdded": false,
+    "llm": false
+  },
+  "protocol": {
+    "version": 1,
+    "locale": "en-US",
+    "continuous": true,
+    "moderateBoost": 5,
+    "maxAlternatives": 3,
+    "curatedVocabulary": [
+      "Cairo",
+      "Giza",
+      "Luxor",
+      "Aswan",
+      "Abu Simbel",
+      "Hurghada",
+      "Sharm El Sheikh",
+      "Nile",
+      "Nile Cruise",
+      "Grand Egyptian Museum",
+      "Valley of the Kings",
+      "Karnak Temple",
+      "Saqqara",
+      "Alexandria",
+      "Red Sea",
+      "Day Tour",
+      "Nile Cruises",
+      "Multi Day Tours"
+    ],
+    "modes": [
+      {
+        "id": "A",
+        "label": "Baseline",
+        "phrases": false,
+        "maxAlternatives": 1
+      },
+      {
+        "id": "B",
+        "label": "Phrase biasing",
+        "phrases": true,
+        "maxAlternatives": 1
+      },
+      {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      {
+        "id": "D",
+        "label": "Phrase biasing + N-best",
+        "phrases": true,
+        "maxAlternatives": 3
+      }
+    ],
+    "prompts": [
+      {
+        "id": "aswan-alone",
+        "entity": "Aswan",
+        "context": "alone",
+        "phrase": "Aswan",
+        "expectedEntities": [
+          "Aswan"
+        ]
+      },
+      {
+        "id": "aswan-short",
+        "entity": "Aswan",
+        "context": "short",
+        "phrase": "trip to Aswan",
+        "expectedEntities": [
+          "Aswan"
+        ]
+      },
+      {
+        "id": "aswan-command",
+        "entity": "Aswan",
+        "context": "command",
+        "phrase": "5 day Nile cruise to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      {
+        "id": "abu-simbel-alone",
+        "entity": "Abu Simbel",
+        "context": "alone",
+        "phrase": "Abu Simbel",
+        "expectedEntities": [
+          "Abu Simbel"
+        ]
+      },
+      {
+        "id": "abu-simbel-short",
+        "entity": "Abu Simbel",
+        "context": "short",
+        "phrase": "trip to Abu Simbel",
+        "expectedEntities": [
+          "Abu Simbel"
+        ]
+      },
+      {
+        "id": "abu-simbel-command",
+        "entity": "Abu Simbel",
+        "context": "command",
+        "phrase": "5 day trip from Aswan to Abu Simbel",
+        "expectedEntities": [
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "importantFields": [
+          "5 days",
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "critical": true
+      },
+      {
+        "id": "sharm-alone",
+        "entity": "Sharm El Sheikh",
+        "context": "alone",
+        "phrase": "Sharm El Sheikh",
+        "expectedEntities": [
+          "Sharm El Sheikh"
+        ]
+      },
+      {
+        "id": "sharm-short",
+        "entity": "Sharm El Sheikh",
+        "context": "short",
+        "phrase": "trip to Sharm El Sheikh",
+        "expectedEntities": [
+          "Sharm El Sheikh"
+        ]
+      },
+      {
+        "id": "sharm-command",
+        "entity": "Sharm El Sheikh",
+        "context": "command",
+        "phrase": "5 day trip from Cairo to Sharm El Sheikh",
+        "expectedEntities": [
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "importantFields": [
+          "5 days",
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "critical": true
+      },
+      {
+        "id": "nile-alone",
+        "entity": "Nile",
+        "context": "alone",
+        "phrase": "Nile",
+        "expectedEntities": [
+          "Nile"
+        ]
+      },
+      {
+        "id": "nile-cruise",
+        "entity": "Nile Cruise",
+        "context": "short",
+        "phrase": "Nile Cruise",
+        "expectedEntities": [
+          "Nile Cruise"
+        ]
+      },
+      {
+        "id": "nile-command",
+        "entity": "Nile / Nile Cruise",
+        "context": "command",
+        "phrase": "5 day Nile cruise from Luxor to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      {
+        "id": "hurghada-alone",
+        "entity": "Hurghada",
+        "context": "alone",
+        "phrase": "Hurghada",
+        "expectedEntities": [
+          "Hurghada"
+        ]
+      },
+      {
+        "id": "hurghada-short",
+        "entity": "Hurghada",
+        "context": "short",
+        "phrase": "trip to Hurghada",
+        "expectedEntities": [
+          "Hurghada"
+        ]
+      },
+      {
+        "id": "hurghada-command",
+        "entity": "Hurghada",
+        "context": "command",
+        "phrase": "5 day trip from Cairo to Hurghada",
+        "expectedEntities": [
+          "Cairo",
+          "Hurghada"
+        ],
+        "importantFields": [
+          "5 days",
+          "Cairo",
+          "Hurghada"
+        ]
+      },
+      {
+        "id": "luxor-alone",
+        "entity": "Luxor",
+        "context": "alone",
+        "phrase": "Luxor",
+        "expectedEntities": [
+          "Luxor"
+        ]
+      },
+      {
+        "id": "luxor-short",
+        "entity": "Luxor",
+        "context": "short",
+        "phrase": "trip to Luxor",
+        "expectedEntities": [
+          "Luxor"
+        ]
+      },
+      {
+        "id": "luxor-command",
+        "entity": "Luxor",
+        "context": "command",
+        "phrase": "5 day Nile cruise from Luxor to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ]
+      },
+      {
+        "id": "cairo-alone",
+        "entity": "Cairo",
+        "context": "alone",
+        "phrase": "Cairo",
+        "expectedEntities": [
+          "Cairo"
+        ]
+      },
+      {
+        "id": "cairo-short",
+        "entity": "Cairo",
+        "context": "short",
+        "phrase": "trip to Cairo",
+        "expectedEntities": [
+          "Cairo"
+        ]
+      },
+      {
+        "id": "cairo-command",
+        "entity": "Cairo",
+        "context": "command",
+        "phrase": "5 day trip from Luxor to Cairo",
+        "expectedEntities": [
+          "Luxor",
+          "Cairo"
+        ],
+        "importantFields": [
+          "5 days",
+          "Luxor",
+          "Cairo"
+        ]
+      },
+      {
+        "id": "negative-egypt",
+        "entity": null,
+        "context": "negative",
+        "phrase": "five days in Egypt",
+        "expectedEntities": []
+      },
+      {
+        "id": "negative-cruise",
+        "entity": null,
+        "context": "negative",
+        "phrase": "a cruise for five days",
+        "expectedEntities": []
+      },
+      {
+        "id": "negative-hotel",
+        "entity": null,
+        "context": "negative",
+        "phrase": "trip from the hotel",
+        "expectedEntities": []
+      },
+      {
+        "id": "negative-city",
+        "entity": null,
+        "context": "negative",
+        "phrase": "city tour tomorrow",
+        "expectedEntities": []
+      },
+      {
+        "id": "negative-museum",
+        "entity": null,
+        "context": "negative",
+        "phrase": "museum visit",
+        "expectedEntities": []
+      },
+      {
+        "id": "negative-desert",
+        "entity": null,
+        "context": "negative",
+        "phrase": "desert tour",
+        "expectedEntities": []
+      }
+    ]
+  },
+  "runtime": {
+    "capturedAt": "2026-09-15T09:06:52.357Z",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+    "platform": "Win32",
+    "language": "en-US",
+    "speechRecognition": "function",
+    "webkitSpeechRecognition": "function",
+    "selectedConstructor": "SpeechRecognition",
+    "selectedConstructorSource": "function SpeechRecognition() { [native code] }",
+    "configuredLocale": "en-US",
+    "continuousRequested": true,
+    "maxAlternativesRequested": 3,
+    "recognitionShape": {
+      "lang": "en-US",
+      "continuous": true,
+      "interimResults": true,
+      "maxAlternatives": 3,
+      "ownKeys": [],
+      "prototypeKeys": [
+        "grammars",
+        "lang",
+        "continuous",
+        "interimResults",
+        "maxAlternatives",
+        "onaudiostart",
+        "onsoundstart",
+        "onspeechstart",
+        "onspeechend",
+        "onsoundend",
+        "onaudioend",
+        "onresult",
+        "onnomatch",
+        "onerror",
+        "onstart",
+        "onend",
+        "abort",
+        "start",
+        "stop",
+        "unspokenPunctuation",
+        "quality",
+        "processLocally",
+        "phrases",
+        "constructor",
+        "Symbol(Symbol.toStringTag)"
+      ]
+    },
+    "phraseSupport": {
+      "constructorPresent": true,
+      "constructorName": "SpeechRecognitionPhrase",
+      "constructorLength": 1,
+      "constructorSource": "function SpeechRecognitionPhrase() { [native code] }",
+      "propertyInRecognition": true,
+      "initialValue": [
+        {},
+        {}
+      ],
+      "phraseShape": {
+        "ownKeys": [],
+        "prototypeKeys": [
+          "phrase",
+          "boost",
+          "constructor",
+          "Symbol(Symbol.toStringTag)"
+        ],
+        "values": {}
+      },
+      "assignment": {
+        "attempted": true,
+        "threw": false,
+        "error": null,
+        "readbackLength": 1
+      },
+      "replacement": {
+        "attempted": true,
+        "threw": false,
+        "error": null,
+        "readback": [
+          {
+            "phrase": "Nile",
+            "boost": 5
+          },
+          {
+            "phrase": "Luxor",
+            "boost": 5
+          }
+        ]
+      },
+      "boostBoundaryProbe": [
+        {
+          "boost": 0,
+          "accepted": true,
+          "readback": 0
+        },
+        {
+          "boost": 5,
+          "accepted": true,
+          "readback": 5
+        },
+        {
+          "boost": 10,
+          "accepted": true,
+          "readback": 10
+        },
+        {
+          "boost": -0.1,
+          "accepted": false,
+          "error": "SyntaxError: Failed to construct 'SpeechRecognitionPhrase': Speech recognition phrase boost value must be inside the range [0, 10]."
+        },
+        {
+          "boost": 10.1,
+          "accepted": false,
+          "error": "SyntaxError: Failed to construct 'SpeechRecognitionPhrase': Speech recognition phrase boost value must be inside the range [0, 10]."
+        }
+      ]
+    },
+    "configurationErrors": []
+  },
+  "attempts": [
+    {
+      "sequence": 1,
+      "startedAt": "2026-09-15T09:20:34.266Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "aswan-command",
+        "entity": "Aswan",
+        "context": "command",
+        "phrase": "5 day Nile cruise to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 1,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day n",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Nile",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Nile CR",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Nile cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to a",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a SW",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise to a",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Nile cruise to a swan",
+              "confidence": 0.9322713017463684
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day Nile cruise through a swan",
+              "confidence": 0.9051907658576965
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5-day Nile Cruz to a swan",
+              "confidence": 0.8993085026741028
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 142
+        },
+        {
+          "type": "speechstart",
+          "atMs": 2241
+        },
+        {
+          "type": "result",
+          "atMs": 3557,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4088,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4573,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4697,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4697,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5169,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5169,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5278,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5278,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5669,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5669,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6742,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6743,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6790,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6942,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6942,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7007
+        },
+        {
+          "type": "speechend",
+          "atMs": 7009
+        },
+        {
+          "type": "audioend",
+          "atMs": 7010
+        },
+        {
+          "type": "result",
+          "atMs": 7112,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "end",
+          "atMs": 7113
+        }
+      ],
+      "primaryFinalTranscript": "5-day Nile cruise to a swan",
+      "error": null,
+      "completedAt": "2026-09-15T09:20:41.379Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 2,
+      "startedAt": "2026-09-15T09:20:49.627Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "aswan-command",
+        "entity": "Aswan",
+        "context": "command",
+        "phrase": "5 day Nile cruise to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 2,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to a",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to a SW",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise to a",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day cruise to a swan",
+              "confidence": 0.9466909170150757
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day cruise to Swan",
+              "confidence": 0.9151501655578613
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5 Day Cruise to a swan",
+              "confidence": 0.9054654240608215
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 145
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1244
+        },
+        {
+          "type": "result",
+          "atMs": 2583,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3271,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3271,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3552,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3552,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3707,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4161,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4344,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4344,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4758,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4867,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4867,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5445,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5445,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5445,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5445,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5476,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5476,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5864,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5864,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6570,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7008
+        },
+        {
+          "type": "speechend",
+          "atMs": 7011
+        },
+        {
+          "type": "audioend",
+          "atMs": 7013
+        },
+        {
+          "type": "end",
+          "atMs": 7500
+        }
+      ],
+      "primaryFinalTranscript": "5-day cruise to a swan",
+      "error": null,
+      "completedAt": "2026-09-15T09:20:57.127Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 3,
+      "startedAt": "2026-09-15T09:20:59.270Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "aswan-command",
+        "entity": "Aswan",
+        "context": "command",
+        "phrase": "5 day Nile cruise to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 3,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day 9",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " 9",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to SW",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise to Swan",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 Day Cruise to Swan",
+              "confidence": 0.9521284103393555
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5 day Nile cruise to Swan",
+              "confidence": 0.9054792523384094
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5 day 92 swan",
+              "confidence": 0.8660986423492432
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 146
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1546
+        },
+        {
+          "type": "result",
+          "atMs": 3070,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3664,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3757,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3757,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4181,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4181,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4262,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4262,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4663,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4663,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5259,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5460,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5460,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5771,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5771,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5879,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5879,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6052,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6052,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6446,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7015
+        },
+        {
+          "type": "speechend",
+          "atMs": 7018
+        },
+        {
+          "type": "audioend",
+          "atMs": 7022
+        },
+        {
+          "type": "result",
+          "atMs": 7136,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "end",
+          "atMs": 7138
+        }
+      ],
+      "primaryFinalTranscript": "5 Day Cruise to Swan",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:06.408Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 4,
+      "startedAt": "2026-09-15T09:21:08.972Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "abu-simbel-command",
+        "entity": "Abu Simbel",
+        "context": "command",
+        "phrase": "5 day trip from Aswan to Abu Simbel",
+        "expectedEntities": [
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "importantFields": [
+          "5 days",
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "critical": true
+      },
+      "repeat": 1,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " o",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " osw",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " oswal",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " oswal to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " bill",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from bill",
+              "confidence": 0.9505689740180969
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day trip from",
+              "confidence": 0.9521284103393555
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 146
+        },
+        {
+          "type": "speechstart",
+          "atMs": 2246
+        },
+        {
+          "type": "result",
+          "atMs": 3447,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3854,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4337,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4433,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4433,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4541,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4542,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4945,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4945,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5068,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5069,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5147,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5147,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5347,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5347,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5347,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5789,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5790,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6134,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6443,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6443,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7002
+        },
+        {
+          "type": "speechend",
+          "atMs": 7005
+        },
+        {
+          "type": "audioend",
+          "atMs": 7005
+        },
+        {
+          "type": "result",
+          "atMs": 7084,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 2
+        },
+        {
+          "type": "end",
+          "atMs": 7087
+        }
+      ],
+      "primaryFinalTranscript": "5-day trip from bill",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:16.059Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 5,
+      "startedAt": "2026-09-15T09:21:19.927Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "abu-simbel-command",
+        "entity": "Abu Simbel",
+        "context": "command",
+        "phrase": "5 day trip from Aswan to Abu Simbel",
+        "expectedEntities": [
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "importantFields": [
+          "5 days",
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "critical": true
+      },
+      "repeat": 2,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " AST",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " astron",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a storm",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " astron to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " a storm to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " storm to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " storm to ab",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " storm to Abu",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a storm to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " absent",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a storm to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " absentville",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from a storm to absentville",
+              "confidence": 0.9254188537597656
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day trip from astron to absentville",
+              "confidence": 0.9312362670898438
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5-day trip from a storm to absent bill",
+              "confidence": 0.8992925882339478
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 138
+        },
+        {
+          "type": "speechstart",
+          "atMs": 2238
+        },
+        {
+          "type": "result",
+          "atMs": 2790,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3165,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3865,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3865,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4081,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4081,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4395,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4395,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4581,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4690,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4690,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4907,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4907,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4907,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4907,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4969,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4969,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5078,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5078,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5173,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5173,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5266,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5266,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5564,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5564,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5673,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5673,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5765,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5766,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5969,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5969,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6861,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7016
+        },
+        {
+          "type": "speechend",
+          "atMs": 7019
+        },
+        {
+          "type": "audioend",
+          "atMs": 7019
+        },
+        {
+          "type": "end",
+          "atMs": 7136
+        }
+      ],
+      "primaryFinalTranscript": "5-day trip from a storm to absentville",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:27.063Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 6,
+      "startedAt": "2026-09-15T09:21:29.787Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "abu-simbel-command",
+        "entity": "Abu Simbel",
+        "context": "command",
+        "phrase": "5 day trip from Aswan to Abu Simbel",
+        "expectedEntities": [
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "importantFields": [
+          "5 days",
+          "Aswan",
+          "Abu Simbel"
+        ],
+        "critical": true
+      },
+      "repeat": 3,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " SW",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Swan",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Swan to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Swan to a",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Swan",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to auss",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Swan to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " auss",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Swan to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " aussem",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Swan to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " aussemble",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Swan to aussemble",
+              "confidence": 0.946162223815918
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5 day trip from Swan to aussemble",
+              "confidence": 0.9160346984863281
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5-day trip from bill",
+              "confidence": 0.8841251134872437
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 141
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1541
+        },
+        {
+          "type": "result",
+          "atMs": 2754,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3237,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3770,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3841,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3842,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4033,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4033,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4361,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4361,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4542,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4829,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4829,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4941,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4941,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5031,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5031,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5437,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5437,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5529,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5529,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5623,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5623,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5732,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5732,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5840,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5840,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6838,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7001
+        },
+        {
+          "type": "speechend",
+          "atMs": 7001
+        },
+        {
+          "type": "audioend",
+          "atMs": 7002
+        },
+        {
+          "type": "end",
+          "atMs": 7079
+        }
+      ],
+      "primaryFinalTranscript": "5-day trip from Swan to aussemble",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:36.866Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 7,
+      "startedAt": "2026-09-15T09:21:39.403Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "sharm-command",
+        "entity": "Sharm El Sheikh",
+        "context": "command",
+        "phrase": "5 day trip from Cairo to Sharm El Sheikh",
+        "expectedEntities": [
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "importantFields": [
+          "5 days",
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "critical": true
+      },
+      "repeat": 1,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " cair",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo to Shar",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Sharma",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma she",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma Sheik",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to Sharma",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sheik",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to Sharma Sheik",
+              "confidence": 0.9373503923416138
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day trip from Cairo to Sharma",
+              "confidence": 0.9477042555809021
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5 day trip from Cairo to Sharma Sheik",
+              "confidence": 0.9119612574577332
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 145
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1644
+        },
+        {
+          "type": "result",
+          "atMs": 2945,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3271,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3844,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3866,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3866,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4098,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4098,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4345,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4345,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4644,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4644,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4845,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4845,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5045,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5045,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5358,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5358,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5437,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5437,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5645,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5645,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5745,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5745,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6643,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6644,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6644,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7001
+        },
+        {
+          "type": "speechend",
+          "atMs": 7002
+        },
+        {
+          "type": "audioend",
+          "atMs": 7002
+        },
+        {
+          "type": "end",
+          "atMs": 7088
+        }
+      ],
+      "primaryFinalTranscript": "5-day trip from Cairo to Sharma Sheik",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:46.491Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 8,
+      "startedAt": "2026-09-15T09:21:48.363Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "sharm-command",
+        "entity": "Sharm El Sheikh",
+        "context": "command",
+        "phrase": "5 day trip from Cairo to Sharm El Sheikh",
+        "expectedEntities": [
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "importantFields": [
+          "5 days",
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "critical": true
+      },
+      "repeat": 2,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " cair",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo to Shar",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Shar",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Sharm",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharm",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " shalom sh",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " sharmischief",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day trip from Cairo to sharmischief",
+              "confidence": 0.9504062533378601
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day trip from Cairo to Sharma Sheik",
+              "confidence": 0.899749219417572
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5-day trip from Cairo to Sharma Sheff",
+              "confidence": 0.899749219417572
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 5
+        },
+        {
+          "type": "audiostart",
+          "atMs": 138
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1438
+        },
+        {
+          "type": "result",
+          "atMs": 2633,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3069,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3635,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3635,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3867,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3868,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4210,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4210,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4413,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4522,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4522,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4725,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4725,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4835,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4835,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5228,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5228,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5338,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5338,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5338,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5338,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5419,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5419,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5530,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5530,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5638,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5638,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5640,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5640,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6710,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7000
+        },
+        {
+          "type": "speechend",
+          "atMs": 7001
+        },
+        {
+          "type": "audioend",
+          "atMs": 7001
+        },
+        {
+          "type": "end",
+          "atMs": 7082
+        }
+      ],
+      "primaryFinalTranscript": "5-day trip from Cairo to sharmischief",
+      "error": null,
+      "completedAt": "2026-09-15T09:21:55.445Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 9,
+      "startedAt": "2026-09-15T09:21:56.875Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "sharm-command",
+        "entity": "Sharm El Sheikh",
+        "context": "command",
+        "phrase": "5 day trip from Cairo to Sharm El Sheikh",
+        "expectedEntities": [
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "importantFields": [
+          "5 days",
+          "Cairo",
+          "Sharm El Sheikh"
+        ],
+        "critical": true
+      },
+      "repeat": 3,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " trip from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from c",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " cair",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cairo to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Shar",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " to Sharma",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma sh",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo to",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Sharma shave",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo to Sharma",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " shave",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day trip from Cairo to Sharma shave",
+              "confidence": 0.9226940274238586
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day trip from Cairo to Sharma shave",
+              "confidence": 0.9132653474807739
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5 day trip from Cairo to Sharma chef",
+              "confidence": 0.9101183414459229
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 140
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1540
+        },
+        {
+          "type": "result",
+          "atMs": 3014,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3536,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3600,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3600,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4073,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4073,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4165,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4165,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4196,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4196,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4588,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4588,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4715,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4715,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4872,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4872,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4951,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4951,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5282,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5282,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5626,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5626,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5736,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5736,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5839,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5839,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5971,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5971,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6004,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6004,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6303,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6303,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6885,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7011
+        },
+        {
+          "type": "speechend",
+          "atMs": 7014
+        },
+        {
+          "type": "audioend",
+          "atMs": 7014
+        },
+        {
+          "type": "end",
+          "atMs": 7161
+        }
+      ],
+      "primaryFinalTranscript": "5 day trip from Cairo to Sharma shave",
+      "error": null,
+      "completedAt": "2026-09-15T09:22:04.036Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 10,
+      "startedAt": "2026-09-15T09:22:06.795Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "nile-command",
+        "entity": "Nile / Nile Cruise",
+        "context": "command",
+        "phrase": "5 day Nile cruise from Luxor to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 1,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night cruise from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " cruise from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Lu",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Lux",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " luxur",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " luxur to",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " luxur to OS",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Luxor to us",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Luxor to us one",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from Luxor to us",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " one",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from Luxor to us one",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from Luxor to us one",
+              "confidence": 0.9065399765968323
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day night cruise from Luxor to us 1",
+              "confidence": 0.9227697253227234
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5-day night cruise from luxur to os 1",
+              "confidence": 0.8959426283836365
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 141
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1440
+        },
+        {
+          "type": "result",
+          "atMs": 2666,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3120,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3541,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3712,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3712,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3978,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3978,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4212,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4212,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4399,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4399,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4666,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4666,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4682,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4683,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4857,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4857,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4920,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4920,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5216,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5216,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5324,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5324,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5402,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5402,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5870,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5870,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5873,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6556,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7001
+        },
+        {
+          "type": "speechend",
+          "atMs": 7002
+        },
+        {
+          "type": "audioend",
+          "atMs": 7004
+        },
+        {
+          "type": "end",
+          "atMs": 7126
+        }
+      ],
+      "primaryFinalTranscript": "5-day night cruise from Luxor to us one",
+      "error": null,
+      "completedAt": "2026-09-15T09:22:13.921Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 11,
+      "startedAt": "2026-09-15T09:22:15.163Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "nile-command",
+        "entity": "Nile / Nile Cruise",
+        "context": "command",
+        "phrase": "5 day Nile cruise from Luxor to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 2,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night Cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from rock",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " rock Sur",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " rock surpl",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " rock surplus",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from rock",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " surplus",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from rock",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " surplus one",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from rock surplus",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " one",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5-day night cruise from rock surplus one",
+              "confidence": 0.926360547542572
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5-day night cruise from rock surplus form",
+              "confidence": 0.9209728240966797
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "5 day night cruise from rock surplus one",
+              "confidence": 0.8926928043365479
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 3
+        },
+        {
+          "type": "audiostart",
+          "atMs": 136
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1136
+        },
+        {
+          "type": "result",
+          "atMs": 2427,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3069,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3146,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3637,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3726,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3726,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3912,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3912,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4474,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4474,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4489,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4599,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4599,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4877,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4878,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5159,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5159,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5409,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5409,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5500,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5500,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5593,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5594,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5703,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5703,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6062,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6062,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6748,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7013
+        },
+        {
+          "type": "speechend",
+          "atMs": 7017
+        },
+        {
+          "type": "audioend",
+          "atMs": 7020
+        },
+        {
+          "type": "end",
+          "atMs": 7149
+        }
+      ],
+      "primaryFinalTranscript": "5-day night cruise from rock surplus one",
+      "error": null,
+      "completedAt": "2026-09-15T09:22:22.312Z",
+      "emptyFinal": false
+    },
+    {
+      "sequence": 12,
+      "startedAt": "2026-09-15T09:22:23.643Z",
+      "mode": {
+        "id": "C",
+        "label": "N-best only",
+        "phrases": false,
+        "maxAlternatives": 3
+      },
+      "prompt": {
+        "id": "nile-command",
+        "entity": "Nile / Nile Cruise",
+        "context": "command",
+        "phrase": "5 day Nile cruise from Luxor to Aswan",
+        "expectedEntities": [
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "importantFields": [
+          "5 days",
+          "Nile Cruise",
+          "Luxor",
+          "Aswan"
+        ],
+        "critical": true
+      },
+      "repeat": 3,
+      "configured": {
+        "lang": "en-US",
+        "continuous": true,
+        "interimResults": true,
+        "maxAlternatives": 3,
+        "phrasesRequested": false,
+        "phraseCount": 0,
+        "boost": null
+      },
+      "results": [
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " day night",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " night Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Cruise",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from Lu",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " from Lux",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " luxur",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " Luxor",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " luxur",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur cor",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur corres",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur corresp",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur correspond",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur",
+              "confidence": 0.8999999761581421
+            }
+          ]
+        },
+        {
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": " correspond",
+              "confidence": 0.009999999776482582
+            }
+          ]
+        },
+        {
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternatives": [
+            {
+              "alternativeIndex": 0,
+              "transcript": "5 day night cruise from luxur correspond",
+              "confidence": 0.9343043565750122
+            },
+            {
+              "alternativeIndex": 1,
+              "transcript": "5 day night cruise from Luxor correspond",
+              "confidence": 0.9297428131103516
+            },
+            {
+              "alternativeIndex": 2,
+              "transcript": "Osborne",
+              "confidence": 0.7076923251152039
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "type": "start",
+          "atMs": 2
+        },
+        {
+          "type": "audiostart",
+          "atMs": 138
+        },
+        {
+          "type": "speechstart",
+          "atMs": 1738
+        },
+        {
+          "type": "result",
+          "atMs": 2865,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3444,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3538,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3538,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3848,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 3849,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4066,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4066,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4066,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4066,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4453,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4453,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4672,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 4672,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5063,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5063,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5141,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5141,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5358,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5358,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5452,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5452,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5538,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5538,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5751,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5767,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5846,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 5862,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6338,
+          "resultIndex": 0,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6338,
+          "resultIndex": 1,
+          "isFinal": false,
+          "alternativeCount": 1
+        },
+        {
+          "type": "result",
+          "atMs": 6969,
+          "resultIndex": 0,
+          "isFinal": true,
+          "alternativeCount": 3
+        },
+        {
+          "type": "automatic-stop-call",
+          "atMs": 7014
+        },
+        {
+          "type": "speechend",
+          "atMs": 7017
+        },
+        {
+          "type": "audioend",
+          "atMs": 7017
+        },
+        {
+          "type": "end",
+          "atMs": 7143
+        }
+      ],
+      "primaryFinalTranscript": "5 day night cruise from luxur correspond",
+      "error": null,
+      "completedAt": "2026-09-15T09:22:30.786Z",
+      "emptyFinal": false
+    }
+  ]
+}

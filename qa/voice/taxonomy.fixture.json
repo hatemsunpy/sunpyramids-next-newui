@@ -1,0 +1,57 @@
+{
+  "description": "Synthetic offline QA records; never imported into production; no API response or production IDs copied.",
+  "destinations": [
+    {
+      "id": 900001,
+      "title": "Cairo Tours",
+      "slug": "cairo"
+    },
+    {
+      "id": 900002,
+      "title": "Giza Tours",
+      "slug": "giza"
+    },
+    {
+      "id": 900003,
+      "title": "Luxor Tours",
+      "slug": "luxor"
+    },
+    {
+      "id": 900004,
+      "title": "Aswan Tours",
+      "slug": "aswan"
+    },
+    {
+      "id": 900005,
+      "title": "Abu Simbel Tours",
+      "slug": "abu-simbel"
+    },
+    {
+      "id": 900006,
+      "title": "Hurghada Tours",
+      "slug": "hurghada"
+    },
+    {
+      "id": 900007,
+      "title": "Sharm El Sheikh Tours",
+      "slug": "sharm-el-sheikh"
+    }
+  ],
+  "rootCategories": [
+    {
+      "id": 910001,
+      "title": "Day Tour",
+      "slug": "day-tour"
+    },
+    {
+      "id": 910002,
+      "title": "Multi Days Tours",
+      "slug": "multi-days-tours"
+    },
+    {
+      "id": 910003,
+      "title": "Nile Cruises",
+      "slug": "nile-cruises"
+    }
+  ]
+}

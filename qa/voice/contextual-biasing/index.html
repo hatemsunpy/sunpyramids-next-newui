@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phase 7.25 Contextual ASR QA</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">Phase 7.25 · QA only</p>
+        <h1>Contextual ASR biasing experiment</h1>
+        <p>No audio recording, resolver call, analytics, production storage, or production Voice import.</p>
+      </header>
+
+      <section aria-labelledby="runtime-heading">
+        <h2 id="runtime-heading">Runtime feature detection</h2>
+        <div id="runtime-summary" class="status">Inspecting the real browser runtime…</div>
+        <pre id="runtime-json" aria-label="Runtime evidence"></pre>
+      </section>
+
+      <section aria-labelledby="run-heading">
+        <h2 id="run-heading">Controlled microphone run</h2>
+        <div class="controls">
+          <label>Mode <select id="mode"></select></label>
+          <label>Attempt plan
+            <select id="plan">
+              <option value="all-once">All 27 prompts · once</option>
+              <option value="critical-three">Four critical commands · three times</option>
+              <option value="single">Current prompt only · once</option>
+            </select>
+          </label>
+          <label>Prompt <select id="prompt"></select></label>
+          <label>Boost <input id="boost" type="number" value="5" step="1" /></label>
+        </div>
+
+        <div class="prompt-card">
+          <p id="progress">No run started</p>
+          <p class="instruction">Speak exactly:</p>
+          <blockquote id="spoken-prompt">Select Start run</blockquote>
+          <p id="timer"></p>
+          <div class="actions">
+            <button id="start-run">Start run</button>
+            <button id="start-attempt" disabled>Start microphone</button>
+            <button id="stop-attempt" disabled>Stop</button>
+            <button id="next-attempt" disabled>Next</button>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <div><h3>Primary final transcript</h3><p id="primary">—</p></div>
+          <div><h3>Latest alternatives</h3><ol id="alternatives"></ol></div>
+          <div><h3>Native events</h3><pre id="events"></pre></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="evidence-heading">
+        <h2 id="evidence-heading">Local evidence</h2>
+        <p id="attempt-count">0 attempts retained in page memory.</p>
+        <div class="actions">
+          <button id="download">Download JSON evidence</button>
+          <button id="clear">Clear page-memory attempts</button>
+        </div>
+        <pre id="latest-json"></pre>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

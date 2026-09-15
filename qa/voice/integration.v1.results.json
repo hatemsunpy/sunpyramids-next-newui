@@ -1,0 +1,4158 @@
+{
+  "measuredAt": "2026-09-13T15:13:12.052Z",
+  "unexpectedNetworkAttempts": 0,
+  "outboundNetworkCalls": 0,
+  "total": 182,
+  "results": [
+    {
+      "id": "en-exact",
+      "payload": {
+        "transcript": "5 days Cairo",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-reverse",
+      "payload": {
+        "transcript": "Cairo 5 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-structured",
+      "payload": {
+        "transcript": "5 day Nile cruise to Aswan",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-direction",
+      "payload": {
+        "transcript": "from Luxor to Aswan for 5 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-number-words",
+      "payload": {
+        "transcript": "five days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-approximate",
+      "payload": {
+        "transcript": "around one week in Cairo",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-place-ambiguity",
+      "payload": {
+        "transcript": "Luxor Aswan cruise",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-nights",
+      "payload": {
+        "transcript": "3 nights",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-mixed-units",
+      "payload": {
+        "transcript": "3 nights 4 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-duration-ambiguity",
+      "payload": {
+        "transcript": "5 days or 7 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-week",
+      "payload": {
+        "transcript": "one week",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-out-of-range",
+      "payload": {
+        "transcript": "46 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-zero",
+      "payload": {
+        "transcript": "0 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-category",
+      "payload": {
+        "transcript": "day tour",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-child-category",
+      "payload": {
+        "transcript": "luxury Nile cruise",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-month",
+      "payload": {
+        "transcript": "in November",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-travelers",
+      "payload": {
+        "transcript": "for two people",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-privacy",
+      "payload": {
+        "transcript": "private tour",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-destination-only",
+      "payload": {
+        "transcript": "trip to Aswan",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-bare-place",
+      "payload": {
+        "transcript": "Cairo",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 days",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-unknown-place",
+      "payload": {
+        "transcript": "trip to Zzyzx",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-destination-removed",
+      "payload": {
+        "transcript": "5 days Cairo",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-category-removed",
+      "payload": {
+        "transcript": "5 day Nile cruise to Aswan",
+        "locale": "en"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-destinations-unavailable",
+      "payload": {
+        "transcript": "5 day Nile cruise to Aswan",
+        "locale": "en"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "en-all-unavailable",
+      "payload": {
+        "transcript": "5 day Nile cruise to Aswan",
+        "locale": "en"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-exact",
+      "payload": {
+        "transcript": "5 jours au Caire",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "cairo",
+                "label": "Cairo Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-reverse",
+      "payload": {
+        "transcript": "Le Caire, 5 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-structured",
+      "payload": {
+        "transcript": "une croisière de 5 jours à Assouan",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-direction",
+      "payload": {
+        "transcript": "de Louxor à Assouan pour 5 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-number-words",
+      "payload": {
+        "transcript": "cinq jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-approximate",
+      "payload": {
+        "transcript": "environ une semaine au Caire",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "cairo",
+                "label": "Cairo Tours"
+              }
+            ]
+          },
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-place-ambiguity",
+      "payload": {
+        "transcript": "Louxor Assouan croisière",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-nights",
+      "payload": {
+        "transcript": "3 nuits",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-mixed-units",
+      "payload": {
+        "transcript": "3 nuits 4 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-duration-ambiguity",
+      "payload": {
+        "transcript": "5 jours ou 7 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-week",
+      "payload": {
+        "transcript": "une semaine",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-out-of-range",
+      "payload": {
+        "transcript": "46 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-zero",
+      "payload": {
+        "transcript": "0 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-category",
+      "payload": {
+        "transcript": "excursion d'une journée",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "1",
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-child-category",
+      "payload": {
+        "transcript": "croisière de luxe",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-month",
+      "payload": {
+        "transcript": "en novembre",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-travelers",
+      "payload": {
+        "transcript": "pour deux personnes",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-privacy",
+      "payload": {
+        "transcript": "voyage privé",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-destination-only",
+      "payload": {
+        "transcript": "un voyage à Assouan",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-bare-place",
+      "payload": {
+        "transcript": "Le Caire",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 jours",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-unknown-place",
+      "payload": {
+        "transcript": "voyage à Zzyzx",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-destination-removed",
+      "payload": {
+        "transcript": "5 jours au Caire",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-category-removed",
+      "payload": {
+        "transcript": "une croisière de 5 jours à Assouan",
+        "locale": "fr"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-destinations-unavailable",
+      "payload": {
+        "transcript": "une croisière de 5 jours à Assouan",
+        "locale": "fr"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "fr-all-unavailable",
+      "payload": {
+        "transcript": "une croisière de 5 jours à Assouan",
+        "locale": "fr"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-exact",
+      "payload": {
+        "transcript": "5 Tage in Kairo",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-reverse",
+      "payload": {
+        "transcript": "Kairo, 5 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-structured",
+      "payload": {
+        "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-direction",
+      "payload": {
+        "transcript": "von Luxor nach Assuan für 5 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-number-words",
+      "payload": {
+        "transcript": "fünf Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-approximate",
+      "payload": {
+        "transcript": "ungefähr eine Woche in Kairo",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-place-ambiguity",
+      "payload": {
+        "transcript": "Luxor Assuan Nilkreuzfahrt",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-nights",
+      "payload": {
+        "transcript": "3 Nächte",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-mixed-units",
+      "payload": {
+        "transcript": "3 Nächte 4 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-duration-ambiguity",
+      "payload": {
+        "transcript": "5 Tage oder 7 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-week",
+      "payload": {
+        "transcript": "eine Woche",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-out-of-range",
+      "payload": {
+        "transcript": "46 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-zero",
+      "payload": {
+        "transcript": "0 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-category",
+      "payload": {
+        "transcript": "Tagestour",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-child-category",
+      "payload": {
+        "transcript": "Luxus Nilkreuzfahrt",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-month",
+      "payload": {
+        "transcript": "im November",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-travelers",
+      "payload": {
+        "transcript": "für zwei Personen",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-privacy",
+      "payload": {
+        "transcript": "private Tour",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-destination-only",
+      "payload": {
+        "transcript": "eine Reise nach Assuan",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-bare-place",
+      "payload": {
+        "transcript": "Kairo",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 Tage",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-unknown-place",
+      "payload": {
+        "transcript": "Reise nach Zzyzx",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-destination-removed",
+      "payload": {
+        "transcript": "5 Tage in Kairo",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-category-removed",
+      "payload": {
+        "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+        "locale": "de"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-destinations-unavailable",
+      "payload": {
+        "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+        "locale": "de"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "de-all-unavailable",
+      "payload": {
+        "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+        "locale": "de"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-exact",
+      "payload": {
+        "transcript": "5 giorni al Cairo",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-reverse",
+      "payload": {
+        "transcript": "Il Cairo, 5 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-structured",
+      "payload": {
+        "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-direction",
+      "payload": {
+        "transcript": "da Luxor ad Aswan per 5 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-number-words",
+      "payload": {
+        "transcript": "cinque giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-approximate",
+      "payload": {
+        "transcript": "circa una settimana al Cairo",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-place-ambiguity",
+      "payload": {
+        "transcript": "Luxor Aswan crociera",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-nights",
+      "payload": {
+        "transcript": "3 notti",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-mixed-units",
+      "payload": {
+        "transcript": "3 notti 4 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-duration-ambiguity",
+      "payload": {
+        "transcript": "5 giorni o 7 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-week",
+      "payload": {
+        "transcript": "una settimana",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-out-of-range",
+      "payload": {
+        "transcript": "46 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-zero",
+      "payload": {
+        "transcript": "0 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-category",
+      "payload": {
+        "transcript": "tour di un giorno",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "1",
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-child-category",
+      "payload": {
+        "transcript": "crociera di lusso",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-month",
+      "payload": {
+        "transcript": "a novembre",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-travelers",
+      "payload": {
+        "transcript": "per due persone",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-privacy",
+      "payload": {
+        "transcript": "tour privato",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-destination-only",
+      "payload": {
+        "transcript": "un viaggio ad Aswan",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-bare-place",
+      "payload": {
+        "transcript": "Il Cairo",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 giorni",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-unknown-place",
+      "payload": {
+        "transcript": "viaggio a Zzyzx",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-destination-removed",
+      "payload": {
+        "transcript": "5 giorni al Cairo",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-category-removed",
+      "payload": {
+        "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+        "locale": "it"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-destinations-unavailable",
+      "payload": {
+        "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+        "locale": "it"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "it-all-unavailable",
+      "payload": {
+        "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+        "locale": "it"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-exact",
+      "payload": {
+        "transcript": "5 dias no Cairo",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-reverse",
+      "payload": {
+        "transcript": "Cairo, 5 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-structured",
+      "payload": {
+        "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-direction",
+      "payload": {
+        "transcript": "de Luxor para Assuão por 5 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-number-words",
+      "payload": {
+        "transcript": "cinco dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-approximate",
+      "payload": {
+        "transcript": "cerca de uma semana no Cairo",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-place-ambiguity",
+      "payload": {
+        "transcript": "Luxor Assuão cruzeiro",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-nights",
+      "payload": {
+        "transcript": "3 noites",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-mixed-units",
+      "payload": {
+        "transcript": "3 noites 4 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-duration-ambiguity",
+      "payload": {
+        "transcript": "5 dias ou 7 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-week",
+      "payload": {
+        "transcript": "uma semana",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-out-of-range",
+      "payload": {
+        "transcript": "46 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-zero",
+      "payload": {
+        "transcript": "0 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-category",
+      "payload": {
+        "transcript": "passeio de um dia",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "1",
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-child-category",
+      "payload": {
+        "transcript": "cruzeiro de luxo",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-month",
+      "payload": {
+        "transcript": "em novembro",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-travelers",
+      "payload": {
+        "transcript": "para duas pessoas",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-privacy",
+      "payload": {
+        "transcript": "viagem privada",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-destination-only",
+      "payload": {
+        "transcript": "uma viagem para Assuão",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-bare-place",
+      "payload": {
+        "transcript": "Cairo",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 dias",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-unknown-place",
+      "payload": {
+        "transcript": "viagem para Zzyzx",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-destination-removed",
+      "payload": {
+        "transcript": "5 dias no Cairo",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-category-removed",
+      "payload": {
+        "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+        "locale": "pt"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-destinations-unavailable",
+      "payload": {
+        "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+        "locale": "pt"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "pt-all-unavailable",
+      "payload": {
+        "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+        "locale": "pt"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-exact",
+      "payload": {
+        "transcript": "5 días en El Cairo",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-reverse",
+      "payload": {
+        "transcript": "El Cairo, 5 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-structured",
+      "payload": {
+        "transcript": "crucero por el Nilo de 5 días a Asuán",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-direction",
+      "payload": {
+        "transcript": "de Luxor a Asuán por 5 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-number-words",
+      "payload": {
+        "transcript": "cinco días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-approximate",
+      "payload": {
+        "transcript": "alrededor de una semana en El Cairo",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-place-ambiguity",
+      "payload": {
+        "transcript": "Luxor Asuán crucero",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-nights",
+      "payload": {
+        "transcript": "3 noches",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-mixed-units",
+      "payload": {
+        "transcript": "3 noches 4 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-duration-ambiguity",
+      "payload": {
+        "transcript": "5 días o 7 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-week",
+      "payload": {
+        "transcript": "una semana",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-out-of-range",
+      "payload": {
+        "transcript": "46 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-zero",
+      "payload": {
+        "transcript": "0 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-category",
+      "payload": {
+        "transcript": "excursión de un día",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "1",
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-child-category",
+      "payload": {
+        "transcript": "crucero de lujo",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-month",
+      "payload": {
+        "transcript": "en noviembre",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-travelers",
+      "payload": {
+        "transcript": "para dos personas",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-privacy",
+      "payload": {
+        "transcript": "tour privado",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-destination-only",
+      "payload": {
+        "transcript": "un viaje a Asuán",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-bare-place",
+      "payload": {
+        "transcript": "El Cairo",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-regional-place",
+      "payload": {
+        "transcript": "Hurghada 5 días",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-unknown-place",
+      "payload": {
+        "transcript": "viaje a Zzyzx",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-destination-removed",
+      "payload": {
+        "transcript": "5 días en El Cairo",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-category-removed",
+      "payload": {
+        "transcript": "crucero por el Nilo de 5 días a Asuán",
+        "locale": "es"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-destinations-unavailable",
+      "payload": {
+        "transcript": "crucero por el Nilo de 5 días a Asuán",
+        "locale": "es"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "es-all-unavailable",
+      "payload": {
+        "transcript": "crucero por el Nilo de 5 días a Asuán",
+        "locale": "es"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-exact",
+      "payload": {
+        "transcript": "开罗五天游",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-reverse",
+      "payload": {
+        "transcript": "开罗5天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-structured",
+      "payload": {
+        "transcript": "五天尼罗河游轮到阿斯旺",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-direction",
+      "payload": {
+        "transcript": "从卢克索到阿斯旺五天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-number-words",
+      "payload": {
+        "transcript": "五天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-approximate",
+      "payload": {
+        "transcript": "大约一周在开罗",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "confirm",
+            "options": [
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-place-ambiguity",
+      "payload": {
+        "transcript": "卢克索阿斯旺游轮",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "main": "nile-cruises"
+        },
+        "decisions": [
+          {
+            "field": "destination",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "luxor",
+                "label": "Luxor Tours"
+              },
+              {
+                "value": "aswan",
+                "label": "Aswan Tours"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-nights",
+      "payload": {
+        "transcript": "三夜",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-mixed-units",
+      "payload": {
+        "transcript": "三夜四天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "4"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-duration-ambiguity",
+      "payload": {
+        "transcript": "五天或七天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {},
+        "decisions": [
+          {
+            "field": "days",
+            "kind": "choose",
+            "options": [
+              {
+                "value": "5"
+              },
+              {
+                "value": "7"
+              }
+            ]
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-week",
+      "payload": {
+        "transcript": "一周",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "7"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-out-of-range",
+      "payload": {
+        "transcript": "46天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-zero",
+      "payload": {
+        "transcript": "0天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-category",
+      "payload": {
+        "transcript": "一日游",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "1",
+          "main": "day-tour"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-child-category",
+      "payload": {
+        "transcript": "豪华尼罗河游轮",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-month",
+      "payload": {
+        "transcript": "十一月",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-travelers",
+      "payload": {
+        "transcript": "两个人",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-privacy",
+      "payload": {
+        "transcript": "私人旅游",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-destination-only",
+      "payload": {
+        "transcript": "去阿斯旺旅行",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-bare-place",
+      "payload": {
+        "transcript": "开罗",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "cairo"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-regional-place",
+      "payload": {
+        "transcript": "赫尔格达五天",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-unknown-place",
+      "payload": {
+        "transcript": "去Zzyzx",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "title"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-destination-removed",
+      "payload": {
+        "transcript": "开罗五天游",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "days": "5"
+        },
+        "decisions": []
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-category-removed",
+      "payload": {
+        "transcript": "五天尼罗河游轮到阿斯旺",
+        "locale": "zh"
+      },
+      "status": 200,
+      "body": {
+        "mode": "structured",
+        "applicable": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "decisions": [
+          {
+            "field": "main",
+            "kind": "unavailable",
+            "options": []
+          }
+        ]
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-destinations-unavailable",
+      "payload": {
+        "transcript": "五天尼罗河游轮到阿斯旺",
+        "locale": "zh"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    },
+    {
+      "id": "zh-all-unavailable",
+      "payload": {
+        "transcript": "五天尼罗河游轮到阿斯旺",
+        "locale": "zh"
+      },
+      "status": 503,
+      "body": {
+        "error": "resolution-unavailable"
+      },
+      "cacheControl": "no-store",
+      "fixtureRequests": [
+        "/api/categories",
+        "/api/categories/count",
+        "/api/destinations"
+      ],
+      "source": "Actual POST function; synthetic in-process Request; fetch replaced at HTTP boundary, not live browser traffic"
+    }
+  ]
+}
