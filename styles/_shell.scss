@@ -125,23 +125,24 @@
 
 .site-shell-v2 .dropdown-panel {
   position: absolute;
-  top: calc(100% + 0.55rem);
-  left: 50%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(205px, 1fr));
-  gap: 0;
-  width: 460px;
-  translate: -50% 0;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 480px;
+  translate: 0 0;
   overflow: visible;
-  border: 0;
-  border-radius: var(--spt-radius-card);
+  border: 1px solid var(--spt-border);
+  border-radius: 16px;
   background: var(--spt-surface);
   padding: 0.55rem;
-  box-shadow: 0 8px 24px rgb(16 31 64 / 14%);
+  box-shadow: 0 16px 36px rgb(16 31 64 / 14%);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   transition: opacity 180ms ease, transform 180ms var(--spt-ease), visibility 180ms ease;
   z-index: 100;
 }
@@ -159,11 +160,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 58px;
-  border-radius: 10px;
-  padding: 0.75rem 0.9rem;
+  min-height: 38px;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
   color: var(--spt-ink);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   transition: background 180ms ease, color 180ms ease;
 }
