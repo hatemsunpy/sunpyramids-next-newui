@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { Header } from "@/components/Header";
 
-// Header-level integration for Basic Voice Search: the real Header markup
+// Header voice wiring with an explicit resolver title-mode response: real markup
 // with BOTH search surfaces (desktop form always mounted, mobile form inside
 // the drawer), the REAL browser adapter, and a stubbed window.SpeechRecognition
 // constructor — no microphone, no permissions, no network.
@@ -94,6 +94,11 @@ function stubSubmit(form: HTMLFormElement) {
   return submit;
 }
 
+async function finishCommand(form: HTMLFormElement, recognition: FakeRecognition) {
+  fireEvent.click(within(form).getByRole("button", { name: /stop listening/i }));
+  await act(async () => recognition.emitEnd());
+}
+
 beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async () => Response.json({ mode: "title" })));
   FakeRecognition.instances = [];
@@ -126,6 +131,7 @@ describe("Header Basic Voice Search — desktop wiring", () => {
     expect(FakeRecognition.instances[0].lang).toBe("en-US");
 
     await act(async () => FakeRecognition.instances[0].emitFinal("nile cruise"));
+    await finishCommand(desktop, FakeRecognition.instances[0]);
     expect(input.value).toBe("nile cruise");
     expect(submit).toHaveBeenCalledTimes(1);
 
@@ -172,6 +178,7 @@ describe("Header Basic Voice Search — mobile drawer wiring", () => {
 
     expect(FakeRecognition.instances).toHaveLength(1);
     await act(async () => FakeRecognition.instances[0].emitFinal("luxor"));
+    await finishCommand(mobile, FakeRecognition.instances[0]);
     expect(mobileInput.value).toBe("luxor");
     expect(submit).toHaveBeenCalledTimes(1);
   });
@@ -190,6 +197,7 @@ describe("Header Basic Voice Search — mobile drawer wiring", () => {
     // Mobile session.
     fireEvent.click(within(mobile).getByRole("button", { name: /search by voice/i }));
     await act(async () => FakeRecognition.instances[0].emitFinal("aswan"));
+    await finishCommand(mobile, FakeRecognition.instances[0]);
     expect(mobileSubmit).toHaveBeenCalledTimes(1);
     expect(desktopSubmit).not.toHaveBeenCalled();
     expect(desktopInput.value).toBe("");
@@ -197,6 +205,7 @@ describe("Header Basic Voice Search — mobile drawer wiring", () => {
     // Desktop session.
     fireEvent.click(within(desktop).getByRole("button", { name: /search by voice/i }));
     await act(async () => FakeRecognition.instances[1].emitFinal("cairo"));
+    await finishCommand(desktop, FakeRecognition.instances[1]);
     expect(desktopSubmit).toHaveBeenCalledTimes(1);
     expect(desktopInput.value).toBe("cairo");
     expect(mobileSubmit).toHaveBeenCalledTimes(1);

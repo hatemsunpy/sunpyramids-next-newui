@@ -1,0 +1,39 @@
+{
+  "frozenAt": "2026-09-15T10:05:41.027Z",
+  "head": "7ce16081e8c9a5df9375b2df3c2734b32d3884f4",
+  "production": {
+    "app/api/voice/resolve/route.ts": "63f7b40d7cdb2bb18c24dba917e2c4bf55dcdb8dfb7695f6c44a9fd6f5de459b",
+    "components/HomeSearchShortcuts.tsx": "bb13a3b49cc06d9a02d0981b1ecb62b44cc128ca8f80cb537a30b88354f98a99",
+    "components/voice/VoiceFindTripPanel.tsx": "29590a28df58668cfa3cc83794ad6ba7a7ff16c3eaa442e249311375f1e3364b",
+    "components/voice/VoiceSearchButton.tsx": "59688b20f91631924c50ee2f33eb9d84e5de0b8a898165550634d097a0084577",
+    "lib/header-voice-resolution.ts": "faebf2a7378d5f718f596825e699fd342fd20885c60c4f49b363a014bed78edb",
+    "lib/voice-copy.ts": "efe9bb846c2ff68108521eda60a5719c846c61d4b00b91a2a7a5fa615ebb5817",
+    "lib/voice/browser-speech-recognizer.ts": "bb09459c5062861901c9bd0d060049372527d6a57508d72a9ed40484d153d9a6",
+    "lib/voice/capability-mapper.ts": "c853f2401e6e0ca2c730ae8ded2f59cf783da8028e402df895c4077400e60b13",
+    "lib/voice/command-speech-recognizer.ts": "e1ec1dd268e04b5e5792ecffb895530aa621a2508a4dba52b193e994441ade0d",
+    "lib/voice/entity-match.ts": "a9053d5e4f4190414a3a371f07871e8f78040e18568c44662c2ab22d2d976003",
+    "lib/voice/lexicons/de.ts": "bedb7c483ac76f4d68ac193a5cc058fb948de14bfa9d228a85e9fdd63ec7268c",
+    "lib/voice/lexicons/en.ts": "32430f39a5475a7c6540e9ee824edefb9f5a86d9db3eda2412b0f9c6036aae61",
+    "lib/voice/lexicons/es.ts": "77db72f86a6e8c6d2df0b5cb4795c7bfd72994fbcd52afcf6c2ce35131db1792",
+    "lib/voice/lexicons/fr.ts": "09d0941798c10c2695f0f2a76062ffb6c174a0d6894dd29e1bdae9999ec74756",
+    "lib/voice/lexicons/index.ts": "c9f9b8c85d3f5d49bf69051bbca2424bfda3dd6be26374fc61936aee7b3a492a",
+    "lib/voice/lexicons/it.ts": "8ebb0c92eb9c7740f9442f5a0c521d72c502d290dec266fac42e96b3de278cfa",
+    "lib/voice/lexicons/pt.ts": "1aa62ff70bd0b3538bc61e8a403d7417e414cb1af0beb429b7c7c5719806c862",
+    "lib/voice/lexicons/types.ts": "86d9faaaefed7557c6e557e9c5f847cf03b1187743f856c6d448bde9cd1280cb",
+    "lib/voice/lexicons/zh.ts": "b21226073f89042bbc05674166fdc43ad3192e7ad490a876c770dc5c8372dbcf",
+    "lib/voice/normalize.ts": "e356eed3702aaf381a0210f4b12dd834e4d8d44c362cb4d2d305dd1aeec25346",
+    "lib/voice/parse-voice-query.ts": "de23ebf3ef52de8e14f43fb0a39845e5fa23ac4b8ff25c443996b6f8f80a0784",
+    "lib/voice/speech-languages.ts": "df574c4c8370b5bbc41c4d50ecb27cb61b53bdcfbce2e8fd48c3aa456ba3fb0e",
+    "lib/voice/speech-recognizer.ts": "c40adc6d8d48de03a0b00469068e3afd36e5bafe34838fee3d49f6d534adbdc8",
+    "lib/voice/types.ts": "ae704d014812eae9691089067ca8eeb9b94347c77e8fcce3f0ff8243d407daff",
+    "lib/voice/use-speech-recognition.ts": "01a5740c7b73af58f6b08bd73a0b4b726035060a2f8f59a3dea865d4edc813c2"
+  },
+  "inputs": {
+    "qa/voice/corpus.v1.json": "79b401910c3a72d695b4c0ee94e295811cd7c1928e5bf34b8d824beb6c085e5e",
+    "qa/voice/taxonomy.fixture.json": "247665f7d753ab06af6d70bc63337d7fa9b3eae07c58a7889df113ccb68c1a71",
+    "qa/voice/asr-matrix.v1.json": "d3e68d467ef3c12bec573fc70624dd265b729f319968f2f3d022322af072ecd2",
+    "qa/voice/README.md": "1ca225ff561fde603f3accb5e9e132e385742be5e8c0e3fe4599d115832b3dbd",
+    "qa/voice/benchmark.test.ts": "ca27a85f3775c76a0ab38b473f768b4c9fe89c150b48652638a0ad45b3aafd5e",
+    "qa/voice/vitest.config.ts": "1cdfeb4a4888ad89c8d214b0c57641f4330768760f0fff27c58f1911fb342890"
+  }
+}

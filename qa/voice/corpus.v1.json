@@ -1,0 +1,2744 @@
+{
+  "version": 1,
+  "preExecution": true,
+  "scope": "Exploratory balanced baseline; labels frozen before any benchmark output. No independent speaker or ASR claims.",
+  "cases": [
+    {
+      "id": "en-exact",
+      "locale": "en",
+      "transcript": "5 days Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-reverse",
+      "locale": "en",
+      "transcript": "Cairo 5 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-structured",
+      "locale": "en",
+      "transcript": "5 day Nile cruise to Aswan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-direction",
+      "locale": "en",
+      "transcript": "from Luxor to Aswan for 5 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-number-words",
+      "locale": "en",
+      "transcript": "five days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-approximate",
+      "locale": "en",
+      "transcript": "around one week in Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-place-ambiguity",
+      "locale": "en",
+      "transcript": "Luxor Aswan cruise",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-nights",
+      "locale": "en",
+      "transcript": "3 nights",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-mixed-units",
+      "locale": "en",
+      "transcript": "3 nights 4 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-duration-ambiguity",
+      "locale": "en",
+      "transcript": "5 days or 7 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-week",
+      "locale": "en",
+      "transcript": "one week",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "en-out-of-range",
+      "locale": "en",
+      "transcript": "46 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-zero",
+      "locale": "en",
+      "transcript": "0 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-category",
+      "locale": "en",
+      "transcript": "day tour",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-child-category",
+      "locale": "en",
+      "transcript": "luxury Nile cruise",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-month",
+      "locale": "en",
+      "transcript": "in November",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-travelers",
+      "locale": "en",
+      "transcript": "for two people",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-privacy",
+      "locale": "en",
+      "transcript": "private tour",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-destination-only",
+      "locale": "en",
+      "transcript": "trip to Aswan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-bare-place",
+      "locale": "en",
+      "transcript": "Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-regional-place",
+      "locale": "en",
+      "transcript": "Hurghada 5 days",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-unknown-place",
+      "locale": "en",
+      "transcript": "trip to Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "en-destination-removed",
+      "locale": "en",
+      "transcript": "5 days Cairo",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "en-category-removed",
+      "locale": "en",
+      "transcript": "5 day Nile cruise to Aswan",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "en-destinations-unavailable",
+      "locale": "en",
+      "transcript": "5 day Nile cruise to Aswan",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "en-all-unavailable",
+      "locale": "en",
+      "transcript": "5 day Nile cruise to Aswan",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "fr-exact",
+      "locale": "fr",
+      "transcript": "5 jours au Caire",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-reverse",
+      "locale": "fr",
+      "transcript": "Le Caire, 5 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-structured",
+      "locale": "fr",
+      "transcript": "une croisière de 5 jours à Assouan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-direction",
+      "locale": "fr",
+      "transcript": "de Louxor à Assouan pour 5 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-number-words",
+      "locale": "fr",
+      "transcript": "cinq jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-approximate",
+      "locale": "fr",
+      "transcript": "environ une semaine au Caire",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-place-ambiguity",
+      "locale": "fr",
+      "transcript": "Louxor Assouan croisière",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-nights",
+      "locale": "fr",
+      "transcript": "3 nuits",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-mixed-units",
+      "locale": "fr",
+      "transcript": "3 nuits 4 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-duration-ambiguity",
+      "locale": "fr",
+      "transcript": "5 jours ou 7 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-week",
+      "locale": "fr",
+      "transcript": "une semaine",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "fr-out-of-range",
+      "locale": "fr",
+      "transcript": "46 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-zero",
+      "locale": "fr",
+      "transcript": "0 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-category",
+      "locale": "fr",
+      "transcript": "excursion d'une journée",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-child-category",
+      "locale": "fr",
+      "transcript": "croisière de luxe",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-month",
+      "locale": "fr",
+      "transcript": "en novembre",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-travelers",
+      "locale": "fr",
+      "transcript": "pour deux personnes",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-privacy",
+      "locale": "fr",
+      "transcript": "voyage privé",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-destination-only",
+      "locale": "fr",
+      "transcript": "un voyage à Assouan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-bare-place",
+      "locale": "fr",
+      "transcript": "Le Caire",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-regional-place",
+      "locale": "fr",
+      "transcript": "Hurghada 5 jours",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-unknown-place",
+      "locale": "fr",
+      "transcript": "voyage à Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "fr-destination-removed",
+      "locale": "fr",
+      "transcript": "5 jours au Caire",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "fr-category-removed",
+      "locale": "fr",
+      "transcript": "une croisière de 5 jours à Assouan",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "fr-destinations-unavailable",
+      "locale": "fr",
+      "transcript": "une croisière de 5 jours à Assouan",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "fr-all-unavailable",
+      "locale": "fr",
+      "transcript": "une croisière de 5 jours à Assouan",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "de-exact",
+      "locale": "de",
+      "transcript": "5 Tage in Kairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-reverse",
+      "locale": "de",
+      "transcript": "Kairo, 5 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-structured",
+      "locale": "de",
+      "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-direction",
+      "locale": "de",
+      "transcript": "von Luxor nach Assuan für 5 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-number-words",
+      "locale": "de",
+      "transcript": "fünf Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-approximate",
+      "locale": "de",
+      "transcript": "ungefähr eine Woche in Kairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-place-ambiguity",
+      "locale": "de",
+      "transcript": "Luxor Assuan Nilkreuzfahrt",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-nights",
+      "locale": "de",
+      "transcript": "3 Nächte",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-mixed-units",
+      "locale": "de",
+      "transcript": "3 Nächte 4 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-duration-ambiguity",
+      "locale": "de",
+      "transcript": "5 Tage oder 7 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-week",
+      "locale": "de",
+      "transcript": "eine Woche",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "de-out-of-range",
+      "locale": "de",
+      "transcript": "46 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-zero",
+      "locale": "de",
+      "transcript": "0 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-category",
+      "locale": "de",
+      "transcript": "Tagestour",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-child-category",
+      "locale": "de",
+      "transcript": "Luxus Nilkreuzfahrt",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-month",
+      "locale": "de",
+      "transcript": "im November",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-travelers",
+      "locale": "de",
+      "transcript": "für zwei Personen",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-privacy",
+      "locale": "de",
+      "transcript": "private Tour",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-destination-only",
+      "locale": "de",
+      "transcript": "eine Reise nach Assuan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-bare-place",
+      "locale": "de",
+      "transcript": "Kairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-regional-place",
+      "locale": "de",
+      "transcript": "Hurghada 5 Tage",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-unknown-place",
+      "locale": "de",
+      "transcript": "Reise nach Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "de-destination-removed",
+      "locale": "de",
+      "transcript": "5 Tage in Kairo",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "de-category-removed",
+      "locale": "de",
+      "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "de-destinations-unavailable",
+      "locale": "de",
+      "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "de-all-unavailable",
+      "locale": "de",
+      "transcript": "5 Tage Nilkreuzfahrt nach Assuan",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "it-exact",
+      "locale": "it",
+      "transcript": "5 giorni al Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-reverse",
+      "locale": "it",
+      "transcript": "Il Cairo, 5 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-structured",
+      "locale": "it",
+      "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-direction",
+      "locale": "it",
+      "transcript": "da Luxor ad Aswan per 5 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-number-words",
+      "locale": "it",
+      "transcript": "cinque giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-approximate",
+      "locale": "it",
+      "transcript": "circa una settimana al Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-place-ambiguity",
+      "locale": "it",
+      "transcript": "Luxor Aswan crociera",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-nights",
+      "locale": "it",
+      "transcript": "3 notti",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-mixed-units",
+      "locale": "it",
+      "transcript": "3 notti 4 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-duration-ambiguity",
+      "locale": "it",
+      "transcript": "5 giorni o 7 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-week",
+      "locale": "it",
+      "transcript": "una settimana",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "it-out-of-range",
+      "locale": "it",
+      "transcript": "46 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-zero",
+      "locale": "it",
+      "transcript": "0 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-category",
+      "locale": "it",
+      "transcript": "tour di un giorno",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-child-category",
+      "locale": "it",
+      "transcript": "crociera di lusso",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-month",
+      "locale": "it",
+      "transcript": "a novembre",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-travelers",
+      "locale": "it",
+      "transcript": "per due persone",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-privacy",
+      "locale": "it",
+      "transcript": "tour privato",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-destination-only",
+      "locale": "it",
+      "transcript": "un viaggio ad Aswan",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-bare-place",
+      "locale": "it",
+      "transcript": "Il Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-regional-place",
+      "locale": "it",
+      "transcript": "Hurghada 5 giorni",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-unknown-place",
+      "locale": "it",
+      "transcript": "viaggio a Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "it-destination-removed",
+      "locale": "it",
+      "transcript": "5 giorni al Cairo",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "it-category-removed",
+      "locale": "it",
+      "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "it-destinations-unavailable",
+      "locale": "it",
+      "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "it-all-unavailable",
+      "locale": "it",
+      "transcript": "crociera sul Nilo di 5 giorni ad Aswan",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "pt-exact",
+      "locale": "pt",
+      "transcript": "5 dias no Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-reverse",
+      "locale": "pt",
+      "transcript": "Cairo, 5 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-structured",
+      "locale": "pt",
+      "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-direction",
+      "locale": "pt",
+      "transcript": "de Luxor para Assuão por 5 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-number-words",
+      "locale": "pt",
+      "transcript": "cinco dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-approximate",
+      "locale": "pt",
+      "transcript": "cerca de uma semana no Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-place-ambiguity",
+      "locale": "pt",
+      "transcript": "Luxor Assuão cruzeiro",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-nights",
+      "locale": "pt",
+      "transcript": "3 noites",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-mixed-units",
+      "locale": "pt",
+      "transcript": "3 noites 4 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-duration-ambiguity",
+      "locale": "pt",
+      "transcript": "5 dias ou 7 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-week",
+      "locale": "pt",
+      "transcript": "uma semana",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "pt-out-of-range",
+      "locale": "pt",
+      "transcript": "46 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-zero",
+      "locale": "pt",
+      "transcript": "0 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-category",
+      "locale": "pt",
+      "transcript": "passeio de um dia",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-child-category",
+      "locale": "pt",
+      "transcript": "cruzeiro de luxo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-month",
+      "locale": "pt",
+      "transcript": "em novembro",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-travelers",
+      "locale": "pt",
+      "transcript": "para duas pessoas",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-privacy",
+      "locale": "pt",
+      "transcript": "viagem privada",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-destination-only",
+      "locale": "pt",
+      "transcript": "uma viagem para Assuão",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-bare-place",
+      "locale": "pt",
+      "transcript": "Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-regional-place",
+      "locale": "pt",
+      "transcript": "Hurghada 5 dias",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-unknown-place",
+      "locale": "pt",
+      "transcript": "viagem para Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "pt-destination-removed",
+      "locale": "pt",
+      "transcript": "5 dias no Cairo",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "pt-category-removed",
+      "locale": "pt",
+      "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "pt-destinations-unavailable",
+      "locale": "pt",
+      "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "pt-all-unavailable",
+      "locale": "pt",
+      "transcript": "cruzeiro no Nilo de 5 dias para Assuão",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "es-exact",
+      "locale": "es",
+      "transcript": "5 días en El Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-reverse",
+      "locale": "es",
+      "transcript": "El Cairo, 5 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-structured",
+      "locale": "es",
+      "transcript": "crucero por el Nilo de 5 días a Asuán",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-direction",
+      "locale": "es",
+      "transcript": "de Luxor a Asuán por 5 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-number-words",
+      "locale": "es",
+      "transcript": "cinco días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-approximate",
+      "locale": "es",
+      "transcript": "alrededor de una semana en El Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-place-ambiguity",
+      "locale": "es",
+      "transcript": "Luxor Asuán crucero",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-nights",
+      "locale": "es",
+      "transcript": "3 noches",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-mixed-units",
+      "locale": "es",
+      "transcript": "3 noches 4 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-duration-ambiguity",
+      "locale": "es",
+      "transcript": "5 días o 7 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-week",
+      "locale": "es",
+      "transcript": "una semana",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "es-out-of-range",
+      "locale": "es",
+      "transcript": "46 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-zero",
+      "locale": "es",
+      "transcript": "0 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-category",
+      "locale": "es",
+      "transcript": "excursión de un día",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-child-category",
+      "locale": "es",
+      "transcript": "crucero de lujo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-month",
+      "locale": "es",
+      "transcript": "en noviembre",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-travelers",
+      "locale": "es",
+      "transcript": "para dos personas",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-privacy",
+      "locale": "es",
+      "transcript": "tour privado",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-destination-only",
+      "locale": "es",
+      "transcript": "un viaje a Asuán",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-bare-place",
+      "locale": "es",
+      "transcript": "El Cairo",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-regional-place",
+      "locale": "es",
+      "transcript": "Hurghada 5 días",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-unknown-place",
+      "locale": "es",
+      "transcript": "viaje a Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "es-destination-removed",
+      "locale": "es",
+      "transcript": "5 días en El Cairo",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "es-category-removed",
+      "locale": "es",
+      "transcript": "crucero por el Nilo de 5 días a Asuán",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "es-destinations-unavailable",
+      "locale": "es",
+      "transcript": "crucero por el Nilo de 5 días a Asuán",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "es-all-unavailable",
+      "locale": "es",
+      "transcript": "crucero por el Nilo de 5 días a Asuán",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "zh-exact",
+      "locale": "zh",
+      "transcript": "开罗五天游",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-reverse",
+      "locale": "zh",
+      "transcript": "开罗5天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-structured",
+      "locale": "zh",
+      "transcript": "五天尼罗河游轮到阿斯旺",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-direction",
+      "locale": "zh",
+      "transcript": "从卢克索到阿斯旺五天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "origin": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-number-words",
+      "locale": "zh",
+      "transcript": "五天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-approximate",
+      "locale": "zh",
+      "transcript": "大约一周在开罗",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "requires-confirmation"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-place-ambiguity",
+      "locale": "zh",
+      "transcript": "卢克索阿斯旺游轮",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "destination": "ambiguous",
+          "category": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-nights",
+      "locale": "zh",
+      "transcript": "三夜",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-mixed-units",
+      "locale": "zh",
+      "transcript": "三夜四天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "4"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-duration-ambiguity",
+      "locale": "zh",
+      "transcript": "五天或七天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "ambiguous"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-week",
+      "locale": "zh",
+      "transcript": "一周",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "days": "7"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "regression"
+    },
+    {
+      "id": "zh-out-of-range",
+      "locale": "zh",
+      "transcript": "46天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-zero",
+      "locale": "zh",
+      "transcript": "0天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "duration": "invalid"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-category",
+      "locale": "zh",
+      "transcript": "一日游",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "main": "day-tour"
+        },
+        "statuses": {
+          "category": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-child-category",
+      "locale": "zh",
+      "transcript": "豪华尼罗河游轮",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-month",
+      "locale": "zh",
+      "transcript": "十一月",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "month": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-travelers",
+      "locale": "zh",
+      "transcript": "两个人",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "travelers": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-privacy",
+      "locale": "zh",
+      "transcript": "私人旅游",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {
+          "privacy": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-destination-only",
+      "locale": "zh",
+      "transcript": "去阿斯旺旅行",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "aswan"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-bare-place",
+      "locale": "zh",
+      "transcript": "开罗",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "cairo"
+        },
+        "statuses": {
+          "destination": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-regional-place",
+      "locale": "zh",
+      "transcript": "赫尔格达五天",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {
+          "destination": "hurghada",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable"
+        }
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-unknown-place",
+      "locale": "zh",
+      "transcript": "去Zzyzx",
+      "taxonomy": "full",
+      "expected": {
+        "filters": {},
+        "statuses": {}
+      },
+      "partition": "challenge"
+    },
+    {
+      "id": "zh-destination-removed",
+      "locale": "zh",
+      "transcript": "开罗五天游",
+      "taxonomy": "destination-removed",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "zh-category-removed",
+      "locale": "zh",
+      "transcript": "五天尼罗河游轮到阿斯旺",
+      "taxonomy": "category-removed",
+      "expected": {
+        "filters": {
+          "destination": "aswan",
+          "days": "5"
+        },
+        "statuses": {
+          "destination": "applicable",
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "zh-destinations-unavailable",
+      "locale": "zh",
+      "transcript": "五天尼罗河游轮到阿斯旺",
+      "taxonomy": "destinations-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5",
+          "main": "nile-cruises"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "applicable"
+        }
+      },
+      "partition": "taxonomy"
+    },
+    {
+      "id": "zh-all-unavailable",
+      "locale": "zh",
+      "transcript": "五天尼罗河游轮到阿斯旺",
+      "taxonomy": "all-unavailable",
+      "expected": {
+        "filters": {
+          "days": "5"
+        },
+        "statuses": {
+          "duration": "applicable",
+          "category": "recognized-but-not-applicable"
+        }
+      },
+      "partition": "taxonomy"
+    }
+  ]
+}

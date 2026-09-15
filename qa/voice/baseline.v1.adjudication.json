@@ -1,0 +1,14 @@
+{
+  "scope": "Post-run annotation review; frozen corpus and raw results are unchanged. No parser changes or rerun with repaired labels.",
+  "invalidOracleCases": ["fr-category", "it-category", "pt-category", "es-category", "zh-category"],
+  "reason": "Each of these phrases explicitly states one day. The expected canonical filter set incorrectly omitted days=1. The observed days=1 application is supported by the transcript, so these are corpus annotation errors, not false confident application.",
+  "rawResultPolicy": "Keep all 182 original rows, raw pass/fail and original false-application flags visible. Report a separate valid-label denominator of 177. Do not silently revise raw metrics.",
+  "confirmedApplicationFindings": [
+    {"id":"fr-exact","class":"destination recall / alias coverage","detail":"au Caire parses Caire; current live-fixture matching proposes Cairo with confirmation rather than auto-applying. Safe degradation, fails the expected full interpretation."},
+    {"id":"fr-approximate","class":"destination recall / alias coverage","detail":"Caire requires destination confirmation; approximate duration correctly requires 7-day confirmation. No silent duration conversion."},
+    {"id":"pt-direction","class":"destination span parsing","detail":"Assuão por is retained as a destination mention; unresolved, no arbitrary place selected. Header requires unavailable-field review."},
+    {"id":"es-direction","class":"destination span parsing","detail":"Asuán por is retained as a destination mention; unresolved, no arbitrary place selected. Header requires unavailable-field review."}
+  ],
+  "productionChanges": "NONE",
+  "fixPolicy": "Evidence only. Any correction must be separately proposed after baseline and manual QA, with a newly versioned corpus for future evaluation."
+}

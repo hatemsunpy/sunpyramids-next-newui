@@ -1,0 +1,295 @@
+{
+  "phase": "7.25",
+  "version": 1,
+  "generatedAt": "2026-09-15T09:26:07.246Z",
+  "method": {
+    "exactEntitySurvival": "Case-folded, punctuation-folded whole-term occurrence in the primary final transcript.",
+    "fullCommandPreservation": "Every declared important field is present; five/five-day forms are accepted for the 5 days field.",
+    "caution": "Missing exact terms are auditable. Separate substitution from truncation/omission only by reviewing raw transcripts; this analyzer does not infer alignment from absent audio."
+  },
+  "sources": {
+    "baselineFiles": [
+      "native-baseline.v1.json",
+      "native-baseline-repeat.v1.json"
+    ],
+    "contextualBiasing": "native-biased-unsupported.v1.json",
+    "nBest": [
+      "native-nbest-critical.v1.json",
+      "native-nbest-critical-repeat.v1.json"
+    ]
+  },
+  "totals": {
+    "recognizerStartAttempts": 79,
+    "attemptsReachingAudioLifecycle": 78,
+    "contextualBiasingStartsRejectedBeforeAudio": 1
+  },
+  "baseline": {
+    "combined": {
+      "attempts": 54,
+      "positiveAttempts": 42,
+      "negativeAttempts": 12,
+      "entitySlots": 60,
+      "exactEntitySlots": 10,
+      "exactEntitySlotRate": 0.16666666666666666,
+      "missingEntitySlots": 50,
+      "missingEntitySlotRate": 0.8333333333333334,
+      "attemptsWithAllExpectedEntities": 5,
+      "allExpectedEntitiesRate": 0.11904761904761904,
+      "commandAttempts": 14,
+      "fullCommands": 0,
+      "fullCommandRate": 0,
+      "emptyFinals": 19,
+      "emptyFinalRate": 0.35185185185185186,
+      "falseDomainInsertions": 0,
+      "falseDomainInsertionRate": 0
+    },
+    "runs": [
+      {
+        "file": "native-baseline.v1.json",
+        "exportedAt": "2026-09-15T08:54:23.239Z",
+        "metrics": {
+          "attempts": 27,
+          "positiveAttempts": 21,
+          "negativeAttempts": 6,
+          "entitySlots": 30,
+          "exactEntitySlots": 4,
+          "exactEntitySlotRate": 0.13333333333333333,
+          "missingEntitySlots": 26,
+          "missingEntitySlotRate": 0.8666666666666667,
+          "attemptsWithAllExpectedEntities": 2,
+          "allExpectedEntitiesRate": 0.09523809523809523,
+          "commandAttempts": 7,
+          "fullCommands": 0,
+          "fullCommandRate": 0,
+          "emptyFinals": 8,
+          "emptyFinalRate": 0.2962962962962963,
+          "falseDomainInsertions": 0,
+          "falseDomainInsertionRate": 0
+        }
+      },
+      {
+        "file": "native-baseline-repeat.v1.json",
+        "exportedAt": "2026-09-15T09:03:44.691Z",
+        "metrics": {
+          "attempts": 27,
+          "positiveAttempts": 21,
+          "negativeAttempts": 6,
+          "entitySlots": 30,
+          "exactEntitySlots": 6,
+          "exactEntitySlotRate": 0.2,
+          "missingEntitySlots": 24,
+          "missingEntitySlotRate": 0.8,
+          "attemptsWithAllExpectedEntities": 3,
+          "allExpectedEntitiesRate": 0.14285714285714285,
+          "commandAttempts": 7,
+          "fullCommands": 0,
+          "fullCommandRate": 0,
+          "emptyFinals": 11,
+          "emptyFinalRate": 0.4074074074074074,
+          "falseDomainInsertions": 0,
+          "falseDomainInsertionRate": 0
+        }
+      }
+    ],
+    "entityBreakdown": {
+      "Aswan": {
+        "slots": 12,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Nile Cruise": {
+        "slots": 8,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Abu Simbel": {
+        "slots": 6,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Sharm El Sheikh": {
+        "slots": 6,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Cairo": {
+        "slots": 10,
+        "exactSurvivals": 7,
+        "rate": 0.7
+      },
+      "Nile": {
+        "slots": 2,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Luxor": {
+        "slots": 10,
+        "exactSurvivals": 3,
+        "rate": 0.3
+      },
+      "Hurghada": {
+        "slots": 6,
+        "exactSurvivals": 0,
+        "rate": 0
+      }
+    }
+  },
+  "contextualBiasing": {
+    "requested": {
+      "vocabularySize": 18,
+      "boost": 5,
+      "maxAlternatives": 1
+    },
+    "operationalResult": "unsupported",
+    "error": {
+      "error": "phrases-not-supported",
+      "message": ""
+    },
+    "events": [
+      {
+        "type": "error",
+        "atMs": 10,
+        "error": "phrases-not-supported",
+        "message": ""
+      },
+      {
+        "type": "error",
+        "atMs": 10,
+        "error": "phrases-not-supported",
+        "message": ""
+      },
+      {
+        "type": "end",
+        "atMs": 11
+      }
+    ],
+    "transcript": "",
+    "measurableTranscriptionMetrics": null
+  },
+  "nBest": {
+    "primaryMetrics": {
+      "attempts": 24,
+      "positiveAttempts": 24,
+      "negativeAttempts": 0,
+      "entitySlots": 54,
+      "exactEntitySlots": 9,
+      "exactEntitySlotRate": 0.16666666666666666,
+      "missingEntitySlots": 45,
+      "missingEntitySlotRate": 0.8333333333333334,
+      "attemptsWithAllExpectedEntities": 0,
+      "allExpectedEntitiesRate": 0,
+      "commandAttempts": 24,
+      "fullCommands": 0,
+      "fullCommandRate": 0,
+      "emptyFinals": 3,
+      "emptyFinalRate": 0.125,
+      "falseDomainInsertions": 0,
+      "falseDomainInsertionRate": null
+    },
+    "entityBreakdown": {
+      "Nile Cruise": {
+        "slots": 12,
+        "exactSurvivals": 1,
+        "rate": 0.08333333333333333
+      },
+      "Aswan": {
+        "slots": 18,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Abu Simbel": {
+        "slots": 6,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Cairo": {
+        "slots": 6,
+        "exactSurvivals": 6,
+        "rate": 1
+      },
+      "Sharm El Sheikh": {
+        "slots": 6,
+        "exactSurvivals": 0,
+        "rate": 0
+      },
+      "Luxor": {
+        "slots": 6,
+        "exactSurvivals": 2,
+        "rate": 0.3333333333333333
+      }
+    },
+    "alternatives": {
+      "requestedMaxAlternatives": 3,
+      "failedPrimaryEntitySlots": 45,
+      "recoveredEntitySlots": 2,
+      "recoveryRate": 0.044444444444444446,
+      "maximumAlternativeCountPerAttempt": [
+        3,
+        1,
+        1,
+        3,
+        1,
+        2,
+        3,
+        2,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "alternativeCountDistribution": {
+        "1": 3,
+        "2": 4,
+        "3": 17
+      },
+      "recoveryExamples": [
+        {
+          "promptId": "aswan-command",
+          "repeat": 3,
+          "entity": "Nile Cruise",
+          "primary": "5 Day Cruise to Swan",
+          "recovery": {
+            "transcript": "5 day Nile cruise to Swan",
+            "confidence": 0.9054792523384094,
+            "alternativeIndex": 1
+          }
+        },
+        {
+          "promptId": "nile-command",
+          "repeat": 3,
+          "entity": "Luxor",
+          "primary": "5 day night cruise from luxur correspond",
+          "recovery": {
+            "transcript": "5 day night cruise from Luxor correspond",
+            "confidence": 0.9297428131103516,
+            "alternativeIndex": 1
+          }
+        }
+      ]
+    },
+    "runs": [
+      {
+        "file": "native-nbest-critical.v1.json",
+        "exportedAt": "2026-09-15T09:14:43.223Z",
+        "attempts": 12
+      },
+      {
+        "file": "native-nbest-critical-repeat.v1.json",
+        "exportedAt": "2026-09-15T09:22:35.080Z",
+        "attempts": 12
+      }
+    ]
+  }
+}

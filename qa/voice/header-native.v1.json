@@ -1,0 +1,135 @@
+{
+  "browser": "Chrome 152.0.0.0, connected regular Chrome profile",
+  "device": "Windows x64 desktop, user's real microphone",
+  "runtime": {
+    "standard": "function",
+    "prefixed": "function",
+    "constructor": "function SpeechRecognition() { [native code] }",
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36"
+  },
+  "privacy": "Development QA text and native events only. No audio, application logging, analytics or production persistence.",
+  "tests": [
+    {
+      "test": 5,
+      "status": "PASS",
+      "recognitionLocale": "en-US",
+      "continuous": true,
+      "interimResults": true,
+      "maxAlternatives": 1,
+      "startedAt": "2026-09-13T15:20:57.854Z",
+      "spokenPhrase": "around one week in Cairo",
+      "exactAsrTranscript": "around 1 week in Cairo",
+      "nativeFinalAtMs": 3899,
+      "nativeStopCallAtMs": 4701,
+      "nativeEndAtMs": 4864,
+      "request": {
+        "requestId": "21712.670",
+        "method": "POST",
+        "url": "http://localhost:3000/api/voice/resolve",
+        "payload": { "transcript": "around 1 week in Cairo", "locale": "en" }
+      },
+      "response": {
+        "status": 200,
+        "cacheControl": "no-store",
+        "body": {
+          "mode": "structured",
+          "applicable": { "destination": "cairo" },
+          "decisions": [ { "field": "days", "kind": "confirm", "options": [ { "value": "7" } ] } ]
+        }
+      },
+      "urlBeforeConfirmation": "http://localhost:3000/",
+      "reviewText": "Confirm your voice search\n\nHeard: “around 1 week in Cairo”\n\nDestination: cairo\n\nDuration: Did you mean\n7 Days\nIgnore this filter\nDismiss",
+      "explicitAction": "Clicked the real 7 Days confirmation button",
+      "finalUrl": "http://localhost:3000/trips?destination=cairo&days=7",
+      "activeFilters": [ "Cairo Tours", "7 Days" ],
+      "titleParameter": false,
+      "classification": "ASR preserved approximation and Cairo; resolver and Header confirmation behaved correctly"
+    },
+    {
+      "test": 6,
+      "status": "FAIL — native ASR semantic preservation",
+      "spokenPhrase": "Luxor Aswan cruise",
+      "protocolNote": "One attempt was requested; four user-initiated native starts and four corresponding POSTs were observed. Intended phrase is the displayed/requested phrase; audio was not recorded.",
+      "recognitionLocale": "en-US",
+      "continuous": true,
+      "interimResults": true,
+      "maxAlternatives": 1,
+      "attempts": [
+        {
+          "startedAt": "2026-09-13T15:31:24.327Z",
+          "exactAsrTranscript": "look for a swan Cruise",
+          "nativeFinalAtMs": 4943,
+          "nativeStopCallAtMs": 5745,
+          "nativeEndAtMs": 6348,
+          "requestId": "12116.571",
+          "documentUrlAtRequest": "http://localhost:3000/",
+          "payload": { "transcript": "look for a swan Cruise", "locale": "en" },
+          "status": 200,
+          "cacheControl": "no-store",
+          "fullResponse": { "mode": "structured", "applicable": { "main": "nile-cruises" }, "decisions": [ { "field": "destination", "kind": "confirm", "options": [ { "value": "aswan", "label": "Aswan Tours" } ] } ] },
+          "resultingAction": "Resolver requires destination confirmation; no two-place ambiguity preserved",
+          "urlVerification": "No separate UI snapshot between this attempt and the next; next request still originated at /"
+        },
+        {
+          "startedAt": "2026-09-13T15:31:38.949Z",
+          "exactAsrTranscript": "Cruise",
+          "nativeFinalAtMs": 4480,
+          "nativeStopCallAtMs": 5288,
+          "nativeEndAtMs": 6311,
+          "requestId": "12116.574",
+          "documentUrlAtRequest": "http://localhost:3000/",
+          "payload": { "transcript": "Cruise", "locale": "en" },
+          "status": 200,
+          "cacheControl": "no-store",
+          "fullResponse": { "mode": "structured", "applicable": { "main": "nile-cruises" }, "decisions": [] },
+          "resultingAction": "Automatic category-only navigation; both intended places missing",
+          "finalUrl": "http://localhost:3000/trips?main=nile-cruises",
+          "urlVerification": "Trips RSC navigation request followed this response; subsequent two resolver requests originated at this URL; final DOM URL matches"
+        },
+        {
+          "startedAt": "2026-09-13T15:31:52.838Z",
+          "exactAsrTranscript": "loksor oswan Cruise",
+          "nativeFinalAtMs": 3734,
+          "nativeStopCallAtMs": 4548,
+          "nativeEndAtMs": 4628,
+          "requestId": "12116.681",
+          "documentUrlAtRequest": "http://localhost:3000/trips?main=nile-cruises",
+          "payload": { "transcript": "loksor oswan Cruise", "locale": "en" },
+          "status": 200,
+          "cacheControl": "no-store",
+          "fullResponse": { "mode": "structured", "applicable": { "main": "nile-cruises" }, "decisions": [ { "field": "destination", "kind": "confirm", "options": [ { "value": "aswan", "label": "Aswan Tours" } ] } ] },
+          "resultingAction": "Resolver requires Aswan confirmation; intended Luxor/Aswan ambiguity not preserved",
+          "urlVerification": "No intermediate UI snapshot; next request retained category-only URL"
+        },
+        {
+          "startedAt": "2026-09-13T15:31:59.544Z",
+          "exactAsrTranscript": "locksor Swan crows",
+          "nativeFinalAtMs": 4593,
+          "nativeStopCallAtMs": 5399,
+          "nativeEndAtMs": 6375,
+          "requestId": "12116.686",
+          "documentUrlAtRequest": "http://localhost:3000/trips?main=nile-cruises",
+          "payload": { "transcript": "locksor Swan crows", "locale": "en" },
+          "status": 200,
+          "cacheControl": "no-store",
+          "fullResponse": { "mode": "structured", "applicable": {}, "decisions": [ { "field": "destination", "kind": "confirm", "options": [ { "value": "aswan", "label": "Aswan Tours" } ] } ] },
+          "resultingAction": "Observed confirmation UI offers Aswan Tours / Ignore this filter / Dismiss; no selection made",
+          "finalUrl": "http://localhost:3000/trips?main=nile-cruises"
+        }
+      ],
+      "requestMethod": "POST",
+      "requestUrl": "http://localhost:3000/api/voice/resolve",
+      "networkCapture": { "truncated": false, "hasMore": false, "resolverPosts": 4, "nativeStarts": 4 },
+      "observedFinalUrl": "http://localhost:3000/trips?main=nile-cruises",
+      "observedActiveFilters": [ "Nile Cruises" ],
+      "observedFinalReviewText": "Confirm your voice search\n\nHeard: “locksor Swan crows”\n\nDestination: Did you mean\nAswan Tours\nIgnore this filter\nDismiss",
+      "titleParameter": false,
+      "bothPlaceNamesPreservedAttempts": 0,
+      "nativeErrorEvents": 0,
+      "classification": [ "ASR place-name substitution/omission", "ASR cruise/category substitution on last attempt", "Missing final phrase segments on Cruise-only attempt; endpointing cause not established", "Application correctly interprets actual final text; fuzzy Aswan remains confirmation-only", "Actual incomplete automatic Header navigation risk" ],
+      "captureAssessment": "Bounded finalization observed 802–814 ms after each usable final, four native sessions and four POSTs; no infrastructure defect inferred",
+      "taxonomyAssessment": "Live resolver responses available, HTTP 200; valid Nile Cruises category and Aswan confirmation option",
+      "confirmationAssessment": "Partial fuzzy-place review correctly shown; expected two-place ambiguity cannot be recovered from corrupted final text"
+    }
+  ]
+}

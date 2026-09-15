@@ -48,7 +48,7 @@ export function isSpeechRecognitionSupported(): boolean {
   return recognitionConstructor() !== null;
 }
 
-export const browserRecognizerFactory: RecognizerFactory = (lang, handlers: RecognizerHandlers) => {
+export const browserRecognizerFactory: RecognizerFactory = (lang, handlers: RecognizerHandlers, options) => {
   const ctor = recognitionConstructor();
   if (!ctor) {
     // Unsupported browsers fail deterministically at start() time with the
@@ -67,9 +67,8 @@ export const browserRecognizerFactory: RecognizerFactory = (lang, handlers: Reco
 
   const recognition = new ctor();
   recognition.lang = lang;
-  // Single-utterance recognition matches both product flows: Basic Voice
-  // (one spoken query) and Smart Find Trip (one spoken sentence).
-  recognition.continuous = false;
+  // Basic Voice and Smart Find Trip retain their single-utterance default.
+  recognition.continuous = options?.continuous ?? false;
   // Interim results let future UI show a live transcript preview; the final
   // result is the only one future flows act on.
   recognition.interimResults = true;
@@ -91,6 +90,13 @@ export const browserRecognizerFactory: RecognizerFactory = (lang, handlers: Reco
       if (result.isFinal) isFinal = true;
     }
     const payload: RecognitionResult = { transcript: transcript.trim(), isFinal };
+    if (options?.indexedResults) {
+      payload.segments = Array.from({ length: event.results.length }, (_, index) => ({
+        index,
+        transcript: (event.results[index][0]?.transcript ?? "").trim(),
+        isFinal: event.results[index].isFinal,
+      }));
+    }
     handlers.onResult(payload);
   };
 

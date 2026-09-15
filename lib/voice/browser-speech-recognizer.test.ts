@@ -175,6 +175,23 @@ describe("browserRecognizerFactory — configuration and event mapping", () => {
     expect(spy.events).toContain("result:final:find a five day nile cruise");
   });
 
+  it("command options enable continuous capture with complete indexed final/interim snapshots", () => {
+    const { Ctor } = makeRecordingCtor();
+    const created: unknown[] = [];
+    const first = patchedCtor(Ctor, created);
+    const onResult = vi.fn();
+    browserRecognizerFactory("en-US", { ...handlers({ events: [] }), onResult }, { continuous: true, indexedResults: true }).start();
+    expect(first().continuous).toBe(true);
+    first().onresult?.({ resultIndex: 1, results: [
+      { isFinal: true, 0: { transcript: "5 day Nile cruise" }, length: 1 },
+      { isFinal: false, 0: { transcript: " to As" }, length: 1 },
+    ] });
+    expect(onResult.mock.calls[0][0].segments).toEqual([
+      { index: 0, transcript: "5 day Nile cruise", isFinal: true },
+      { index: 1, transcript: "to As", isFinal: false },
+    ]);
+  });
+
   it("concatenates multiple result batches in a single event from resultIndex", () => {
     const { Ctor } = makeRecordingCtor();
     const created: unknown[] = [];

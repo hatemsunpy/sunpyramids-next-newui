@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "protocol": "Native browser only, no audio recording. Each row is one explicit command. Keep actual transcript distinct from intended phrase. Other locales NOT MEASURED until a willing proficient speaker is available.",
+  "rows": [
+    {
+      "entity": "Cairo",
+      "shape": "alone",
+      "phrase": "Cairo",
+      "id": "en-matrix-01",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Cairo",
+      "shape": "short",
+      "phrase": "trip to Cairo",
+      "id": "en-matrix-02",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Cairo",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Cairo",
+      "id": "en-matrix-03",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Giza",
+      "shape": "alone",
+      "phrase": "Giza",
+      "id": "en-matrix-04",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Giza",
+      "shape": "short",
+      "phrase": "trip to Giza",
+      "id": "en-matrix-05",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Giza",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Giza",
+      "id": "en-matrix-06",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Luxor",
+      "shape": "alone",
+      "phrase": "Luxor",
+      "id": "en-matrix-07",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Luxor",
+      "shape": "short",
+      "phrase": "trip to Luxor",
+      "id": "en-matrix-08",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Luxor",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Luxor",
+      "id": "en-matrix-09",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Aswan",
+      "shape": "alone",
+      "phrase": "Aswan",
+      "id": "en-matrix-10",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Aswan",
+      "shape": "short",
+      "phrase": "trip to Aswan",
+      "id": "en-matrix-11",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Aswan",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Aswan",
+      "id": "en-matrix-12",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Abu Simbel",
+      "shape": "alone",
+      "phrase": "Abu Simbel",
+      "id": "en-matrix-13",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Abu Simbel",
+      "shape": "short",
+      "phrase": "trip to Abu Simbel",
+      "id": "en-matrix-14",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Abu Simbel",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Abu Simbel",
+      "id": "en-matrix-15",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Hurghada",
+      "shape": "alone",
+      "phrase": "Hurghada",
+      "id": "en-matrix-16",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Hurghada",
+      "shape": "short",
+      "phrase": "trip to Hurghada",
+      "id": "en-matrix-17",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Hurghada",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Hurghada",
+      "id": "en-matrix-18",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Sharm El Sheikh",
+      "shape": "alone",
+      "phrase": "Sharm El Sheikh",
+      "id": "en-matrix-19",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Sharm El Sheikh",
+      "shape": "short",
+      "phrase": "trip to Sharm El Sheikh",
+      "id": "en-matrix-20",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Sharm El Sheikh",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Sharm El Sheikh",
+      "id": "en-matrix-21",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile",
+      "shape": "alone",
+      "phrase": "Nile",
+      "id": "en-matrix-22",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile",
+      "shape": "short",
+      "phrase": "a Nile trip",
+      "id": "en-matrix-23",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile cruise from Luxor to Aswan",
+      "id": "en-matrix-24",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile Cruise",
+      "shape": "alone",
+      "phrase": "Nile Cruise",
+      "id": "en-matrix-25",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile Cruise",
+      "shape": "short",
+      "phrase": "a Nile Cruise trip",
+      "id": "en-matrix-26",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    },
+    {
+      "entity": "Nile Cruise",
+      "shape": "multi-entity",
+      "phrase": "5 day Nile Cruise cruise from Luxor to Aswan",
+      "id": "en-matrix-27",
+      "locale": "en",
+      "recognitionLocale": "en-US",
+      "state": "NOT RUN"
+    }
+  ]
+}

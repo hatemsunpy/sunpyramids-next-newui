@@ -68,9 +68,107 @@ function isActivePath(pathname: string, href: string) {
   return targetPath === "/" ? currentPath === "/" : currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
 }
 
+const tourMetaMap: Record<
+  (typeof tourLinks)[number][0],
+  {
+    image: string;
+    cardTitle: Record<Locale, string>;
+    subtitle: Record<Locale, string>;
+  }
+> = {
+  oneDay: {
+    image: "/images/aboutusmainbanner.png",
+    cardTitle: {
+      en: "Top Cairo Tours & Day Trips",
+      fr: "Meilleurs Tours et Excursions d'un Jour",
+      de: "Top Kairo Touren & Tagesausflüge",
+      it: "I Migliori Tour e Gite di un Giorno",
+      pt: "Melhores Passeios e Excursões de Um Dia",
+      es: "Mejores Tours y Excursiones de un Día",
+      zh: "开罗精选一日游与经典探险",
+    },
+    subtitle: {
+      en: "Pyramids, museums & daily Egyptian excursions",
+      fr: "Pyramides, musées et excursions quotidiennes",
+      de: "Pyramiden, Museen und tägliche Ausflüge",
+      it: "Piramidi, musei ed escursioni giornaliere",
+      pt: "Pirâmides, museus e passeios diários",
+      es: "Pirámides, museos y excursiones diarias",
+      zh: "金字塔、博物馆与经典每日行程",
+    },
+  },
+  multiDays: {
+    image: "/images/mainBanner.png",
+    cardTitle: {
+      en: "Egypt Multi-Day Vacation Packages",
+      fr: "Forfaits Vacances Multi-Jours en Égypte",
+      de: "Ägypten Mehrtägige Reisepakete",
+      it: "Pacchetti Vacanza Più Giorni in Egitto",
+      pt: "Pacotes de Viagem de Vários Dias no Egito",
+      es: "Paquetes de Viaje de Varios Días en Egipto",
+      zh: "埃及全景多日深度度假套餐",
+    },
+    subtitle: {
+      en: "Tailored itineraries across Cairo, Luxor & Aswan",
+      fr: "Itinéraires sur mesure au Caire, Louxor et Assouan",
+      de: "Maßgeschneiderte Routen durch Kairo, Luxor & Assuan",
+      it: "Itinerari su misura tra Il Cairo, Luxor e Assuan",
+      pt: "Roteiros personalizados pelo Cairo, Luxor e Aswan",
+      es: "Itinerarios a medida por El Cairo, Lúxor y Asuán",
+      zh: "开罗、卢克索与阿斯旺定制深度行程",
+    },
+  },
+  nileCruises: {
+    image: "/images/nile-cruise-preview.jpg",
+    cardTitle: {
+      en: "Luxury Nile Cruises Experience",
+      fr: "Croisières de Luxe sur le Nil",
+      de: "Luxus-Nilkreuzfahrten Erlebnis",
+      it: "Esperienza di Crociera di Lusso sul Nilo",
+      pt: "Experiência em Cruzeiros de Luxo no Nilo",
+      es: "Experiencia de Cruceros de Lujo por el Nilo",
+      zh: "尼罗河奢华五星级游轮巡游之旅",
+    },
+    subtitle: {
+      en: "Sail legendary waters between Luxor & Aswan",
+      fr: "Naviguez entre Louxor et Assouan en 5 étoiles",
+      de: "Segeln Sie zwischen Luxor und Assuan",
+      it: "Naviga tra Luxor e Assuan nel massimo comfort",
+      pt: "Navegue entre Luxor e Aswan com todo o conforto",
+      es: "Navega entre Lúxor y Asuán con el máximo confort",
+      zh: "巡航卢克索与阿斯旺之间的千年古迹",
+    },
+  },
+  shoreExcursions: {
+    image: "/images/sea.png",
+    cardTitle: {
+      en: "Shore & Port Coastal Excursions",
+      fr: "Excursions Portuaires et Mer Rouge",
+      de: "Landausflüge & Rotes Meer Erlebnisse",
+      it: "Escursioni dai Porti e Mar Rosso",
+      pt: "Excursões Portuárias e Mar Vermelho",
+      es: "Excursiones Portuarias y Mar Rojo",
+      zh: "红海港口靠岸观光与海滨探险",
+    },
+    subtitle: {
+      en: "Safaga, Alexandria & Red Sea coastal trips",
+      fr: "Départs de Safaga, Alexandrie et stations balnéaires",
+      de: "Ab Safaga, Alexandria und Rotem Meer",
+      it: "Da Safaga, Alessandria e località del Mar Rosso",
+      pt: "De Safaga, Alexandria e praias do Mar Vermelho",
+      es: "Desde Safaga, Alejandría y el Mar Rojo",
+      zh: "萨法加、亚历山大及红海海岸精选出游",
+    },
+  },
+};
+
 function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string }) {
   const copy = uiCopy(locale);
   const [open, setOpen] = useState(false);
+  const currentActiveLink = tourLinks.find(([, href]) => isActivePath(pathname, href));
+  const [hoveredKey, setHoveredKey] = useState<(typeof tourLinks)[number][0]>(
+    currentActiveLink ? currentActiveLink[0] : "oneDay"
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const active = tourLinks.some(([, href]) => isActivePath(pathname, href)) || stripLocale(pathname).startsWith("/tour/");
@@ -106,10 +204,6 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
   }, [open]);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     return () => {
       clearCloseTimeout();
     };
@@ -120,6 +214,12 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
       setOpen(false);
     }
   };
+
+  const activeMeta = tourMetaMap[hoveredKey] || tourMetaMap.oneDay;
+  const activeLink = tourLinks.find(([key]) => key === hoveredKey) || tourLinks[0];
+  const activeHref = activeLink[1];
+  const cardTitle = activeMeta.cardTitle[locale] || activeMeta.cardTitle.en;
+  const cardSubtitle = activeMeta.subtitle[locale] || activeMeta.subtitle.en;
 
   return (
     <div
@@ -156,21 +256,68 @@ function NavDropdown({ locale, pathname }: { locale: Locale; pathname: string })
         {copy.egyptTours}
         <svg className="dropdown-chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" /></svg>
       </button>
-      <div className="dropdown-panel" role="menu">
-        {tourLinks.map(([key, href]) => (
+      <div className="dropdown-panel dropdown-panel--with-preview" role="menu">
+        <div className="dropdown-panel__links">
+          {tourLinks.map(([key, href]) => {
+            const isHovered = hoveredKey === key;
+            const isCurrentPage = isActivePath(pathname, href);
+            return (
+              <Link
+                key={href}
+                href={withLocale(href, locale)}
+                role="menuitem"
+                aria-current={isCurrentPage ? "page" : undefined}
+                className={`dropdown-link-item ${isHovered ? "dropdown-link-item--active" : ""}`}
+                onMouseEnter={() => setHoveredKey(key)}
+                onMouseOver={() => setHoveredKey(key)}
+                onPointerEnter={() => setHoveredKey(key)}
+                onFocus={() => setHoveredKey(key)}
+                onClick={() => {
+                  clearCloseTimeout();
+                  setOpen(false);
+                }}
+              >
+                <span className="dropdown-link-indicator" aria-hidden="true" />
+                <span className="dropdown-link-label">{copy[key]}</span>
+                <ArrowIcon />
+              </Link>
+            );
+          })}
+        </div>
+        <div className="dropdown-panel__preview" aria-hidden="true">
           <Link
-            key={href}
-            href={withLocale(href, locale)}
-            role="menuitem"
-            aria-current={isActivePath(pathname, href) ? "page" : undefined}
+            href={withLocale(activeHref, locale)}
+            className="dropdown-preview-card"
+            tabIndex={-1}
             onClick={() => {
               clearCloseTimeout();
               setOpen(false);
             }}
           >
-            {copy[key]}<ArrowIcon />
+            <div className="dropdown-preview-media">
+              {tourLinks.map(([key]) => {
+                const meta = tourMetaMap[key];
+                const isVisible = key === hoveredKey;
+                return (
+                  <Image
+                    key={key}
+                    src={meta.image}
+                    alt=""
+                    fill
+                    sizes="260px"
+                    priority
+                    className={`dropdown-preview-img ${isVisible ? "dropdown-preview-img--visible" : ""}`}
+                  />
+                );
+              })}
+              <div className="dropdown-preview-gradient" />
+            </div>
+            <div className="dropdown-preview-content">
+              <span className="dropdown-preview-title">{cardTitle}</span>
+              <span className="dropdown-preview-desc">{cardSubtitle}</span>
+            </div>
           </Link>
-        ))}
+        </div>
       </div>
     </div>
   );
@@ -256,7 +403,7 @@ export function Header({ locale = "en", siteTitle }: { locale?: Locale; siteTitl
 
   const renderPrimaryNavigation = (mobile = false) => primaryNavLinks.map(([key, href]) => {
     if (href === null) {
-      if (!mobile) return <NavDropdown key={key} locale={locale} pathname={pathname} />;
+      if (!mobile) return <NavDropdown key={`${key}-${pathname}`} locale={locale} pathname={pathname} />;
       const toursActive = tourLinks.some(([, tourHref]) => isActivePath(pathname, tourHref)) || stripLocale(pathname).startsWith("/tour/");
       return (
         <details className={`mobile-tour-group ${toursActive ? "nav-item-active" : ""}`} key={key}>

@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "locale": "en-US",
+  "continuous": true,
+  "moderateBoost": 5,
+  "maxAlternatives": 3,
+  "curatedVocabulary": [
+    "Cairo",
+    "Giza",
+    "Luxor",
+    "Aswan",
+    "Abu Simbel",
+    "Hurghada",
+    "Sharm El Sheikh",
+    "Nile",
+    "Nile Cruise",
+    "Grand Egyptian Museum",
+    "Valley of the Kings",
+    "Karnak Temple",
+    "Saqqara",
+    "Alexandria",
+    "Red Sea",
+    "Day Tour",
+    "Nile Cruises",
+    "Multi Day Tours"
+  ],
+  "modes": [
+    { "id": "A", "label": "Baseline", "phrases": false, "maxAlternatives": 1 },
+    { "id": "B", "label": "Phrase biasing", "phrases": true, "maxAlternatives": 1 },
+    { "id": "C", "label": "N-best only", "phrases": false, "maxAlternatives": 3 },
+    { "id": "D", "label": "Phrase biasing + N-best", "phrases": true, "maxAlternatives": 3 }
+  ],
+  "prompts": [
+    { "id": "aswan-alone", "entity": "Aswan", "context": "alone", "phrase": "Aswan", "expectedEntities": ["Aswan"] },
+    { "id": "aswan-short", "entity": "Aswan", "context": "short", "phrase": "trip to Aswan", "expectedEntities": ["Aswan"] },
+    { "id": "aswan-command", "entity": "Aswan", "context": "command", "phrase": "5 day Nile cruise to Aswan", "expectedEntities": ["Nile Cruise", "Aswan"], "importantFields": ["5 days", "Nile Cruise", "Aswan"], "critical": true },
+
+    { "id": "abu-simbel-alone", "entity": "Abu Simbel", "context": "alone", "phrase": "Abu Simbel", "expectedEntities": ["Abu Simbel"] },
+    { "id": "abu-simbel-short", "entity": "Abu Simbel", "context": "short", "phrase": "trip to Abu Simbel", "expectedEntities": ["Abu Simbel"] },
+    { "id": "abu-simbel-command", "entity": "Abu Simbel", "context": "command", "phrase": "5 day trip from Aswan to Abu Simbel", "expectedEntities": ["Aswan", "Abu Simbel"], "importantFields": ["5 days", "Aswan", "Abu Simbel"], "critical": true },
+
+    { "id": "sharm-alone", "entity": "Sharm El Sheikh", "context": "alone", "phrase": "Sharm El Sheikh", "expectedEntities": ["Sharm El Sheikh"] },
+    { "id": "sharm-short", "entity": "Sharm El Sheikh", "context": "short", "phrase": "trip to Sharm El Sheikh", "expectedEntities": ["Sharm El Sheikh"] },
+    { "id": "sharm-command", "entity": "Sharm El Sheikh", "context": "command", "phrase": "5 day trip from Cairo to Sharm El Sheikh", "expectedEntities": ["Cairo", "Sharm El Sheikh"], "importantFields": ["5 days", "Cairo", "Sharm El Sheikh"], "critical": true },
+
+    { "id": "nile-alone", "entity": "Nile", "context": "alone", "phrase": "Nile", "expectedEntities": ["Nile"] },
+    { "id": "nile-cruise", "entity": "Nile Cruise", "context": "short", "phrase": "Nile Cruise", "expectedEntities": ["Nile Cruise"] },
+    { "id": "nile-command", "entity": "Nile / Nile Cruise", "context": "command", "phrase": "5 day Nile cruise from Luxor to Aswan", "expectedEntities": ["Nile Cruise", "Luxor", "Aswan"], "importantFields": ["5 days", "Nile Cruise", "Luxor", "Aswan"], "critical": true },
+
+    { "id": "hurghada-alone", "entity": "Hurghada", "context": "alone", "phrase": "Hurghada", "expectedEntities": ["Hurghada"] },
+    { "id": "hurghada-short", "entity": "Hurghada", "context": "short", "phrase": "trip to Hurghada", "expectedEntities": ["Hurghada"] },
+    { "id": "hurghada-command", "entity": "Hurghada", "context": "command", "phrase": "5 day trip from Cairo to Hurghada", "expectedEntities": ["Cairo", "Hurghada"], "importantFields": ["5 days", "Cairo", "Hurghada"] },
+
+    { "id": "luxor-alone", "entity": "Luxor", "context": "alone", "phrase": "Luxor", "expectedEntities": ["Luxor"] },
+    { "id": "luxor-short", "entity": "Luxor", "context": "short", "phrase": "trip to Luxor", "expectedEntities": ["Luxor"] },
+    { "id": "luxor-command", "entity": "Luxor", "context": "command", "phrase": "5 day Nile cruise from Luxor to Aswan", "expectedEntities": ["Nile Cruise", "Luxor", "Aswan"], "importantFields": ["5 days", "Nile Cruise", "Luxor", "Aswan"] },
+
+    { "id": "cairo-alone", "entity": "Cairo", "context": "alone", "phrase": "Cairo", "expectedEntities": ["Cairo"] },
+    { "id": "cairo-short", "entity": "Cairo", "context": "short", "phrase": "trip to Cairo", "expectedEntities": ["Cairo"] },
+    { "id": "cairo-command", "entity": "Cairo", "context": "command", "phrase": "5 day trip from Luxor to Cairo", "expectedEntities": ["Luxor", "Cairo"], "importantFields": ["5 days", "Luxor", "Cairo"] },
+
+    { "id": "negative-egypt", "entity": null, "context": "negative", "phrase": "five days in Egypt", "expectedEntities": [] },
+    { "id": "negative-cruise", "entity": null, "context": "negative", "phrase": "a cruise for five days", "expectedEntities": [] },
+    { "id": "negative-hotel", "entity": null, "context": "negative", "phrase": "trip from the hotel", "expectedEntities": [] },
+    { "id": "negative-city", "entity": null, "context": "negative", "phrase": "city tour tomorrow", "expectedEntities": [] },
+    { "id": "negative-museum", "entity": null, "context": "negative", "phrase": "museum visit", "expectedEntities": [] },
+    { "id": "negative-desert", "entity": null, "context": "negative", "phrase": "desert tour", "expectedEntities": [] }
+  ]
+}

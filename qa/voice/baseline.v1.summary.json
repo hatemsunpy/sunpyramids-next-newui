@@ -1,0 +1,268 @@
+{
+  "rawTotal": 182,
+  "rawPass": 173,
+  "invalidOracleCases": [
+    "fr-category",
+    "it-category",
+    "pt-category",
+    "es-category",
+    "zh-category"
+  ],
+  "validTotal": 177,
+  "validPass": 173,
+  "policy": "Separate annotation adjudication; raw frozen results and recommendations are preserved. No production edits.",
+  "locales": [
+    {
+      "locale": "en",
+      "raw": {
+        "locale": "en",
+        "total": 26,
+        "pass": 26,
+        "percent": 100,
+        "exactFilters": 26,
+        "challenge": {
+          "total": 11,
+          "pass": 11
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 0,
+        "missingExpectedFiltersCases": 0,
+        "parserRecommendation": "FULL SMART quality (exploratory text only)",
+        "failures": []
+      },
+      "validLabels": {
+        "total": 26,
+        "pass": 26,
+        "percent": 100,
+        "challengeTotal": 11,
+        "challengePass": 11,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": []
+      }
+    },
+    {
+      "locale": "fr",
+      "raw": {
+        "locale": "fr",
+        "total": 26,
+        "pass": 23,
+        "percent": 88.46153846153847,
+        "exactFilters": 23,
+        "challenge": {
+          "total": 11,
+          "pass": 10
+        },
+        "safety": {
+          "total": 16,
+          "pass": 15
+        },
+        "falseConfidentApplicationCases": 1,
+        "missingExpectedFiltersCases": 2,
+        "parserRecommendation": "SUGGESTION ONLY",
+        "failures": [
+          "fr-exact",
+          "fr-approximate",
+          "fr-category"
+        ]
+      },
+      "validLabels": {
+        "total": 25,
+        "pass": 23,
+        "percent": 92,
+        "challengeTotal": 10,
+        "challengePass": 10,
+        "safetyTotal": 16,
+        "safetyPass": 15,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": [
+          "fr-exact",
+          "fr-approximate"
+        ]
+      }
+    },
+    {
+      "locale": "de",
+      "raw": {
+        "locale": "de",
+        "total": 26,
+        "pass": 26,
+        "percent": 100,
+        "exactFilters": 26,
+        "challenge": {
+          "total": 11,
+          "pass": 11
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 0,
+        "missingExpectedFiltersCases": 0,
+        "parserRecommendation": "FULL SMART quality (exploratory text only)",
+        "failures": []
+      },
+      "validLabels": {
+        "total": 26,
+        "pass": 26,
+        "percent": 100,
+        "challengeTotal": 11,
+        "challengePass": 11,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": []
+      }
+    },
+    {
+      "locale": "it",
+      "raw": {
+        "locale": "it",
+        "total": 26,
+        "pass": 25,
+        "percent": 96.15384615384616,
+        "exactFilters": 25,
+        "challenge": {
+          "total": 11,
+          "pass": 10
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 1,
+        "missingExpectedFiltersCases": 0,
+        "parserRecommendation": "SUGGESTION ONLY",
+        "failures": [
+          "it-category"
+        ]
+      },
+      "validLabels": {
+        "total": 25,
+        "pass": 25,
+        "percent": 100,
+        "challengeTotal": 10,
+        "challengePass": 10,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": []
+      }
+    },
+    {
+      "locale": "pt",
+      "raw": {
+        "locale": "pt",
+        "total": 26,
+        "pass": 24,
+        "percent": 92.3076923076923,
+        "exactFilters": 24,
+        "challenge": {
+          "total": 11,
+          "pass": 10
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 1,
+        "missingExpectedFiltersCases": 1,
+        "parserRecommendation": "SUGGESTION ONLY",
+        "failures": [
+          "pt-direction",
+          "pt-category"
+        ]
+      },
+      "validLabels": {
+        "total": 25,
+        "pass": 24,
+        "percent": 96,
+        "challengeTotal": 10,
+        "challengePass": 10,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": [
+          "pt-direction"
+        ]
+      }
+    },
+    {
+      "locale": "es",
+      "raw": {
+        "locale": "es",
+        "total": 26,
+        "pass": 24,
+        "percent": 92.3076923076923,
+        "exactFilters": 24,
+        "challenge": {
+          "total": 11,
+          "pass": 10
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 1,
+        "missingExpectedFiltersCases": 1,
+        "parserRecommendation": "SUGGESTION ONLY",
+        "failures": [
+          "es-direction",
+          "es-category"
+        ]
+      },
+      "validLabels": {
+        "total": 25,
+        "pass": 24,
+        "percent": 96,
+        "challengeTotal": 10,
+        "challengePass": 10,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": [
+          "es-direction"
+        ]
+      }
+    },
+    {
+      "locale": "zh",
+      "raw": {
+        "locale": "zh",
+        "total": 26,
+        "pass": 25,
+        "percent": 96.15384615384616,
+        "exactFilters": 25,
+        "challenge": {
+          "total": 11,
+          "pass": 10
+        },
+        "safety": {
+          "total": 16,
+          "pass": 16
+        },
+        "falseConfidentApplicationCases": 1,
+        "missingExpectedFiltersCases": 0,
+        "parserRecommendation": "SUGGESTION ONLY",
+        "failures": [
+          "zh-category"
+        ]
+      },
+      "validLabels": {
+        "total": 25,
+        "pass": 25,
+        "percent": 100,
+        "challengeTotal": 10,
+        "challengePass": 10,
+        "safetyTotal": 16,
+        "safetyPass": 16,
+        "falseConfidentApplicationCases": 0,
+        "confirmedFailures": []
+      }
+    }
+  ]
+}
