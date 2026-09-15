@@ -27,7 +27,7 @@ export default async function Page() {
   ]);
 
   return (
-    <SiteShell locale="en" settings={settings}>
+    <SiteShell locale="en" settings={settings} taxonomy={taxonomy}>
       <JsonLd schema={page?.seo?.structure_schema} />
       <HomePage page={page} tours={tours} popularTours={popularTours} specialOffers={specialOffers} highlights={highlights} blogs={blogs} faqs={faqs} events={events} rootCategories={taxonomy.rootCategories.map(({ slug, title, name }) => ({ slug, title, name }))} socialLinks={settings.socialLinks} locale="en" />
     </SiteShell>

@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: Props) {
   const tours = tourListData(toursResponse);
   const meta = tourMeta(toursResponse);
   return (
-    <SiteShell locale="en">
+    <SiteShell locale="en" taxonomy={taxonomy}>
       <JsonLd schema={page?.seo?.structure_schema} />
       <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={request} meta={meta} />
     </SiteShell>
