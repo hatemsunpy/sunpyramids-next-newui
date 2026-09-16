@@ -864,6 +864,83 @@ input[data-native-type] {
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
+.tour-card {
+  position: relative;
+}
+
+.tour-card-wishlist-wrap {
+  position: absolute;
+  z-index: 3;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  justify-items: end;
+  gap: 0.4rem;
+  max-width: calc(100% - 1.5rem);
+}
+
+.tour-card-wishlist {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--spt-border) 78%, transparent);
+  border-radius: 50%;
+  background: var(--spt-surface-raised);
+  color: var(--spt-anchor);
+  box-shadow: 0 6px 18px rgb(15 28 52 / 18%);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--spt-anchor-soft);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--spt-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--spt-amber);
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+}
+
+.tour-card-wishlist-feedback {
+  max-width: 12rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--spt-border);
+  border-radius: 0.55rem;
+  background: var(--spt-surface-raised);
+  color: var(--spt-ink);
+  box-shadow: 0 7px 20px rgb(15 28 52 / 16%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: end;
+}
+
 .tour-card:hover,
 .blog-card:hover {
   transform: translateY(-4px);

@@ -89,6 +89,7 @@ export function TripsPage({
                       key={tour.id || tour.slug}
                       tour={tour}
                       locale={locale}
+                      showWishlist
                     />
                   ))}
                 </div>

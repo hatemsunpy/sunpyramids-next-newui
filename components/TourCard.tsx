@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Locale, Tour } from "@/types/api";
 import { tourPath } from "@/lib/locales";
 import { PriceText } from "@/components/PriceText";
+import { TourWishlistButton } from "@/components/TourWishlistButton";
 
 function imageOf(item: Tour) {
   return item.featured_image || item.image || item.banner || item.gallery?.[0] || item.images?.[0] || "/images/mainBanner.png";
@@ -42,14 +43,28 @@ function DurationClockIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export function TourCard({ tour, locale = "en", className = "" }: { tour: Tour; locale?: Locale; className?: string }) {
+export function TourCard({
+  tour,
+  locale = "en",
+  className = "",
+  showWishlist = false,
+}: {
+  tour: Tour;
+  locale?: Locale;
+  className?: string;
+  showWishlist?: boolean;
+}) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
   const description = tour.short_description || tour.description || title;
   const price = priceOf(tour);
+  const isWishlisted = Boolean((tour as Tour & { wishlisted_exists?: boolean }).wishlisted_exists);
 
   return (
     <article className={`tour-card ${className}`.trim()}>
+      {showWishlist ? (
+        <TourWishlistButton key={`${tour.id || slug}-${isWishlisted}`} tour={tour} locale={locale} />
+      ) : null}
       <Link href={tourPath(slug, locale)}>
         <div className="tour-card-media">
           <Image src={imageOf(tour)} alt={title} fill sizes="(max-width: 768px) 100vw, 25vw" />

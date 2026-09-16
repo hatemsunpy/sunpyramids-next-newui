@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { TripsFilterSidebar } from "@/components/TripsFilterSidebar";
 import type { Locale, TripTaxonomy } from "@/types/api";
 
@@ -14,7 +14,9 @@ const taxonomy: TripTaxonomy = {
     { id: 3, name: "Multi Days Tours", title: "Multi Days Tours", slug: "multi-days-tours" },
     { id: 17, name: "Nile Cruises", title: "Nile Cruises", slug: "nile-cruises" },
     { id: 13, name: "One Day Tours", title: "One Day Tours", slug: "one-day-tours", parent_id: 1 },
+    { id: 23, name: "Shore Excursions", title: "Shore Excursions", slug: "shore-excursions", parent_id: 1 },
     { id: 2, name: "Luxury Nile Cruise", title: "Luxury Nile Cruise", slug: "luxury-nile-cruise", parent_id: 17 },
+    { id: 53, name: "Special Offers", title: "Special Offers", slug: "special-offers" },
   ],
   rootCategories: [
     { id: 1, name: "Day Tour", title: "Day Tour", slug: "day-tour" },
@@ -23,6 +25,7 @@ const taxonomy: TripTaxonomy = {
   ],
   childCategories: [
     { id: 13, name: "One Day Tours", title: "One Day Tours", slug: "one-day-tours", parent_id: 1 },
+    { id: 23, name: "Shore Excursions", title: "Shore Excursions", slug: "shore-excursions", parent_id: 1 },
     { id: 2, name: "Luxury Nile Cruise", title: "Luxury Nile Cruise", slug: "luxury-nile-cruise", parent_id: 17 },
   ],
   destinations: [
@@ -30,7 +33,7 @@ const taxonomy: TripTaxonomy = {
     { id: 12, title: "Luxor Tours", slug: "luxor" },
     { id: 13, title: "Aswan Tours", slug: "aswan" },
   ],
-  counts: { "day-tour": 316, "multi-days-tours": 100, "nile-cruises": 70 },
+  counts: { "day-tour": 316, "multi-days-tours": 100, "nile-cruises": 70, "shore-excursions": 45 },
   available: true,
 };
 
@@ -46,6 +49,66 @@ afterEach(() => {
 function activeLinkWithLabel(label: string) {
   return screen.getAllByTitle(label).map((el) => el.getAttribute("href"))[0];
 }
+
+function tourTypeLink(sidebar: HTMLElement, slug: string) {
+  return within(sidebar).getAllByRole("link").find((link) => link.getAttribute("href")?.includes(`main=${slug}`));
+}
+
+describe("TripsFilterSidebar — complete Tours Type filter", () => {
+  it("renders the five API-backed tour types in the desktop sidebar", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{}} />);
+    const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
+
+    expect(within(sidebar).getByRole("button", { name: "Tours Type" })).toBeTruthy();
+    [
+      ["day-tour", "Day Tour"],
+      ["multi-days-tours", "Multi Days Tours"],
+      ["nile-cruises", "Nile Cruises"],
+      ["shore-excursions", "Shore Excursions"],
+      ["special-offers", "Special Offers"],
+    ].forEach(([slug, label]) => {
+      expect(tourTypeLink(sidebar, slug)?.textContent).toContain(label);
+    });
+  });
+
+  it("renders counts from taxonomy metadata and leaves an unavailable count blank", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{}} />);
+    const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
+
+    expect(tourTypeLink(sidebar, "day-tour")?.textContent).toContain("316");
+    expect(tourTypeLink(sidebar, "shore-excursions")?.textContent).toContain("45");
+    expect(tourTypeLink(sidebar, "special-offers")?.textContent).not.toMatch(/\d/);
+  });
+
+  it("initializes the selected type from the committed main query", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{ main: "shore-excursions" }} />);
+    const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
+    expect(within(sidebar).getByText("Shore Excursions").closest("a")).toHaveAttribute("aria-current", "true");
+  });
+
+  it("preserves existing filters and resets pagination when changing type", () => {
+    render(
+      <TripsFilterSidebar
+        taxonomy={taxonomy}
+        locale="en"
+        active={{ destination: "aswan", days: 5, page: 9 }}
+      />,
+    );
+    const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
+    const href = tourTypeLink(sidebar, "special-offers")?.getAttribute("href") ?? "";
+
+    expect(href).toContain("main=special-offers");
+    expect(href).toContain("destination=aswan");
+    expect(href).toContain("days=5");
+    expect(href).not.toContain("page=");
+  });
+
+  it("does not duplicate Shore Excursions in Experience Categories", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{}} />);
+    const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
+    expect(within(sidebar).getAllByText("Shore Excursions")).toHaveLength(1);
+  });
+});
 
 describe("TripsFilterSidebar — days propagation through filter links", () => {
   it("days=5 + add destination → days preserved in the destination link", () => {
