@@ -1075,9 +1075,10 @@
   gap: clamp(1.25rem, 2vw, 2rem);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-snap-stop: normal;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
   overscroll-behavior-x: contain;
   user-select: none;
   -webkit-user-select: none;
@@ -1980,19 +1981,21 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .home-why-travel {
-    margin-top: 3rem;
-    padding-block: 4rem;
+    margin-top: 2.25rem;
+    padding-block: 2.5rem;
+    overflow: hidden;
   }
 
   .home-why-travel__layout {
-    gap: 3rem;
+    gap: 1.5rem;
   }
 
   .home-why-travel__heading {
-    max-width: 12ch;
-    font-size: clamp(2.25rem, 11vw, 3.3rem);
+    max-width: none;
+    font-size: clamp(1.85rem, 7.5vw, 2.35rem);
+    line-height: 1.15;
   }
 
   .home-why-travel__heading > span {
@@ -2000,21 +2003,97 @@
   }
 
   .home-why-travel__items {
-    grid-template-columns: 1fr;
-    gap: 2.75rem;
+    counter-reset: trust-card;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-snap-stop: normal;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding-inline: 0.25rem 1.5rem;
+    padding-block: 0.25rem 0.75rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .home-why-travel__item {
+    counter-increment: trust-card;
+    position: relative;
+    flex: 0 0 min(76vw, 280px);
+    width: min(76vw, 280px);
+    min-height: 280px;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    background: linear-gradient(180deg, var(--spt-surface-card) 0%, var(--spt-surface-soft) 100%);
+    border: 1px solid var(--spt-border-subtle);
+    border-radius: var(--spt-radius-card);
+    padding: 1.5rem 1.35rem;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+
+    &::after {
+      content: "0" counter(trust-card);
+      position: absolute;
+      top: 1.35rem;
+      right: 1.35rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--spt-muted);
+      opacity: 0.45;
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
   }
 
   .home-why-travel__item h3 {
-    font-size: 1.05rem;
+    margin: 0;
+    color: var(--spt-ink);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    padding-right: 2rem;
+  }
+
+  .home-why-travel__underline {
+    width: 5.5rem;
+    height: 0.65rem;
+    margin-top: 0.4rem;
   }
 
   .home-why-travel__item strong {
-    font-size: 1.08rem;
+    display: block;
+    margin-top: 1.25rem;
+    color: var(--spt-link);
+    font-size: 1.18rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
   }
 
   .home-why-travel__item p {
-    max-width: 36rem;
+    max-width: none;
+    margin: 0.55rem 0 0;
+    color: var(--spt-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
   }
+}
+
+@media (max-width: 640px) {
 
   .section-heading-v2,
   .section-heading-v2--center {
@@ -2214,13 +2293,18 @@
   .home-page--redesign .home-tour-grid,
   .home-offers-track,
   .home-destination-mosaic,
-  .home-events-track {
+  .upcoming-events-track,
+  .home-social-gallery-v2 {
     display: flex;
     width: calc(100% + 1rem);
     gap: 0.8rem;
     overflow-x: auto;
     scroll-padding-inline: 0.1rem;
     scroll-snap-type: x mandatory;
+    scroll-snap-stop: normal;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
     scrollbar-width: none;
   }
 
@@ -2228,19 +2312,21 @@
   .home-page--redesign .home-tour-grid::-webkit-scrollbar,
   .home-offers-track::-webkit-scrollbar,
   .home-destination-mosaic::-webkit-scrollbar,
-  .home-events-track::-webkit-scrollbar {
+  .upcoming-events-track::-webkit-scrollbar,
+  .home-social-gallery-v2::-webkit-scrollbar {
     display: none;
   }
 
   .home-signature-grid .tour-card,
   .home-page--redesign .home-tour-grid .tour-card,
   .home-offers-track .tour-card,
-  .home-events-track .event-card-v2 {
+  .upcoming-events-track .upcoming-event-card-wrapper {
     display: block;
     width: min(79vw, 305px);
     min-width: min(79vw, 305px);
     min-height: 0;
     scroll-snap-align: start;
+    scroll-snap-stop: normal;
   }
 
   .home-signature-grid .tour-card--feature {
@@ -2313,14 +2399,18 @@
   }
 
   .home-social-gallery-v2 {
-    grid-template-columns: repeat(5, minmax(72vw, 1fr));
+    grid-template-columns: none;
   }
 
   .home-social-gallery-v2 article,
   .home-social-gallery-v2 article > a,
   .home-social-gallery-v2 article.is-tall,
   .home-social-gallery-v2 article.is-tall > a {
+    flex: 0 0 min(72vw, 280px);
+    width: min(72vw, 280px);
     height: 390px;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
   }
 
   .home-faq-section-v2 {

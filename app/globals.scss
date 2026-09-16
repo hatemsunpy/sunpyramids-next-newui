@@ -1148,7 +1148,7 @@ input[data-native-type] {
   .home-mobile-card-track > .tour-card,
   .home-tour-grid .tour-card { min-width: min(82vw, 340px); scroll-snap-align: start; }
   .home-blog-track > .blog-card { min-width: min(64vw, 300px); scroll-snap-align: start; }
-  .swipe-carousel { cursor: grab; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .swipe-carousel { cursor: grab; touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
   .swipe-carousel.is-dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
   .swipe-carousel img { user-select: none; -webkit-user-drag: none; }
   .swipe-carousel:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
@@ -7381,7 +7381,7 @@ input[data-native-type] {
     scroll-padding-inline: 0.1rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -7395,14 +7395,14 @@ input[data-native-type] {
     width: min(70vw, 270px);
     min-width: min(70vw, 270px);
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
   .home-blog-track > .blog-card {
     width: min(64vw, 248px);
     min-width: min(64vw, 248px);
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
   .home-page .tour-card-media,
@@ -7528,7 +7528,7 @@ input[data-native-type] {
     margin-top: 1.5rem;
     overscroll-behavior-inline: contain;
     scrollbar-width: none;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -7540,7 +7540,7 @@ input[data-native-type] {
   .home-social-gallery article {
     flex-basis: 42vw;
     height: 280px;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
   .home-partners {
@@ -7550,7 +7550,7 @@ input[data-native-type] {
     scroll-padding-inline: 1rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    touch-action: pan-y;
+    touch-action: pan-x pan-y;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -7558,7 +7558,7 @@ input[data-native-type] {
     width: 110px;
     height: 52px;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal;
   }
 
 

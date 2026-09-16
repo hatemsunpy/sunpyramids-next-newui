@@ -76,6 +76,8 @@ export function HomeUpcomingEventsCarousel({
 
   // Pointer / touch drag handling
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // On mobile touch screens, let the browser's native hardware-accelerated touch momentum and CSS scroll snap handle swiping with 120fps physics
+    if (e.pointerType === "touch" || e.pointerType === "pen") return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
     const el = scrollRef.current;
     if (!el || el.scrollWidth <= el.clientWidth) return;

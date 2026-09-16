@@ -18,6 +18,7 @@ type DragState = {
   startX: number;
   startY: number;
   startScrollLeft: number;
+  startTime: number;
   dragging: boolean;
 };
 
@@ -35,6 +36,7 @@ const initialDragState: DragState = {
   startX: 0,
   startY: 0,
   startScrollLeft: 0,
+  startTime: 0,
   dragging: false,
 };
 
@@ -70,6 +72,8 @@ function moveByCard(track: HTMLDivElement, direction: -1 | 1) {
 }
 
 function beginCarouselDrag(event: ReactPointerEvent<HTMLDivElement>, refs: DragRefs) {
+  // On mobile touch screens, let the browser's native hardware-accelerated touch momentum and CSS scroll snap handle swiping with 120fps physics
+  if (event.pointerType === "touch" || event.pointerType === "pen") return;
   if (event.pointerType === "mouse" && event.button !== 0) return;
   if (event.currentTarget.scrollWidth <= event.currentTarget.clientWidth) return;
 
@@ -78,6 +82,7 @@ function beginCarouselDrag(event: ReactPointerEvent<HTMLDivElement>, refs: DragR
     startX: event.clientX,
     startY: event.clientY,
     startScrollLeft: event.currentTarget.scrollLeft,
+    startTime: Date.now(),
     dragging: false,
   };
   refs.suppressClick.current = false;
@@ -95,7 +100,11 @@ function moveCarouselPointer(event: ReactPointerEvent<HTMLDivElement>, refs: Dra
     return;
   }
 
-  if (!state.dragging) event.currentTarget.setPointerCapture(event.pointerId);
+  if (!state.dragging) {
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {}
+  }
   state.dragging = true;
   refs.suppressClick.current = true;
   event.currentTarget.classList.add("is-dragging");
@@ -108,12 +117,23 @@ function finishCarouselDrag(event: ReactPointerEvent<HTMLDivElement>, refs: Drag
   if (state.pointerId !== event.pointerId) return;
 
   if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-    event.currentTarget.releasePointerCapture(event.pointerId);
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {}
   }
   event.currentTarget.classList.remove("is-dragging");
-  if (state.dragging) snapToNearestCard(event.currentTarget);
+  if (state.dragging) {
+    const elapsed = Math.max(1, Date.now() - state.startTime);
+    const distanceX = event.clientX - state.startX;
+    const velocityX = distanceX / elapsed;
+    if (Math.abs(velocityX) > 0.25 || Math.abs(distanceX) > 60) {
+      moveByCard(event.currentTarget, distanceX < 0 || velocityX < -0.25 ? 1 : -1);
+    } else {
+      snapToNearestCard(event.currentTarget);
+    }
+  }
   refs.state.current = { ...initialDragState };
-  window.setTimeout(() => { refs.suppressClick.current = false; }, 0);
+  window.setTimeout(() => { refs.suppressClick.current = false; }, 80);
 }
 
 function blockClickAfterDrag(event: ReactMouseEvent<HTMLDivElement>, suppressClick: MutableRef<boolean>) {

@@ -65,12 +65,6 @@ export function HomePage({
   const heroImages = page?.gallery?.length
     ? page.gallery
     : [page?.banner || page?.image || "/images/mainBanner.png"];
-  const stats = [
-    ["+100K", copy.happyCustomer],
-    ["+50", copy.yearsExperience],
-    ["+60", copy.totalDestinations],
-    ["5.0", copy.tripadvisorRating],
-  ];
   const bookingSteps = [
     ["1", copy.findingTitle, copy.findingDescription],
     ["2", copy.bookingTitle, copy.bookingDescription],
@@ -102,10 +96,6 @@ export function HomePage({
         <HomeSearchShortcuts locale={locale} destinations={highlights} rootCategories={rootCategories} />
       </section>
 
-      <section className="home-trust-rail container-shell" aria-label="Sun Pyramids Tours statistics">
-        {stats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
-      </section>
-
       <WhyTravelWithSunPyramids locale={locale} />
 
       {tours.length ? (
@@ -116,11 +106,11 @@ export function HomePage({
             linkLabel={copy.seeMore}
             title={copy.seasonalTitle}
           />
-          <div className="home-signature-grid">
+          <SwipeCarousel className="home-signature-grid" ariaLabel={copy.seasonalTitle}>
             {tours.map((tour, index) => (
               <TourCard className={index === 0 ? "tour-card--feature" : ""} key={tour.id || tour.slug} tour={tour} locale={locale} />
             ))}
-          </div>
+          </SwipeCarousel>
         </section>
       ) : null}
 
