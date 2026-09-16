@@ -455,6 +455,109 @@
   font-weight: 500;
 }
 
+.home-why-travel {
+  margin-top: clamp(3.5rem, 6vw, 6rem);
+  padding-block: clamp(4rem, 6.5vw, 6.5rem);
+  background: var(--spt-surface-soft);
+}
+
+.home-why-travel__layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.4fr) minmax(0, 4fr);
+  align-items: start;
+  gap: clamp(2.5rem, 4vw, 5rem);
+}
+
+.home-why-travel__heading {
+  max-width: none;
+  margin: 0;
+  color: var(--spt-ink);
+  font-size: clamp(2.35rem, 2.9vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.home-why-travel__heading > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.home-why-travel__heading em {
+  margin-inline-end: 0.08em;
+  color: var(--spt-link);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.home-why-travel__items {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.2vw, 2.75rem);
+}
+
+.home-why-travel__item {
+  min-width: 0;
+}
+
+.home-why-travel__item h3 {
+  margin: 0;
+  color: var(--spt-ink);
+  font-size: clamp(0.96rem, 1.1vw, 1.08rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.home-why-travel__underline {
+  position: relative;
+  display: block;
+  width: min(100%, 9.5rem);
+  height: 0.7rem;
+  margin-top: 0.35rem;
+}
+
+.home-why-travel__underline::before,
+.home-why-travel__underline::after {
+  position: absolute;
+  left: 0;
+  width: 94%;
+  border-top: 2px solid var(--spt-amber);
+  border-radius: 50%;
+  content: "";
+  transform: rotate(-1.2deg);
+  transform-origin: left center;
+}
+
+.home-why-travel__underline::before {
+  top: 0.2rem;
+}
+
+.home-why-travel__underline::after {
+  top: 0.42rem;
+  left: 0.18rem;
+  width: 86%;
+  opacity: 0.58;
+  transform: rotate(0.8deg);
+}
+
+.home-why-travel__item strong {
+  display: block;
+  margin-top: 1.15rem;
+  color: var(--spt-link);
+  font-size: clamp(1rem, 1.2vw, 1.14rem);
+  line-height: 1.4;
+}
+
+.home-why-travel__item p {
+  max-width: 30ch;
+  margin: 0.8rem 0 0;
+  color: var(--spt-muted);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
 .site-shell-v2 .tour-card,
 .site-shell-v2 .blog-card {
   position: relative;
@@ -1699,6 +1802,24 @@
 }
 
 @media (max-width: 1180px) {
+  .home-why-travel__layout {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  .home-why-travel__heading {
+    max-width: none;
+  }
+
+  .home-why-travel__items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem clamp(2rem, 7vw, 5rem);
+  }
+
+  .home-why-travel__item p {
+    max-width: 38ch;
+  }
+
   .home-hero-v2 {
     min-height: 820px;
   }
@@ -1860,6 +1981,41 @@
 }
 
 @media (max-width: 640px) {
+  .home-why-travel {
+    margin-top: 3rem;
+    padding-block: 4rem;
+  }
+
+  .home-why-travel__layout {
+    gap: 3rem;
+  }
+
+  .home-why-travel__heading {
+    max-width: 12ch;
+    font-size: clamp(2.25rem, 11vw, 3.3rem);
+  }
+
+  .home-why-travel__heading > span {
+    white-space: normal;
+  }
+
+  .home-why-travel__items {
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
+  }
+
+  .home-why-travel__item h3 {
+    font-size: 1.05rem;
+  }
+
+  .home-why-travel__item strong {
+    font-size: 1.08rem;
+  }
+
+  .home-why-travel__item p {
+    max-width: 36rem;
+  }
+
   .section-heading-v2,
   .section-heading-v2--center {
     align-items: flex-start;
