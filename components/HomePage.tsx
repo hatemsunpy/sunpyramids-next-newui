@@ -14,6 +14,7 @@ import { HomeHeroMedia } from "@/components/HomeHeroMedia";
 import { TravelPartners } from "@/components/TravelPartners";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { HomeUpcomingEvents } from "@/components/HomeUpcomingEvents";
+import { WhyTravelWithSunPyramids } from "@/components/WhyTravelWithSunPyramids";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { homeCopy } from "@/lib/home-copy";
 
@@ -104,6 +105,8 @@ export function HomePage({
       <section className="home-trust-rail container-shell" aria-label="Sun Pyramids Tours statistics">
         {stats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
       </section>
+
+      <WhyTravelWithSunPyramids locale={locale} />
 
       {tours.length ? (
         <section className="home-section home-signature-section container-shell">
