@@ -1,5 +1,6 @@
 import { homeCopy } from "@/lib/home-copy";
 import type { Locale } from "@/types/api";
+import { SwipeCarousel } from "@/components/SwipeCarousel";
 
 const trustItems = [
   ["whyTravelHappyTitle", "whyTravelHappyStat", "whyTravelHappyDescription"],
@@ -25,7 +26,7 @@ export function WhyTravelWithSunPyramids({ locale = "en" }: { locale?: Locale })
           <span>{copy.whyTravelHeadingBrand}</span>
         </h2>
 
-        <div className="home-why-travel__items">
+        <SwipeCarousel className="home-why-travel__items" ariaLabel={copy.whyTravelHeadingBrand}>
           {trustItems.map(([titleKey, statKey, descriptionKey]) => (
             <article className="home-why-travel__item" key={titleKey}>
               <h3>{copy[titleKey]}</h3>
@@ -34,7 +35,7 @@ export function WhyTravelWithSunPyramids({ locale = "en" }: { locale?: Locale })
               <p>{copy[descriptionKey]}</p>
             </article>
           ))}
-        </div>
+        </SwipeCarousel>
       </div>
     </section>
   );
