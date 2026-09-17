@@ -6,9 +6,7 @@ import type { Locale, Tour } from "@/types/api";
 
 export function useTourActions(tour: Tour | null, locale: Locale) {
   const [actionMessage, setActionMessage] = useState("");
-  const [isFavorite, setIsFavorite] = useState(
-    Boolean((tour as (Tour & { wishlisted_exists?: boolean }) | null)?.wishlisted_exists),
-  );
+  const [isFavorite, setIsFavorite] = useState(Boolean(tour?.wishlisted_exists));
   const [isFavoritePending, setIsFavoritePending] = useState(false);
 
   async function shareTour() {

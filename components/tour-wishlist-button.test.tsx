@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { TourCard } from "@/components/TourCard";
 import { TourWishlistButton } from "@/components/TourWishlistButton";
 import type { Tour } from "@/types/api";
 
@@ -16,13 +17,11 @@ afterEach(() => {
   mocks.toggleWishlist.mockReset();
 });
 
-const tour = { id: 42, title: "Cairo Day Tour", wishlisted_exists: false } as Tour & {
-  wishlisted_exists: boolean;
-};
+const tour: Tour = { id: 42, title: "Cairo Day Tour", wishlisted_exists: false };
 
 describe("TourWishlistButton", () => {
-  it("renders the API-provided unsaved state as an accessible button", () => {
-    render(<TourWishlistButton tour={tour} locale="en" />);
+  it("renders the API-provided unsaved state on the shared tour card", () => {
+    render(<TourCard tour={tour} locale="en" />);
     const button = screen.getByRole("button", { name: "Add to wishlist" });
     expect(button).toHaveAttribute("aria-pressed", "false");
     expect(button.tagName).toBe("BUTTON");
@@ -31,7 +30,7 @@ describe("TourWishlistButton", () => {
   it("renders the API-provided saved state", () => {
     render(
       <TourWishlistButton
-        tour={{ ...tour, wishlisted_exists: true } as Tour & { wishlisted_exists: boolean }}
+        tour={{ ...tour, wishlisted_exists: true }}
         locale="en"
       />,
     );

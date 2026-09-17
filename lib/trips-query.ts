@@ -21,10 +21,27 @@ export function tripsRequest(searchParams: TripsSearchParams, taxonomy: TripTaxo
   } else if (main) {
     const root = taxonomy.allCategories.find((item) => item.slug === main && item.id);
     if (root?.id) {
-      const childIds = taxonomy.childCategories
-        .filter((item) => item.parent_id === root.id && item.id)
-        .map((item) => String(item.id));
-      (childIds.length ? childIds : [String(root.id)]).forEach((id) => query.append("categories.id[]", id));
+      // Explicit main must match the Laravel facet count scope: the selected
+      // root plus every descendant at any depth. Traverse allCategories by
+      // parent_id (childCategories holds only direct children of roots).
+      const seen = new Set<string>([String(root.id)]);
+      const ids = [String(root.id)];
+      const queue: Array<string | number> = [root.id];
+      while (queue.length) {
+        const current = queue.shift()!;
+        for (const item of taxonomy.allCategories) {
+          if (!item?.id) continue;
+          if ((item as { parent_id?: unknown }).parent_id === current) {
+            const id = String(item.id);
+            if (!seen.has(id)) {
+              seen.add(id);
+              ids.push(id);
+              queue.push(item.id);
+            }
+          }
+        }
+      }
+      ids.forEach((id) => query.append("categories.id[]", id));
     }
   } else if (days === 1 && !category) {
     // Verified legacy behavior (Nuxt Trips page): an unqualified days=1

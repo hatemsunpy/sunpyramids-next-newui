@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Locale, TripTaxonomy } from "@/types/api";
 import { withLocale } from "@/lib/locales";
+import { TRIP_TYPE_SLUGS } from "@/lib/trip-types";
 import { uiCopy } from "@/lib/ui-copy";
 
 type ActiveFilters = {
@@ -14,14 +15,6 @@ type ActiveFilters = {
   page?: number;
   days?: number;
 };
-
-const TOUR_TYPE_SLUGS = [
-  "day-tour",
-  "multi-days-tours",
-  "nile-cruises",
-  "shore-excursions",
-  "special-offers",
-] as const;
 
 export function TripsFilterSidebar({
   taxonomy,
@@ -160,11 +153,11 @@ export function TripsFilterSidebar({
   const activeChildCategory = taxonomy.allCategories.find(
     (item) => String(item.id) === active.category,
   );
-  const tourTypeCategories = TOUR_TYPE_SLUGS.flatMap((slug) => {
+  const tourTypeCategories = TRIP_TYPE_SLUGS.flatMap((slug) => {
     const category = taxonomy.allCategories.find((item) => item.slug === slug);
     return category ? [category] : [];
   });
-  const tourTypeSlugs = new Set<string>(TOUR_TYPE_SLUGS);
+  const tourTypeSlugs = new Set<string>(TRIP_TYPE_SLUGS);
   const experienceCategories = taxonomy.childCategories.filter(
     (item) => !item.slug || !tourTypeSlugs.has(item.slug),
   );

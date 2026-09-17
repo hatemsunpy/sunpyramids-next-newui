@@ -85,12 +85,7 @@ export function TripsPage({
               <>
                 <div className="discovery-grid">
                   {tours.map((tour) => (
-                    <TourCard
-                      key={tour.id || tour.slug}
-                      tour={tour}
-                      locale={locale}
-                      showWishlist
-                    />
+                    <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />
                   ))}
                 </div>
 

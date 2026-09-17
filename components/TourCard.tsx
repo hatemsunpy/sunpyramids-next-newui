@@ -43,28 +43,15 @@ function DurationClockIcon({ className = "" }: { className?: string }) {
   );
 }
 
-export function TourCard({
-  tour,
-  locale = "en",
-  className = "",
-  showWishlist = false,
-}: {
-  tour: Tour;
-  locale?: Locale;
-  className?: string;
-  showWishlist?: boolean;
-}) {
+export function TourCard({ tour, locale = "en", className = "" }: { tour: Tour; locale?: Locale; className?: string }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
   const description = tour.short_description || tour.description || title;
   const price = priceOf(tour);
-  const isWishlisted = Boolean((tour as Tour & { wishlisted_exists?: boolean }).wishlisted_exists);
 
   return (
     <article className={`tour-card ${className}`.trim()}>
-      {showWishlist ? (
-        <TourWishlistButton key={`${tour.id || slug}-${isWishlisted}`} tour={tour} locale={locale} />
-      ) : null}
+      <TourWishlistButton tour={tour} locale={locale} />
       <Link href={tourPath(slug, locale)}>
         <div className="tour-card-media">
           <Image src={imageOf(tour)} alt={title} fill sizes="(max-width: 768px) 100vw, 25vw" />

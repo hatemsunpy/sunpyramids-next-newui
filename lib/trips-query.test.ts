@@ -60,14 +60,14 @@ describe("tripsRequest baseline (pre-D1) — single filters", () => {
       .toBe(`${BASE}&title=*cairo*`);
   });
 
-  it("main with one child (nile-cruises → luxury-nile-cruise id 2)", () => {
+  it("main with one child includes root plus child (nile-cruises → 17,2)", () => {
     expect(tripsRequest({ main: "nile-cruises" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=2`);
+      .toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2`);
   });
 
-  it("main with multiple children, childCategories order preserved (day-tour → 13,23)", () => {
+  it("main with multiple children includes root plus children in allCategories order (day-tour → 1,13,23)", () => {
     expect(tripsRequest({ main: "day-tour" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=13&categories.id%5B%5D=23`);
+      .toBe(`${BASE}&categories.id%5B%5D=1&categories.id%5B%5D=13&categories.id%5B%5D=23`);
   });
 
   it("main with no children falls back to root id (special-offers → 53)", () => {
@@ -117,12 +117,12 @@ describe("tripsRequest baseline (pre-D1) — single filters", () => {
 describe("tripsRequest baseline (pre-D1) — combinations", () => {
   it("main + destination", () => {
     expect(tripsRequest({ main: "nile-cruises", destination: "aswan" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan`);
+      .toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan`);
   });
 
   it("main + title", () => {
     expect(tripsRequest({ main: "nile-cruises", title: "nile cruise" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=2&title=*nile+cruise*`);
+      .toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2&title=*nile+cruise*`);
   });
 
   it("numeric category takes precedence over main (else-if contract)", () => {
@@ -148,7 +148,7 @@ describe("tripsRequest baseline (pre-D1) — combinations", () => {
 
   it("main + destination + title", () => {
     expect(tripsRequest({ main: "nile-cruises", destination: "aswan", title: "nile" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan&title=*nile*`);
+      .toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan&title=*nile*`);
   });
 
   it("category + destination + title", () => {
@@ -162,7 +162,7 @@ describe("tripsRequest baseline (pre-D1) — combinations", () => {
       taxonomy,
     );
     expect(r.endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=13&categories.id%5B%5D=23&destinations.slug%5B%5D=luxor&title=*temple*`);
+      .toBe(`${BASE}&categories.id%5B%5D=1&categories.id%5B%5D=13&categories.id%5B%5D=23&destinations.slug%5B%5D=luxor&title=*temple*`);
     expect(r.page).toBe(4);
   });
 
@@ -206,13 +206,13 @@ describe("tripsRequest D1 (Hybrid) — days search contract", () => {
 
   it("main + days=1 → explicit main preserved exactly, duration_in_days=1 AND-ed (nile-cruises)", () => {
     const r = tripsRequest({ main: "nile-cruises", days: "1" }, taxonomy);
-    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=2${DUR(1)}`);
+    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2${DUR(1)}`);
     expect(r.main).toBe("nile-cruises");
   });
 
   it("main + days=1 → explicit main preserved exactly, duration_in_days=1 AND-ed (day-tour)", () => {
     const r = tripsRequest({ main: "day-tour", days: "1" }, taxonomy);
-    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=13&categories.id%5B%5D=23${DUR(1)}`);
+    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=1&categories.id%5B%5D=13&categories.id%5B%5D=23${DUR(1)}`);
     expect(r.main).toBe("day-tour");
   });
 
@@ -230,13 +230,13 @@ describe("tripsRequest D1 (Hybrid) — days search contract", () => {
 
   it("main + days=5 → explicit main preserved exactly, duration AND-ed (nile-cruises)", () => {
     const r = tripsRequest({ main: "nile-cruises", days: "5" }, taxonomy);
-    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=2${DUR(5)}`);
+    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2${DUR(5)}`);
     expect(r.main).toBe("nile-cruises");
   });
 
   it("main + days=5 → explicit main preserved exactly (day-tour; zero-result combination is legitimate)", () => {
     const r = tripsRequest({ main: "day-tour", days: "5" }, taxonomy);
-    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=13&categories.id%5B%5D=23${DUR(5)}`);
+    expect(r.endpoint).toBe(`${BASE}&categories.id%5B%5D=1&categories.id%5B%5D=13&categories.id%5B%5D=23${DUR(5)}`);
     expect(r.main).toBe("day-tour");
   });
 
@@ -269,7 +269,7 @@ describe("tripsRequest D1 (Hybrid) — days search contract", () => {
 
   it("main + destination + days=5 → category + destination + duration", () => {
     expect(tripsRequest({ main: "nile-cruises", destination: "aswan", days: "5" }, taxonomy).endpoint)
-      .toBe(`${BASE}&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan${DUR(5)}`);
+      .toBe(`${BASE}&categories.id%5B%5D=17&categories.id%5B%5D=2&destinations.slug%5B%5D=aswan${DUR(5)}`);
   });
 
   it("invalid days values are ignored, current request behavior retained", () => {
@@ -316,5 +316,63 @@ describe("tripsRequest D1 (Hybrid) — days search contract", () => {
   it("typo'd distination remains ignored in Phase 1 (D2 fix is Phase 2)", () => {
     expect(tripsRequest({ distination: "aswan", days: "5" }, taxonomy).endpoint)
       .toBe(`${BASE}${DUR(5)}`);
+  });
+});
+
+describe("tripsRequest explicit main recursive expansion — root plus all descendants", () => {
+  const CAT = (id: number | string) => `categories.id%5B%5D=${id}`;
+
+  const lineageTaxonomy: TripTaxonomy = {
+    allCategories: [
+      { id: 200, name: "Lineage Root", title: "Lineage Root", slug: "lineage-root" },
+      { id: 201, name: "L2", title: "L2", slug: "lineage-l2", parent_id: 200 },
+      { id: 202, name: "L3", title: "L3", slug: "lineage-l3", parent_id: 201 },
+      { id: 203, name: "L4", title: "L4", slug: "lineage-l4", parent_id: 202 },
+    ],
+    rootCategories: [{ id: 200, name: "Lineage Root", title: "Lineage Root", slug: "lineage-root" }],
+    // childCategories holds only direct children of roots in production.
+    childCategories: [{ id: 201, name: "L2", title: "L2", slug: "lineage-l2", parent_id: 200 }],
+    destinations: [],
+    counts: {},
+    available: true,
+  };
+
+  it("descendants beyond childCategories resolve via allCategories through a great-grandchild", () => {
+    expect(tripsRequest({ main: "lineage-root" }, lineageTaxonomy).endpoint)
+      .toBe(`${BASE}&${CAT(200)}&${CAT(201)}&${CAT(202)}&${CAT(203)}`);
+  });
+
+  it("deduplicates ids defensively", () => {
+    const dup: TripTaxonomy = {
+      ...lineageTaxonomy,
+      allCategories: [...lineageTaxonomy.allCategories, { id: 201, name: "L2 dup", title: "L2 dup", slug: "lineage-l2", parent_id: 200 }],
+    };
+    expect(tripsRequest({ main: "lineage-root" }, dup).endpoint)
+      .toBe(`${BASE}&${CAT(200)}&${CAT(201)}&${CAT(202)}&${CAT(203)}`);
+  });
+
+  it("existing days=1 fallback remains direct-child mapping and is not switched to recursive mapping", () => {
+    const dayDeep: TripTaxonomy = {
+      allCategories: [
+        { id: 1, name: "Day Tour", title: "Day Tour", slug: "day-tour" },
+        { id: 13, name: "One Day Tours", title: "One Day Tours", slug: "one-day-tours", parent_id: 1 },
+        { id: 23, name: "Shore Excursions", title: "Shore Excursions", slug: "shore-excursions", parent_id: 1 },
+        { id: 99, name: "Deep Day Child", title: "Deep Day Child", slug: "deep-day-child", parent_id: 13 },
+      ],
+      rootCategories: [{ id: 1, name: "Day Tour", title: "Day Tour", slug: "day-tour" }],
+      childCategories: [
+        { id: 13, name: "One Day Tours", title: "One Day Tours", slug: "one-day-tours", parent_id: 1 },
+        { id: 23, name: "Shore Excursions", title: "Shore Excursions", slug: "shore-excursions", parent_id: 1 },
+      ],
+      destinations: [],
+      counts: {},
+      available: true,
+    };
+    // Fallback stays byte-for-byte legacy: direct children only, no root, no deep descendant.
+    expect(tripsRequest({ days: "1" }, dayDeep).endpoint)
+      .toBe(`${BASE}&${CAT(13)}&${CAT(23)}`);
+    // Explicit main on the same taxonomy uses the new recursive mapping.
+    expect(tripsRequest({ main: "day-tour" }, dayDeep).endpoint)
+      .toBe(`${BASE}&${CAT(1)}&${CAT(13)}&${CAT(23)}&${CAT(99)}`);
   });
 });

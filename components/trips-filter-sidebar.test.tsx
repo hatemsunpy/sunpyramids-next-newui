@@ -33,7 +33,7 @@ const taxonomy: TripTaxonomy = {
     { id: 12, title: "Luxor Tours", slug: "luxor" },
     { id: 13, title: "Aswan Tours", slug: "aswan" },
   ],
-  counts: { "day-tour": 316, "multi-days-tours": 100, "nile-cruises": 70, "shore-excursions": 45 },
+  counts: { "day-tour": 316, "multi-days-tours": 100, "nile-cruises": 70, "shore-excursions": 45, "special-offers": 8 },
   available: true,
 };
 
@@ -71,13 +71,13 @@ describe("TripsFilterSidebar — complete Tours Type filter", () => {
     });
   });
 
-  it("renders counts from taxonomy metadata and leaves an unavailable count blank", () => {
+  it("renders the backend count metadata for every tour type", () => {
     render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{}} />);
     const sidebar = screen.getByRole("complementary", { name: /filter tours/i });
 
     expect(tourTypeLink(sidebar, "day-tour")?.textContent).toContain("316");
     expect(tourTypeLink(sidebar, "shore-excursions")?.textContent).toContain("45");
-    expect(tourTypeLink(sidebar, "special-offers")?.textContent).not.toMatch(/\d/);
+    expect(tourTypeLink(sidebar, "special-offers")?.textContent).toContain("8");
   });
 
   it("initializes the selected type from the committed main query", () => {

@@ -85,6 +85,7 @@ export type ApiList<T> = {
 };
 
 export type Tour = ApiPage & {
+  wishlisted_exists?: boolean;
   price?: number | string;
   start_from?: number | string;
   adult_price?: number | string;
