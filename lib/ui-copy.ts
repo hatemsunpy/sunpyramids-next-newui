@@ -56,8 +56,18 @@ const formCopies: Record<Locale, UiCopy> = {
   zh: { country: "国家/地区", writeUs: "给我们留言....", sendMessage: "发送消息", sending: "发送中...", signOut: "退出登录", exploreTours: "探索旅游", clearAll: "全部清除", apply: "应用", state: "州/省", note: "备注", saveEdits: "保存编辑", delete: "删除", discount: "折扣", addCouponCode: "添加优惠码..", checkoutNow: "立即结账", billingDetails: "账单详情", paymentMethod: "付款方式", back: "返回", summary: "付款摘要", date: "日期", adults: "成人", children: "儿童", infants: "婴儿", addOns: "附加服务", total: "总计", loadingCart: "正在加载购物车...", emptyCart: "添加旅游或租车以继续。", checkoutLoading: "正在创建预订...", card: "借记卡 / 信用卡", bookTripTitle: "与当地专家一起探索埃及", bookTripDescription: "通过定制行程、专业导游和难忘的回忆，探索埃及的奇迹。", whatsappNow: "立即WhatsApp", planYourTrip: "计划您的旅程", whyChooseUs: "为什么选择Sun Pyramids Tours？", licensedTitle: "持证专家", licensedDescription: "值得信赖的导游，拥有50多年经验", privateTitle: "私人接送", privateDescription: "舒适安全的埃及全程交通", hotelTitle: "顶级酒店", hotelDescription: "入住景观极佳的豪华酒店", selectedTours: "热门埃及之旅——专为您精选", makeTripEasy: "让您的旅行更轻松", customItinerary: "获取我的定制行程", galleryTitle: "精彩旅程画廊", galleryDescription: "关注我们的社交媒体查看更多精彩旅程", durationDay: "1天", durationDays: "{days}天" },
 };
 
+const tripsCopies: Record<Locale, UiCopy> = {
+  en: { tourTypes: "Tours Type", addToWishlist: "Add to wishlist", removeFromWishlist: "Remove from wishlist" },
+  fr: { tourTypes: "Types de circuits", addToWishlist: "Ajouter aux favoris", removeFromWishlist: "Retirer des favoris" },
+  de: { tourTypes: "Reisearten", addToWishlist: "Zur Wunschliste hinzufügen", removeFromWishlist: "Von der Wunschliste entfernen" },
+  it: { tourTypes: "Tipi di tour", addToWishlist: "Aggiungi ai preferiti", removeFromWishlist: "Rimuovi dai preferiti" },
+  pt: { tourTypes: "Tipos de passeio", addToWishlist: "Adicionar aos favoritos", removeFromWishlist: "Remover dos favoritos" },
+  es: { tourTypes: "Tipos de tour", addToWishlist: "Añadir a favoritos", removeFromWishlist: "Eliminar de favoritos" },
+  zh: { tourTypes: "旅游类型", addToWishlist: "添加到收藏", removeFromWishlist: "从收藏中移除" },
+};
+
 export function uiCopy(locale: Locale): UiCopy {
-  return new Proxy({ ...en, ...(copies[locale] ?? {}), ...formCopies[locale] }, {
+  return new Proxy({ ...en, ...(copies[locale] ?? {}), ...formCopies[locale], ...tripsCopies[locale] }, {
     get(target, property: string) {
       return target[property] ?? en[property] ?? property;
     },

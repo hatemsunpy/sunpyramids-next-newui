@@ -10,6 +10,7 @@ import type {
   Tour,
   TripTaxonomy,
 } from "@/types/api";
+import { TRIP_TYPE_SLUGS } from "@/lib/trip-types";
 
 function listData<T>(response: ApiList<T> | null | undefined): T[] {
   if (Array.isArray(response?.data)) return response.data;
@@ -154,7 +155,28 @@ export async function getTripTaxonomy(locale: Locale): Promise<TripTaxonomy> {
   ]);
 
   const categories = categoriesResult.ok ? (categoriesResult.value ?? []) : [];
-  const counts = countsResult.ok && countsResult.value?.data ? countsResult.value.data : {};
+  const hasReportedCounts = countsResult.ok && Boolean(countsResult.value?.data);
+  const reportedCounts = hasReportedCounts ? countsResult.value?.data ?? {} : {};
+  const missingCountCategories = hasReportedCounts ? categories.filter(
+    (category) =>
+      category.id &&
+      category.slug &&
+      TRIP_TYPE_SLUGS.some((slug) => slug === category.slug) &&
+      reportedCounts[category.slug] === undefined,
+  ) : [];
+  const missingCountResults = await Promise.all(
+    missingCountCategories.map((category) =>
+      apiFetchReliable<ApiList<Tour>>(
+        `tours?categories.id%5B%5D=${encodeURIComponent(String(category.id))}&page_limit=1&page=1`,
+        { locale },
+      ),
+    ),
+  );
+  const counts = { ...reportedCounts };
+  missingCountResults.forEach((countResult, index) => {
+    const slug = missingCountCategories[index]?.slug;
+    if (slug && countResult.ok) counts[slug] = tourMeta(countResult.value).total;
+  });
   const countSlugs = new Set(Object.keys(counts));
   const rootCategories = categories.filter(
     (category) => category.parent_id == null && category.slug && countSlugs.has(category.slug),

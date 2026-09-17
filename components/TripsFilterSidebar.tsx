@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Locale, TripTaxonomy } from "@/types/api";
 import { withLocale } from "@/lib/locales";
+import { TRIP_TYPE_SLUGS } from "@/lib/trip-types";
 import { uiCopy } from "@/lib/ui-copy";
 
 type ActiveFilters = {
@@ -152,6 +153,14 @@ export function TripsFilterSidebar({
   const activeChildCategory = taxonomy.allCategories.find(
     (item) => String(item.id) === active.category,
   );
+  const tourTypeCategories = TRIP_TYPE_SLUGS.flatMap((slug) => {
+    const category = taxonomy.allCategories.find((item) => item.slug === slug);
+    return category ? [category] : [];
+  });
+  const tourTypeSlugs = new Set<string>(TRIP_TYPE_SLUGS);
+  const experienceCategories = taxonomy.childCategories.filter(
+    (item) => !item.slug || !tourTypeSlugs.has(item.slug),
+  );
 
   // The pill reflects what the user requested (e.g. "1 Day"); the unqualified
   // days=1 Day Tour fallback remains internal API behavior, never a pill.
@@ -176,7 +185,7 @@ export function TripsFilterSidebar({
   const renderFilterSections = (isMobile = false) => (
     <>
       {/* Tour Types / Main categories */}
-      {taxonomy.rootCategories.length > 0 && (
+      {tourTypeCategories.length > 0 && (
         <div className="discovery-filter-group">
           <button
             type="button"
@@ -184,14 +193,14 @@ export function TripsFilterSidebar({
             aria-expanded={openGroups.types}
             onClick={() => toggleGroup("types")}
           >
-            <span>{copy.tours || "Tour Types"}</span>
+            <span>{copy.tourTypes || "Tours Type"}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </button>
           {openGroups.types && (
             <div className="group-items">
-              {taxonomy.rootCategories.map((item) => {
+              {tourTypeCategories.map((item) => {
                 const isSelected = active.main === item.slug;
                 const count = item.slug ? taxonomy.counts[item.slug] : undefined;
                 return (
@@ -262,7 +271,7 @@ export function TripsFilterSidebar({
       )}
 
       {/* Child Categories */}
-      {taxonomy.childCategories.length > 0 && (
+      {experienceCategories.length > 0 && (
         <div className="discovery-filter-group">
           <button
             type="button"
@@ -277,7 +286,7 @@ export function TripsFilterSidebar({
           </button>
           {openGroups.categories && (
             <div className="group-items">
-              {taxonomy.childCategories.map((item) => {
+              {experienceCategories.map((item) => {
                 const isSelected = active.category === String(item.id);
                 return (
                   <Link
