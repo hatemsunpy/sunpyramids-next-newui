@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { CategoryChildrenIndex } from "@/components/CategoryChildrenIndex";
+import { CategorySubcategoryFilter } from "@/components/CategorySubcategoryFilter";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
@@ -43,6 +44,11 @@ export default async function Page({ params, searchParams }: Props) {
     1,
     parseInt(Array.isArray(rawPage) ? rawPage[0] : rawPage || "1", 10) || 1,
   );
+  const rawSub = query.sub;
+  const activeSub = typeof rawSub === "string" ? rawSub : Array.isArray(rawSub) ? rawSub[0] : undefined;
+  const rawOrder = query.order;
+  const currentOrder = typeof rawOrder === "string" ? rawOrder : Array.isArray(rawOrder) ? rawOrder[0] : "display_order,asc";
+
   const isOneDayRoute = slug[0] === "one-day-tours";
   const isOneDayIndex = isOneDayRoute && slug.length === 1;
   const isCategoryChildrenIndex = slug.length === 1 && (slug[0] === "multi-days-tours" || slug[0] === "nile-cruises");
@@ -53,25 +59,80 @@ export default async function Page({ params, searchParams }: Props) {
     return <CategoryChildrenIndex slug={slug} locale="en" />;
   }
 
-  const [pageResult, itemsResponse] = await Promise.all([
-    resolveEgyptToursPage(slug, "en"),
-    isOneDayIndex
-      ? getDestinations("destinations?parent.slug=egypt&order_by=display_order,asc", "en")
-      : isOneDayRoute
-        ? getTours(
-            `tours?exists=wishlisted&destinations.slug=${encodeURIComponent(filterSlug)}&categories.slug[]=night-tours&categories.slug[]=one-day-tours&categories.slug[]=half-day-tour&categories.slug[]=layover&order_by=display_order,asc`,
-            "en",
-            limit,
-            currentPage,
-          )
-        : getTours(`tours?categories.slug=${encodeURIComponent(filterSlug)}&order_by=display_order,asc`, "en", limit, currentPage),
-  ]);
+  const pageResult = await resolveEgyptToursPage(slug, "en");
   if (!pageResult.ok) {
     if (pageResult.reason === "not_found") notFound();
     throw new Error(`Failed to fetch egypt-tours page "${slug.join("/")}": ${formatApiError(pageResult)}`);
   }
   const page = pageResult.value;
   if (!page) notFound();
+
+  const children = (page.children as ApiPage[] | undefined) || [];
+  const hasChildren = children.length > 0;
+
+  let itemsResponse: ApiList<Tour> | ApiPage[] | null = null;
+
+  if (isOneDayIndex) {
+    itemsResponse = await getDestinations("destinations?parent.slug=egypt&order_by=display_order,asc", "en");
+  } else if (isOneDayRoute) {
+    itemsResponse = await getTours(
+      `tours?exists=wishlisted&destinations.slug=${encodeURIComponent(filterSlug)}&categories.slug[]=night-tours&categories.slug[]=one-day-tours&categories.slug[]=half-day-tour&categories.slug[]=layover&order_by=display_order,asc`,
+      "en",
+      limit,
+      currentPage,
+    );
+  } else if (hasChildren) {
+    let catFilter = "";
+    if (activeSub && activeSub !== "all") {
+      const matchedChild = children.find(
+        (c) => String(c.id) === activeSub || c.slug === activeSub
+      );
+      if (matchedChild && matchedChild.id != null) {
+        catFilter = `categories.id[]=${matchedChild.id}`;
+      } else {
+        catFilter = `categories.slug=${encodeURIComponent(activeSub)}`;
+      }
+    } else {
+      catFilter = children
+        .filter((c) => c.id != null)
+        .map((c) => `categories.id[]=${c.id}`)
+        .join("&");
+    }
+
+    let toursEndpoint = "tours";
+    if (currentOrder === "price,asc") {
+      toursEndpoint = `tours/asc/${currentPage}`;
+    } else if (currentOrder === "price,desc") {
+      toursEndpoint = `tours/desc/${currentPage}`;
+    } else {
+      toursEndpoint = `tours?order_by=${encodeURIComponent(currentOrder)}`;
+    }
+
+    const sep = toursEndpoint.includes("?") ? "&" : "?";
+    itemsResponse = await getTours(
+      `${toursEndpoint}${sep}exists=wishlisted&${catFilter}`,
+      "en",
+      limit,
+      currentPage,
+    );
+  } else {
+    let toursEndpoint = "tours";
+    if (currentOrder === "price,asc") {
+      toursEndpoint = `tours/asc/${currentPage}`;
+    } else if (currentOrder === "price,desc") {
+      toursEndpoint = `tours/desc/${currentPage}`;
+    } else {
+      toursEndpoint = `tours?order_by=${encodeURIComponent(currentOrder)}`;
+    }
+    const sep = toursEndpoint.includes("?") ? "&" : "?";
+    itemsResponse = await getTours(
+      `${toursEndpoint}${sep}categories.slug=${encodeURIComponent(filterSlug)}`,
+      "en",
+      limit,
+      currentPage,
+    );
+  }
+
   const items = isOneDayIndex
     ? (itemsResponse as ApiPage[])
     : tourListData(itemsResponse as ApiList<Tour> | null);
@@ -80,8 +141,17 @@ export default async function Page({ params, searchParams }: Props) {
   // Validate the requested page against the API-provided last page and redirect
   // back to a valid page instead of rendering an empty out-of-range listing.
   if (!isOneDayIndex && meta && currentPage > meta.lastPage) {
-    redirect(meta.lastPage > 1 ? `${routePath(slug)}?page=${meta.lastPage}` : routePath(slug));
+    const targetParams = new URLSearchParams();
+    if (activeSub && activeSub !== "all") targetParams.set("sub", activeSub);
+    if (currentOrder && currentOrder !== "display_order,asc") targetParams.set("order", currentOrder);
+    if (meta.lastPage > 1) targetParams.set("page", String(meta.lastPage));
+    const qs = targetParams.toString();
+    redirect(qs ? `${routePath(slug)}?${qs}` : routePath(slug));
   }
+
+  const paginationQuery = new URLSearchParams();
+  if (activeSub && activeSub !== "all") paginationQuery.set("sub", activeSub);
+  if (currentOrder && currentOrder !== "display_order,asc") paginationQuery.set("order", currentOrder);
 
   const pageTitle = page?.title || page?.name || "Egypt Tours";
   const breadcrumbs = [
@@ -104,6 +174,15 @@ export default async function Page({ params, searchParams }: Props) {
         />
         <section className="discovery-section">
           <div className="container-shell">
+            {hasChildren && (
+              <CategorySubcategoryFilter
+                childrenCategories={children}
+                basePath={routePath(slug)}
+                locale="en"
+                activeSub={activeSub}
+                currentOrder={currentOrder}
+              />
+            )}
             {isOneDayIndex ? (
               items.length > 0 ? (
                 <div className="destination-mosaic-grid">
@@ -139,7 +218,7 @@ export default async function Page({ params, searchParams }: Props) {
                         page={currentPage}
                         lastPage={meta.lastPage}
                         basePath={routePath(slug)}
-                        query={new URLSearchParams()}
+                        query={paginationQuery}
                       />
                     )}
                   </div>

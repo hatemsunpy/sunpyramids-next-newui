@@ -868,6 +868,55 @@ input[data-native-type] {
   position: relative;
 }
 
+.tour-card-offer-badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  inset-inline-start: 0.65rem;
+  inset-inline-end: auto;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 1.35rem;
+  padding: 0 0.52rem 0 0.42rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #ff414d 0%, #e11d48 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  white-space: nowrap;
+
+  .tour-card-offer-icon {
+    width: 0.68rem;
+    height: 0.68rem;
+    flex-shrink: 0;
+  }
+}
+
+.tour-card-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.tour-card-price-original {
+  margin: 0 !important;
+  color: #a5a5a5 !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  text-decoration: line-through;
+  text-decoration-color: #f55157;
+  text-decoration-thickness: 1.5px;
+}
+
 .tour-card-wishlist-wrap {
   position: absolute;
   z-index: 3;

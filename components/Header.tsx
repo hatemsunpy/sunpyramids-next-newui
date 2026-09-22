@@ -77,12 +77,14 @@ function NavDropdown({
   categories = [],
   oneDayChildren = [],
   multiDaysChildren = [],
+  nileCruisesChildren = [],
 }: {
   locale: Locale;
   pathname: string;
   categories?: HeaderTourCategory[];
   oneDayChildren?: EgyptToursMenuChild[];
   multiDaysChildren?: EgyptToursMenuChild[];
+  nileCruisesChildren?: EgyptToursMenuChild[];
 }) {
   const copy = uiCopy(locale);
   const [open, setOpen] = useState(false);
@@ -105,7 +107,9 @@ function NavDropdown({
       ? oneDayChildren
       : nextKey === "multiDays"
         ? multiDaysChildren
-        : [];
+        : nextKey === "nileCruises"
+          ? nileCruisesChildren
+          : [];
     const currentChild = routeChildren.find((child) =>
       isActivePath(pathname, `${nextHref}/${child.slug}`)
     ) ?? null;
@@ -167,14 +171,17 @@ function NavDropdown({
   const childrenByKey: Record<(typeof tourLinks)[number][0], EgyptToursMenuChild[]> = {
     oneDay: oneDayChildren,
     multiDays: multiDaysChildren,
-    nileCruises: [],
+    nileCruises: nileCruisesChildren,
     shoreExcursions: [],
   };
   const activeChildren = childrenByKey[hoveredKey] ?? [];
   // Keep the panel geometry stable while switching sections. Shrinking the
   // panel when a section has no children makes the pointer land on a
   // different item and causes the menu to flicker.
-  const hasChildMenus = oneDayChildren.length > 0 || multiDaysChildren.length > 0;
+  const hasChildMenus =
+    oneDayChildren.length > 0 ||
+    multiDaysChildren.length > 0 ||
+    nileCruisesChildren.length > 0;
 
   return (
     <div
@@ -317,12 +324,14 @@ export function Header({
   categories = [],
   oneDayChildren = [],
   multiDaysChildren = [],
+  nileCruisesChildren = [],
 }: {
   locale?: Locale;
   siteTitle?: string | null;
   categories?: HeaderTourCategory[];
   oneDayChildren?: EgyptToursMenuChild[];
   multiDaysChildren?: EgyptToursMenuChild[];
+  nileCruisesChildren?: EgyptToursMenuChild[];
 }) {
   const copy = uiCopy(locale);
   const currentThemeLabels = themeLabels[locale];
@@ -403,11 +412,23 @@ export function Header({
 
   const renderPrimaryNavigation = (mobile = false) => primaryNavLinks.map(([key, href]) => {
     if (href === null) {
-      if (!mobile) return <NavDropdown key={`${key}-${pathname}`} locale={locale} pathname={pathname} categories={categories} oneDayChildren={oneDayChildren} multiDaysChildren={multiDaysChildren} />;
+      if (!mobile)
+        return (
+          <NavDropdown
+            key={`${key}-${pathname}`}
+            locale={locale}
+            pathname={pathname}
+            categories={categories}
+            oneDayChildren={oneDayChildren}
+            multiDaysChildren={multiDaysChildren}
+            nileCruisesChildren={nileCruisesChildren}
+          />
+        );
       const toursActive = tourLinks.some(([, tourHref]) => isActivePath(pathname, tourHref)) || stripLocale(pathname).startsWith("/tour/");
       const mobileChildrenByKey: Record<string, EgyptToursMenuChild[]> = {
         oneDay: oneDayChildren,
         multiDays: multiDaysChildren,
+        nileCruises: nileCruisesChildren,
       };
       return (
         <details className={`mobile-tour-group ${toursActive ? "nav-item-active" : ""}`} key={key}>

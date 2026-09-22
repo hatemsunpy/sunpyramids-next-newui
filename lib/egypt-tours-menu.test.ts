@@ -76,6 +76,7 @@ describe("buildEgyptToursMenu", () => {
     expect(buildEgyptToursMenu(taxonomy)).toEqual({
       oneDay: [{ slug: "cairo", label: "Cairo Tours", title: "Cairo Tours", featured_image: "https://cdn.example/cairo.jpg" }],
       multiDays: [{ slug: "desert-tours", label: "Desert Tours", title: "Desert Tours", featured_image: "https://cdn.example/desert.jpg" }],
+      nileCruises: [],
     });
   });
 
@@ -101,9 +102,39 @@ describe("buildEgyptToursMenu", () => {
     expect(buildEgyptToursMenu(taxonomy).oneDay).toHaveLength(3);
   });
 
+  it("populates Nile Cruises children and excludes dahabiyat when without tours", () => {
+    const taxonomy = taxonomyFixture();
+    taxonomy.allCategories.push(
+      { id: 21, title: "Dahabiyat", slug: "dahabiyat", parent_id: 17 },
+    );
+    taxonomy.childCategories.push(
+      { id: 21, title: "Dahabiyat", slug: "dahabiyat", parent_id: 17 },
+    );
+    const menu = buildEgyptToursMenu(taxonomy);
+    expect(menu.nileCruises).toEqual([
+      { slug: "luxury-nile-cruise", label: "Luxury Nile Cruise", title: "Luxury Nile Cruise" },
+    ]);
+  });
+
+  it("includes dahabiyat in Nile Cruises when subcategories are added", () => {
+    const taxonomy = taxonomyFixture();
+    taxonomy.allCategories.push(
+      { id: 21, title: "Dahabiyat", slug: "dahabiyat", parent_id: 17 },
+      { id: 202, title: "Dahabiyat 5 Days", slug: "dahabiyat-5-days", parent_id: 21 },
+    );
+    taxonomy.childCategories.push(
+      { id: 21, title: "Dahabiyat", slug: "dahabiyat", parent_id: 17 },
+    );
+    const menu = buildEgyptToursMenu(taxonomy);
+    expect(menu.nileCruises).toEqual([
+      { slug: "luxury-nile-cruise", label: "Luxury Nile Cruise", title: "Luxury Nile Cruise" },
+      { slug: "dahabiyat", label: "Dahabiyat", title: "Dahabiyat" },
+    ]);
+  });
+
   it("returns empty menu for null taxonomy (header hides child panel)", () => {
-    expect(buildEgyptToursMenu(null)).toEqual({ oneDay: [], multiDays: [] });
-    expect(buildEgyptToursMenu(undefined)).toEqual({ oneDay: [], multiDays: [] });
+    expect(buildEgyptToursMenu(null)).toEqual({ oneDay: [], multiDays: [], nileCruises: [] });
+    expect(buildEgyptToursMenu(undefined)).toEqual({ oneDay: [], multiDays: [], nileCruises: [] });
   });
 
   it("does not mutate the input taxonomy", () => {

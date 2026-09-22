@@ -23,6 +23,8 @@ import { generateRecaptchaToken } from "@/lib/recaptcha";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { uiCopy } from "@/lib/ui-copy";
 import { siteContact } from "@/lib/site-contact";
+import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
+import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 
 type ApiResponse<T = any> = {
   status?: boolean;
@@ -526,18 +528,13 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
               <input id="profile-phone" name="phone" placeholder={copy.phone} defaultValue={user?.phone || ""} autoComplete="tel" />
             </div>
             <div className="account-field">
-              <label htmlFor="profile-birthdate">{copy.birthDate}</label>
-              <input
+              <label>{copy.birthDate}</label>
+              <FlowbiteDatepicker
                 id="profile-birthdate"
                 name="birthDate"
-                type="date"
                 defaultValue={user?.birthdate || ""}
-                autoComplete="bday"
-                onClick={(e) => {
-                  try {
-                    e.currentTarget.showPicker?.();
-                  } catch {}
-                }}
+                placeholder={copy.birthDate}
+                maxDate={new Date().toISOString().split("T")[0]}
               />
             </div>
             <div className="account-field">
@@ -628,18 +625,13 @@ function CartTourEditor({
       </p>
       <div className="editor-grid">
         <div className="editor-field">
-          <label htmlFor={`startDate-${itemId}`}>{copy.date}</label>
-          <input
+          <label>{copy.date}</label>
+          <FlowbiteDatepicker
             id={`startDate-${itemId}`}
             name="startDate"
-            type="date"
             defaultValue={String(item.start_date || "").slice(0, 10)}
-            aria-label={copy.date}
-            onClick={(e) => {
-              try {
-                e.currentTarget.showPicker?.();
-              } catch {}
-            }}
+            placeholder={copy.date}
+            minDate={new Date().toISOString().split("T")[0]}
           />
         </div>
         <div className="editor-field">
@@ -1565,20 +1557,21 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                   <span>{copy.pickupLocation || "Pickup Location"}<span className="required-mark">*</span></span>
                 </label>
                 <div className="input-wrap">
-                  <select
+                  <SearchSelectDropdown
                     id="planner-pickup-loc"
                     name="pickupLocationId"
                     required
                     value={pickupLocationId}
-                    onChange={(e) => loadRentalDestinations(e.currentTarget.value)}
-                  >
-                    <option value="">{copy.pickupLocation || "Choose Pickup City or Terminal"}</option>
-                    {locations.map((loc) => (
-                      <option key={loc.id} value={loc.id}>
-                        {loc.name}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder={copy.pickupLocation || "Choose Pickup City or Terminal"}
+                    variant="boxed"
+                    iconType="location"
+                    menuTitle={copy.pickupLocation || "Pickup Location"}
+                    options={locations.map((loc) => ({
+                      value: String(loc.id),
+                      label: String(loc.name),
+                    }))}
+                    onChange={(val) => loadRentalDestinations(val)}
+                  />
                 </div>
               </div>
 
@@ -1587,27 +1580,28 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                   <span>{copy.dropoffLocation || "Destination / Dropoff"}<span className="required-mark">*</span></span>
                 </label>
                 <div className="input-wrap">
-                  <select
+                  <SearchSelectDropdown
                     id="planner-drop-loc"
                     name="destinationId"
                     required
                     value={destinationId}
                     disabled={!pickupLocationId || destinations.length === 0}
-                    onChange={(e) => loadRentalRoute(e.currentTarget.value)}
-                  >
-                    <option value="">
-                      {!pickupLocationId
+                    placeholder={
+                      !pickupLocationId
                         ? "Select pickup location first"
                         : destinations.length === 0
                         ? "Loading destinations..."
-                        : copy.dropoffLocation || "Choose Destination City"}
-                    </option>
-                    {destinations.map((dest) => (
-                      <option key={dest.id} value={dest.id}>
-                        {dest.name}
-                      </option>
-                    ))}
-                  </select>
+                        : copy.dropoffLocation || "Choose Destination City"
+                    }
+                    variant="boxed"
+                    iconType="location"
+                    menuTitle={copy.dropoffLocation || "Dropoff Location"}
+                    options={destinations.map((dest) => ({
+                      value: String(dest.id),
+                      label: String(dest.name),
+                    }))}
+                    onChange={(val) => loadRentalRoute(val)}
+                  />
                 </div>
                 {routeMessage && (
                   <p className={`route-feedback ${routeMessage.includes("available") ? "is-available" : "is-unavailable"}`}>
@@ -1623,16 +1617,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                   <span>{copy.pickupDate || "Pickup Date"}<span className="required-mark">*</span></span>
                 </label>
                 <div className="input-wrap">
-                  <input
+                  <FlowbiteDatepicker
                     id="planner-pickup-date"
                     name="pickupDate"
-                    type="date"
+                    placeholder={copy.pickupDate || "Pickup Date"}
+                    minDate={new Date().toISOString().split("T")[0]}
                     required
-                    onClick={(e) => {
-                      try {
-                        e.currentTarget.showPicker?.();
-                      } catch {}
-                    }}
                   />
                 </div>
               </div>
@@ -1664,16 +1654,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     <span>{copy.returnDate || "Return Date"}<span className="required-mark">*</span></span>
                   </label>
                   <div className="input-wrap">
-                    <input
+                    <FlowbiteDatepicker
                       id="planner-return-date"
                       name="returnDate"
-                      type="date"
+                      placeholder={copy.returnDate || "Return Date"}
+                      minDate={new Date().toISOString().split("T")[0]}
                       required
-                      onClick={(e) => {
-                        try {
-                          e.currentTarget.showPicker?.();
-                        } catch {}
-                      }}
                     />
                   </div>
                 </div>
@@ -1746,16 +1732,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     <span>Start / Arrival Date<span className="required-mark">*</span></span>
                   </label>
                   <div className="input-wrap">
-                    <input
+                    <FlowbiteDatepicker
                       id="planner-start-date"
                       name="startDate"
-                      type="date"
+                      placeholder="Start / Arrival Date"
+                      minDate={new Date().toISOString().split("T")[0]}
                       required
-                      onClick={(e) => {
-                        try {
-                          e.currentTarget.showPicker?.();
-                        } catch {}
-                      }}
                     />
                   </div>
                 </div>
@@ -1765,16 +1747,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     <span>End / Departure Date<span className="required-mark">*</span></span>
                   </label>
                   <div className="input-wrap">
-                    <input
+                    <FlowbiteDatepicker
                       id="planner-end-date"
                       name="endDate"
-                      type="date"
+                      placeholder="End / Departure Date"
+                      minDate={new Date().toISOString().split("T")[0]}
                       required
-                      onClick={(e) => {
-                        try {
-                          e.currentTarget.showPicker?.();
-                        } catch {}
-                      }}
                     />
                   </div>
                 </div>
@@ -2034,14 +2012,21 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
               <span>{copy.nationality || "Nationality"}<span className="required-mark">*</span></span>
             </label>
             <div className="input-wrap">
-              <select id="planner-nationality" name="nationality" required defaultValue="">
-                <option value="" disabled>{copy.nationality || "Select your country"}</option>
-                {countries.map((country) => (
-                  <option key={country.id || country.name} value={country.name}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
+              <SearchSelectDropdown
+                id="planner-nationality"
+                name="nationality"
+                required
+                defaultValue=""
+                placeholder={copy.nationality || "Select your country"}
+                variant="boxed"
+                iconType="country"
+                searchable
+                menuTitle={copy.nationality || "Select Country / Nationality"}
+                options={countries.map((country) => ({
+                  value: String(country.name),
+                  label: String(country.name),
+                }))}
+              />
             </div>
           </div>
         </div>

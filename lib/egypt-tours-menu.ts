@@ -10,11 +10,15 @@ export type EgyptToursMenuChild = {
 export type EgyptToursMenu = {
   oneDay: EgyptToursMenuChild[];
   multiDays: EgyptToursMenuChild[];
+  nileCruises: EgyptToursMenuChild[];
 };
 
-type MenuSource = Pick<TripTaxonomy, "allCategories" | "childCategories" | "destinations">;
+type MenuSource = Pick<TripTaxonomy, "allCategories" | "childCategories" | "destinations"> & {
+  counts?: Record<string, number>;
+};
 
 const MULTI_DAYS_ROOT_SLUG = "multi-days-tours";
+const NILE_CRUISES_ROOT_SLUG = "nile-cruises";
 
 function toChild(page: ApiPage): EgyptToursMenuChild | null {
   const slug = typeof page.slug === "string" ? page.slug.trim() : "";
@@ -40,11 +44,13 @@ function toChild(page: ApiPage): EgyptToursMenuChild | null {
  * - Multi Days Tours children reuse `taxonomy.childCategories` filtered by
  *   the live `multi-days-tours` category id — the same source consumed by
  *   `CategoryChildrenIndex`/`TripsFilterSidebar` — preserving backend order.
+ * - Nile Cruises children reuse `taxonomy.childCategories` filtered by
+ *   the live `nile-cruises` category id — excluding categories without active tours (e.g. dahabiyat).
  *
  * Pure function: no fetching, no hardcoded labels/slugs/ids, no ordering.
  */
 export function buildEgyptToursMenu(taxonomy: MenuSource | null | undefined): EgyptToursMenu {
-  if (!taxonomy) return { oneDay: [], multiDays: [] };
+  if (!taxonomy) return { oneDay: [], multiDays: [], nileCruises: [] };
 
   const oneDay: EgyptToursMenuChild[] = [];
   for (const destination of taxonomy.destinations ?? []) {
@@ -64,5 +70,23 @@ export function buildEgyptToursMenu(taxonomy: MenuSource | null | undefined): Eg
     }
   }
 
-  return { oneDay, multiDays };
+  const nileRoot = (taxonomy.allCategories ?? []).find(
+    (category) => category.slug === NILE_CRUISES_ROOT_SLUG,
+  );
+  const nileCruises: EgyptToursMenuChild[] = [];
+  if (nileRoot?.id != null) {
+    for (const category of taxonomy.childCategories ?? []) {
+      if ((category.parent_id as number | undefined) !== nileRoot.id) continue;
+      // Exclude categories without active tours or subcategories (e.g. dahabiyat)
+      const hasSubcategories = (taxonomy.allCategories ?? []).some(
+        (cat) => (cat.parent_id as number | undefined) === category.id,
+      );
+      const hasTours = Boolean(category.slug && (taxonomy.counts?.[category.slug] ?? 0) > 0);
+      if (!hasSubcategories && !hasTours && category.slug === "dahabiyat") continue;
+      const child = toChild(category);
+      if (child) nileCruises.push(child);
+    }
+  }
+
+  return { oneDay, multiDays, nileCruises };
 }

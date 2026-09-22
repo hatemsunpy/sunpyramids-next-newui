@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BlogCard } from "@/components/BlogCard";
 import { EmptyState } from "@/components/EmptyState";
+import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { apiGet } from "@/lib/client-api";
 import { blogCopy } from "@/lib/blog-copy";
 import type { BlogListing } from "@/lib/data";
@@ -136,14 +137,22 @@ export function BlogExplorer({
               );
             })}
           </div>
-          <label className="blogs-sort">
+          <div className="blogs-sort">
             <span className="sr-only">{labels.sortBy}</span>
-            <select value={order} onChange={(event) => selectOrder(event.target.value as SortOrder)}>
-              <option value="" disabled>{labels.sortBy}</option>
-              <option value="asc">{labels.asc}</option>
-              <option value="desc">{labels.desc}</option>
-            </select>
-          </label>
+            <SearchSelectDropdown
+              name="order"
+              value={order}
+              placeholder={labels.sortBy}
+              variant="pill"
+              iconType="sort"
+              menuTitle={labels.sortBy}
+              options={[
+                { value: "asc", label: labels.asc },
+                { value: "desc", label: labels.desc },
+              ]}
+              onChange={(value) => selectOrder(value as SortOrder)}
+            />
+          </div>
         </div>
       </section>
 

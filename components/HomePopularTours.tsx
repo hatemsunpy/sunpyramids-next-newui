@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { apiGet } from "@/lib/client-api";
 import { TourCard } from "@/components/TourCard";
 import type { ApiList, Locale, Tour } from "@/types/api";
@@ -90,34 +91,62 @@ export function HomePopularTours({
 
   return (
     <>
-      <div className="home-filter-pills" role="tablist" aria-label={copy.popularTitle}>
-        {FILTERS.map((filter) => (
-          <button
-            aria-selected={active === filter.key}
-            className={active === filter.key ? "is-active" : ""}
-            key={filter.key}
-            onClick={() => select(filter)}
-            role="tab"
-            type="button"
+      <LayoutGroup id="home-popular-tours-tabs">
+        <div className="home-filter-pills" role="tablist" aria-label={copy.popularTitle}>
+          {FILTERS.map((filter) => {
+            const isActive = active === filter.key;
+            return (
+              <motion.button
+                aria-selected={isActive}
+                className={`home-filter-tab ${isActive ? "is-active" : ""}`}
+                key={filter.key}
+                onClick={() => select(filter)}
+                role="tab"
+                type="button"
+                whileTap={{ scale: 0.96 }}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="popular-tours-active-highlight"
+                    className="home-filter-pill-highlight"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 32,
+                    }}
+                  />
+                )}
+                <span className="home-filter-pill-label">{copy[filter.labelKey]}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+      </LayoutGroup>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
+          className="home-tour-grid-wrap"
+        >
+          <SwipeCarousel
+            aria-busy={loading}
+            ariaLabel={copy.popularTitle}
+            aria-live="polite"
+            className="grid-cards home-tour-grid"
           >
-            {copy[filter.labelKey]}
-          </button>
-        ))}
-      </div>
-      <SwipeCarousel
-        aria-busy={loading}
-        ariaLabel={copy.popularTitle}
-        aria-live="polite"
-        className="grid-cards home-tour-grid"
-      >
-        {loading
-          ? Array.from({ length: 4 }).map((_, index) => <div className="tour-card tour-card-skeleton" key={index} />)
-          : failed
-            ? <div className="home-filter-empty" role="alert">Tours are temporarily unavailable. Please try again.</div>
-          : tours.length
-            ? tours.map((tour) => <TourCard key={tour.id || tour.slug} locale={locale} tour={tour} />)
-            : <div className="home-filter-empty">No tours are available for this category right now.</div>}
-      </SwipeCarousel>
+            {loading
+              ? Array.from({ length: 4 }).map((_, index) => <div className="tour-card tour-card-skeleton" key={index} />)
+              : failed
+                ? <div className="home-filter-empty" role="alert">Tours are temporarily unavailable. Please try again.</div>
+              : tours.length
+                ? tours.map((tour) => <TourCard key={tour.id || tour.slug} locale={locale} tour={tour} />)
+                : <div className="home-filter-empty">No tours are available for this category right now.</div>}
+          </SwipeCarousel>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 }

@@ -1,0 +1,564 @@
+/* ==========================================================================
+   Flowbite React Datepicker Styles
+   Matches: https://flowbite-react.com/docs/components/datepicker#default-datepicker
+   ========================================================================== */
+
+.flowbite-datepicker {
+  position: relative;
+  width: 100%;
+}
+
+.flowbite-datepicker-input-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 42px;
+  border-radius: 0.55rem;
+  background: var(--spt-surface-soft, #f9fafb);
+  border: 1px solid var(--spt-border, #d1d5db);
+  color: var(--spt-ink, #111827);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+
+  &.is-open {
+    border-color: var(--spt-anchor, #163a96);
+    box-shadow: 0 0 0 3px rgba(22, 58, 150, 0.15);
+    background: #ffffff;
+  }
+
+  &.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-input-wrapper {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+
+  &:hover {
+    border-color: #6b7280;
+  }
+
+  &.is-open {
+    border-color: var(--spt-link, #a9beff);
+    box-shadow: 0 0 0 3px rgba(169, 190, 255, 0.2);
+    background: #202a35;
+  }
+}
+
+/* Flowbite Calendar Icon */
+.flowbite-datepicker-icon-wrap {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: #6b7280;
+  z-index: 1;
+}
+
+.flowbite-datepicker-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-icon-wrap {
+  color: #9ca3af;
+}
+
+/* Native readonly input styled as Flowbite text input */
+.flowbite-datepicker .flowbite-datepicker-native-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0.55rem 2.25rem 0.55rem 2.65rem !important;
+  font-size: 0.85rem;
+  font-weight: 550;
+  color: inherit;
+  outline: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: var(--spt-muted, #9ca3af);
+    font-size: 0.82rem;
+    font-weight: 450;
+    opacity: 1;
+  }
+}
+
+/* Clear icon button inside input */
+.flowbite-datepicker-clear-btn {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #6b7280;
+  border: 0;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  z-index: 2;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12);
+    color: #111827;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-clear-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #9ca3af;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+  }
+}
+
+/* Flowbite Calendar Popover Dropdown */
+.flowbite-datepicker-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 9999;
+  width: 310px;
+  max-width: calc(100vw - 2rem);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 0.85rem;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-popover {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f9fafb;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Popover Header */
+.flowbite-datepicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.flowbite-datepicker-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-nav-btn {
+  color: #9ca3af;
+
+  &:hover {
+    background: #374151;
+    color: #ffffff;
+  }
+}
+
+.flowbite-datepicker-title-btn {
+  border: 0;
+  background: transparent;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-title-btn {
+  color: #ffffff;
+
+  &:hover {
+    background: #374151;
+  }
+}
+
+/* Weekday Names Header */
+.flowbite-datepicker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 0.25rem;
+}
+
+.flowbite-datepicker-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  padding: 0.3rem 0;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-weekday {
+  color: #9ca3af;
+}
+
+/* Days Grid */
+.flowbite-datepicker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.flowbite-datepicker-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  box-sizing: border-box;
+
+  &:hover:not(.is-selected):not(.is-disabled) {
+    background: #f3f4f6;
+  }
+
+  &.is-other-month {
+    color: #9ca3af;
+    font-weight: 400;
+  }
+
+  &.is-today {
+    border: 1px solid var(--spt-anchor, #163a96);
+    color: var(--spt-anchor, #163a96);
+    font-weight: 700;
+  }
+
+  &.is-selected {
+    background: var(--spt-anchor, #163a96) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 6px rgba(22, 58, 150, 0.35);
+  }
+
+  &.is-disabled {
+    opacity: 0.28;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-cell {
+  color: #f9fafb;
+
+  &:hover:not(.is-selected):not(.is-disabled) {
+    background: #374151;
+  }
+
+  &.is-other-month {
+    color: #6b7280;
+  }
+
+  &.is-today {
+    border-color: var(--spt-link, #a9beff);
+    color: var(--spt-link, #a9beff);
+  }
+
+  &.is-selected {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.45);
+  }
+}
+
+/* Months & Years Grids */
+.flowbite-datepicker-months-grid,
+.flowbite-datepicker-years-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.flowbite-datepicker-month-cell,
+.flowbite-datepicker-year-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 0.5rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 550;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover:not(.is-selected) {
+    background: #f3f4f6;
+  }
+
+  &.is-selected {
+    background: var(--spt-anchor, #163a96) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+  }
+
+  &.is-other-decade {
+    color: #9ca3af;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-month-cell,
+:root[data-theme="dark"] .flowbite-datepicker-year-cell {
+  color: #f9fafb;
+
+  &:hover:not(.is-selected) {
+    background: #374151;
+  }
+
+  &.is-selected {
+    background: #2563eb !important;
+    color: #ffffff !important;
+  }
+
+  &.is-other-decade {
+    color: #6b7280;
+  }
+}
+
+/* Popover Footer */
+.flowbite-datepicker-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-footer {
+  border-top-color: #374151;
+}
+
+.flowbite-datepicker-btn-today {
+  flex: 1;
+  min-height: 34px;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--spt-anchor, #163a96);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.15s ease, filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-btn-today {
+  background: #2563eb;
+}
+
+.flowbite-datepicker-btn-done {
+  flex: 1;
+  min-height: 34px;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.15s ease, filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-btn-done {
+  background: #3b82f6;
+}
+
+.flowbite-datepicker-btn-clear {
+  flex: 1;
+  min-height: 34px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #374151;
+  font-size: 0.78rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-btn-clear {
+  background: #1f2937;
+  border-color: #4b5563;
+  color: #e5e7eb;
+
+  &:hover {
+    background: #374151;
+  }
+}
+
+/* Time Selection Section */
+.flowbite-datepicker-time-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.65rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed #e5e7eb;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-time-section {
+  border-top-color: #374151;
+}
+
+.flowbite-datepicker-time-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-time-label {
+  color: #9ca3af;
+}
+
+.flowbite-datepicker-time-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.flowbite-datepicker-time-select {
+  height: 30px;
+  padding: 0 0.4rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #111827;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  &:hover,
+  &:focus {
+    border-color: var(--spt-anchor, #163a96);
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-time-select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+
+  &:hover,
+  &:focus {
+    border-color: var(--spt-link, #a9beff);
+  }
+}
+
+.flowbite-datepicker-time-sep {
+  font-weight: 700;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.flowbite-datepicker-ampm-group {
+  display: inline-flex;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  overflow: hidden;
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-ampm-group {
+  border-color: #4b5563;
+}
+
+.flowbite-datepicker-ampm-btn {
+  border: 0;
+  background: transparent;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &.is-active {
+    background: var(--spt-anchor, #163a96);
+    color: #ffffff;
+  }
+}
+
+:root[data-theme="dark"] .flowbite-datepicker-ampm-btn {
+  color: #9ca3af;
+
+  &.is-active {
+    background: #2563eb;
+    color: #ffffff;
+  }
+}
+
