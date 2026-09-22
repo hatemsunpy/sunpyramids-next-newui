@@ -35,6 +35,7 @@ export type ApiPage = {
   published_at?: string | null;
   related_tours?: Tour[];
   categories?: { id?: number; name?: string; title?: string; slug?: string }[];
+  children?: ApiPage[];
   metas?: { meta_key?: string; meta_value?: string; value?: string; title?: string; description?: string; [key: string]: unknown }[];
   seo?: SeoFields | null;
   [key: string]: unknown;

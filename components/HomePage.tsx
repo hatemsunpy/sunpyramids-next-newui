@@ -147,7 +147,9 @@ export function HomePage({
             title={copy.specialOffersTitle}
           />
           <SwipeCarousel className="home-offers-track" ariaLabel={copy.specialOffersTitle}>
-            {specialOffers.map((tour) => <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} />)}
+            {specialOffers.map((tour) => (
+              <TourCard key={tour.id || tour.slug} tour={tour} locale={locale} isSpecialOffer />
+            ))}
           </SwipeCarousel>
         </section>
       ) : null}

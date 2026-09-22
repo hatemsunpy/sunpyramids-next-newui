@@ -8,6 +8,7 @@ import { useCurrency } from "@/components/CurrencyProvider";
 import { TourBookingAddOns } from "@/components/tour/TourAddOns";
 import { useTourActions } from "@/components/tour/TourActions";
 import { apiPost } from "@/lib/client-api";
+import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 import { parseLocalCalendarDate } from "@/lib/local-date";
 import { withLocale } from "@/lib/locales";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
@@ -142,20 +143,15 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
           <form className="tour-booking-form" onSubmit={submit}>
             <div className="tour-booking-step">
               <span className="tour-booking-step-number" aria-hidden="true">1</span>
-              <label className="tour-field">
+              <div className="tour-field">
                 <span>Choose your date</span>
-                <input
-                  type="date"
+                <FlowbiteDatepicker
                   value={date}
-                  onChange={(event) => setDate(event.target.value)}
-                  onClick={(event) => {
-                    try {
-                      event.currentTarget.showPicker?.();
-                    } catch {}
-                  }}
+                  onChange={(val) => setDate(val)}
+                  minDate={new Date().toISOString().split("T")[0]}
                   required
                 />
-              </label>
+              </div>
             </div>
 
             <div className="tour-booking-step">

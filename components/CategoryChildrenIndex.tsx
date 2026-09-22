@@ -46,28 +46,58 @@ export async function CategoryChildrenIndex({ slug, locale = "en" }: Props) {
 
   const subcategories = categoryId
     ? await getCategories(
-        `categories?parent_id=${categoryId}&enabled=1`,
+        `categories?parent_id=${categoryId}&enabled=1&includes=children`,
         locale,
         100,
       )
     : [];
 
   // 2. Fallback to embedded children if parent_id query returned empty
-  let children = subcategories;
-  if (children.length === 0) {
-    const rawChildren =
+  let rawChildren = subcategories;
+  if (rawChildren.length === 0) {
+    const embedded =
       (categoryResult.ok
         ? (categoryResult.value as ApiPage & { children?: ApiPage[] })
         : null
       )?.children ??
       (page as ApiPage & { children?: ApiPage[] })?.children ??
       [];
-    const orderOf = (item: ApiPage) =>
-      typeof item.display_order === "number" ? item.display_order : 999;
-    children = [...rawChildren].sort(
-      (a, b) => orderOf(a) - orderOf(b) || (a.id ?? 0) - (b.id ?? 0),
-    );
+    rawChildren = embedded;
   }
+
+  const orderOf = (item: ApiPage) =>
+    typeof item.display_order === "number" ? item.display_order : 999;
+  const sortedChildren = [...rawChildren].sort(
+    (a, b) => orderOf(a) - orderOf(b) || (a.id ?? 0) - (b.id ?? 0),
+  );
+
+  // Filter out any category that does not have active tours attached to it (e.g. Dahabiyat)
+  const tourCountChecks = await Promise.all(
+    sortedChildren.map(async (child) => {
+      const subChildren = (child.children as ApiPage[] | undefined) || [];
+      let queryParam = "";
+      if (subChildren.length > 0) {
+        queryParam = subChildren
+          .filter((sub) => sub.id != null)
+          .map((sub) => `categories.id[]=${sub.id}`)
+          .join("&");
+      } else if (child.id != null) {
+        queryParam = `categories.id[]=${child.id}`;
+      } else if (child.slug) {
+        queryParam = `categories.slug=${encodeURIComponent(child.slug)}`;
+      }
+
+      if (!queryParam) return { child, count: 0 };
+
+      const toursResponse = await getTours(`tours?${queryParam}`, locale, 1, 1);
+      const meta = tourMeta(toursResponse as ApiList<Tour> | null);
+      return { child, count: meta.total };
+    })
+  );
+
+  const children = tourCountChecks
+    .filter((item) => item.count > 0)
+    .map((item) => item.child);
 
   const pageTitle =
     page?.title ||

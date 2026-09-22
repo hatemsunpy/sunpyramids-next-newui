@@ -24,3 +24,6 @@ skills-lock.json
 *.jpg
 *.pid
 .vscode/
+# Delegate configuration and workflows
+.delegate/
+.agent/workflows/
