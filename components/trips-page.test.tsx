@@ -46,6 +46,13 @@ function page2Href() {
 }
 
 describe("TripsPage pagination — days propagation", () => {
+  it("renders a wishlist button for every trips result card", () => {
+    render(
+      <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={{ page: 1 }} meta={meta} />,
+    );
+    expect(screen.getAllByRole("button", { name: "Add to wishlist" })).toHaveLength(tours.length);
+  });
+
   it("days=5 → page 2 preserves days=5", () => {
     render(
       <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={{ days: 5, page: 1 }} meta={meta} />,

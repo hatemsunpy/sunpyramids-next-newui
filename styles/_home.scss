@@ -663,6 +663,33 @@
   font-size: 0.7rem;
 }
 
+.site-shell-v2 .tour-card-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  margin: 0;
+  color: var(--spt-muted);
+  font-size: 0.74rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.site-shell-v2 .tour-card-duration-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary, #163a96);
+  flex-shrink: 0;
+  line-height: 1;
+
+  svg {
+    display: block;
+    width: 13.5px;
+    height: 13.5px;
+    border-radius: 50%;
+  }
+}
+
 .site-shell-v2 .tour-card-bottom strong {
   color: var(--spt-link);
   font-size: 1.1rem;
@@ -731,6 +758,10 @@
 
 .home-signature-grid .tour-card--feature .tour-card-bottom strong {
   color: white;
+}
+
+.home-signature-grid .tour-card--feature .tour-card-duration-icon svg {
+  box-shadow: 0 0 0 1.2px rgba(255, 255, 255, 0.6);
 }
 
 .home-signature-grid .tour-card:last-child {
