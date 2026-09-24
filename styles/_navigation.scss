@@ -40,9 +40,9 @@
 .site-shell-v2 .header-main,
 .site-shell-v2 .site-header-at-top .header-main {
   width: 100%;
-  min-height: 66px;
+  min-height: 42px;
   margin: 0;
-  padding: 0.55rem clamp(0.75rem, 1.4vw, 1.25rem);
+  padding: 0.22rem clamp(0.75rem, 1.4vw, 1.25rem);
   gap: clamp(0.8rem, 1.7vw, 1.6rem);
   border-radius: inherit;
   background: transparent;
@@ -50,7 +50,7 @@
 }
 
 .site-shell-v2 .header-logo img {
-  width: clamp(8.6rem, 11vw, 10.3rem);
+  width: clamp(5.5rem, 7vw, 6.6rem);
 }
 
 :root[data-theme="dark"] .site-shell-v2 :is(.header-logo img, .mobile-drawer-head img) {
@@ -67,12 +67,12 @@
   display: flex;
   align-items: center;
   width: min(31vw, 28rem);
-  height: 44px;
+  height: 31px;
   margin-inline: auto 0;
   border: 1px solid var(--spt-border);
   border-radius: 12px;
   background: var(--spt-surface-soft);
-  padding: 0.65rem 0.9rem;
+  padding: 0.28rem 0.7rem;
   box-shadow: none;
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
@@ -84,8 +84,8 @@
 }
 
 .site-shell-v2 :is(.header-search, .mobile-drawer-search) > svg {
-  width: 20px;
-  min-width: 20px;
+  width: 16px;
+  min-width: 16px;
   stroke: var(--spt-muted);
   stroke-width: 1.8;
   stroke-linecap: round;
@@ -110,9 +110,9 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
+  width: 27px;
+  min-width: 27px;
+  height: 27px;
   border: 1px solid transparent;
   border-radius: 10px;
   background: transparent;
@@ -123,9 +123,9 @@
 }
 
 .site-shell-v2 .voice-mic > svg {
-  width: 20px;
-  min-width: 20px;
-  height: 20px;
+  width: 15px;
+  min-width: 15px;
+  height: 15px;
 }
 
 .site-shell-v2 .voice-mic:hover {
@@ -253,12 +253,12 @@
 }
 
 .site-shell-v2 :is(.header-language, .circle-action, .signin-action, .theme-toggle) {
-  min-height: 42px;
+  min-height: 30px;
   border: 1px solid var(--spt-border);
   border-radius: 10px;
   background: transparent;
   color: var(--spt-ink);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 650;
   transition: border-color 180ms ease, background 180ms ease, color 180ms ease, translate 180ms var(--spt-ease);
 }
@@ -274,8 +274,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  min-width: 42px;
+  width: 30px;
+  min-width: 30px;
   padding: 0;
 }
 
@@ -288,8 +288,8 @@
 .site-shell-v2 .mobile-links svg,
 .site-shell-v2 .mobile-drawer-utilities svg,
 .site-shell-v2 .mobile-drawer-actions svg {
-  width: 19px;
-  height: 19px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
   stroke-width: 1.8;
   stroke-linecap: round;
@@ -297,7 +297,7 @@
 }
 
 .site-shell-v2 .signin-action {
-  padding-inline: 0.95rem;
+  padding-inline: 0.75rem;
 }
 
 .site-shell-v2 .theme-toggle-sun,
@@ -320,7 +320,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 50px;
+  min-height: 38px;
   margin: 0;
   border-top: 1px solid var(--spt-border);
   background: transparent;
@@ -341,13 +341,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  min-height: 49px;
+  min-height: 37px;
   border: 0;
   border-radius: 0;
   background: transparent;
   color: var(--spt-ink);
-  padding: 0.65rem clamp(0.55rem, 0.8vw, 0.85rem);
-  font-size: 0.82rem;
+  padding: 0.32rem clamp(0.55rem, 0.8vw, 0.85rem);
+  font-size: 0.8rem;
   font-weight: 650;
   white-space: nowrap;
   transition: color 180ms ease, background 180ms ease;
@@ -391,8 +391,8 @@
 }
 
 .site-shell-v2 .dropdown-chevron {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   stroke: currentColor;
   stroke-width: 1.8;
   transition: rotate 180ms ease;
@@ -708,8 +708,8 @@
 }
 
 .site-shell-v2 .special-offer-link {
-  min-height: 40px;
-  padding: 0.7rem 0.8rem;
+  min-height: 33px;
+  padding: 0.35rem 0.7rem;
   color: var(--spt-link);
   font-size: 0.8rem;
   font-weight: 700;
@@ -720,12 +720,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  min-height: 40px;
+  min-height: 33px;
   border: 1px solid var(--spt-amber);
   border-radius: 10px;
   background: var(--spt-amber);
   color: #1d1f1f;
-  padding-inline: 0.95rem;
+  padding-inline: 0.75rem;
   font-size: 0.8rem;
   font-weight: 750;
   white-space: nowrap;
@@ -990,6 +990,16 @@
   .site-shell-v2 .header-actions > :is(.header-language, .header-theme-toggle, .signin-action),
   .site-shell-v2 .header-search {
     display: none;
+  }
+
+  /* Keep comfortable touch targets on small screens */
+  .site-shell-v2 :is(.header-language, .circle-action, .signin-action, .theme-toggle) {
+    min-height: 40px;
+  }
+
+  .site-shell-v2 :is(.circle-action, .theme-toggle) {
+    width: 40px;
+    min-width: 40px;
   }
 
   .site-shell-v2 .header-actions > .cart-action {

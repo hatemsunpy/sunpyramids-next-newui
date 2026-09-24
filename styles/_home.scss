@@ -246,7 +246,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
 }
 
-.home-page--redesign .home-search-make-fields > label:only-of-type {
+.home-page--redesign .home-search-make-fields > :is(label, .home-search-field-col):only-of-type {
   grid-column: span 2;
 }
 
@@ -794,6 +794,9 @@
   background: var(--spt-surface-soft);
   scrollbar-width: none;
   -webkit-tap-highlight-color: transparent;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 .home-page--redesign .home-filter-pills::-webkit-scrollbar {

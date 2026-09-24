@@ -142,20 +142,16 @@ export function HomeSearchShortcuts({ locale = "en", destinations, rootCategorie
             </>
           ) : null}
           {makeType === "approximateTime" ? (
-            <label>
+            <div className="home-search-field-col">
               <span>{copy.selectMonth}</span>
-              <input
+              <FlowbiteDatepicker
+                id="home-make-month"
                 name="month"
+                placeholder={copy.selectExpectedMonth}
                 required
-                type="month"
-                aria-label={copy.selectExpectedMonth}
-                onClick={(e) => {
-                  try {
-                    e.currentTarget.showPicker?.();
-                  } catch {}
-                }}
+                selectionMode="month"
               />
-            </label>
+            </div>
           ) : null}
           {makeType === "notSureYet" ? <label><span>{copy.manyDays}</span><input min="1" name="days" required type="number" placeholder={copy.manyDays} /></label> : null}
           <button className="btn-primary" type="submit">{copy.makeTripShort}</button>

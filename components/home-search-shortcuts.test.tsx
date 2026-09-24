@@ -114,3 +114,38 @@ describe("D2 — Find Trip submit generates corrected destination param", () => 
     expect(pushes).toEqual(["/trips?days=5&destination=108"]);
   });
 });
+
+describe("Make Your Trip approximate month picker", () => {
+  it("uses the shared datepicker UI and preserves the YYYY-MM query contract", () => {
+    const ui = render(<HomeSearchShortcuts locale="en" destinations={destinations} />);
+    fireEvent.click(screen.getByRole("radio", { name: /approximate time/i }));
+
+    const monthInput = screen.getByPlaceholderText(/expected month/i);
+    expect(monthInput).toHaveAttribute("type", "text");
+
+    fireEvent.click(monthInput);
+    const currentYear = new Date().getFullYear();
+    const selectedYear = currentYear + 1;
+    fireEvent.click(screen.getByRole("button", { name: String(currentYear) }));
+    fireEvent.click(screen.getByRole("button", { name: String(selectedYear) }));
+    fireEvent.click(screen.getByRole("button", { name: `October ${selectedYear}` }));
+
+    expect(ui.container.querySelector<HTMLInputElement>('input[name="month"]')).toHaveValue(`${selectedYear}-10`);
+    fireEvent.click(screen.getByRole("button", { name: /make trip/i }));
+    expect(pushes).toEqual([`/make-your-trip?type=approximateTime&month=${selectedYear}-10`]);
+  });
+
+  it("selecting This month resets both month and year after browsing another year", () => {
+    const ui = render(<HomeSearchShortcuts locale="en" destinations={destinations} />);
+    fireEvent.click(screen.getByRole("radio", { name: /approximate time/i }));
+    fireEvent.click(screen.getByPlaceholderText(/expected month/i));
+
+    const today = new Date();
+    fireEvent.click(screen.getByRole("button", { name: String(today.getFullYear()) }));
+    fireEvent.click(screen.getByRole("button", { name: String(today.getFullYear() + 1) }));
+    fireEvent.click(screen.getByRole("button", { name: /this month/i }));
+
+    const expectedMonth = String(today.getMonth() + 1).padStart(2, "0");
+    expect(ui.container.querySelector<HTMLInputElement>('input[name="month"]')).toHaveValue(`${today.getFullYear()}-${expectedMonth}`);
+  });
+});

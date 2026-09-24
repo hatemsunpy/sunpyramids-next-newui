@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/types/api";
 import {
   apiDelete,
@@ -1766,11 +1767,13 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
                     <span>Target Month / Year<span className="required-mark">*</span></span>
                   </label>
                   <div className="input-wrap">
-                    <input
+                    <FlowbiteDatepicker
                       id="planner-month"
                       name="month"
-                      placeholder="e.g. November 2026"
+                      placeholder="Select month and year"
+                      minDate={new Date().toISOString().split("T")[0]}
                       required
+                      selectionMode="month"
                     />
                   </div>
                 </div>
@@ -2058,7 +2061,10 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
           {state === "loading" ? (
             <span>Securing Request...</span>
           ) : (
-            <span>{isCar ? (copy.addToCart || "Book Private Transfer") : "Request Custom Itinerary &rarr;"}</span>
+            <>
+              <span>{isCar ? (copy.addToCart || "Book Private Transfer") : "Request Custom Itinerary"}</span>
+              <ArrowRight aria-hidden="true" size={19} strokeWidth={2.25} />
+            </>
           )}
         </button>
 

@@ -105,11 +105,10 @@ export function SearchSelectDropdown({
   // Focus search input when popover opens
   React.useEffect(() => {
     if (open && isSearchable) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         searchInputRef.current?.focus();
       }, 50);
-    } else if (!open) {
-      setQuery("");
+      return () => clearTimeout(timer);
     }
   }, [open, isSearchable]);
 
@@ -141,7 +140,16 @@ export function SearchSelectDropdown({
       </select>
 
       {/* Animate-UI Radix Dropdown Presentation */}
-      <DropdownMenu open={open && !disabled} onOpenChange={(o) => !disabled && setOpen(o)}>
+      <DropdownMenu
+        open={open && !disabled}
+        onOpenChange={(nextOpen) => {
+          if (disabled) return;
+          setOpen(nextOpen);
+          if (!nextOpen) {
+            setQuery("");
+          }
+        }}
+      >
         <DropdownMenuTrigger asChild>
           <button
             type="button"

@@ -1,6 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import {
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { apiGet } from "@/lib/client-api";
 import { TourCard } from "@/components/TourCard";
@@ -52,6 +57,76 @@ function listData<T>(response: ApiList<T> | null | undefined): T[] {
   return [];
 }
 
+type PillsDragState = {
+  pointerId: number | null;
+  startX: number;
+  startScrollLeft: number;
+  dragging: boolean;
+};
+
+// Drag-to-scroll for the filter pills row. Touch devices scroll natively;
+// this adds the same gesture for mouse users and suppresses the tab click
+// that would otherwise fire at the end of a drag.
+function usePillsDragScroll() {
+  const state = useRef<PillsDragState>({ pointerId: null, startX: 0, startScrollLeft: 0, dragging: false });
+  const suppressClick = useRef(false);
+
+  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    if (event.currentTarget.scrollWidth <= event.currentTarget.clientWidth) return;
+    state.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: event.currentTarget.scrollLeft,
+      dragging: false,
+    };
+    suppressClick.current = false;
+  }
+
+  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const current = state.current;
+    if (current.pointerId !== event.pointerId) return;
+    const distanceX = event.clientX - current.startX;
+    if (!current.dragging && Math.abs(distanceX) < 6) return;
+    if (!current.dragging) {
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch {}
+    }
+    current.dragging = true;
+    suppressClick.current = true;
+    // "Content follows finger" works for both LTR and RTL scroll models.
+    event.currentTarget.scrollLeft = current.startScrollLeft - distanceX;
+  }
+
+  function finishDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (state.current.pointerId !== event.pointerId) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      try {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      } catch {}
+    }
+    state.current = { pointerId: null, startX: 0, startScrollLeft: 0, dragging: false };
+    window.setTimeout(() => {
+      suppressClick.current = false;
+    }, 80);
+  }
+
+  function onClickCapture(event: ReactMouseEvent<HTMLDivElement>) {
+    if (!suppressClick.current) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  return {
+    onClickCapture,
+    onPointerCancel: finishDrag,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp: finishDrag,
+  };
+}
+
 export function HomePopularTours({
   initialTours,
   locale = "en",
@@ -65,6 +140,7 @@ export function HomePopularTours({
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
   const cache = useRef<Record<string, Tour[]>>({ recommended: initialTours });
+  const pillsDrag = usePillsDragScroll();
 
   async function select(next: Filter) {
     if (next.key === active) return;
@@ -92,7 +168,12 @@ export function HomePopularTours({
   return (
     <>
       <LayoutGroup id="home-popular-tours-tabs">
-        <div className="home-filter-pills" role="tablist" aria-label={copy.popularTitle}>
+        <div
+          {...pillsDrag}
+          className="home-filter-pills"
+          role="tablist"
+          aria-label={copy.popularTitle}
+        >
           {FILTERS.map((filter) => {
             const isActive = active === filter.key;
             return (
