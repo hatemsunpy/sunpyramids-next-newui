@@ -2,25 +2,9 @@
 
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
+import { motion } from "motion/react";
 import { Check, ChevronRight, Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-/* -------------------------------------------------------------------------------------------------
- * Highlight Context (Signature Animate-UI Floating Highlight)
- * -----------------------------------------------------------------------------------------------*/
-
-interface HighlightContextValue {
-  hoveredId: string | null;
-  setHoveredId: (id: string | null) => void;
-  layoutId: string;
-}
-
-const HighlightContext = React.createContext<HighlightContextValue | null>(null);
-
-function useHighlight() {
-  return React.useContext(HighlightContext);
-}
 
 /* -------------------------------------------------------------------------------------------------
  * DropdownMenu Root & Trigger
@@ -53,9 +37,6 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   DropdownMenuContentProps
 >(({ className, sideOffset = 6, align = "start", children, ...props }, ref) => {
-  const [hoveredId, setHoveredId] = React.useState<string | null>(null);
-  const layoutId = React.useId();
-
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -69,17 +50,14 @@ const DropdownMenuContent = React.forwardRef<
           initial={{ opacity: 0, scale: 0.95, y: -4 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -4 }}
-          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
             "animate-ui-dropdown-content",
-            "z-50 min-w-[12rem] overflow-x-hidden overflow-y-auto rounded-2xl p-1.5 shadow-2xl outline-none backdrop-blur-md",
+            "z-50 min-w-[12rem] overflow-x-hidden overflow-y-auto rounded-2xl p-1.5 shadow-2xl outline-none",
             className
           )}
-          onPointerLeave={() => setHoveredId(null)}
         >
-          <HighlightContext.Provider value={{ hoveredId, setHoveredId, layoutId }}>
-            {children}
-          </HighlightContext.Provider>
+          {children}
         </motion.div>
       </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
@@ -102,10 +80,6 @@ const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   DropdownMenuItemProps
 >(({ className, inset, variant = "default", active, disabled, children, ...props }, ref) => {
-  const highlight = useHighlight();
-  const itemId = React.useId();
-  const isHovered = highlight?.hoveredId === itemId;
-
   return (
     <DropdownMenuPrimitive.Item
       ref={ref}
@@ -118,16 +92,8 @@ const DropdownMenuItem = React.forwardRef<
         active && "is-active",
         className
       )}
-      onPointerEnter={() => !disabled && highlight?.setHoveredId(itemId)}
       {...props}
     >
-      {isHovered && !disabled && (
-        <motion.span
-          layoutId={highlight?.layoutId}
-          className="animate-ui-dropdown-highlight absolute inset-0 -z-10 rounded-xl"
-          transition={{ type: "spring", stiffness: 350, damping: 30 }}
-        />
-      )}
       {children}
     </DropdownMenuPrimitive.Item>
   );
@@ -145,10 +111,6 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   DropdownMenuCheckboxItemProps
 >(({ className, children, checked, disabled, ...props }, ref) => {
-  const highlight = useHighlight();
-  const itemId = React.useId();
-  const isHovered = highlight?.hoveredId === itemId;
-
   return (
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
@@ -159,16 +121,8 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       )}
       checked={checked}
       disabled={disabled}
-      onPointerEnter={() => !disabled && highlight?.setHoveredId(itemId)}
       {...props}
     >
-      {isHovered && !disabled && (
-        <motion.span
-          layoutId={highlight?.layoutId}
-          className="animate-ui-dropdown-highlight absolute inset-0 -z-10 rounded-xl"
-          transition={{ type: "spring", stiffness: 350, damping: 30 }}
-        />
-      )}
       <span className="absolute left-2.5 flex h-4 w-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
           <Check className="h-4 w-4" />
@@ -191,10 +145,6 @@ const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   DropdownMenuRadioItemProps
 >(({ className, children, disabled, ...props }, ref) => {
-  const highlight = useHighlight();
-  const itemId = React.useId();
-  const isHovered = highlight?.hoveredId === itemId;
-
   return (
     <DropdownMenuPrimitive.RadioItem
       ref={ref}
@@ -204,16 +154,8 @@ const DropdownMenuRadioItem = React.forwardRef<
         className
       )}
       disabled={disabled}
-      onPointerEnter={() => !disabled && highlight?.setHoveredId(itemId)}
       {...props}
     >
-      {isHovered && !disabled && (
-        <motion.span
-          layoutId={highlight?.layoutId}
-          className="animate-ui-dropdown-highlight absolute inset-0 -z-10 rounded-xl"
-          transition={{ type: "spring", stiffness: 350, damping: 30 }}
-        />
-      )}
       <span className="absolute left-2.5 flex h-4 w-4 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
           <Circle className="h-2 w-2 fill-current" />
@@ -278,10 +220,6 @@ const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }
 >(({ className, inset, children, disabled, ...props }, ref) => {
-  const highlight = useHighlight();
-  const itemId = React.useId();
-  const isHovered = highlight?.hoveredId === itemId;
-
   return (
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
@@ -292,16 +230,8 @@ const DropdownMenuSubTrigger = React.forwardRef<
         disabled && "pointer-events-none opacity-40",
         className
       )}
-      onPointerEnter={() => !disabled && highlight?.setHoveredId(itemId)}
       {...props}
     >
-      {isHovered && !disabled && (
-        <motion.span
-          layoutId={highlight?.layoutId}
-          className="animate-ui-dropdown-highlight absolute inset-0 -z-10 rounded-xl"
-          transition={{ type: "spring", stiffness: 350, damping: 30 }}
-        />
-      )}
       {children}
       <ChevronRight className="ml-auto h-4 w-4" />
     </DropdownMenuPrimitive.SubTrigger>
@@ -322,9 +252,9 @@ const DropdownMenuSubContent = React.forwardRef<
       initial={{ opacity: 0, scale: 0.95, x: -4 }}
       animate={{ opacity: 1, scale: 1, x: 0 }}
       exit={{ opacity: 0, scale: 0.95, x: -4 }}
-      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.1, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "animate-ui-dropdown-content z-50 min-w-[10rem] overflow-hidden rounded-2xl p-1.5 shadow-2xl outline-none backdrop-blur-md",
+        "animate-ui-dropdown-content z-50 min-w-[10rem] overflow-hidden rounded-2xl p-1.5 shadow-2xl outline-none",
         className
       )}
     />

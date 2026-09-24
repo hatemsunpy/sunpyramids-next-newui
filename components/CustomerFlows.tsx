@@ -26,6 +26,11 @@ import { uiCopy } from "@/lib/ui-copy";
 import { siteContact } from "@/lib/site-contact";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
+import {
+  PhoneCountryInput,
+  type PhoneCountry,
+  type PhoneCountryLoadState,
+} from "@/components/PhoneCountryInput";
 
 type ApiResponse<T = any> = {
   status?: boolean;
@@ -1346,22 +1351,27 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
   const [message, setMessage] = useState("");
   const [locations, setLocations] = useState<any[]>([]);
   const [destinations, setDestinations] = useState<any[]>([]);
-  const [countries, setCountries] = useState<any[]>([]);
+  const [countries, setCountries] = useState<PhoneCountry[]>([]);
+  const [countryLoadState, setCountryLoadState] = useState<PhoneCountryLoadState>("loading");
   const [pickupLocationId, setPickupLocationId] = useState("");
   const [destinationId, setDestinationId] = useState("");
   const [routeMessage, setRouteMessage] = useState("");
 
   useEffect(() => {
     async function loadOptions() {
+      setCountryLoadState("loading");
       try {
         const [countryRes, locationRes] = await Promise.all([
-          apiGet<ApiResponse<any[]>>("countries", locale, false),
+          apiGet<ApiResponse<PhoneCountry[]>>("countries", locale, false),
           isCar ? apiGet<ApiResponse<{ data?: any[] }>>("locations?page_limit=200&order_by=id,asc", locale, false) : Promise.resolve(null),
         ]);
-        setCountries(Array.isArray(countryRes.data) ? countryRes.data : []);
+        const loadedCountries = Array.isArray(countryRes.data) ? countryRes.data : [];
+        setCountries(loadedCountries);
+        setCountryLoadState(loadedCountries.length > 0 ? "ready" : "error");
         if (locationRes) setLocations(Array.isArray(locationRes.data?.data) ? locationRes.data.data : []);
       } catch {
         setCountries([]);
+        setCountryLoadState("error");
         setLocations([]);
       }
     }
@@ -1403,6 +1413,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!isCar && countryLoadState !== "ready") {
+      setState("error");
+      setMessage(copy.countryCodesUnavailable);
+      return;
+    }
     setState("loading");
     setMessage("");
     const form = new FormData(event.currentTarget);
@@ -1996,17 +2011,39 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
           <div className="planner-field">
             <label htmlFor="planner-phone">
               <span>{copy.phone || "Phone Number"}<span className="required-mark">*</span></span>
-              <span className="field-hint">With country code</span>
             </label>
             <div className="input-wrap">
-              <input
-                id="planner-phone"
-                name="phone"
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                autoComplete="tel"
-                required
-              />
+              {isCar ? (
+                <input
+                  id="planner-phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="+1 (555) 000-0000"
+                  autoComplete="tel"
+                  required
+                />
+              ) : (
+                <PhoneCountryInput
+                  id="planner-phone"
+                  name="phone"
+                  countries={countries}
+                  loadState={countryLoadState}
+                  copy={{
+                    placeholder: copy.phonePlaceholder,
+                    selectCallingCode: copy.selectCallingCode,
+                    callingCode: copy.callingCode,
+                    searchCountryCode: copy.searchCountryCode,
+                    noCountriesFound: copy.noCountriesFound,
+                    loadingCountryCodes: copy.loadingCountryCodes,
+                    countryCodesUnavailable: copy.countryCodesUnavailable,
+                    phoneWithoutCountryCode: copy.phoneWithoutCountryCode,
+                    enterPhoneDigits: copy.enterPhoneDigits,
+                    enterValidPhone: copy.enterValidPhone,
+                    countryCallingCodes: copy.countryCallingCodes,
+                  }}
+                  required
+                />
+              )}
             </div>
           </div>
 
@@ -2056,7 +2093,7 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
         <button
           className="btn-submit-planner"
           type="submit"
-          disabled={state === "loading"}
+          disabled={state === "loading" || (!isCar && countryLoadState !== "ready")}
         >
           {state === "loading" ? (
             <span>Securing Request...</span>

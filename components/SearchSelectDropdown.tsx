@@ -229,7 +229,7 @@ export function SearchSelectDropdown({
                     active={isSelected}
                     onSelect={() => handleSelect(String(opt.value))}
                     className={cn(
-                      "search-select-item flex items-center justify-between gap-3 text-[0.85rem] cursor-pointer transition-colors",
+                      "search-select-item flex items-center justify-between gap-3 text-[0.85rem] cursor-pointer",
                       isSelected && "font-semibold text-primary is-active"
                     )}
                   >

@@ -5,18 +5,19 @@ import { withLocale } from "@/lib/locales";
 import { TourCard } from "@/components/TourCard";
 import { BlogCard } from "@/components/BlogCard";
 import { DestinationCard } from "@/components/DestinationCard";
-import { SectionHeading } from "@/components/SectionHeading";
+import { SectionEyebrow, SectionHeading } from "@/components/SectionHeading";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
 import { HomeSearchShortcuts } from "@/components/HomeSearchShortcuts";
 import { HomePopularTours } from "@/components/HomePopularTours";
-import { HomeHeroMedia } from "@/components/HomeHeroMedia";
+import { HomeHeroScene } from "@/components/HomeHeroScene";
 import { TravelPartners } from "@/components/TravelPartners";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { HomeUpcomingEvents } from "@/components/HomeUpcomingEvents";
 import { WhyTravelWithSunPyramids } from "@/components/WhyTravelWithSunPyramids";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { homeCopy } from "@/lib/home-copy";
+import { homeSectionLabels } from "@/lib/home-section-labels";
 
 const gallery = [
   ["/images/shorts.png", "/images/shorts-gallary.png", "YouTube Shorts", "shorts"],
@@ -62,9 +63,17 @@ export function HomePage({
   locale?: Locale;
 }) {
   const copy = homeCopy(locale);
+  const labels = homeSectionLabels(locale);
   const heroImages = page?.gallery?.length
     ? page.gallery
     : [page?.banner || page?.image || "/images/mainBanner.png"];
+  const heroCopySlides = [
+    { title: copy.heroMainTitle, accent: copy.heroMainAccent, description: copy.heroMainDescription },
+    { title: copy.heroSlide1Title, accent: copy.heroSlide1Accent, description: copy.heroSlide1Description },
+    { title: copy.heroSlide2Title, accent: copy.heroSlide2Accent, description: copy.heroSlide2Description },
+    { title: copy.heroSlide3Title, accent: copy.heroSlide3Accent, description: copy.heroSlide3Description },
+    { title: copy.heroSlide4Title, accent: copy.heroSlide4Accent, description: copy.heroSlide4Description },
+  ];
   const bookingSteps = [
     ["1", copy.findingTitle, copy.findingDescription],
     ["2", copy.bookingTitle, copy.bookingDescription],
@@ -75,16 +84,7 @@ export function HomePage({
   return (
     <main className="home-page home-page--redesign">
       <section className="home-hero-v2">
-        <div className="home-hero-v2__media">
-          <HomeHeroMedia images={heroImages} alt="Sun Pyramids Tours Egypt experience" />
-        </div>
-        <div className="home-hero-v2__veil" />
-        <div className="home-hero-v2__inner">
-          <div className="home-hero-v2__copy">
-            <p>{copy.heroKicker}</p>
-            <h1>{copy.heroTitle}</h1>
-          </div>
-        </div>
+        <HomeHeroScene images={heroImages} alt="Sun Pyramids Tours Egypt experience" slides={heroCopySlides} />
         <nav className="home-mobile-shortcuts" aria-label="Quick trip actions">
           <Link href={withLocale("/make-your-trip", locale)}><ShortcutIcon type="make" /><strong>{copy.makeTripShort}</strong></Link>
           <Link href={withLocale("/trips", locale)}><ShortcutIcon type="find" /><strong>{copy.findTripShort}</strong></Link>
@@ -102,6 +102,7 @@ export function HomePage({
         <section className="home-section home-signature-section container-shell">
           <SectionHeading
             description={copy.seasonalDescription}
+            eyebrow={labels.seasonal}
             href={withLocale("/event/egypt-christmas-event-2027", locale)}
             linkLabel={copy.seeMore}
             title={copy.seasonalTitle}
@@ -119,6 +120,7 @@ export function HomePage({
           <SectionHeading
             align="center"
             description={copy.popularDescription}
+            eyebrow={copy.popularEyebrow}
             href={withLocale("/trips", locale)}
             linkLabel={copy.seeMore}
             title={copy.popularTitle}
@@ -133,6 +135,7 @@ export function HomePage({
           <div><span>{copy.makeTripShort}</span><strong>{copy.makeYourTrip}</strong></div>
         </div>
         <div className="home-plan-section__form">
+          <SectionEyebrow>{labels.plan}</SectionEyebrow>
           <h2>{copy.makeYourTrip}</h2>
           <HomeSearchShortcuts locale={locale} destinations={highlights} modeOnly="make" />
         </div>
@@ -142,6 +145,7 @@ export function HomePage({
         <section className="home-section container-shell home-offers-section">
           <SectionHeading
             description={copy.specialOffersDescription}
+            eyebrow={labels.offers}
             href={withLocale("/trips?main=special-offers", locale)}
             linkLabel={copy.seeMore}
             title={copy.specialOffersTitle}
@@ -159,6 +163,7 @@ export function HomePage({
       <section className="home-how-section-v2">
         <div className="container-shell home-how-layout">
           <div className="home-how-intro">
+            <SectionEyebrow>{labels.how}</SectionEyebrow>
             <h2>{copy.howItWorks}</h2>
             <p>{copy.howItWorksDescription}</p>
             <Link className="btn-outline" href={withLocale("/make-your-trip", locale)}>{copy.makeTripShort}<span aria-hidden="true">↗</span></Link>
@@ -177,7 +182,7 @@ export function HomePage({
 
       {highlights.length ? (
         <section className="home-section home-destinations-section container-shell">
-          <SectionHeading align="center" description={copy.highlightsDescription} title={copy.highlightsTitle} />
+          <SectionHeading align="center" description={copy.highlightsDescription} eyebrow={labels.destinations} title={copy.highlightsTitle} />
           <SwipeCarousel className="home-destination-mosaic" ariaLabel={copy.highlightsTitle}>
             {highlights.slice(0, 7).map((destination, index) => (
               <DestinationCard
@@ -197,6 +202,7 @@ export function HomePage({
         <section className="home-section home-editorial-section">
           <div className="container-shell">
             <SectionHeading
+              eyebrow={labels.blogs}
               href={withLocale("/blogs/all-blogs", locale)}
               linkLabel={copy.seeMore}
               title={copy.travelBlogs}
@@ -213,6 +219,7 @@ export function HomePage({
       <section className="home-certification-section-v2 container-shell">
         <div>
           <p>{copy.howItWorksDescription}</p>
+          <SectionEyebrow>{labels.sustainability}</SectionEyebrow>
           <h2>Tailored <span>guidance</span> for your <span>sustainability</span> journey</h2>
           <Link className="btn-primary" href={withLocale("/sustainability", locale)}>{copy.seeMore}<span aria-hidden="true">↗</span></Link>
         </div>
@@ -220,7 +227,7 @@ export function HomePage({
       </section>
 
       <section className="home-section container-shell home-gallery-section-v2">
-        <SectionHeading align="center" description={copy.galleryDescription} title={copy.galleryTitle} />
+        <SectionHeading align="center" description={copy.galleryDescription} eyebrow={labels.gallery} title={copy.galleryTitle} />
         <SwipeCarousel className="home-social-gallery-v2" ariaLabel={copy.galleryTitle}>
           {gallery.map(([image, icon, label, type], index) => {
             const content = <><Image src={image} alt={`${label} travel moments`} fill sizes="(max-width: 768px) 72vw, 25vw" /><Image className="home-gallery-icon" src={icon} alt="" width={54} height={54} /><span>{label}</span></>;
@@ -239,6 +246,7 @@ export function HomePage({
         <section className="home-faq-section-v2">
           <div className="container-shell home-faq-layout">
             <div className="home-faq-intro">
+              <SectionEyebrow>{labels.faq}</SectionEyebrow>
               <h2>{copy.faqTitle}</h2>
               <Link className="section-heading-link" href={withLocale("/faqs", locale)}>{copy.seeMore}<span aria-hidden="true">↗</span></Link>
             </div>
@@ -255,7 +263,7 @@ export function HomePage({
       ) : null}
 
       <section className="home-help-section-v2 container-shell">
-        <div className="home-help-panel-v2"><h2>{copy.needHelp}</h2><HomeNeedHelpForm locale={locale} /></div>
+        <div className="home-help-panel-v2"><SectionEyebrow>{labels.help}</SectionEyebrow><h2>{copy.needHelp}</h2><HomeNeedHelpForm locale={locale} /></div>
       </section>
 
       <TravelPartners />
