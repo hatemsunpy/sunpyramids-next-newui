@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "vitest run --configLoader=runner --no-file-parallelism",
     "test:watch": "vitest"
   },
   "dependencies": {

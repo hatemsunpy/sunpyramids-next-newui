@@ -179,7 +179,7 @@
 }
 
 .site-shell-v2 :is(.header-language, .circle-action, .signin-action, .make-trip-action) {
-  min-height: 44px;
+  min-height: 36px;
   border-color: rgb(29 31 31 / 18%);
   background: var(--spt-surface);
   color: var(--spt-ink);
@@ -200,8 +200,8 @@
 }
 
 .site-shell-v2 .circle-action {
-  width: 44px;
-  min-width: 44px;
+  width: 36px;
+  min-width: 36px;
   padding: 0;
 }
 
@@ -244,7 +244,7 @@
   border-color: var(--spt-amber);
   background: var(--spt-amber);
   color: var(--spt-ink);
-  padding-inline: 1.2rem;
+  padding-inline: 1rem;
 }
 
 .site-shell-v2 .make-trip-action:hover {
@@ -257,25 +257,25 @@
   position: relative;
   z-index: 5;
   width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
-  min-height: 42px;
-  margin: 0.45rem auto 0;
+  min-height: 34px;
+  margin: 0.3rem auto 0;
   border-radius: 12px;
   background: rgb(255 255 255 / 96%);
   color: var(--spt-anchor);
-  padding: 0.35rem 0.45rem 0.35rem 1.15rem;
+  padding: 0.22rem 0.45rem 0.22rem 1rem;
   box-shadow: 0 6px 8px rgb(16 31 64 / 10%);
 }
 
 .site-shell-v2 .promo-strip p {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
 }
 
 .site-shell-v2 .promo-strip .btn-primary {
-  min-height: 34px;
-  padding: 0.45rem 0.95rem;
-  font-size: 0.78rem;
+  min-height: 28px;
+  padding: 0.28rem 0.8rem;
+  font-size: 0.75rem;
 }
 
 .site-shell-v2 .mobile-drawer-backdrop {

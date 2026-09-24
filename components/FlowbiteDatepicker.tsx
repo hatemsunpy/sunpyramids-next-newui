@@ -19,6 +19,7 @@ export interface FlowbiteDatepickerProps {
   className?: string;
   autoClose?: boolean;
   enableTime?: boolean;
+  selectionMode?: "date" | "month";
 }
 
 type CalendarView = "days" | "months" | "years";
@@ -59,10 +60,10 @@ function parseISODate(str?: string | null): Date | null {
   if (!str) return null;
   const dateOnly = str.includes("T") ? str.split("T")[0] : str.split(" ")[0];
   const parts = dateOnly.split("-");
-  if (parts.length !== 3) return null;
+  if (parts.length < 2 || parts.length > 3) return null;
   const year = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10) - 1;
-  const day = parseInt(parts[2], 10);
+  const day = parts[2] ? parseInt(parts[2], 10) : 1;
   if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
   return new Date(year, month, day);
 }
@@ -103,6 +104,15 @@ function formatDisplayDate(dateStr: string, enableTime = false): string {
   return `${formattedDate}, ${displayHour}:${displayMinute} ${period}`;
 }
 
+function formatDisplayMonth(dateStr: string): string {
+  const parsed = parseISODate(dateStr);
+  if (!parsed) return dateStr;
+  return parsed.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export function FlowbiteDatepicker({
   id,
   name,
@@ -117,15 +127,18 @@ export function FlowbiteDatepicker({
   className,
   autoClose = true,
   enableTime = false,
+  selectionMode = "date",
 }: FlowbiteDatepickerProps) {
+  const isMonthPicker = selectionMode === "month";
+  const initialView: CalendarView = isMonthPicker ? "months" : "days";
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = React.useState(defaultValue);
   const selectedDateStr = isControlled ? controlledValue || "" : internalValue;
 
   const [isOpen, setIsOpen] = React.useState(false);
-  const [view, setView] = React.useState<CalendarView>("days");
+  const [view, setView] = React.useState<CalendarView>(initialView);
 
-  const initialTime = React.useMemo(() => extractTimeParts(selectedDateStr), []);
+  const [initialTime] = React.useState(() => extractTimeParts(selectedDateStr));
   const [selectedHour, setSelectedHour] = React.useState<number>(initialTime.hour);
   const [selectedMinute, setSelectedMinute] = React.useState<number>(initialTime.minute);
 
@@ -134,7 +147,41 @@ export function FlowbiteDatepicker({
   const [viewMonth, setViewMonth] = React.useState(initialDate.getMonth());
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const popoverRef = React.useRef<HTMLDivElement>(null);
+
+  // Keep the open popover inside the viewport horizontally.
+  // The popover is anchored with `left: 0` to its (sometimes narrow) wrapper,
+  // so inputs near the right screen edge would overflow on mobile.
+  React.useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    const adjust = () => {
+      const pop = popoverRef.current;
+      if (!pop) return;
+      pop.style.left = "0px";
+      const rect = pop.getBoundingClientRect();
+      const margin = 8;
+      let offset = 0;
+      if (rect.right > window.innerWidth - margin) {
+        offset = window.innerWidth - margin - rect.right;
+      }
+      if (rect.left + offset < margin) {
+        offset = margin - rect.left;
+      }
+      pop.style.left = `${offset}px`;
+    };
+
+    adjust();
+    // Re-check after the entry animation settles (scale transform shifts the rect slightly)
+    const timer = window.setTimeout(adjust, 200);
+    window.addEventListener("resize", adjust);
+    window.addEventListener("orientationchange", adjust);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", adjust);
+      window.removeEventListener("orientationchange", adjust);
+    };
+  }, [isOpen]);
 
   // Parse minDate and maxDate
   const parsedMinDate = React.useMemo(() => {
@@ -149,17 +196,6 @@ export function FlowbiteDatepicker({
     return parseISODate(maxDate);
   }, [maxDate]);
 
-  // Sync internal view when a valid value is selected externally
-  React.useEffect(() => {
-    if (selectedDateStr) {
-      const d = parseISODate(selectedDateStr);
-      if (d) {
-        setViewYear(d.getFullYear());
-        setViewMonth(d.getMonth());
-      }
-    }
-  }, [selectedDateStr]);
-
   // Close when clicking outside or pressing Escape
   React.useEffect(() => {
     if (!isOpen) return;
@@ -170,14 +206,14 @@ export function FlowbiteDatepicker({
         !containerRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
-        setView("days");
+        setView(initialView);
       }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsOpen(false);
-        setView("days");
+        setView(initialView);
       }
     };
 
@@ -187,7 +223,7 @@ export function FlowbiteDatepicker({
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [initialView, isOpen]);
 
   const handleSelectDate = (date: Date) => {
     const isoDate = toISODateString(date);
@@ -203,7 +239,21 @@ export function FlowbiteDatepicker({
     onChange?.(finalValue);
     if (!enableTime && autoClose) {
       setIsOpen(false);
-      setView("days");
+      setView(initialView);
+    }
+  };
+
+  const handleSelectMonth = (year: number, month: number) => {
+    const finalValue = `${year}-${String(month + 1).padStart(2, "0")}`;
+    setViewYear(year);
+    setViewMonth(month);
+    if (!isControlled) {
+      setInternalValue(finalValue);
+    }
+    onChange?.(finalValue);
+    if (autoClose) {
+      setIsOpen(false);
+      setView("months");
     }
   };
 
@@ -229,7 +279,7 @@ export function FlowbiteDatepicker({
     onChange?.("");
     if (autoClose) {
       setIsOpen(false);
-      setView("days");
+      setView(initialView);
     }
   };
 
@@ -242,9 +292,13 @@ export function FlowbiteDatepicker({
     if (parsedMaxDate && toISODateString(today) > toISODateString(parsedMaxDate)) {
       return;
     }
-    setViewYear(today.getFullYear());
-    setViewMonth(today.getMonth());
-    handleSelectDate(today);
+    if (isMonthPicker) {
+      handleSelectMonth(today.getFullYear(), today.getMonth());
+    } else {
+      setViewYear(today.getFullYear());
+      setViewMonth(today.getMonth());
+      handleSelectDate(today);
+    }
   };
 
   // Prev / Next navigation
@@ -282,7 +336,7 @@ export function FlowbiteDatepicker({
   const handleTitleClick = () => {
     if (view === "days") setView("months");
     else if (view === "months") setView("years");
-    else setView("days");
+    else setView(initialView);
   };
 
   const getHeaderTitle = () => {
@@ -351,6 +405,21 @@ export function FlowbiteDatepicker({
     return Array.from({ length: 12 }, (_, i) => decadeStart - 1 + i);
   }, [viewYear]);
 
+  const togglePicker = () => {
+    if (isOpen) {
+      setIsOpen(false);
+      return;
+    }
+
+    const selectedDate = parseISODate(selectedDateStr);
+    if (selectedDate) {
+      setViewYear(selectedDate.getFullYear());
+      setViewMonth(selectedDate.getMonth());
+    }
+    setView(initialView);
+    setIsOpen(true);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -374,25 +443,8 @@ export function FlowbiteDatepicker({
           isOpen && "is-open",
           disabled && "is-disabled"
         )}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (!disabled) {
-            setIsOpen((prev) => !prev);
-          }
-        }}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            if (!disabled) setIsOpen((prev) => !prev);
-          }
-        }}
       >
-        {/* Flowbite Calendar Icon */}
-        <div className="flowbite-datepicker-icon-wrap" aria-hidden="true">
+        <span className="flowbite-datepicker-icon-wrap" aria-hidden="true">
           <svg
             className="flowbite-datepicker-icon"
             aria-hidden="true"
@@ -402,17 +454,26 @@ export function FlowbiteDatepicker({
           >
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Z" />
           </svg>
-        </div>
-
+        </span>
         <input
-          ref={inputRef}
           id={id}
           type="text"
           readOnly
           className="flowbite-datepicker-native-input"
           placeholder={placeholder}
-          value={selectedDateStr ? formatDisplayDate(selectedDateStr, enableTime) : ""}
+          value={selectedDateStr ? (isMonthPicker ? formatDisplayMonth(selectedDateStr) : formatDisplayDate(selectedDateStr, enableTime)) : ""}
           disabled={disabled}
+          aria-haspopup="dialog"
+          onClick={(e) => {
+            e.stopPropagation();
+            togglePicker();
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              if (!disabled) togglePicker();
+            }
+          }}
         />
 
         {selectedDateStr && !disabled && (
@@ -432,13 +493,14 @@ export function FlowbiteDatepicker({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={popoverRef}
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: 0.16, ease: "easeOut" }}
             className="flowbite-datepicker-popover"
             role="dialog"
-            aria-label="Calendar picker"
+            aria-label={isMonthPicker ? "Month and year picker" : "Calendar picker"}
           >
             {/* Header with Navigation & Title */}
             <div className="flowbite-datepicker-header">
@@ -600,13 +662,18 @@ export function FlowbiteDatepicker({
                       key={mShort}
                       type="button"
                       onClick={() => {
-                        setViewMonth(idx);
-                        setView("days");
+                        if (isMonthPicker) {
+                          handleSelectMonth(viewYear, idx);
+                        } else {
+                          setViewMonth(idx);
+                          setView("days");
+                        }
                       }}
                       className={cn(
                         "flowbite-datepicker-month-cell",
                         isSelectedMonth && "is-selected"
                       )}
+                      aria-label={`${MONTH_NAMES[idx]} ${viewYear}`}
                     >
                       {mShort}
                     </button>
@@ -650,7 +717,7 @@ export function FlowbiteDatepicker({
                 className="flowbite-datepicker-btn-today"
                 onClick={handleToday}
               >
-                Today
+                {isMonthPicker ? "This month" : "Today"}
               </button>
               {enableTime && (
                 <button
@@ -658,7 +725,7 @@ export function FlowbiteDatepicker({
                   className="flowbite-datepicker-btn-done"
                   onClick={() => {
                     setIsOpen(false);
-                    setView("days");
+                    setView(initialView);
                   }}
                 >
                   Done

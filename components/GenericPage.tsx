@@ -49,6 +49,20 @@ function heroImage(page: ApiPage | null, route: string) {
   return page?.banner || page?.featured_image || page?.image || fallbackBanners[route] || "/images/aboutusmainbanner.png";
 }
 
+function pageCopyKey(value: string | null | undefined) {
+  return String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&(?:nbsp|amp|quot|#39);/gi, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/[-_\s]+/g, " ");
+}
+
+function hasMeaningfulPageCopy(value: string | null | undefined, route: string, title: string) {
+  const valueKey = pageCopyKey(value);
+  return Boolean(valueKey && valueKey !== pageCopyKey(route) && valueKey !== pageCopyKey(title));
+}
+
 export function GenericPage({
   page,
   fallbackTitle,
@@ -462,12 +476,14 @@ function PlannerPage({
   const eyebrow = isCar
     ? "Private Transfers & Chauffeur Services"
     : "Bespoke Private Egypt Itineraries";
-  const leadDescription =
-    page?.short_description ||
-    page?.description ||
-    (isCar
-      ? "Reliable, air-conditioned vehicle transfers across Cairo, Luxor, Aswan, Hurghada, and Alexandria with licensed English-speaking drivers."
-      : "Tell our certified Egyptologists and trip designers what you want to experience. We craft your personalized journey with zero hassle.");
+  const leadDescription = hasMeaningfulPageCopy(page?.short_description, route, title)
+    ? page?.short_description
+    : hasMeaningfulPageCopy(page?.description, route, title)
+      ? page?.description
+      : isCar
+        ? "Reliable, air-conditioned vehicle transfers across Cairo, Luxor, Aswan, Hurghada, and Alexandria with licensed English-speaking drivers."
+        : "Share your dates, travel style, and priorities. Our Cairo-based team will shape them into a private Egypt itinerary built around you.";
+  const showPageContent = hasMeaningfulPageCopy(page?.content, route, title);
 
   return (
     <main className="planner-page">
@@ -489,10 +505,10 @@ function PlannerPage({
         <div className="planner-container">
           <div className="planner-layout-grid">
             <div className="planner-main-column">
-              {page?.content && (
+              {showPageContent && page?.content && (
                 <div
                   className="editorial-prose"
-                  style={{ marginBottom: "2rem" }}
+                  style={{ marginBottom: "1.5rem" }}
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
                 />
               )}
