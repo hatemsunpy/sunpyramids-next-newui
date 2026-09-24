@@ -4,6 +4,7 @@ import { homeCopy } from "@/lib/home-copy";
 import { withLocale } from "@/lib/locales";
 import { HomeUpcomingEventCard } from "@/components/HomeUpcomingEventCard";
 import { HomeUpcomingEventsCarousel } from "@/components/HomeUpcomingEventsCarousel";
+import { SectionEyebrow } from "@/components/SectionHeading";
 
 type Props = {
   events: ApiPage[];
@@ -41,9 +42,9 @@ export function HomeUpcomingEvents({ events, locale = "en" }: Props) {
           header={
             <div className="upcoming-events-header-text">
               {copy.upcomingEventsEyebrow && (
-                <span className="upcoming-events-eyebrow">
+                <SectionEyebrow>
                   {copy.upcomingEventsEyebrow}
-                </span>
+                </SectionEyebrow>
               )}
               <h2 id="upcoming-events-title" className="upcoming-events-title">
                 {copy.upcomingEventsTitle}

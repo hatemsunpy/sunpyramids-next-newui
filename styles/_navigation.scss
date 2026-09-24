@@ -463,7 +463,7 @@
   font-size: 0.86rem;
   font-weight: 600;
   text-decoration: none;
-  transition: background 150ms ease, color 150ms ease;
+  transition: none;
 }
 
 .site-shell-v2 .dropdown-link-indicator {
@@ -472,7 +472,7 @@
   border-radius: 2px;
   background: transparent;
   flex-shrink: 0;
-  transition: background 150ms ease;
+  transition: none;
 }
 
 .site-shell-v2 .dropdown-link-label {
@@ -572,7 +572,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+  transition: none;
 }
 
 .site-shell-v2 .dropdown-child-label {

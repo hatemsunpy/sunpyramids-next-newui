@@ -143,7 +143,7 @@
   visibility: hidden;
   pointer-events: none;
   transform: translateY(-6px);
-  transition: opacity 180ms ease, transform 180ms var(--spt-ease), visibility 180ms ease;
+  transition: opacity 100ms ease, transform 100ms var(--spt-ease), visibility 100ms ease;
   z-index: 100;
 }
 
@@ -166,7 +166,7 @@
   color: var(--spt-ink);
   font-size: 0.85rem;
   font-weight: 600;
-  transition: background 180ms ease, color 180ms ease;
+  transition: none;
 }
 
 .site-shell-v2 .dropdown-panel a:hover {

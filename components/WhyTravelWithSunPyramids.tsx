@@ -1,6 +1,8 @@
 import { homeCopy } from "@/lib/home-copy";
 import type { Locale } from "@/types/api";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
+import { SectionEyebrow } from "@/components/SectionHeading";
+import { homeSectionLabels } from "@/lib/home-section-labels";
 
 const trustItems = [
   ["whyTravelHappyTitle", "whyTravelHappyStat", "whyTravelHappyDescription"],
@@ -11,20 +13,24 @@ const trustItems = [
 
 export function WhyTravelWithSunPyramids({ locale = "en" }: { locale?: Locale }) {
   const copy = homeCopy(locale);
+  const labels = homeSectionLabels(locale);
   const headingId = "why-travel-with-sun-pyramids";
 
   return (
     <section className="home-why-travel" aria-labelledby={headingId}>
       <div className="container-shell home-why-travel__layout">
-        <h2 id={headingId} className="home-why-travel__heading">
-          <span>
-            {copy.whyTravelHeadingBefore}
-            <em>{copy.whyTravelHeadingEmphasis}</em>
-            {copy.whyTravelHeadingAfter}
-          </span>
-          {" "}
-          <span>{copy.whyTravelHeadingBrand}</span>
-        </h2>
+        <div className="home-why-travel__intro">
+          <SectionEyebrow>{labels.why}</SectionEyebrow>
+          <h2 id={headingId} className="home-why-travel__heading">
+            <span>
+              {copy.whyTravelHeadingBefore}
+              <em>{copy.whyTravelHeadingEmphasis}</em>
+              {copy.whyTravelHeadingAfter}
+            </span>
+            {" "}
+            <span>{copy.whyTravelHeadingBrand}</span>
+          </h2>
+        </div>
 
         <SwipeCarousel className="home-why-travel__items" ariaLabel={copy.whyTravelHeadingBrand}>
           {trustItems.map(([titleKey, statKey, descriptionKey]) => (
