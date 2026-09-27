@@ -519,7 +519,7 @@
 
 .home-why-travel__layout {
   display: grid;
-  grid-template-columns: minmax(260px, 1.4fr) minmax(0, 4fr);
+  grid-template-columns: minmax(21rem, 1.4fr) minmax(0, 4fr);
   align-items: start;
   gap: clamp(2.5rem, 4vw, 5rem);
 }
@@ -528,7 +528,7 @@
   max-width: none;
   margin: 0;
   color: var(--spt-ink);
-  font-size: clamp(2.35rem, 2.9vw, 3.25rem);
+  font-size: clamp(2rem, 2.9vw, 2.5rem);
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 0.98;
@@ -537,6 +537,9 @@
 
 .home-why-travel__heading > span {
   display: block;
+}
+
+.home-why-travel__brand {
   white-space: nowrap;
 }
 
@@ -2124,10 +2127,6 @@
     max-width: none;
     font-size: clamp(1.85rem, 7.5vw, 2.35rem);
     line-height: 1.15;
-  }
-
-  .home-why-travel__heading > span {
-    white-space: normal;
   }
 
   .home-why-travel__items {

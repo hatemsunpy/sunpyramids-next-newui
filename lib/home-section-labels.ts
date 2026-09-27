@@ -17,7 +17,7 @@ type SectionLabels = {
 const labels: Record<Locale, SectionLabels> = {
   en: {
     why: "Our Difference",
-    seasonal: "Seasonal Journeys",
+    seasonal: "Christmas & New Year",
     plan: "Plan Your Journey",
     offers: "Tour Offers",
     how: "Three Simple Steps",

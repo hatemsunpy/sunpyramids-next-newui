@@ -28,7 +28,13 @@ export function WhyTravelWithSunPyramids({ locale = "en" }: { locale?: Locale })
               {copy.whyTravelHeadingAfter}
             </span>
             {" "}
-            <span>{copy.whyTravelHeadingBrand}</span>
+            <span>
+              {copy.whyTravelHeadingBrand.split(/(Sun Pyramids Tours)/).map((part, index) =>
+                part === "Sun Pyramids Tours" ? (
+                  <span className="home-why-travel__brand" key={index}>{part}</span>
+                ) : part,
+              )}
+            </span>
           </h2>
         </div>
 

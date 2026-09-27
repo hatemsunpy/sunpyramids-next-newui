@@ -8,7 +8,7 @@ describe("WhyTravelWithSunPyramids", () => {
   it("renders the approved English trust content as a labelled section", () => {
     const { container } = render(<WhyTravelWithSunPyramids />);
 
-    expect(screen.getByRole("heading", { level: 2, name: /Why travel with Sun Pyramids Tours\?/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: /Why Choose Sun Pyramids Tours for Your Egypt Vacation\?/i })).toBeInTheDocument();
     expect(container.querySelectorAll("article")).toHaveLength(4);
     expect(screen.getByText("100K+ travelers served")).toBeInTheDocument();
     expect(screen.getByText("50+ years of expertise")).toBeInTheDocument();
