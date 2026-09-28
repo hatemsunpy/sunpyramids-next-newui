@@ -993,7 +993,7 @@
 }
 
 .home-plan-section__media strong {
-  max-width: 10ch;
+  max-width: 20ch;
   font-size: clamp(2rem, 3.5vw, 3.5rem);
   line-height: 0.98;
   text-wrap: balance;
@@ -1004,14 +1004,16 @@
   justify-content: center;
   flex-direction: column;
   padding: clamp(2rem, 5vw, 5rem);
+  padding-inline-end: clamp(4rem, 9vw, 9rem);
 }
 
 .home-plan-section__form > h2 {
-  max-width: 10ch;
+  max-width: 22ch;
+  text-wrap: balance;
   margin: 0 0 2.5rem;
   color: var(--spt-link);
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: 0.96;
+  font-size: clamp(1.85rem, 3vw, 2.75rem);
+  line-height: 1.1;
   letter-spacing: -0.035em;
 }
 
@@ -1045,6 +1047,17 @@
 
 .home-offers-section {
   padding-top: 0;
+
+  .section-heading-v2 > div {
+    max-width: 950px;
+  }
+
+  .section-heading-v2 h2 {
+    max-width: 28ch;
+    font-size: clamp(1.9rem, 3.2vw, 3.25rem);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
 }
 
 .home-offers-track {
@@ -1084,10 +1097,11 @@
 
 .upcoming-events-description {
   margin: 0;
-  font-size: clamp(0.95rem, 1.1vw, 1.0625rem);
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
   line-height: 1.6;
   color: var(--spt-muted);
-  max-width: 58ch;
+  max-width: 85ch;
+  text-wrap: balance;
 }
 
 .upcoming-events-header-actions {
@@ -1453,13 +1467,13 @@
 }
 
 .home-how-intro h2 {
-  max-width: 8ch;
+  white-space: pre-line;
+  max-width: 28ch;
   margin: 0;
   color: var(--spt-link);
-  font-size: clamp(2.4rem, 5vw, 5rem);
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
+  font-size: clamp(1.65rem, 2.2vw, 2.05rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
 .home-how-intro p {
@@ -1580,6 +1594,14 @@
 
 .home-editorial-section {
   background: var(--spt-surface);
+
+  .section-heading-v2 h2 {
+    max-width: 34ch;
+    font-size: clamp(1.9rem, 3.2vw, 3.15rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
 }
 
 .home-editorial-grid {
