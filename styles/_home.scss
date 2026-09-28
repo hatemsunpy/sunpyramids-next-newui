@@ -306,6 +306,159 @@
   grid-column: span 2;
 }
 
+.home-card-stack-section {
+  width: 100%;
+  margin-block: clamp(2.5rem, 5vw, 5rem);
+  overflow: hidden;
+  background: var(--spt-ground);
+}
+
+.home-card-stack {
+  width: 100%;
+  padding-block: clamp(1rem, 2vw, 2rem);
+}
+
+.home-card-stack__stage {
+  --stack-near: clamp(190px, 20vw, 370px);
+  --stack-far: clamp(360px, 40vw, 700px);
+  position: relative;
+  width: 100%;
+  height: clamp(440px, 46vw, 650px);
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.home-card-stack__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(260px, 25vw, 420px);
+  height: clamp(350px, 34vw, 525px);
+  overflow: hidden;
+  border-radius: var(--spt-radius-panel);
+  background: var(--spt-anchor-deep);
+  box-shadow: 0 24px 50px rgb(16 32 61 / 18%);
+  pointer-events: none;
+  transition: transform 520ms var(--spt-ease), filter 520ms ease;
+}
+
+.home-card-stack__card > img {
+  object-fit: cover;
+}
+
+.home-card-stack__card.is-active {
+  z-index: 5;
+  transform: translate(-50%, -50%);
+}
+
+.home-card-stack__card.is-previous {
+  z-index: 4;
+  filter: brightness(0.88);
+  transform: translate(-50%, -50%) translateX(calc(0px - var(--stack-near))) rotate(-9deg) scale(0.9);
+}
+
+.home-card-stack__card.is-next {
+  z-index: 4;
+  filter: brightness(0.88);
+  transform: translate(-50%, -50%) translateX(var(--stack-near)) rotate(9deg) scale(0.9);
+}
+
+.home-card-stack__card.is-far-previous {
+  z-index: 2;
+  filter: brightness(0.78);
+  transform: translate(-50%, -50%) translateX(calc(0px - var(--stack-far))) rotate(-15deg) scale(0.78);
+}
+
+.home-card-stack__card.is-far-next {
+  z-index: 2;
+  filter: brightness(0.78);
+  transform: translate(-50%, -50%) translateX(var(--stack-far)) rotate(15deg) scale(0.78);
+}
+
+.home-card-stack__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  width: min(calc(100% - 2rem), 520px);
+  margin-inline: auto;
+  padding-top: 1.25rem;
+}
+
+.home-card-stack__controls button {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--spt-border);
+  border-radius: 50%;
+  background: var(--spt-surface);
+  color: var(--spt-link);
+  cursor: pointer;
+}
+
+.home-card-stack__controls button:hover {
+  border-color: var(--spt-link);
+}
+
+.home-card-stack__controls button:focus-visible {
+  outline: 3px solid var(--spt-focus);
+  outline-offset: 3px;
+}
+
+.home-card-stack__controls svg {
+  width: 20px;
+  height: 20px;
+}
+
+.home-card-stack__progress {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  height: 24px;
+}
+
+.home-card-stack__progress span {
+  flex: 1 1 0;
+  max-width: 18px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--spt-border);
+}
+
+.home-card-stack__progress span.is-active {
+  background: var(--spt-amber);
+}
+
+@media (max-width: 640px) {
+  .home-card-stack__stage {
+    --stack-near: clamp(195px, 53vw, 280px);
+    height: 430px;
+  }
+
+  .home-card-stack__card {
+    width: min(75vw, 320px);
+    height: min(95vw, 410px);
+  }
+
+  .home-card-stack__card.is-far-previous,
+  .home-card-stack__card.is-far-next {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-card-stack__card {
+    transition: none;
+  }
+}
+
 .home-page--redesign .home-search-fields:not(.home-search-make-fields):not(.home-search-car-fields) {
   grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
 }
@@ -1765,6 +1918,35 @@
 .home-review-section {
   min-height: 100px;
   padding-bottom: var(--spt-section);
+
+  .ti-widget,
+  .ti-widget-container,
+  .ti-reviews-container,
+  .ti-reviews-container-wrapper,
+  .ti-review-item,
+  .ti-inner,
+  .ti-review-content {
+    touch-action: pan-y !important;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .ti-reviews-container {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .ti-controls-line {
+    cursor: pointer;
+    touch-action: none !important;
+    padding-block: 8px;
+    margin-top: -4px;
+    position: relative;
+    z-index: 5;
+  }
 }
 
 .home-faq-section-v2 {

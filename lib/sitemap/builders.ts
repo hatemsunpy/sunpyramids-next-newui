@@ -4,6 +4,7 @@ import {
   SITEMAP_LOCALES,
   SITEMAP_MAX_URLS,
   SITEMAP_MAX_XML_BYTES,
+  SITEMAP_PREFERRED_TOUR_CHUNKS,
 } from "@/lib/sitemap/config";
 import type {
   SitemapApiItem,
@@ -111,13 +112,16 @@ function chunkTours(records: SitemapRecord[]) {
   let chunk: SitemapRecord[] = [];
   let byteCount = 512;
   let urlCount = 0;
+  const targetRecordsPerChunk = Math.ceil(records.length / SITEMAP_PREFERRED_TOUR_CHUNKS);
 
   for (const entry of records) {
     const variants = sitemapRecordXmlEntries(entry);
     const bytes = variants.reduce((total, xml) => total + Buffer.byteLength(xml, "utf8") + 1, 0);
     if (
       chunk.length &&
-      (urlCount + variants.length > SITEMAP_MAX_URLS || byteCount + bytes > SITEMAP_MAX_XML_BYTES)
+      (chunk.length >= targetRecordsPerChunk ||
+        urlCount + variants.length > SITEMAP_MAX_URLS ||
+        byteCount + bytes > SITEMAP_MAX_XML_BYTES)
     ) {
       chunks.push(chunk);
       chunk = [];
@@ -182,13 +186,15 @@ export function buildSitemapCatalog(dataset: SitemapDataset): SitemapCatalog {
 
 export function catalogGroups(catalog: SitemapCatalog) {
   return [
-    { route: "/sitemap-pages.xml", records: catalog.pages },
+    { route: "/sitemap-pages.xml", records: pageSitemapRecords(catalog) },
     { route: "/sitemap-posts.xml", records: catalog.posts },
-    { route: "/sitemap-events.xml", records: catalog.events },
-    { route: "/sitemap-travel-guide.xml", records: catalog.travelGuide },
-    { route: "/sitemap-taxonomies.xml", records: catalog.taxonomies },
     ...catalog.tourChunks.map((records, index) => ({ route: `/sitemap-tours-${index + 1}.xml`, records })),
   ];
+}
+
+export function pageSitemapRecords(catalog: SitemapCatalog) {
+  return [...catalog.pages, ...catalog.events, ...catalog.travelGuide, ...catalog.taxonomies]
+    .sort((a, b) => a.loc.localeCompare(b.loc));
 }
 
 export function latestLastmod(records: SitemapRecord[]) {

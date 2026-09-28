@@ -11,6 +11,7 @@ output/
 !.env.example
 .local-test-creds.json
 .agents/
+agent/
 .claude/
 .codex/
 skills-lock.json
@@ -22,6 +23,7 @@ skills-lock.json
 *.png
 *.jpeg
 *.jpg
+!public/images/guest-photos/*.jpg
 *.pid
 .vscode/
 # Delegate configuration and workflows

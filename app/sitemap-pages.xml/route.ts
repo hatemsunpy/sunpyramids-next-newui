@@ -1,3 +1,4 @@
+import { pageSitemapRecords } from "@/lib/sitemap/builders";
 import { xmlResponse } from "@/lib/sitemap/response";
 import { getSitemapCatalog } from "@/lib/sitemap/service";
 import { sitemapUrlsetXml } from "@/lib/sitemap/xml";
@@ -6,5 +7,5 @@ import { sitemapUrlsetXml } from "@/lib/sitemap/xml";
 export const revalidate = 86400;
 export const dynamic = "force-dynamic";
 export async function GET() {
-  return xmlResponse(sitemapUrlsetXml((await getSitemapCatalog()).pages));
+  return xmlResponse(sitemapUrlsetXml(pageSitemapRecords(await getSitemapCatalog())));
 }

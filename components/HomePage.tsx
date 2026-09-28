@@ -14,6 +14,7 @@ import { HomeHeroScene } from "@/components/HomeHeroScene";
 import { TravelPartners } from "@/components/TravelPartners";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { HomeUpcomingEvents } from "@/components/HomeUpcomingEvents";
+import { HomeCardStack } from "@/components/HomeCardStack";
 import { WhyTravelWithSunPyramids } from "@/components/WhyTravelWithSunPyramids";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { homeCopy } from "@/lib/home-copy";
@@ -236,6 +237,10 @@ export function HomePage({
           })}
         </SwipeCarousel>
       </section>
+
+      <div className="home-card-stack-section">
+        <HomeCardStack previousLabel={copy.stackPrevious} nextLabel={copy.stackNext} cardLabel={copy.stackCard} />
+      </div>
 
       <section className="home-review-section container-shell">
         <div id="home-reviews" />
