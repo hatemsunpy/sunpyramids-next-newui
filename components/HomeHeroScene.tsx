@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type HomeHeroCopySlide = {
   title: string;
@@ -19,6 +19,7 @@ export function HomeHeroScene({
   slides: HomeHeroCopySlide[];
 }) {
   const [active, setActive] = useState(0);
+  const firstImageRef = useRef<HTMLImageElement>(null);
   const count = images.length;
 
   const goTo = (index: number) => setActive(((index % count) + count) % count);
@@ -29,6 +30,45 @@ export function HomeHeroScene({
     return () => window.clearInterval(timer);
   }, [count]);
 
+  useEffect(() => {
+    const remaining = Array.from(new Set(images.slice(1).filter((image) => image !== images[0])));
+    if (!remaining.length) return;
+
+    const firstImage = firstImageRef.current;
+    const preloads: HTMLImageElement[] = [];
+    let cursor = 0;
+    let inFlight = 0;
+    let cancelled = false;
+
+    function loadNext() {
+      while (!cancelled && inFlight < 2 && cursor < remaining.length) {
+        const image = new window.Image();
+        image.decoding = "async";
+        image.fetchPriority = cursor === 0 ? "auto" : "low";
+        image.onload = image.onerror = () => {
+          inFlight--;
+          loadNext();
+        };
+        preloads.push(image);
+        inFlight++;
+        image.src = remaining[cursor++];
+      }
+    }
+
+    if (!firstImage || firstImage.complete) loadNext();
+    else {
+      firstImage?.addEventListener("load", loadNext, { once: true });
+      firstImage?.addEventListener("error", loadNext, { once: true });
+    }
+
+    return () => {
+      cancelled = true;
+      firstImage?.removeEventListener("load", loadNext);
+      firstImage?.removeEventListener("error", loadNext);
+      preloads.forEach((image) => { image.onload = image.onerror = null; });
+    };
+  }, [images]);
+
   const copy = slides.length ? slides[active % slides.length] : null;
   const TitleTag = copy && active % slides.length === 0 ? "h1" : "h2";
 
@@ -38,10 +78,11 @@ export function HomeHeroScene({
         {images.map((image, index) => (
           <Image
             key={image}
+            ref={index === 0 ? firstImageRef : undefined}
             src={image}
             alt={alt}
             fill
-            priority={index === 0}
+            preload={index === 0}
             sizes="100vw"
             className="hero-media-slide"
             style={{ opacity: index === active ? 1 : 0 }}

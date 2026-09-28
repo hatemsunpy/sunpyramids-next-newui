@@ -10,6 +10,6 @@ import { SITEMAP_REVALIDATE_SECONDS } from "@/lib/sitemap/config";
 // so an expired last-known-good catalog is never replaced by partial data.
 export const getSitemapCatalog = unstable_cache(
   async () => buildSitemapCatalog(await loadSitemapDataset()),
-  ["sunpyramids-sitemap-phase1-catalog-v4", API_BASE],
+  ["sunpyramids-sitemap-phase1-catalog-v5", API_BASE],
   { revalidate: SITEMAP_REVALIDATE_SECONDS },
 );
