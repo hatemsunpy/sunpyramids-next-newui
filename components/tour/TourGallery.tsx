@@ -7,6 +7,7 @@ import type { Locale, Tour } from "@/types/api";
 
 export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Locale }) {
   const [active, setActive] = useState(0);
+  const [displayed, setDisplayed] = useState(0);
   const [thumbnailsReady, setThumbnailsReady] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -88,17 +89,29 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         }}
       >
         <Image
-          key={`${gallery[active]}-${active}`}
-          src={gallery[active]}
-          alt={`${tour?.title || tour?.name || "Tour"} photo ${active + 1}`}
+          key={`${gallery[displayed]}-${displayed}`}
+          src={gallery[displayed]}
+          alt={`${tour?.title || tour?.name || "Tour"} photo ${displayed + 1}`}
           fill
-          preload={active === 0}
-          fetchPriority={active === 0 ? "high" : "auto"}
-          loading={active === 0 ? "eager" : "lazy"}
+          preload={displayed === 0}
+          fetchPriority={displayed === 0 ? "high" : "auto"}
+          loading={displayed === 0 ? "eager" : "lazy"}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 75vw"
           className="tour-gallery-slide is-active"
           onLoad={() => setThumbnailsReady(true)}
         />
+        {active !== displayed ? (
+          <Image
+            key={`pending-${gallery[active]}-${active}`}
+            src={gallery[active]}
+            alt=""
+            fill
+            loading="eager"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 75vw"
+            className="tour-gallery-slide"
+            onLoad={() => setDisplayed(active)}
+          />
+        ) : null}
         {gallery.length > 1 ? (
           <>
             <button className="tour-gallery-arrow tour-gallery-prev" type="button" onClick={() => showPhoto(active - 1)} aria-label="Previous photo"><ChevronIcon direction="previous" /></button>
@@ -109,9 +122,9 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           <button type="button" onClick={favoriteTour} aria-label="Add tour to favorites"><HeartIcon /></button>
           <button type="button" onClick={shareTour} aria-label="Share tour"><ShareIcon /></button>
         </div>
-        <a className="tour-gallery-expand" href={gallery[active]} target="_blank" rel="noreferrer" aria-label="Open current photo"><ExpandIcon /></a>
+        <a className="tour-gallery-expand" href={gallery[displayed]} target="_blank" rel="noreferrer" aria-label="Open current photo"><ExpandIcon /></a>
         <span className="tour-gallery-count" aria-live="polite">
-          <strong>{String(active + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
+          <strong>{String(displayed + 1).padStart(2, "0")}</strong> / {String(gallery.length).padStart(2, "0")}
         </span>
       </div>
       {gallery.length > 1 ? (
@@ -149,7 +162,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
                 {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" /> : null}
                 {isLastWithMore ? (
                   <span className="tour-gallery-more-overlay" aria-hidden="true">
-                    +{remainingCount + 1} photos
+                    <span>+{remainingCount + 1} photos</span>
                   </span>
                 ) : null}
                 <span className="react-bits-glare-effect" aria-hidden="true" />

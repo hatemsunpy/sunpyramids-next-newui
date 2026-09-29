@@ -34,30 +34,35 @@ export function TourPageNavigation({
   useEffect(() => {
     if (typeof window === "undefined" || !links.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-        if (visibleEntries.length > 0) {
-          const topEntry = visibleEntries.sort(
-            (first, second) => Math.abs(first.boundingClientRect.top) - Math.abs(second.boundingClientRect.top),
-          )[0];
-          if (topEntry?.target.id) {
-            setActiveId(topEntry.target.id);
-          }
+    const sections = links.map((link) => document.getElementById(link.id)).filter((section): section is HTMLElement => Boolean(section));
+    let frame = 0;
+
+    const updateActive = () => {
+      frame = 0;
+      const navBottom = document.querySelector<HTMLElement>(".tour-page-nav")?.getBoundingClientRect().bottom ?? 0;
+      let currentId = sections[0]?.id || "";
+
+      for (const section of sections) {
+        const scrollMargin = Number.parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+        if (section.getBoundingClientRect().top <= Math.max(navBottom + 8, scrollMargin) + 1) {
+          currentId = section.id;
         }
-      },
-      {
-        rootMargin: "-120px 0px -60% 0px",
-        threshold: [0, 0.2, 0.5],
-      },
-    );
+      }
+      setActiveId(currentId);
+    };
 
-    links.forEach((link) => {
-      const el = document.getElementById(link.id);
-      if (el) observer.observe(el);
-    });
+    const scheduleUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updateActive);
+    };
 
-    return () => observer.disconnect();
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, [links]);
 
   if (links.length < 2) return null;
