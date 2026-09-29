@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight, Bookmark, MessageCircle, Share2 } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { optionCost } from "@/components/CustomerFlows";
 import { useCurrency } from "@/components/CurrencyProvider";
@@ -10,6 +11,7 @@ import { useTourActions } from "@/components/tour/TourActions";
 import { apiPost } from "@/lib/client-api";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 import { parseLocalCalendarDate } from "@/lib/local-date";
+import { isTourDateAvailable } from "@/lib/tour-availability";
 import { withLocale } from "@/lib/locales";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
 import type { Locale, Tour } from "@/types/api";
@@ -37,6 +39,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
+  const travelerCount = adults + children + infants;
   const [date, setDate] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,12 +47,18 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
 
   useEffect(() => {
     const openBookingPanel = () => {
+      if (tour?.is_inquiry) {
+        requestAnimationFrame(() => {
+          document.querySelector("#tour-booking .tour-inquiry-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        return;
+      }
       setMobileOpen(true);
       requestAnimationFrame(() => document.querySelector<HTMLInputElement>(".tour-field input")?.focus());
     };
     window.addEventListener("tour:open-booking", openBookingPanel);
     return () => window.removeEventListener("tour:open-booking", openBookingPanel);
-  }, []);
+  }, [tour?.is_inquiry]);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -70,7 +79,6 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
     return (
       <aside className="tour-right-panel" id="tour-booking">
         <div className="tour-booking-card tour-inquiry-card">
-          <span className="tour-booking-kicker">Built around your dates</span>
           <h3 className="tour-inquiry-title">Contact Us For Checking Availability</h3>
           <ContactForm locale={locale} tourId={tour?.id} tourTitle={tour?.title} />
         </div>
@@ -97,6 +105,10 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!tour?.id) return;
+    if (!date || !isTourDateAvailable(tour, date)) {
+      setStatus("error");
+      return;
+    }
     setStatus("loading");
     try {
       await apiPost(
@@ -134,6 +146,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
                 {offer ? <span className="tour-price-original">{format(baseTotal)}</span> : null}
               </div>
               <button type="button" className="tour-booking-share" onClick={shareTour}>
+                <Share2 size={16} strokeWidth={2} aria-hidden="true" />
                 Share
               </button>
             </div>
@@ -148,6 +161,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
                 <FlowbiteDatepicker
                   value={date}
                   onChange={(val) => setDate(val)}
+                  isDateAvailable={(day) => isTourDateAvailable(tour, day)}
                   minDate={new Date().toISOString().split("T")[0]}
                   required
                 />
@@ -155,7 +169,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
             </div>
 
             <div className="tour-booking-step">
-              <span className="tour-booking-step-number" aria-hidden="true">2</span>
+              <span className="tour-booking-step-number" aria-live="polite" aria-label={`${travelerCount} travelers`}>{travelerCount}</span>
               <div className="tour-passengers">
                 <span className="tour-booking-label">Who is traveling?</span>
                 <Counter label="Adults (12+)" value={adults} onChange={setAdults} min={1} />
@@ -174,14 +188,18 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
             </div>
 
             <button type="submit" className="btn-primary" disabled={status === "loading"}>
-              {status === "loading" ? "Booking..." : "Book now"}
+              {status === "loading" ? "Booking..." : <>Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" /></>}
             </button>
             {status === "error" ? <p className="tour-booking-error" role="alert">Something went wrong. Please try again.</p> : null}
           </form>
 
           <div className="tour-booking-actions" aria-label="Other ways to continue">
-            <button type="button" className="tour-booking-secondary" onClick={favoriteTour}>Save for later</button>
-            <a className="btn-outline" href={whatsappInquiryUrl(`I want to inquire about a tour (${tour?.title})`)} target="_blank" rel="noreferrer">
+            <button type="button" className="tour-booking-secondary" onClick={favoriteTour}>
+              <Bookmark size={17} strokeWidth={2} aria-hidden="true" />
+              Save for later
+            </button>
+            <a className="tour-booking-question" href={whatsappInquiryUrl(`I want to inquire about a tour (${tour?.title})`)} target="_blank" rel="noreferrer">
+              <MessageCircle size={17} strokeWidth={2} aria-hidden="true" />
               Ask a question
             </a>
           </div>
@@ -191,7 +209,9 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
 
       <div className="tour-mobile-booking-bar">
         <div><span>Price</span><strong>{format(total)}</strong></div>
-        <button type="button" className="btn-primary" onClick={() => setMobileOpen(true)}>Book now</button>
+        <button type="button" className="btn-primary" onClick={() => setMobileOpen(true)}>
+          Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
+        </button>
       </div>
     </aside>
   );

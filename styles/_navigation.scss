@@ -23,7 +23,7 @@
 .site-shell-v2 .header-frame {
   position: relative;
   z-index: 20;
-  width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
+  width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   margin-inline: auto;
   overflow: visible;
   border: 1px solid var(--spt-border);
@@ -975,7 +975,7 @@
   .site-shell-v2 .header-frame,
   .site-shell-v2 .header-main,
   .site-shell-v2 .promo-strip {
-    width: calc(100% - 1rem);
+    width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   }
 
   .site-shell-v2 .header-frame {

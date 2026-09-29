@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteShell } from "@/components/SiteShell";
 import { TourPage } from "@/components/TourPage";
-import { getPublicSiteSettings, getRelatedTours, getTourReliable } from "@/lib/data";
+import { getPublicSiteSettings, getRelatedTours, getTourReliable, getTripTaxonomy } from "@/lib/data";
 import { decodePathSegment, tourPath } from "@/lib/locales";
 import { resolveRequiredApiResult } from "@/lib/resolve-api-result";
 import { metadataFromPage } from "@/lib/seo";
@@ -19,14 +19,15 @@ export default async function Page({ params }: Props) {
   const slug = decodePathSegment((await params).slug);
   const settingsPromise = getPublicSiteSettings("en");
   const tour = resolveRequiredApiResult(await getTourReliable(slug, "en"), `tour "${slug}"`);
-  const [relatedTours, settings] = await Promise.all([
+  const [relatedTours, settings, taxonomy] = await Promise.all([
     getRelatedTours(tour, "en", 12),
     settingsPromise,
+    getTripTaxonomy("en"),
   ]);
   return (
-    <SiteShell locale="en" settings={settings}>
+    <SiteShell locale="en" settings={settings} taxonomy={taxonomy}>
       <JsonLd schema={tour?.seo?.structure_schema} />
-      <TourPage tour={tour} relatedTours={relatedTours} locale="en" />
+      <TourPage tour={tour} relatedTours={relatedTours} locale="en" taxonomy={taxonomy} />
     </SiteShell>
   );
 }

@@ -3853,42 +3853,6 @@ input[data-native-type] {
   text-wrap: balance;
 }
 
-.tour-page-redesign .tour-make-trip-copy {
-  max-width: 54ch;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 1.05rem;
-  line-height: 1.68;
-  text-wrap: pretty;
-}
-
-.tour-page-redesign .tour-make-trip-features {
-  display: grid;
-  gap: 0.65rem;
-  margin-top: 0.5rem;
-}
-
-.tour-page-redesign .tour-make-trip-feature {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: rgba(255, 255, 255, 0.94);
-  font-size: 0.94rem;
-  font-weight: 600;
-}
-
-.tour-page-redesign .tour-make-trip-feature-icon {
-  width: 1.35rem;
-  height: 1.35rem;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--tour-action);
-  color: #111827;
-  font-size: 0.75rem;
-  font-weight: 800;
-}
-
 .tour-page-redesign .tour-make-trip-actions {
   margin-top: 0.75rem;
 }
@@ -5844,8 +5808,7 @@ input[data-native-type] {
   text-wrap: balance;
 }
 
-.tour-section-heading p,
-.tour-make-trip-copy {
+.tour-section-heading p {
   max-width: 62ch;
   margin: 0;
   color: var(--text-dark);
@@ -5996,11 +5959,6 @@ input[data-native-type] {
 .tour-make-trip .make-trip-section h2 {
   color: var(--text-dark);
   text-align: left;
-}
-
-.tour-make-trip-copy {
-  margin: 0.75rem 0 1.75rem;
-  color: #fff;
 }
 
 .tour-make-trip .home-search-panel {

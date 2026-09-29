@@ -14,6 +14,7 @@ export interface FlowbiteDatepickerProps {
   onChange?: (dateString: string) => void;
   minDate?: string | Date; // YYYY-MM-DD or Date
   maxDate?: string | Date; // YYYY-MM-DD or Date
+  isDateAvailable?: (dateString: string) => boolean;
   required?: boolean;
   disabled?: boolean;
   className?: string;
@@ -122,6 +123,7 @@ export function FlowbiteDatepicker({
   onChange,
   minDate,
   maxDate,
+  isDateAvailable,
   required = false,
   disabled = false,
   className,
@@ -227,6 +229,7 @@ export function FlowbiteDatepicker({
 
   const handleSelectDate = (date: Date) => {
     const isoDate = toISODateString(date);
+    if (isDateAvailable && !isDateAvailable(isoDate)) return;
     let finalValue = isoDate;
     if (enableTime) {
       const hStr = String(selectedHour).padStart(2, "0");
@@ -290,6 +293,9 @@ export function FlowbiteDatepicker({
       return;
     }
     if (parsedMaxDate && toISODateString(today) > toISODateString(parsedMaxDate)) {
+      return;
+    }
+    if (!isMonthPicker && isDateAvailable && !isDateAvailable(toISODateString(today))) {
       return;
     }
     if (isMonthPicker) {
@@ -369,7 +375,8 @@ export function FlowbiteDatepicker({
       const iso = toISODateString(d);
       const disabled =
         Boolean(parsedMinDate && iso < toISODateString(parsedMinDate)) ||
-        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate));
+        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate)) ||
+        Boolean(isDateAvailable && !isDateAvailable(iso));
       days.push({ date: d, isCurrentMonth: false, iso, disabled });
     }
 
@@ -379,7 +386,8 @@ export function FlowbiteDatepicker({
       const iso = toISODateString(d);
       const disabled =
         Boolean(parsedMinDate && iso < toISODateString(parsedMinDate)) ||
-        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate));
+        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate)) ||
+        Boolean(isDateAvailable && !isDateAvailable(iso));
       days.push({ date: d, isCurrentMonth: true, iso, disabled });
     }
 
@@ -390,14 +398,19 @@ export function FlowbiteDatepicker({
       const iso = toISODateString(d);
       const disabled =
         Boolean(parsedMinDate && iso < toISODateString(parsedMinDate)) ||
-        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate));
+        Boolean(parsedMaxDate && iso > toISODateString(parsedMaxDate)) ||
+        Boolean(isDateAvailable && !isDateAvailable(iso));
       days.push({ date: d, isCurrentMonth: false, iso, disabled });
     }
 
     return days;
-  }, [viewYear, viewMonth, parsedMinDate, parsedMaxDate]);
+  }, [viewYear, viewMonth, parsedMinDate, parsedMaxDate, isDateAvailable]);
 
   const todayIso = React.useMemo(() => toISODateString(new Date()), []);
+  const todayDisabled =
+    Boolean(parsedMinDate && todayIso < toISODateString(parsedMinDate)) ||
+    Boolean(parsedMaxDate && todayIso > toISODateString(parsedMaxDate)) ||
+    Boolean(!isMonthPicker && isDateAvailable && !isDateAvailable(todayIso));
 
   // Decade years calculation for year view
   const decadeYears = React.useMemo(() => {
@@ -716,6 +729,7 @@ export function FlowbiteDatepicker({
                 type="button"
                 className="flowbite-datepicker-btn-today"
                 onClick={handleToday}
+                disabled={todayDisabled}
               >
                 {isMonthPicker ? "This month" : "Today"}
               </button>

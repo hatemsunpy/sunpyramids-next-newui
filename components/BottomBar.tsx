@@ -39,7 +39,7 @@ export function BottomBar({ locale = "en" }: { locale?: Locale }) {
         </Link>
       ))}
       <a className="bottom-whatsapp" href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer" aria-label="Open WhatsApp chat">
-        <Image src="/images/whatsapp.png" alt="" width={32} height={32} />
+        <Image src="/images/whatsapp.webp" alt="" width={32} height={32} />
       </a>
       {shortcuts.slice(2).map((shortcut) => {
         const href = withLocale(shortcut.href, locale);

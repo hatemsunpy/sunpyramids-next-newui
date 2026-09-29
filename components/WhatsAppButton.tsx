@@ -10,7 +10,7 @@ export function WhatsAppButton() {
       rel="noreferrer"
       aria-label="Contact Sun Pyramids on WhatsApp"
     >
-      <Image src="/images/whatsapp.png" alt="" width={40} height={40} />
+      <Image src="/images/whatsapp.webp" alt="" width={40} height={40} />
     </a>
   );
 }

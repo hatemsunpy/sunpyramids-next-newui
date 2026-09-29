@@ -4,7 +4,7 @@
   background: var(--spt-ground);
 
   .container-shell {
-    width: min(calc(100% - clamp(2rem, 6.4vw, 6rem)), var(--spt-shell));
+    width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), var(--spt-shell));
     margin-inline: auto;
   }
 
@@ -65,7 +65,7 @@
 }
 
 .site-shell-v2 .header-main {
-  width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
+  width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   min-height: 68px;
   margin-inline: auto;
   padding: 0.55rem clamp(0.85rem, 1.5vw, 1.5rem);
@@ -228,7 +228,7 @@
 }
 
 .site-shell-v2 .header-nav-row {
-  width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
+  width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   min-height: 52px;
   margin-inline: auto;
   padding: 0 0.8rem 0.45rem;
@@ -256,7 +256,7 @@
 .site-shell-v2 .promo-strip {
   position: relative;
   z-index: 5;
-  width: min(calc(100% - clamp(2rem, 4vw, 4rem)), 1480px);
+  width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   min-height: 34px;
   margin: 0.3rem auto 0;
   border-radius: 12px;

@@ -56,7 +56,7 @@ const copies: Record<Locale, HomeCopy> = {
     "multiDaysFilter": "Multi Days",
     "nileCruisesFilter": "Nile Cruises",
     "shoreExcursionsFilter": "Shore Excursion",
-    "makeYourTrip": "Plan Your Perfect Egypt Trip with Local Travel Experts",
+    "makeYourTrip": "Make Your Trip",
     "specialOffersTitle": "Explore Our Egypt Tour Deals & Special Travel Offers",
     "specialOffersDescription": "Discover special offers on Egypt tour packages, private day trips, and Nile cruises. Find exciting travel experiences and plan your next Egyptian adventure.",
     "howItWorks": "How to Book Your Egypt Tour\nin 3 Easy Steps",

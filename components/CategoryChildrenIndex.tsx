@@ -131,7 +131,7 @@ export async function CategoryChildrenIndex({ slug, locale = "en" }: Props) {
             eyebrow="Curated Egypt Packages"
             description={page?.short_description || page?.description || page?.content}
             totalCount={meta?.total}
-            bgImage={page?.banner || "/images/mainBanner.png"}
+            bgImage={page?.banner || "/images/mainBanner.webp"}
             locale={locale}
           />
           <section className="discovery-section">
@@ -172,7 +172,7 @@ export async function CategoryChildrenIndex({ slug, locale = "en" }: Props) {
           eyebrow={eyebrow}
           description={page?.short_description || page?.description || page?.content}
           totalCount={children.length}
-          bgImage={page?.banner || "/images/mainBanner.png"}
+          bgImage={page?.banner || "/images/mainBanner.webp"}
           locale={locale}
         />
         <section className="discovery-section">

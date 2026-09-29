@@ -58,7 +58,7 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
           ) : null}
           <Link href={withLocale("/sustainability", locale)}>
             <Image
-              src="/images/certified_footer_white.png"
+              src="/images/certified_footer_white.webp"
               alt="Certified sustainable travel"
               width={292}
               height={120}

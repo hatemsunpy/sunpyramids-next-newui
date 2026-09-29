@@ -7,7 +7,7 @@ import { PriceText } from "@/components/PriceText";
 import { TourWishlistButton } from "@/components/TourWishlistButton";
 
 function imageOf(item: Tour) {
-  return item.featured_image || item.image || item.banner || item.gallery?.[0] || item.images?.[0] || "/images/mainBanner.png";
+  return item.featured_image || item.image || item.banner || item.gallery?.[0] || item.images?.[0] || "/images/mainBanner.webp";
 }
 
 function placeOf(tour: Tour) {
