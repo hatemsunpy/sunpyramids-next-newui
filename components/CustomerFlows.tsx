@@ -289,7 +289,7 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
       {mode === "sign-in" || mode === "sign-up" ? (
         <div className="social-row">
           <button type="button" onClick={() => socialRedirect("auth/google/redirect")}>
-            <Image src="/images/google.png" alt="" width={20} height={20} aria-hidden="true" />
+            <Image src="/images/google.webp" alt="" width={20} height={20} aria-hidden="true" />
             Google
           </button>
           <button type="button" onClick={() => socialRedirect("auth/facebook/redirect")}>
@@ -1214,7 +1214,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                 const itemId = item.id || item.tour?.id || index;
                 const isEditing = editingItemId === itemId;
                 const title = item.tour?.title || item.title || item.name || `${copy.cart} ${index + 1}`;
-                const imageSrc = item.tour?.image || item.image || "/images/Cairo_Egypt_Unsplash.png";
+                const imageSrc = item.tour?.image || item.image || "/images/Cairo_Egypt_Unsplash.webp";
                 const adults = Number(item.adults) || 1;
                 const children = Number(item.children) || 0;
                 const infants = Number(item.infants) || 0;

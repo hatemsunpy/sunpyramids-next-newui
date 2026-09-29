@@ -32,7 +32,7 @@ export function HomeUpcomingEventCard({ event, locale = "en" }: Props) {
     event.featured_image ||
     event.image ||
     event.banner ||
-    "/images/mainBanner.png";
+    "/images/mainBanner.webp";
   const image = rawImage.startsWith("http") ? encodeURI(rawImage) : rawImage;
 
   // Calendar date parsing

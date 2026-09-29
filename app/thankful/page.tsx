@@ -1,5 +1,6 @@
-import { ThankfulPage } from "@/components/ClonedNuxtPages";
+import { SiteShell } from "@/components/SiteShell";
+import { ThankfulPage } from "@/components/ThankfulPage";
 
 export default function Page() {
-  return <ThankfulPage />;
+  return <SiteShell><ThankfulPage /></SiteShell>;
 }

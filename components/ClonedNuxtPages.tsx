@@ -17,11 +17,11 @@ import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 import { uiCopy } from "@/lib/ui-copy";
 
 const bookTripGallery = [
-  ["/images/shorts.png", "/images/shorts-gallary.png", "YouTube Shorts"],
-  ["/images/youtubeone.png", "/images/youtube-gallary.png", "YouTube"],
-  ["/images/tiktok.png", "/images/tiktok-gallary.png", "TikTok"],
-  ["/images/instagram.png", "/images/insta-gallary.png", "Instagram"],
-  ["/images/youtubetwo.png", "/images/fb-logo.webp", "Facebook"],
+  ["/images/shorts.webp", "/images/shorts-gallary.webp", "YouTube Shorts"],
+  ["/images/youtubeone.webp", "/images/youtube-gallary.webp", "YouTube"],
+  ["/images/tiktok.webp", "/images/tiktok-gallary.webp", "TikTok"],
+  ["/images/instagram.webp", "/images/insta-gallary.webp", "Instagram"],
+  ["/images/youtubetwo.webp", "/images/fb-logo.webp", "Facebook"],
 ] as const;
 
 export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Locale }) {
@@ -39,7 +39,7 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
         </Suspense>
       </section>
       <section className="auth-image" aria-hidden="true">
-        <Image src="/images/Cairo_Egypt_Unsplash.png" alt="" fill sizes="(max-width: 1023px) 0px, 48vw" priority />
+        <Image src="/images/Cairo_Egypt_Unsplash.webp" alt="" fill sizes="(max-width: 1023px) 0px, 48vw" priority />
         <div className="auth-image-caption">
           <span>{copy.egyptTours}</span>
           <strong>Sun Pyramids Tours</strong>
@@ -155,7 +155,7 @@ export function TripsListingPage({
   };
   return (
     <main>
-      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${page?.banner || "/images/mainBanner.png"})` }}>
+      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${page?.banner || "/images/mainBanner.webp"})` }}>
         <h1>{page?.title || copy.egyptTours}</h1>
       </section>
       <section className="trips-layout">
@@ -225,7 +225,7 @@ export function TravelGuidePage({
           "Essential travel advice, historical insights, and destination tips directly from our Cairo team."
         }
         totalCount={totalCount > 0 ? totalCount : undefined}
-        bgImage={page?.banner || "/images/blogsHero.png"}
+        bgImage={page?.banner || "/images/blogsHero.webp"}
       />
 
       <section className="discovery-section">
@@ -369,7 +369,7 @@ export function EventDetailPage({
 
 export function MarketingLandingPage({ page, tours, locale = "en" }: { page: ApiPage | null; tours: Tour[]; locale?: Locale }) {
   const copy = uiCopy(locale);
-  const banner = page?.banner || "/images/mainBanner.png";
+  const banner = page?.banner || "/images/mainBanner.webp";
   const heroStyle = {
     backgroundImage: `url(${banner})`,
   } as CSSProperties;
@@ -459,19 +459,6 @@ export function MarketingLandingPage({ page, tours, locale = "en" }: { page: Api
             </article>
           ))}
         </div>
-      </section>
-    </main>
-  );
-}
-
-export function ThankfulPage({ locale = "en" }: { locale?: Locale }) {
-  return (
-    <main className="payment-status">
-      <section className="status-card">
-        <p className="eyebrow">Thank you</p>
-        <h1>Your request has been received</h1>
-        <p className="muted">Sun Pyramids Tours will contact you shortly with the next steps.</p>
-        <Link className="btn-primary" href={withLocale("/", locale)}>Back Home</Link>
       </section>
     </main>
   );

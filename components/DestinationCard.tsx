@@ -22,7 +22,7 @@ export function DestinationCard({
     destination.featured_image ||
     destination.image ||
     destination.banner ||
-    "/images/mainBanner.png";
+    "/images/mainBanner.webp";
   const image = rawImage.startsWith("http") ? encodeURI(rawImage) : rawImage;
   const Heading = headingLevel === 3 ? "h3" : "h2";
 

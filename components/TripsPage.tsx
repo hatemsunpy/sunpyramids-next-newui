@@ -65,7 +65,7 @@ export function TripsPage({
               "Discover authentic, handcrafted Egypt journeys guided by certified Egyptologists."
         }
         totalCount={totalCount}
-        bgImage={page?.banner || "/images/mainBanner.png"}
+        bgImage={page?.banner || "/images/mainBanner.webp"}
       />
 
       <section className="discovery-section">

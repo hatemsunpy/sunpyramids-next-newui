@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
+
 export function TourBookingTrigger({ inquiry = false }: { inquiry?: boolean }) {
   return (
     <button
@@ -8,7 +10,7 @@ export function TourBookingTrigger({ inquiry = false }: { inquiry?: boolean }) {
       onClick={() => window.dispatchEvent(new CustomEvent("tour:open-booking"))}
     >
       {inquiry ? "Check availability" : "Plan this tour"}
-      <span aria-hidden="true">→</span>
+      <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
     </button>
   );
 }

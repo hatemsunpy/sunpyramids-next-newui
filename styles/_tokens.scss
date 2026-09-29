@@ -24,9 +24,10 @@
   --spt-ink: var(--spt-text-primary);
   --spt-muted: var(--spt-text-secondary);
   --spt-border: var(--spt-border-subtle);
-  --spt-shell: 1440px;
+  --spt-shell: 1300px;
   --spt-reading: 780px;
-  --spt-gutter: clamp(1rem, 3.2vw, 3rem);
+  --spt-page-gutter: clamp(1rem, 6vw, 6rem);
+  --spt-gutter: var(--spt-page-gutter);
   --spt-section: clamp(4.75rem, 8vw, 8.5rem);
   --spt-radius-sm: 10px;
   --spt-radius-card: 16px;
@@ -63,7 +64,6 @@
 
 @media (max-width: 767px) {
   :root {
-    --spt-gutter: clamp(1rem, 4.6vw, 1.25rem);
     --spt-section: 4.5rem;
   }
 }

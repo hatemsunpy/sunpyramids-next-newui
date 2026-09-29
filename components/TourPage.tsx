@@ -12,16 +12,18 @@ import { TourPageNavigation } from "@/components/tour/TourPageNavigation";
 import { TourSeasonPrices } from "@/components/tour/TourSeasonPrices";
 import { TourSocialGallery } from "@/components/tour/TourSocialGallery";
 import { TourSpecularButtons } from "@/components/tour/TourSpecularButtons";
-import type { Locale, Tour } from "@/types/api";
+import type { Locale, Tour, TripTaxonomy } from "@/types/api";
 
 export function TourPage({
   tour,
   relatedTours = [],
   locale = "en",
+  taxonomy,
 }: {
   tour: Tour | null;
   relatedTours?: Tour[];
   locale?: Locale;
+  taxonomy: TripTaxonomy;
 }) {
   const title = tour?.title || tour?.name || "";
   const hasOverview = Boolean(
@@ -41,7 +43,7 @@ export function TourPage({
   return (
     <main className="tour-page tour-page-redesign">
       <TourSpecularButtons />
-      <TourBreadcrumb title={title} locale={locale} />
+      <TourBreadcrumb title={title} locale={locale} tour={tour} taxonomy={taxonomy} />
       <section className="tour-page-shell">
         <div className="tour-hero-stage">
           <TourGallery tour={tour} locale={locale} />

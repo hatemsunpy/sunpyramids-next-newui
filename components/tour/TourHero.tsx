@@ -28,14 +28,14 @@ export function TourHero({ tour, title }: { tour: Tour | null; title: string }) 
           {offer > 0 ? <span className="tour-hero-offer">Save {offer}%</span> : null}
         </div>
       ) : null}
-      {title ? <h1 className="tour-page-title">{title}</h1> : null}
+      {title ? <h1 className="tour-page-title tour-title--calm">{title}</h1> : null}
       {duration || tourType ? (
         <div className="tour-hero-meta-pills" aria-label="Tour essentials">
           {duration ? <span className="tour-hero-pill">{duration}</span> : null}
           {tourType ? <span className="tour-hero-pill">{tourType}</span> : null}
         </div>
       ) : null}
-      <div className="tour-hero-conversion">
+      <div className={`tour-hero-conversion${tour?.is_inquiry ? " is-inquiry" : ""}`}>
         {tour?.is_inquiry ? (
           <span className="tour-hero-inquiry">Tailored availability</span>
         ) : price !== null && price !== undefined && price !== "" ? (

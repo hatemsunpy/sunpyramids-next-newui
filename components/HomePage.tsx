@@ -21,11 +21,11 @@ import { homeCopy } from "@/lib/home-copy";
 import { homeSectionLabels } from "@/lib/home-section-labels";
 
 const gallery = [
-  ["/images/shorts.png", "/images/shorts-gallary.png", "YouTube Shorts", "shorts"],
-  ["/images/youtubeone.png", "/images/youtube-gallary.png", "YouTube", "youtube-video-1"],
-  ["/images/tiktok.png", "/images/tiktok-gallary.png", "TikTok", "tiktok"],
-  ["/images/instagram.png", "/images/insta-gallary.png", "Instagram", "insta-link"],
-  ["/images/youtubetwo.png", "/images/fb-logo.webp", "Facebook", "youtube-video-2"],
+  ["/images/shorts.webp", "/images/shorts-gallary.webp", "YouTube Shorts", "shorts"],
+  ["/images/youtubeone.webp", "/images/youtube-gallary.webp", "YouTube", "youtube-video-1"],
+  ["/images/tiktok.webp", "/images/tiktok-gallary.webp", "TikTok", "tiktok"],
+  ["/images/instagram.webp", "/images/insta-gallary.webp", "Instagram", "insta-link"],
+  ["/images/youtubetwo.webp", "/images/fb-logo.webp", "Facebook", "youtube-video-2"],
 ];
 
 function ShortcutIcon({ type }: { type: "make" | "find" | "car" }) {
@@ -67,7 +67,7 @@ export function HomePage({
   const labels = homeSectionLabels(locale);
   const heroImages = page?.gallery?.length
     ? page.gallery
-    : [page?.banner || page?.image || "/images/mainBanner.png"];
+    : [page?.banner || page?.image || "/images/mainBanner.webp"];
   const heroCopySlides = [
     { title: copy.heroMainTitle, accent: copy.heroMainAccent, description: copy.heroMainDescription },
     { title: copy.heroSlide1Title, accent: copy.heroSlide1Accent, description: copy.heroSlide1Description },
@@ -223,7 +223,7 @@ export function HomePage({
           <h2>Tailored <span>guidance</span> for your <span>sustainability</span> journey</h2>
           <Link className="btn-primary" href={withLocale("/sustainability", locale)}>{copy.seeMore}<span aria-hidden="true">↗</span></Link>
         </div>
-        <Image src="/images/certified-logo.png" alt="Certified sustainable travel" width={430} height={167} />
+        <Image src="/images/certified-logo.webp" alt="Certified sustainable travel" width={430} height={167} />
       </section>
 
       <section className="home-section container-shell home-gallery-section-v2">

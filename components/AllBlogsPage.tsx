@@ -25,7 +25,7 @@ export function AllBlogsPage({
   initialTitle?: string;
 }) {
   const copy = homeCopy(locale);
-  const banner = page?.banner || "/images/blogsHero.png";
+  const banner = page?.banner || "/images/blogsHero.webp";
   const title = locale === "en" ? "Egypt Travel Guides & Stories" : page?.title || "Blogs";
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },

@@ -170,7 +170,7 @@ export default async function Page({ params, searchParams }: Props) {
           eyebrow={isOneDayIndex ? "Egypt Destinations" : "Curated Egypt Packages"}
           description={page?.short_description || page?.description || page?.content}
           totalCount={isOneDayIndex ? items.length : meta?.total}
-          bgImage={page?.banner || "/images/mainBanner.png"}
+          bgImage={page?.banner || "/images/mainBanner.webp"}
         />
         <section className="discovery-section">
           <div className="container-shell">

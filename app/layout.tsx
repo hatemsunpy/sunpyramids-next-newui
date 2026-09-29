@@ -53,7 +53,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </noscript>
         {children}
         <ThirdPartyScripts />
-      </body>
+      {/* impeccable-live-start */}
+<script src="http://localhost:8400/live.js?token=5754243e-675d-4c19-b9e6-11367a2a196f"></script>
+{/* impeccable-live-end */}
+</body>
     </html>
   );
 }

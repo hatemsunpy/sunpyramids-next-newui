@@ -288,7 +288,7 @@ export function BlogPostPage({
   locale?: Locale;
 }) {
   const title = blog.title || blog.name || "Egypt Travel Guide";
-  const image = blog.featured_image || blog.image || blog.banner || "/images/blogsHero.png";
+  const image = blog.featured_image || blog.image || blog.banner || "/images/blogsHero.webp";
   const date = formatDate(blog.published_at || blog.created_at, locale);
   const { html, headings } = prepareArticle(blog.description || blog.content);
 

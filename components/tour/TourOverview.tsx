@@ -1,3 +1,4 @@
+import { CalendarDays, Clock3 } from "lucide-react";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import type { Tour } from "@/types/api";
 
@@ -51,12 +52,18 @@ export function TourOverview({ tour }: { tour: Tour | null }) {
       {tour?.overview || hasLogistics ? <div className={`tour-overview-body ${hasLogistics ? "has-logistics" : ""}`}>
         {hasLogistics ? <aside className="tour-overview-pickup" aria-label="Tour logistics">
           {tour?.pickup_time ? <div className="tour-overview-card">
-            <span>Pick-up time</span>
-            <strong>{tour.pickup_time}</strong>
+            <Clock3 className="tour-overview-icon" aria-hidden="true" />
+            <div className="tour-overview-card-copy">
+              <span>Pick-up time</span>
+              <strong>{tour.pickup_time}</strong>
+            </div>
           </div> : null}
           {tour?.run ? <div className="tour-overview-card">
-            <span>Tour availability</span>
-            <strong>{tour.run}</strong>
+            <CalendarDays className="tour-overview-icon" aria-hidden="true" />
+            <div className="tour-overview-card-copy">
+              <span>Tour availability</span>
+              <strong>{tour.run}</strong>
+            </div>
           </div> : null}
         </aside> : null}
         {tour?.overview ? (

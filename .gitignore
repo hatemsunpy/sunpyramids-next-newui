@@ -19,11 +19,13 @@ skills-lock.json
 .opencode/
 .commandcode/
 .impeccable/
+.hermes/
 .playwright-mcp/
 *.png
 *.jpeg
 *.jpg
 !public/images/guest-photos/*.jpg
+!public/images/guest-photos/*.webp
 *.pid
 .vscode/
 # Delegate configuration and workflows

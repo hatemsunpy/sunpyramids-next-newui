@@ -1,4 +1,4 @@
-export const APPROVED_BRAND_LOGO = "/images/logo.png";
+export const APPROVED_BRAND_LOGO = "/images/logo.webp";
 
 export const siteContact = {
   phones: [

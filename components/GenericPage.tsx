@@ -27,13 +27,13 @@ type GenericPageProps = {
 };
 
 const fallbackBanners: Record<string, string> = {
-  faqs: "/images/faqs-banner.png",
-  "contact-us": "/images/contactForm.png",
-  "about-us": "/images/aboutusmainbanner.png",
-  sustainability: "/images/certification.png",
-  "accessible-travel": "/images/wheelChair.png",
-  "make-your-trip": "/images/makeYourTripImage.png",
-  "rent-car": "/images/Cairo_Egypt_Unsplash.png",
+  faqs: "/images/faqs-banner.webp",
+  "contact-us": "/images/contactForm.webp",
+  "about-us": "/images/aboutusmainbanner.webp",
+  sustainability: "/images/certification.webp",
+  "accessible-travel": "/images/wheelChair.webp",
+  "make-your-trip": "/images/makeYourTripImage.webp",
+  "rent-car": "/images/Cairo_Egypt_Unsplash.webp",
 };
 
 function meta(page: ApiPage | null, key: string) {
@@ -46,7 +46,7 @@ function metaHtml(page: ApiPage | null, key: string) {
 }
 
 function heroImage(page: ApiPage | null, route: string) {
-  return page?.banner || page?.featured_image || page?.image || fallbackBanners[route] || "/images/aboutusmainbanner.png";
+  return page?.banner || page?.featured_image || page?.image || fallbackBanners[route] || "/images/aboutusmainbanner.webp";
 }
 
 function pageCopyKey(value: string | null | undefined) {
@@ -321,7 +321,7 @@ function AboutPage({
             </div>
             <div className="story-media">
               <Image
-                src={String(page?.feature_1 || gallery[0] || "/images/aboutusmainbanner.png")}
+                src={String(page?.feature_1 || gallery[0] || "/images/aboutusmainbanner.webp")}
                 alt={title}
                 fill
                 sizes="(max-width: 920px) 100vw, 50vw"
@@ -578,7 +578,7 @@ function ImpactPage({
 }) {
   const isSustainability = route === "sustainability";
   const eyebrow = isSustainability ? "Responsible Travel & Eco Commitment" : "Inclusive Travel Worldwide";
-  const illustration = isSustainability ? "/images/certification.png" : "/images/wheelChair.png";
+  const illustration = isSustainability ? "/images/certification.webp" : "/images/wheelChair.webp";
 
   return (
     <main>

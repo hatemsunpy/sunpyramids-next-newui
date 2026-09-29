@@ -6,14 +6,14 @@ import type { Locale, Tour } from "@/types/api";
 type SocialGalleryItem = NonNullable<Tour["social_links"]>[number];
 
 const galleryPresentation: Record<string, { image: string; icon: string; label: string }> = {
-  shorts: { image: "/images/shorts.png", icon: "/images/shorts-gallary.png", label: "YouTube Shorts" },
-  "youtube-video-1": { image: "/images/youtubeone.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
-  "youtube-video-2": { image: "/images/youtubetwo.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
-  youtube: { image: "/images/youtubeone.png", icon: "/images/youtube-gallary.png", label: "YouTube" },
-  facebook: { image: "/images/youtubetwo.png", icon: "/images/fb-logo.webp", label: "Facebook" },
-  tiktok: { image: "/images/tiktok.png", icon: "/images/tiktok-gallary.png", label: "TikTok" },
-  "insta-link": { image: "/images/instagram.png", icon: "/images/insta-gallary.png", label: "Instagram" },
-  instagram: { image: "/images/instagram.png", icon: "/images/insta-gallary.png", label: "Instagram" },
+  shorts: { image: "/images/shorts.webp", icon: "/images/shorts-gallary.webp", label: "YouTube Shorts" },
+  "youtube-video-1": { image: "/images/youtubeone.webp", icon: "/images/youtube-gallary.webp", label: "YouTube" },
+  "youtube-video-2": { image: "/images/youtubetwo.webp", icon: "/images/youtube-gallary.webp", label: "YouTube" },
+  youtube: { image: "/images/youtubeone.webp", icon: "/images/youtube-gallary.webp", label: "YouTube" },
+  facebook: { image: "/images/youtubetwo.webp", icon: "/images/fb-logo.webp", label: "Facebook" },
+  tiktok: { image: "/images/tiktok.webp", icon: "/images/tiktok-gallary.webp", label: "TikTok" },
+  "insta-link": { image: "/images/instagram.webp", icon: "/images/insta-gallary.webp", label: "Instagram" },
+  instagram: { image: "/images/instagram.webp", icon: "/images/insta-gallary.webp", label: "Instagram" },
 };
 
 function resolveGalleryItem(socialLink: SocialGalleryItem) {

@@ -6,7 +6,7 @@ import { withLocale } from "@/lib/locales";
 export function BlogCard({ blog, locale = "en", variant = "default", className = "" }: { blog: ApiPage; locale?: Locale; variant?: "default" | "listing"; className?: string }) {
   const slug = blog.slug || String(blog.id || "");
   const title = blog.title || blog.name || "Egypt Travel Guide";
-  const image = blog.featured_image || blog.image || blog.banner || "/images/blogsHero.png";
+  const image = blog.featured_image || blog.image || blog.banner || "/images/blogsHero.webp";
 
   return (
     <article className={`blog-card${variant === "listing" ? " blog-card-listing" : ""}${className ? ` ${className}` : ""}`}>

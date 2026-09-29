@@ -86,6 +86,12 @@ export type ApiList<T> = {
 };
 
 export type Tour = ApiPage & {
+  calender_availability?: {
+    day_numbers?: number[];
+    day_names?: string[];
+    month_names?: string[];
+    years?: number[];
+  };
   wishlisted_exists?: boolean;
   price?: number | string;
   start_from?: number | string;

@@ -29,7 +29,7 @@ export function DiscoveryHero({
   children?: ReactNode;
   locale?: Locale | string;
 }) {
-  const bannerImage = bgImage || "/images/mainBanner.png";
+  const bannerImage = bgImage || "/images/mainBanner.webp";
 
   return (
     <header
