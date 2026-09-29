@@ -1118,38 +1118,8 @@
   background: var(--spt-anchor-deep);
 }
 
-.home-plan-section__media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgb(8 18 44 / 72%), transparent 65%);
-}
-
 .home-plan-section__media > img {
   object-fit: cover;
-}
-
-.home-plan-section__media > div {
-  position: absolute;
-  z-index: 1;
-  right: 2rem;
-  bottom: 2rem;
-  left: 2rem;
-  display: grid;
-  gap: 0.35rem;
-  color: white;
-}
-
-.home-plan-section__media span {
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.home-plan-section__media strong {
-  max-width: 20ch;
-  font-size: clamp(2rem, 3.5vw, 3.5rem);
-  line-height: 0.98;
-  text-wrap: balance;
 }
 
 .home-plan-section__form {

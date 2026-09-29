@@ -133,7 +133,6 @@ export function HomePage({
       <section className="home-plan-section container-shell">
         <div className="home-plan-section__media">
           <Image src={heroImages[1] || heroImages[0]} alt="Plan a journey across Egypt" fill sizes="(max-width: 900px) 100vw, 42vw" />
-          <div><span>{copy.makeTripShort}</span><strong>{copy.makeYourTrip}</strong></div>
         </div>
         <div className="home-plan-section__form">
           <SectionEyebrow>{labels.plan}</SectionEyebrow>
