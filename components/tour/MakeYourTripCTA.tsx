@@ -25,6 +25,14 @@ export function MakeYourTripCTA({ tour, locale }: { tour: Tour | null; locale: L
             />
           ) : null}
           <span className="tour-make-trip-kicker">Tailor-Made Concierge</span>
+        </div>
+        <div className="tour-make-trip-form-box">
+          <span className="tour-make-trip-form-title">Select your dates & destinations</span>
+          <HomeSearchShortcuts
+            locale={locale}
+            destinations={(tour?.destinations ?? []).map(({ id, name, title: destinationTitle, slug }) => ({ id, name, title: destinationTitle, slug }))}
+            modeOnly="make"
+          />
           <div className="tour-make-trip-actions">
             <a
               href={whatsappUrl}
@@ -36,14 +44,6 @@ export function MakeYourTripCTA({ tour, locale }: { tour: Tour | null; locale: L
               <span aria-hidden="true">→</span>
             </a>
           </div>
-        </div>
-        <div className="tour-make-trip-form-box">
-          <span className="tour-make-trip-form-title">Select your dates & destinations</span>
-          <HomeSearchShortcuts
-            locale={locale}
-            destinations={(tour?.destinations ?? []).map(({ id, name, title: destinationTitle, slug }) => ({ id, name, title: destinationTitle, slug }))}
-            modeOnly="make"
-          />
         </div>
       </div>
     </section>
