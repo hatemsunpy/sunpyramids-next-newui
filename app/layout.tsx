@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { HtmlLangSynchronizer } from "@/components/HtmlLangSynchronizer";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 import { DatePickerEnhancer } from "@/components/DatePickerEnhancer";
+import { ButtonGlassEffects } from "@/components/ButtonGlassEffects";
 import { isLocale } from "@/lib/locales";
 import "./globals.scss";
 import "@/styles/batch-one.scss";
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body>
         <HtmlLangSynchronizer />
         <DatePickerEnhancer />
+        <ButtonGlassEffects />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KDF33T7"
@@ -53,10 +55,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </noscript>
         {children}
         <ThirdPartyScripts />
-      {/* impeccable-live-start */}
-<script src="http://localhost:8400/live.js?token=5754243e-675d-4c19-b9e6-11367a2a196f"></script>
-{/* impeccable-live-end */}
-</body>
+      </body>
     </html>
   );
 }

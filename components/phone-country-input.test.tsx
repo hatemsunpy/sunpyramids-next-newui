@@ -65,11 +65,11 @@ describe("PhoneCountryInput", () => {
     expect(phone.checkValidity()).toBe(false);
     expect(screen.getByText("Enter 10 digits after +20")).toBeInTheDocument();
 
-    fireEvent.change(phone, { target: { value: "010 123-4567" } });
-    expect(phone).toHaveValue("0101234567");
+    fireEvent.change(phone, { target: { value: "101 234-5678" } });
+    expect(phone).toHaveValue("1012345678");
     expect(phone.checkValidity()).toBe(true);
     expect(new FormData(screen.getByTestId("form") as HTMLFormElement).get("phone")).toBe(
-      "+200101234567"
+      "+201012345678"
     );
   });
 
@@ -139,8 +139,65 @@ describe("PhoneCountryInput", () => {
       <PhoneCountryInput id="phone" countries={[]} copy={copy} loadState="error" required />
     );
 
-    expect(ui.container.querySelector<HTMLInputElement>("#phone")).toBeDisabled();
+    const phone = ui.container.querySelector<HTMLInputElement>("#phone")!;
+    expect(phone).toHaveAttribute("aria-disabled", "true");
+    expect(phone.checkValidity()).toBe(false);
     expect(screen.getByRole("alert")).toHaveTextContent("Refresh the page to try again");
     expect(screen.getByRole("button", { name: copy.selectCallingCode })).toBeDisabled();
+  });
+
+  it("preserves an existing backend profile phone until it is edited", () => {
+    const ui = render(
+      <form>
+        <PhoneCountryInput id="phone" countries={countries} copy={copy} loadState="ready" defaultValue="+20 1012345678" />
+      </form>
+    );
+    const form = ui.container.querySelector("form")!;
+    const phone = ui.container.querySelector<HTMLInputElement>("#phone")!;
+    expect(phone).toHaveValue("1012345678");
+    expect(new FormData(form).get("phone")).toBe("+20 1012345678");
+    expect(fetch).not.toHaveBeenCalled();
+    fireEvent.change(phone, { target: { value: "1098765432" } });
+    expect(new FormData(form).get("phone")).toBe("+201098765432");
+  });
+
+  it("preserves legacy profile numbers without inventing a country code", () => {
+    const ui = render(
+      <form>
+        <PhoneCountryInput id="phone" countries={countries} copy={copy} loadState="ready" defaultValue="01012345678" />
+      </form>
+    );
+    const form = ui.container.querySelector("form")!;
+    expect(form.checkValidity()).toBe(true);
+    expect(new FormData(form).get("phone")).toBe("01012345678");
+    expect(screen.getByRole("button", { name: copy.selectCallingCode })).toBeEnabled();
+    fireEvent.change(ui.container.querySelector("#phone")!, { target: { value: "1012345678" } });
+    expect(form.checkValidity()).toBe(false);
+    expect(new FormData(form).get("phone")).toBe("1012345678");
+  });
+
+  it("clears both the visible number and submitted phone on form reset", () => {
+    const ui = render(
+      <form>
+        <PhoneCountryInput id="phone" countries={countries} copy={copy} loadState="ready" />
+      </form>
+    );
+    const form = ui.container.querySelector("form")!;
+    fireEvent.change(ui.container.querySelector("#phone")!, { target: { value: "123456789" } });
+    fireEvent.reset(form);
+    expect(ui.container.querySelector("#phone")).toHaveValue("");
+    expect(new FormData(form).get("phone")).toBe("");
+  });
+
+  it("does not change the dial code after typing if delayed geo detection arrives", async () => {
+    let finishLookup!: (value: Response) => void;
+    vi.mocked(fetch).mockImplementation(() => new Promise((resolve) => { finishLookup = resolve; }));
+    const ui = render(
+      <form><PhoneCountryInput id="phone" countries={countries} copy={copy} loadState="ready" /></form>
+    );
+    fireEvent.change(ui.container.querySelector("#phone")!, { target: { value: "123456789" } });
+    finishLookup({ ok: true, json: async () => ({ country: "EG" }) } as Response);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Country calling code: Afghanistan +93" })).toBeInTheDocument());
+    expect(new FormData(ui.container.querySelector("form")!).get("phone")).toBe("+93123456789");
   });
 });

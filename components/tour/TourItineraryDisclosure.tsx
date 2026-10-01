@@ -1,31 +1,40 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
-import { TourCollapsible } from "@/components/tour/TourCollapsible";
+import { useId, useRef, useState, type ReactNode } from "react";
 
 export function TourItineraryDisclosure({ children }: { children: ReactNode }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [closedAll, setClosedAll] = useState(false);
+  const daysRef = useRef<HTMLDivElement>(null);
+  const contentId = useId();
+  const [expanded, setExpanded] = useState(true);
 
-  function toggleAll() {
-    const nextClosed = !closedAll;
-    setClosedAll(nextClosed);
-    containerRef.current?.querySelectorAll<HTMLDetailsElement>("details").forEach((day) => {
-      day.open = !nextClosed;
+  function toggleDayDetails() {
+    const nextExpanded = !expanded;
+    daysRef.current?.querySelectorAll<HTMLDetailsElement>("details").forEach((day) => {
+      day.open = nextExpanded;
     });
+    setExpanded(nextExpanded);
   }
 
   return (
-    <TourCollapsible
-      title="Full itinerary"
-      defaultOpen
-      actions={
-        <button type="button" className="btn-outline btn-sm" onClick={toggleAll}>
-          {closedAll ? "Expand All" : "Contract All"}
-        </button>
-      }
-    >
-      <div ref={containerRef} className="tour-days">{children}</div>
-    </TourCollapsible>
+    <div className="tour-collapsible">
+      <div className="tour-collapsible-head">
+        <h2>Tour Itinerary</h2>
+        <div className="tour-collapsible-actions">
+          <button
+            type="button"
+            onClick={toggleDayDetails}
+            aria-expanded={expanded}
+            aria-controls={contentId}
+            aria-label={`${expanded ? "Collapse" : "Expand"} all day details`}
+            className={`tour-collapsible-toggle ${expanded ? "is-open" : ""}`}
+          >
+            ▼
+          </button>
+        </div>
+      </div>
+      <div id={contentId} className="tour-collapsible-body">
+        <div ref={daysRef} className="tour-days">{children}</div>
+      </div>
+    </div>
   );
 }

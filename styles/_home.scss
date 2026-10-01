@@ -2047,10 +2047,17 @@
   gap: 0.4rem;
 }
 
-.home-help-panel-v2 .home-help-form label span {
+.home-help-panel-v2 .home-help-form .home-help-label {
   color: rgb(255 255 255 / 78%);
   font-size: 0.72rem;
   font-weight: 600;
+}
+
+.home-help-form label > .home-help-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  white-space: nowrap;
 }
 
 .home-help-panel-v2 .home-help-form input {

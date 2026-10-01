@@ -8,7 +8,6 @@ import type { Locale, Tour } from "@/types/api";
 export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Locale }) {
   const [active, setActive] = useState(0);
   const [displayed, setDisplayed] = useState(0);
-  const [thumbnailsReady, setThumbnailsReady] = useState(false);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const viewerRef = useRef<HTMLDialogElement>(null);
@@ -98,7 +97,6 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
           loading={displayed === 0 ? "eager" : "lazy"}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 75vw"
           className="tour-gallery-slide is-active"
-          onLoad={() => setThumbnailsReady(true)}
         />
         {active !== displayed ? (
           <Image
@@ -159,7 +157,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
                 onClick={() => isLastWithMore ? openViewer(index) : showPhoto(index)}
                 aria-label={isLastWithMore ? "Open full tour photo gallery" : `View photo ${index + 1}`}
               >
-                {thumbnailsReady ? <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" /> : null}
+                <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" />
                 {isLastWithMore ? (
                   <span className="tour-gallery-more-overlay" aria-hidden="true">
                     <span>+{remainingCount + 1} photos</span>

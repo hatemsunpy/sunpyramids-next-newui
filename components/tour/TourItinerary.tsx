@@ -14,6 +14,11 @@ export function TourItinerary({ days, locale }: { days: NonNullable<Tour["days"]
           const translation = day.translations?.find((t) => t.locale === locale) || day.translations?.find((t) => t.locale === "en") || day.translations?.[0];
           const dayTitle = translation?.title?.split(":").slice(1).join(":").trim() || day.title || "";
           const description = translation?.description || day.description || "";
+          // Mark blank CMS paragraphs so mobile spacing can collapse without removing content.
+          const descriptionHtml = sanitizeHtml(description).replace(
+            /<p>((?:\s|&nbsp;|&#160;|&#xa0;|<br\s*\/?>)*)<\/p>/gi,
+            '<p data-itinerary-spacer>$1</p>',
+          );
           return (
             <details key={day.id || index} className="tour-day" open>
               <summary>
@@ -28,7 +33,7 @@ export function TourItinerary({ days, locale }: { days: NonNullable<Tour["days"]
                   </svg>
                 </span>
               </summary>
-              <div className="tour-day-body content-prose" dangerouslySetInnerHTML={{ __html: sanitizeHtml(description) }} />
+              <div className="tour-day-body content-prose" dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
             </details>
           );
         })}

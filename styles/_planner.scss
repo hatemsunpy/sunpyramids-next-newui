@@ -377,101 +377,6 @@
       }
     }
 
-    .phone-country-field {
-      width: 100%;
-    }
-
-    .phone-country-input {
-      width: 100%;
-      min-height: 48px;
-      display: flex;
-      align-items: stretch;
-      overflow: hidden;
-      background: var(--spt-surface);
-      border: 1px solid var(--spt-border);
-      border-radius: var(--spt-radius-sm);
-      transition: border-color 150ms ease, box-shadow 150ms ease;
-
-      &:focus-within {
-        border-color: var(--spt-anchor);
-        box-shadow: 0 0 0 3px rgba(22, 58, 150, 0.15);
-      }
-
-      &:has(.phone-country-number[aria-invalid="true"]) {
-        border-color: var(--spt-danger-text);
-      }
-
-      .phone-country-trigger {
-        min-width: 116px;
-        min-height: 48px;
-        padding: 0 0.85rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        border: 0;
-        border-inline-end: 1px solid var(--spt-border);
-        background: transparent;
-        color: var(--spt-ink);
-        cursor: pointer;
-
-        &:disabled {
-          cursor: wait;
-          color: var(--spt-muted);
-        }
-      }
-
-      .phone-country-code {
-        font-size: 0.85rem;
-        font-weight: 700;
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
-      }
-
-      .phone-country-chevron {
-        width: 15px;
-        height: 15px;
-        color: var(--spt-muted);
-        transition: transform 180ms ease;
-      }
-
-      .phone-country-trigger[data-state="open"] .phone-country-chevron {
-        transform: rotate(180deg);
-      }
-
-      input.phone-country-number {
-        min-width: 0;
-        min-height: 48px;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: transparent;
-
-        &:focus {
-          border: 0;
-          box-shadow: none;
-        }
-
-        &:disabled {
-          cursor: wait;
-          color: var(--spt-muted);
-        }
-      }
-    }
-
-    .phone-country-feedback,
-    .phone-country-status {
-      margin: 0.4rem 0 0;
-      color: var(--spt-muted);
-      font-size: 0.78rem;
-      line-height: 1.4;
-    }
-
-    .phone-country-feedback,
-    .phone-country-status.is-error {
-      color: var(--spt-danger-text);
-    }
-
     .route-feedback {
       font-size: 0.84rem;
       margin-top: 0.35rem;
@@ -1003,12 +908,136 @@
   }
 }
 
-// Portaled phone-country menu: kept outside .site-shell-v2 so Radix content
-// retains the planner form's visual language when rendered under <body>.
+// Shared phone field and portaled country menu used by all customer forms.
+.phone-required {
+  color: var(--spt-danger-text);
+}
+
+.form-field:has(.phone-country-field) > label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.home-help-form .home-help-phone > label {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.home-help-form .home-help-phone label .phone-required {
+  display: inline;
+  margin: 0;
+  color: var(--spt-danger-text);
+}
+
+.phone-country-field {
+  width: 100%;
+  min-width: 0;
+
+  .phone-country-input {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    min-height: 52px;
+    overflow: hidden;
+    direction: ltr;
+    border: 1px solid var(--spt-border);
+    border-radius: 14px;
+    background: var(--spt-surface);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+
+    &:focus-within {
+      border-color: var(--spt-focus);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--spt-focus) 22%, transparent);
+    }
+
+    &:has([aria-invalid="true"]) {
+      border-color: var(--spt-danger-text);
+    }
+
+    button.phone-country-trigger {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      min-width: 88px;
+      min-height: 50px;
+      padding: 0 0.4rem;
+      border: 0;
+      border-inline-end: 1px solid var(--spt-border);
+      border-radius: 0;
+      background: transparent;
+      color: var(--spt-ink);
+      cursor: pointer;
+
+      &:disabled { cursor: not-allowed; color: var(--spt-muted); }
+      &:focus-visible { outline-offset: -4px; }
+    }
+
+    .phone-country-code {
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .phone-country-chevron {
+      width: 14px;
+      height: 14px;
+      color: var(--spt-muted);
+      transition: transform 180ms ease;
+    }
+
+    .phone-country-trigger[data-state="open"] .phone-country-chevron { transform: rotate(180deg); }
+
+    .phone-country-flag {
+      width: 24px;
+      height: 24px;
+      flex-basis: 24px;
+    }
+  }
+}
+
+// Match the specificity of surrounding form input rules without per-form copies.
+.site-shell-v2 .phone-country-field .phone-country-input input.phone-country-number,
+.phone-country-field .phone-country-input input.phone-country-number {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0.7rem 0.8rem;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--spt-ink);
+  font: inherit;
+  font-size: 1rem;
+  caret-color: var(--spt-link);
+
+  &::placeholder { color: var(--spt-muted); }
+  &:focus { border: 0; outline: 0; box-shadow: none; }
+  &[aria-disabled="true"] { cursor: not-allowed; }
+}
+
+.phone-country-field p.phone-country-feedback,
+.phone-country-field p.phone-country-status {
+  margin: 0.4rem 0 0;
+  color: var(--spt-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.phone-country-field p.phone-country-feedback,
+.phone-country-field p.phone-country-status.is-error { color: var(--spt-danger-text); }
+
 .phone-country-flag {
-  width: 24px;
-  height: 24px;
-  flex: 0 0 24px;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -8,6 +8,7 @@ const config = [
       "node_modules/**",
       "public/**",
       "output/**",
+      ".impeccable/**",
     ],
   },
   ...nextVitals,

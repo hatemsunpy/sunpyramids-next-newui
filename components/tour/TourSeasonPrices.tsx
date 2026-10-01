@@ -6,8 +6,8 @@ export function TourSeasonPrices({ seasons }: { seasons: NonNullable<Tour["seaso
     <section className="tour-seasons" id="prices" aria-labelledby="tour-prices-title">
       <div className="container-shell">
         <div className="tour-section-heading">
-          <h2 id="tour-prices-title">Find your travel window</h2>
-          <p>Choose the travel window and group size that suits your plans.</p>
+          <h2 id="tour-prices-title">Tour Prices</h2>
+          <p>View tour prices by travel dates and group size.</p>
         </div>
         <div className="tour-season-grid">
           {seasons.map((season, index) => {
@@ -26,7 +26,7 @@ export function TourSeasonPrices({ seasons }: { seasons: NonNullable<Tour["seaso
             return (
               <article key={season.id || index} className="tour-season-card">
                 <header className="tour-season-head">
-                  <span>Travel window</span>
+                  <span>Prices for these dates</span>
                   <h3 className="tour-season-date">{seasonLabel}</h3>
                 </header>
                 <div className="tour-season-rates">

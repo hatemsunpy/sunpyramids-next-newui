@@ -6,7 +6,7 @@ export function TourHighlights({ tour, locale }: { tour: Tour | null; locale: Lo
   return (
     <section className="tour-highlights" id="highlights" aria-labelledby="tour-highlights-title">
       <div className="tour-editorial-heading tour-editorial-heading-split">
-        <h2 id="tour-highlights-title">The moments that define this tour</h2>
+        <h2 id="tour-highlights-title">Tour Highlights</h2>
         <p>A focused view of the places, experiences, and details that shape the journey.</p>
       </div>
       {tour?.highlights ? (

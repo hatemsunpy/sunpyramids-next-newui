@@ -972,15 +972,21 @@
 }
 
 @media (max-width: 720px) {
+  .site-shell-v2 .site-header-at-top {
+    padding-top: 0;
+  }
+
   .site-shell-v2 .header-frame,
   .site-shell-v2 .header-main,
   .site-shell-v2 .promo-strip {
-    width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
+    width: 100%;
   }
 
-  .site-shell-v2 .header-frame {
-    margin-inline: auto;
-    border-radius: 13px;
+  .site-shell-v2 .header-frame,
+  .site-shell-v2 .site-header-at-top .header-frame {
+    margin-inline: 0;
+    border-inline: 0;
+    border-radius: 0;
   }
 
   .site-shell-v2 .header-main {
