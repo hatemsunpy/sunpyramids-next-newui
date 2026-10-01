@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { PhoneCountryInput, type PhoneCountry, type PhoneCountryLoadState } from "@/components/PhoneCountryInput";
+import { PhoneCountryInput, phoneCountryCopy, type PhoneCountry, type PhoneCountryLoadState } from "@/components/PhoneCountryInput";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { apiGet, apiPost } from "@/lib/client-api";
 import { generateRecaptchaToken } from "@/lib/recaptcha";
@@ -29,7 +29,6 @@ export function ContactForm({
   const [countryLoadState, setCountryLoadState] = useState<PhoneCountryLoadState>("loading");
 
   useEffect(() => {
-    if (!isTourInquiry) return;
     let active = true;
     apiGet<{ data?: PhoneCountry[] }>("countries", locale, false)
       .then((response) => {
@@ -44,12 +43,13 @@ export function ContactForm({
         setCountryLoadState("error");
       });
     return () => { active = false; };
-  }, [isTourInquiry, locale]);
+  }, [locale]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
-    if (isTourInquiry && countryLoadState !== "ready") {
+    if (!formElement.reportValidity()) return;
+    if (countryLoadState !== "ready") {
       setStatus("error");
       return;
     }
@@ -112,19 +112,7 @@ export function ContactForm({
               name="phone"
               countries={countries}
               loadState={countryLoadState}
-              copy={{
-                placeholder: copy.phonePlaceholder,
-                selectCallingCode: copy.selectCallingCode,
-                callingCode: copy.callingCode,
-                searchCountryCode: copy.searchCountryCode,
-                noCountriesFound: copy.noCountriesFound,
-                loadingCountryCodes: copy.loadingCountryCodes,
-                countryCodesUnavailable: copy.countryCodesUnavailable,
-                phoneWithoutCountryCode: copy.phoneWithoutCountryCode,
-                enterPhoneDigits: copy.enterPhoneDigits,
-                enterValidPhone: copy.enterValidPhone,
-                countryCallingCodes: copy.countryCallingCodes,
-              }}
+              copy={phoneCountryCopy(copy)}
               required
             />
           </div>
@@ -146,7 +134,11 @@ export function ContactForm({
             <input name="email" type="email" placeholder={copy.email} autoComplete="email" required />
           </div>
           <div className="form-field">
-            <input name="phone" type="tel" placeholder={copy.phone} autoComplete="tel" required />
+            <label htmlFor="contact-phone">{copy.phone} <span className="phone-required" aria-hidden="true">*</span></label>
+            <PhoneCountryInput
+              id="contact-phone" countries={countries} loadState={countryLoadState}
+              copy={phoneCountryCopy(copy)} required
+            />
           </div>
           <div className="form-field">
             <input name="country" placeholder={copy.country} autoComplete="country-name" required />
@@ -156,7 +148,7 @@ export function ContactForm({
           </div>
         </>
       )}
-      <button className="btn-primary" type="submit" disabled={status === "loading" || (isTourInquiry && countryLoadState !== "ready")}>
+      <button className="btn-primary" type="submit" disabled={status === "loading" || countryLoadState !== "ready"}>
         {status === "loading" ? copy.sending : submitLabel || (isTourInquiry ? copy.submit : copy.sendMessage)}
       </button>
       <div aria-live="polite">

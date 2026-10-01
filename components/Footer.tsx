@@ -37,7 +37,7 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
             <p>We would be happy to help you.</p>
           </div>
         </div>
-        <Link className="footer-plan-link" href={withLocale("/make-your-trip", locale)}>
+        <Link className="btn-primary footer-plan-link" href={withLocale("/make-your-trip", locale)}>
           {copy.makeTrip}<span aria-hidden="true">↗</span>
         </Link>
       </div>

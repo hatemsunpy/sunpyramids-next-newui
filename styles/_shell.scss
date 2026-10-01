@@ -445,13 +445,16 @@
   padding: 0.8rem 1.15rem 0.8rem 1.35rem;
   color: #1d1f1f;
   font-weight: 700;
-  transition: background 180ms ease, transform 180ms var(--spt-ease);
+  box-shadow: none;
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
 }
 
 .site-shell-v2 .footer-plan-link:hover {
   background: var(--spt-amber-hover);
   color: #1d1f1f;
-  transform: translateY(-2px);
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgb(13 43 120 / 14%);
+  transform: translateY(-1px);
 }
 
 .site-shell-v2 .footer-grid {
@@ -696,6 +699,13 @@
   .site-shell-v2 .bottom-bar a.is-active .bottom-home-icon {
     fill: var(--spt-anchor);
     color: var(--spt-anchor);
+  }
+}
+
+@media (max-width: 1023px) {
+  // Tour pages use their own fixed booking bar instead of mobile shortcuts.
+  .site-shell-v2:has(.tour-page) > .bottom-bar {
+    display: none;
   }
 }
 

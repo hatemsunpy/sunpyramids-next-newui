@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { apiGet, apiPost } from "@/lib/client-api";
 import { withLocale } from "@/lib/locales";
@@ -23,7 +23,7 @@ function listData<T>(response: ApiListResponse<T>): T[] {
 
 
 
-export function HomeSearchShortcuts({ locale = "en", destinations, rootCategories = emptyRootCategories, modeOnly }: { locale?: Locale; destinations: ApiPage[]; rootCategories?: ApiPage[]; modeOnly?: SearchMode }) {
+export function HomeSearchShortcuts({ locale = "en", destinations, rootCategories = emptyRootCategories, modeOnly, makeButtonIcon }: { locale?: Locale; destinations: ApiPage[]; rootCategories?: ApiPage[]; modeOnly?: SearchMode; makeButtonIcon?: ReactNode }) {
   const router = useRouter();
   const copy = homeCopy(locale);
   const [mode, setMode] = useState<SearchMode>(modeOnly ?? "make");
@@ -154,7 +154,7 @@ export function HomeSearchShortcuts({ locale = "en", destinations, rootCategorie
             </div>
           ) : null}
           {makeType === "notSureYet" ? <label><span>{copy.manyDays}</span><input min="1" name="days" required type="number" placeholder={copy.manyDays} /></label> : null}
-          <button className="btn-primary" type="submit">{copy.makeTripShort}</button>
+          <button className="btn-primary" type="submit">{copy.makeTripShort}{makeButtonIcon}</button>
         </div>
       ) : null}
       {mode === "find" ? <>

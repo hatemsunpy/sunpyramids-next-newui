@@ -20,7 +20,7 @@ export function RelatedTours({ tours, locale }: { tours: Tour[]; locale: Locale 
     <section className="tour-related" id="related-tours" aria-labelledby="tour-related-title">
       <div className="container-shell">
         <div className="tour-section-heading tour-section-heading-related">
-          <h2 id="tour-related-title">Where will Egypt take you next?</h2>
+          <h2 id="tour-related-title">Related Tours</h2>
           <p>Continue with more journeys selected from the same part of your travel story.</p>
         </div>
         <div className="tour-related-scroll">

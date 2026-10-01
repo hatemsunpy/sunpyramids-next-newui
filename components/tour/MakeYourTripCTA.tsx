@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { HomeSearchShortcuts } from "@/components/HomeSearchShortcuts";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
 import type { Locale, Tour } from "@/types/api";
@@ -32,6 +33,7 @@ export function MakeYourTripCTA({ tour, locale }: { tour: Tour | null; locale: L
             locale={locale}
             destinations={(tour?.destinations ?? []).map(({ id, name, title: destinationTitle, slug }) => ({ id, name, title: destinationTitle, slug }))}
             modeOnly="make"
+            makeButtonIcon={<ArrowRight size={18} strokeWidth={2} aria-hidden="true" />}
           />
           <div className="tour-make-trip-actions">
             <a

@@ -7,6 +7,7 @@ import { generateRecaptchaToken } from "@/lib/recaptcha";
 import { withLocale } from "@/lib/locales";
 import type { Locale } from "@/types/api";
 import { homeCopy } from "@/lib/home-copy";
+import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 
 export function HomeNeedHelpForm({ locale = "en" }: { locale?: Locale }) {
   const copy = homeCopy(locale);
@@ -16,6 +17,7 @@ export function HomeNeedHelpForm({ locale = "en" }: { locale?: Locale }) {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
     setPending(true);
     setFailed(false);
     const form = new FormData(event.currentTarget);
@@ -41,9 +43,12 @@ export function HomeNeedHelpForm({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <form className="home-help-form" onSubmit={submit}>
-      <label><span>{copy.fullName}</span><input name="name" required autoComplete="name" /></label>
-      <label><span>{copy.nationality}</span><input name="country" required autoComplete="country-name" /></label>
-      <label><span>{copy.phone}</span><input name="phone" type="tel" required autoComplete="tel" /></label>
+      <label><span className="home-help-label">{copy.fullName}</span><input name="name" required autoComplete="name" /></label>
+      <label><span className="home-help-label">{copy.nationality}</span><input name="country" required autoComplete="country-name" /></label>
+      <div className="home-help-phone">
+        <label htmlFor="home-help-phone"><span className="home-help-label">{copy.phone}<span className="phone-required" aria-hidden="true">*</span></span></label>
+        <ApiPhoneCountryInput id="home-help-phone" locale={locale} required />
+      </div>
       <button className="btn-primary" disabled={pending} aria-busy={pending} type="submit">{copy.contactNow}</button>
       {failed ? <p role="alert">Something went wrong. Please try again.</p> : null}
     </form>

@@ -33,6 +33,22 @@ export type PhoneCountryInputCopy = {
   countryCallingCodes: string;
 };
 
+export function phoneCountryCopy(copy: Record<string, string>): PhoneCountryInputCopy {
+  return {
+    placeholder: copy.phonePlaceholder,
+    selectCallingCode: copy.selectCallingCode,
+    callingCode: copy.callingCode,
+    searchCountryCode: copy.searchCountryCode,
+    noCountriesFound: copy.noCountriesFound,
+    loadingCountryCodes: copy.loadingCountryCodes,
+    countryCodesUnavailable: copy.countryCodesUnavailable,
+    phoneWithoutCountryCode: copy.phoneWithoutCountryCode,
+    enterPhoneDigits: copy.enterPhoneDigits,
+    enterValidPhone: copy.enterValidPhone,
+    countryCallingCodes: copy.countryCallingCodes,
+  };
+}
+
 type PhoneCountryInputProps = {
   countries: PhoneCountry[];
   copy: PhoneCountryInputCopy;
@@ -40,6 +56,7 @@ type PhoneCountryInputProps = {
   loadState: PhoneCountryLoadState;
   name?: string;
   required?: boolean;
+  defaultValue?: string;
 };
 
 const visitorCountryEndpoint =
@@ -75,33 +92,48 @@ export function PhoneCountryInput({
   loadState,
   name = "phone",
   required = false,
+  defaultValue = "",
 }: PhoneCountryInputProps) {
   const availableCountries = React.useMemo(
     () => countries.filter((country) => country.name && country.phone_code),
     [countries]
   );
-  const [selectedKey, setSelectedKey] = React.useState("");
-  const [nationalNumber, setNationalNumber] = React.useState("");
+  const initialCountry = availableCountries
+    .filter((country) => defaultValue.startsWith(dialCode(country)))
+    .sort((a, b) => dialCode(b).length - dialCode(a).length)[0];
+  const initialNumber = initialCountry
+    ? defaultValue.slice(dialCode(initialCountry).length).replace(/\D/g, "")
+    : defaultValue;
+  const [selectedKey, setSelectedKey] = React.useState(initialCountry ? countryKey(initialCountry) : "");
+  const [nationalNumber, setNationalNumber] = React.useState(initialNumber);
+  const [edited, setEdited] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const searchRef = React.useRef<HTMLInputElement>(null);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const numberRef = React.useRef<HTMLInputElement>(null);
   const hasUserSelectedRef = React.useRef(false);
   const geoLookupStartedRef = React.useRef(false);
 
   const selectedCountry =
-    availableCountries.find((country) => countryKey(country) === selectedKey) ??
-    availableCountries[0] ??
-    null;
+    defaultValue && !initialCountry && !selectedKey
+      ? null
+      : availableCountries.find((country) => countryKey(country) === selectedKey) ??
+        availableCountries[0] ??
+        null;
   const selectedDialCode = dialCode(selectedCountry);
   const expectedLength = Number(selectedCountry?.length);
   const hasExpectedLength = Number.isInteger(expectedLength) && expectedLength > 0;
   const hasLengthError =
-    nationalNumber.length > 0 && hasExpectedLength && nationalNumber.length !== expectedLength;
-  const submittedPhone = nationalNumber ? `${selectedDialCode}${nationalNumber}` : "";
+    (edited || !defaultValue) && nationalNumber.length > 0 && hasExpectedLength && nationalNumber.length !== expectedLength;
+  // Preserve the backend profile value exactly until the visitor edits it.
+  const submittedPhone = defaultValue && !edited
+    ? defaultValue
+    : nationalNumber ? `${selectedDialCode}${nationalNumber}` : "";
   const feedbackId = `${id}-feedback`;
   const statusId = `${id}-country-status`;
   const isReady = loadState === "ready" && availableCountries.length > 0;
+  const countryStatus = loadState === "ready" && !availableCountries.length ? "error" : loadState;
 
   const filteredCountries = React.useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
@@ -120,6 +152,7 @@ export function PhoneCountryInput({
   const selectCountry = React.useCallback(
     (country: PhoneCountry) => {
       hasUserSelectedRef.current = true;
+      setEdited(true);
       setSelectedKey(countryKey(country));
       setQuery("");
       setOpen(false);
@@ -137,6 +170,7 @@ export function PhoneCountryInput({
   React.useEffect(() => {
     if (
       availableCountries.length === 0 ||
+      defaultValue ||
       hasUserSelectedRef.current ||
       geoLookupStartedRef.current
     ) {
@@ -201,7 +235,24 @@ export function PhoneCountryInput({
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [availableCountries]);
+  }, [availableCountries, defaultValue]);
+
+  React.useEffect(() => {
+    const input = numberRef.current;
+    if (!input) return;
+    // Disabled controls are excluded from native form validation. Keep the
+    // number in validation so a failed countries request cannot send an empty phone.
+    input.setCustomValidity(!isReady
+      ? copy.countryCodesUnavailable
+      : !selectedCountry && edited ? copy.selectCallingCode : "");
+  }, [isReady, selectedCountry, edited, copy.countryCodesUnavailable, copy.selectCallingCode]);
+
+  React.useEffect(() => {
+    const form = numberRef.current?.form;
+    const reset = () => { setNationalNumber(initialNumber); setEdited(false); };
+    form?.addEventListener("reset", reset);
+    return () => form?.removeEventListener("reset", reset);
+  }, [initialNumber]);
 
   function handleSearchKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Escape") {
@@ -260,7 +311,7 @@ export function PhoneCountryInput({
                   ? `${copy.callingCode}: ${selectedCountry.name} ${selectedDialCode}`
                   : copy.selectCallingCode
               }
-              aria-describedby={loadState !== "ready" ? statusId : undefined}
+              aria-describedby={!isReady ? statusId : undefined}
               disabled={!isReady}
             >
               <span
@@ -328,6 +379,7 @@ export function PhoneCountryInput({
         </DropdownMenu>
 
         <input
+          ref={numberRef}
           id={id}
           className="phone-country-number"
           type="tel"
@@ -335,14 +387,19 @@ export function PhoneCountryInput({
           autoComplete="tel-national"
           placeholder={copy.placeholder}
           value={nationalNumber}
-          onChange={(event) => setNationalNumber(event.target.value.replace(/\D/g, ""))}
+          onChange={(event) => {
+            if (!isReady) return;
+            hasUserSelectedRef.current = true;
+            setEdited(true);
+            setNationalNumber(event.target.value.replace(/\D/g, ""));
+          }}
           required={required}
-          disabled={!isReady}
-          pattern={hasExpectedLength ? `[0-9]{${expectedLength}}` : "[0-9]+"}
+          aria-disabled={!isReady || undefined}
+          pattern={defaultValue && !edited ? undefined : hasExpectedLength ? `[0-9]{${expectedLength}}` : "[0-9]+"}
           title={validationMessage}
           aria-label={copy.phoneWithoutCountryCode}
           aria-invalid={hasLengthError || undefined}
-          aria-describedby={hasLengthError ? feedbackId : loadState !== "ready" ? statusId : undefined}
+          aria-describedby={hasLengthError ? feedbackId : !isReady ? statusId : undefined}
         />
       </div>
 
@@ -352,13 +409,13 @@ export function PhoneCountryInput({
         </p>
       ) : null}
 
-      {loadState !== "ready" ? (
+      {!isReady ? (
         <p
           id={statusId}
-          className={`phone-country-status ${loadState === "error" ? "is-error" : ""}`}
-          role={loadState === "error" ? "alert" : "status"}
+          className={`phone-country-status ${countryStatus === "error" ? "is-error" : ""}`}
+          role={countryStatus === "error" ? "alert" : "status"}
         >
-          {loadState === "error" ? copy.countryCodesUnavailable : copy.loadingCountryCodes}
+          {countryStatus === "error" ? copy.countryCodesUnavailable : copy.loadingCountryCodes}
         </p>
       ) : null}
     </div>

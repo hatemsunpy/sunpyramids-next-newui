@@ -1,0 +1,92 @@
+// The same glass rim and moving reflection used by the tour booking button.
+$button-targets: 'button:not([class*="backdrop"]):not([class*="overlay"]), a[role="button"], a[class*="btn-"], a[class*="-btn"], a[class*="-button"], a[class*="-cta"]';
+
+// Keep this positioning fallback below component rules for fixed/absolute buttons.
+:where(body) :where(#{$button-targets}) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+body :is(#{$button-targets})::before {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    7rem circle at var(--button-glass-x, 50%) var(--button-glass-y, 50%),
+    rgb(255 255 255 / 98%) 0,
+    rgb(255 255 255 / 56%) 18%,
+    rgb(255 255 255 / 14%) 44%,
+    transparent 72%
+  );
+  content: "";
+  opacity: 0.44;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+// Desktop navigation keeps its existing ::after active-page underline.
+body :is(#{$button-targets}):not(.dropdown > button)::after {
+  position: absolute;
+  inset: -80% -45%;
+  z-index: 2;
+  border-radius: inherit;
+  background: linear-gradient(112deg, transparent 38%, rgb(255 255 255 / 28%) 50%, transparent 62%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-48%) rotate(8deg);
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+}
+
+body :is(#{$button-targets}):not(:disabled):not([aria-disabled="true"]):focus-visible::before {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body :is(#{$button-targets}):not(:disabled):not([aria-disabled="true"]):hover::before {
+    opacity: 1;
+  }
+
+  body :is(#{$button-targets}):not(.dropdown > button):not(:disabled):not([aria-disabled="true"]):hover::after {
+    opacity: 1;
+    transform: translateX(48%) rotate(8deg);
+  }
+
+  // Use the free pseudo-element for the reflection on navigation buttons.
+  body .dropdown > button::before {
+    padding: 0;
+    background: linear-gradient(112deg, transparent 38%, rgb(255 255 255 / 28%) 50%, transparent 62%) -100% 0 / 250% 100% no-repeat;
+    opacity: 0;
+    -webkit-mask: none;
+    mask: none;
+    transition: background-position 650ms cubic-bezier(0.16, 1, 0.3, 1), opacity 220ms ease;
+  }
+
+  body .dropdown > button:not(:disabled):not([aria-disabled="true"]):hover::before {
+    background-position: 200% 0;
+    opacity: 1;
+  }
+}
+
+body :is(#{$button-targets}):is(:disabled, [aria-disabled="true"])::before,
+body :is(#{$button-targets}):not(.dropdown > button):is(:disabled, [aria-disabled="true"])::after {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body :is(#{$button-targets})::before,
+  body .dropdown > button::before {
+    transition: none;
+  }
+
+  body :is(#{$button-targets}):not(.dropdown > button)::after {
+    display: none;
+  }
+}

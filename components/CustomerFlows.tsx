@@ -26,8 +26,10 @@ import { uiCopy } from "@/lib/ui-copy";
 import { siteContact } from "@/lib/site-contact";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
+import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 import {
   PhoneCountryInput,
+  phoneCountryCopy,
   type PhoneCountry,
   type PhoneCountryLoadState,
 } from "@/components/PhoneCountryInput";
@@ -433,6 +435,7 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
 
   async function updateProfile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
     setState("loading");
     setMessage("");
     const form = new FormData(event.currentTarget);
@@ -531,7 +534,7 @@ export function AccountFlow({ view = "profile", locale = "en" }: { view?: string
             </div>
             <div className="account-field">
               <label htmlFor="profile-phone">{copy.phone}</label>
-              <input id="profile-phone" name="phone" placeholder={copy.phone} defaultValue={user?.phone || ""} autoComplete="tel" />
+              <ApiPhoneCountryInput id="profile-phone" locale={locale} defaultValue={user?.phone || ""} />
             </div>
             <div className="account-field">
               <label>{copy.birthDate}</label>
@@ -855,6 +858,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
 
   async function checkoutSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
     if (!selected) {
       setState("error");
       setMessage("Currency options are temporarily unavailable. Please try again before checkout.");
@@ -1058,7 +1062,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                 </div>
                 <div className="form-group">
                   <label htmlFor="checkout-phone">{copy.phone} <span className="req">*</span></label>
-                  <input id="checkout-phone" name="phone" type="tel" placeholder={copy.phone} required />
+                  <ApiPhoneCountryInput id="checkout-phone" locale={locale} required />
                 </div>
                 <div className="form-group">
                   <label htmlFor="checkout-country">{copy.country} <span className="req">*</span></label>
@@ -1413,7 +1417,8 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isCar && countryLoadState !== "ready") {
+    if (!event.currentTarget.reportValidity()) return;
+    if (countryLoadState !== "ready") {
       setState("error");
       setMessage(copy.countryCodesUnavailable);
       return;
@@ -2013,37 +2018,11 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
               <span>{copy.phone || "Phone Number"}<span className="required-mark">*</span></span>
             </label>
             <div className="input-wrap">
-              {isCar ? (
-                <input
-                  id="planner-phone"
-                  name="phone"
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  autoComplete="tel"
-                  required
-                />
-              ) : (
-                <PhoneCountryInput
-                  id="planner-phone"
-                  name="phone"
-                  countries={countries}
-                  loadState={countryLoadState}
-                  copy={{
-                    placeholder: copy.phonePlaceholder,
-                    selectCallingCode: copy.selectCallingCode,
-                    callingCode: copy.callingCode,
-                    searchCountryCode: copy.searchCountryCode,
-                    noCountriesFound: copy.noCountriesFound,
-                    loadingCountryCodes: copy.loadingCountryCodes,
-                    countryCodesUnavailable: copy.countryCodesUnavailable,
-                    phoneWithoutCountryCode: copy.phoneWithoutCountryCode,
-                    enterPhoneDigits: copy.enterPhoneDigits,
-                    enterValidPhone: copy.enterValidPhone,
-                    countryCallingCodes: copy.countryCallingCodes,
-                  }}
-                  required
-                />
-              )}
+              <PhoneCountryInput
+                id="planner-phone" name="phone"
+                countries={countries} loadState={countryLoadState}
+                copy={phoneCountryCopy(copy)} required
+              />
             </div>
           </div>
 
@@ -2093,7 +2072,7 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
         <button
           className="btn-submit-planner"
           type="submit"
-          disabled={state === "loading" || (!isCar && countryLoadState !== "ready")}
+          disabled={state === "loading" || countryLoadState !== "ready"}
         >
           {state === "loading" ? (
             <span>Securing Request...</span>
