@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { apiGet, apiPost } from "@/lib/client-api";
 import { withLocale } from "@/lib/locales";
 import type { ApiPage, Locale } from "@/types/api";

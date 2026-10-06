@@ -1,0 +1,285 @@
+.site-shell-v2 .sustainability-page {
+  .sustainability-overview {
+    padding-block: clamp(2rem, 4vw, 4rem);
+    background: var(--spt-surface);
+  }
+
+  .sustainability-overview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+
+    h2 {
+      margin: 0 0 clamp(1.5rem, 3vw, 3rem);
+      color: var(--spt-ink);
+      font-size: clamp(1.75rem, 3.2vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+
+      span {
+        color: var(--spt-amber);
+      }
+    }
+
+    p {
+      margin: 0 0 1.5rem;
+      color: var(--spt-ink);
+      font-size: clamp(1rem, 1.5vw, 1.5rem);
+      font-weight: 500;
+      line-height: 1.5;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  .editorial-main-section {
+    background: var(--spt-ground);
+  }
+
+  .sustainability-tab-list {
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    touch-action: pan-x pan-y pinch-zoom;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-inline: contain;
+    user-select: none;
+    cursor: grab;
+    padding: 4px 4px 0;
+    margin-inline: clamp(0rem, 3vw, 2rem);
+    scrollbar-width: thin;
+    scrollbar-color: var(--spt-border) transparent;
+
+    &.is-dragging,
+    &.is-dragging button {
+      cursor: grabbing;
+    }
+
+    button {
+      flex: 0 0 auto;
+      min-height: 64px;
+      padding: 1rem 1.5rem;
+      border: 0;
+      border-radius: 24px 24px 0 0;
+      background: transparent;
+      color: var(--spt-ink);
+      font: inherit;
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.4;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &[aria-selected="true"] {
+        background: var(--spt-surface);
+        color: var(--spt-link);
+      }
+
+      &:hover {
+        color: var(--spt-link);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--spt-focus);
+        outline-offset: -5px;
+      }
+    }
+  }
+
+  .sustainability-tab-panel {
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border-radius: 32px;
+    background: var(--spt-surface);
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--spt-focus);
+      outline-offset: 3px;
+    }
+
+    .editorial-prose {
+      max-width: none;
+      font-size: 1.1rem;
+      line-height: 1.7;
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      li {
+        margin-bottom: 0.25rem;
+      }
+
+      > div > :last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .sustainability-certification-section {
+    padding-block: clamp(2rem, 4vw, 4rem);
+    background: var(--spt-surface);
+  }
+
+  .sustainability-certification-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+
+    > div {
+      min-width: 0;
+    }
+
+    h2 {
+      max-width: 16ch;
+      margin: 0 0 1.5rem;
+      color: var(--spt-ink);
+      font-size: clamp(1.75rem, 3.2vw, 3rem);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+
+      span {
+        color: var(--spt-amber);
+      }
+    }
+  }
+
+  .sustainability-certification-copy {
+    max-width: 70ch;
+    padding-inline-start: 1rem;
+    // The blue rule is part of the supplied original certification section.
+    border-inline-start: 4px solid var(--spt-link);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .impact-related-content .editorial-related-section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .sustainability-reviews {
+    padding-block: 2rem;
+    background: var(--spt-surface);
+  }
+
+  @at-root .site-shell-v2 :is(.sustainability-help-section, .legal-help-section) {
+    padding-block: clamp(2rem, 4vw, 4rem);
+    background: var(--spt-surface);
+
+    .home-help-panel-v2 {
+      padding: clamp(1.5rem, 4vw, 3rem);
+      border-radius: 32px;
+      background: #193b96 url("/images/linearNeedHelp.webp") center / cover no-repeat;
+
+      &::after { display: none; }
+
+      h2 {
+        max-width: none;
+        margin-bottom: 2rem;
+        color: white;
+        text-align: center;
+        font-size: clamp(1.75rem, 3vw, 3rem);
+        line-height: 1.2;
+      }
+    }
+
+    .home-help-form {
+      align-items: start;
+      gap: 1rem;
+
+      .home-help-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .home-help-phone > label,
+      .home-help-nationality > label { margin: 0; }
+
+      input[name="name"],
+      .search-select-trigger,
+      .phone-country-input,
+      .btn-primary { min-height: 60px; }
+
+      .phone-country-number { min-height: 58px; }
+
+      .btn-primary {
+        align-self: start;
+        padding-inline: 2rem;
+        border-radius: 999px;
+      }
+
+      .phone-country-status,
+      .phone-country-feedback,
+      [role="alert"] { color: white; }
+    }
+  }
+
+  .sustainability-certificate {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 920px) {
+    .sustainability-overview-grid {
+      grid-template-columns: minmax(0, 1fr);
+
+      img {
+        width: min(100%, 300px);
+        justify-self: center;
+      }
+    }
+
+    .sustainability-certification-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .sustainability-certification-copy {
+      font-size: 1rem;
+      padding-inline-start: 0.75rem;
+    }
+
+    .sustainability-tab-list {
+      margin-inline: 0;
+
+      button {
+        min-height: 52px;
+        padding: 0.875rem 1rem;
+        font-size: 0.95rem;
+        border-radius: 20px 20px 0 0;
+      }
+    }
+
+    .sustainability-tab-panel {
+      border-radius: 20px;
+
+      .editorial-prose {
+        font-size: 1rem;
+      }
+    }
+  }
+}

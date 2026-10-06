@@ -19,6 +19,7 @@ import { WhyTravelWithSunPyramids } from "@/components/WhyTravelWithSunPyramids"
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { homeCopy } from "@/lib/home-copy";
 import { homeSectionLabels } from "@/lib/home-section-labels";
+import { getImageBlurPlaceholders } from "@/lib/image-blur.server";
 
 const gallery = [
   ["/images/shorts.webp", "/images/shorts-gallary.webp", "YouTube Shorts", "shorts"],
@@ -38,7 +39,7 @@ function ShortcutIcon({ type }: { type: "make" | "find" | "car" }) {
   return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 15 8-3 3-8 2 1-1 7 5 3-1 2-6-1-3 5-2-1 1-5-5 2-1-2Z" /></svg>;
 }
 
-export function HomePage({
+export async function HomePage({
   page,
   tours,
   popularTours,
@@ -68,6 +69,7 @@ export function HomePage({
   const heroImages = page?.gallery?.length
     ? page.gallery
     : [page?.banner || page?.image || "/images/mainBanner.webp"];
+  const heroBlurImages = await getImageBlurPlaceholders(heroImages);
   const heroCopySlides = [
     { title: copy.heroMainTitle, accent: copy.heroMainAccent, description: copy.heroMainDescription },
     { title: copy.heroSlide1Title, accent: copy.heroSlide1Accent, description: copy.heroSlide1Description },
@@ -85,7 +87,7 @@ export function HomePage({
   return (
     <main className="home-page home-page--redesign">
       <section className="home-hero-v2">
-        <HomeHeroScene images={heroImages} alt="Sun Pyramids Tours Egypt experience" slides={heroCopySlides} />
+        <HomeHeroScene images={heroImages} blurImages={heroBlurImages} alt="Sun Pyramids Tours Egypt experience" slides={heroCopySlides} />
         <nav className="home-mobile-shortcuts" aria-label="Quick trip actions">
           <Link href={withLocale("/make-your-trip", locale)}><ShortcutIcon type="make" /><strong>{copy.makeTripShort}</strong></Link>
           <Link href={withLocale("/trips", locale)}><ShortcutIcon type="find" /><strong>{copy.findTripShort}</strong></Link>

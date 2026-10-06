@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";

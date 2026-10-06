@@ -1,9 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { headers } from "next/headers";
 import { HtmlLangSynchronizer } from "@/components/HtmlLangSynchronizer";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 import { DatePickerEnhancer } from "@/components/DatePickerEnhancer";
 import { ButtonGlassEffects } from "@/components/ButtonGlassEffects";
+import { ImageBlurEffects } from "@/components/ImageBlurEffects";
+import { NavigationLoadingBar } from "@/components/NavigationLoadingBar";
 import { isLocale } from "@/lib/locales";
 import "./globals.scss";
 import "@/styles/batch-one.scss";
@@ -42,9 +45,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <Suspense fallback={null}><NavigationLoadingBar /></Suspense>
         <HtmlLangSynchronizer />
         <DatePickerEnhancer />
         <ButtonGlassEffects />
+        <ImageBlurEffects />
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-KDF33T7"

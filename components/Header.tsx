@@ -340,6 +340,7 @@ export function Header({
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [isTop, setIsTop] = useState(true);
+  const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   // Instance-local ownership for Header Voice: each search form owns
@@ -350,6 +351,23 @@ export function Header({
   const mobileInputRef = useRef<HTMLInputElement>(null);
   const isHome = pathname === "/" || pathname === `/${locale}`;
   const firstStyle = isHome && isTop;
+
+  useEffect(() => {
+    const header = headerRef.current;
+    const shell = header?.closest<HTMLElement>(".site-shell-v2");
+    if (!header || !shell) return;
+
+    const updateHeight = () => {
+      shell.style.setProperty("--spt-image-header-height", `${header.getBoundingClientRect().height}px`);
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(header, { box: "border-box" });
+    return () => {
+      observer.disconnect();
+      shell.style.removeProperty("--spt-image-header-height");
+    };
+  }, [pathname]);
 
   const handleScroll = useCallback(() => {
     const mobile = window.innerWidth < 512;
@@ -490,7 +508,7 @@ export function Header({
   });
 
   return (
-    <header className={`site-header ${isHome ? "site-header-home" : ""} ${firstStyle ? "site-header-at-top" : ""} ${menuOpen || langOpen ? "site-header-modal-open" : ""}`}>
+    <header ref={headerRef} className={`site-header ${isHome ? "site-header-home" : ""} ${firstStyle ? "site-header-at-top" : ""} ${menuOpen || langOpen ? "site-header-modal-open" : ""}`}>
       <div className="header-frame">
         <div className="header-main">
           <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" className="header-logo">

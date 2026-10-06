@@ -28,7 +28,7 @@ async function submitHelpForm() {
   fireEvent.change(ui.container.querySelector('input[name="name"]')!, {
     target: { value: "Hatem Sunpyramids" },
   });
-  fireEvent.change(ui.container.querySelector('input[name="country"]')!, {
+  fireEvent.change(screen.getByRole("combobox", { name: "Nationality" }), {
     target: { value: "Egypt" },
   });
   fireEvent.change(screen.getByRole("textbox", { name: "Phone number without country code" }), {
@@ -42,7 +42,7 @@ it("opens the personalized thank-you page after a successful help request", asyn
 
   await waitFor(() => expect(apiPost).toHaveBeenCalledWith(
     "contact-requests",
-    expect.objectContaining({ name: "Hatem Sunpyramids", phone: "+201012345678" }),
+    expect.objectContaining({ name: "Hatem Sunpyramids", phone: "+201012345678", country: "Egypt" }),
     "en",
   ));
   expect(push).toHaveBeenCalledWith("/thankful?name=Hatem%20Sunpyramids");

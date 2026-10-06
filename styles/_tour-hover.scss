@@ -2,7 +2,7 @@
 // Keep these refinements local to tour pages on desktops with a mouse.
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .tour-page-redesign {
-    :is(.tour-info-card, .tour-overview-card, .tour-destination-story-item) {
+    :is(.tour-info-card, .tour-overview-card, .tour-destination-story-item:not(.has-image)) {
       transition: background-color 180ms ease;
 
       &:hover {

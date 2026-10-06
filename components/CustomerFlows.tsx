@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/types/api";

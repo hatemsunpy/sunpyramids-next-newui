@@ -12,8 +12,9 @@ import { TourPageNavigation } from "@/components/tour/TourPageNavigation";
 import { TourSeasonPrices } from "@/components/tour/TourSeasonPrices";
 import { TourSocialGallery } from "@/components/tour/TourSocialGallery";
 import type { Locale, Tour, TripTaxonomy } from "@/types/api";
+import { getImageBlurPlaceholders } from "@/lib/image-blur.server";
 
-export function TourPage({
+export async function TourPage({
   tour,
   relatedTours = [],
   locale = "en",
@@ -25,6 +26,9 @@ export function TourPage({
   taxonomy: TripTaxonomy;
 }) {
   const title = tour?.title || tour?.name || "";
+  const gallery = (tour?.gallery?.length ? tour.gallery : [tour?.featured_image])
+    .filter((src): src is string => Boolean(src));
+  const blurImages = await getImageBlurPlaceholders(gallery.slice(0, 4));
   const hasOverview = Boolean(
     tour?.overview
       || tour?.duration
@@ -44,7 +48,7 @@ export function TourPage({
       <TourBreadcrumb title={title} locale={locale} tour={tour} taxonomy={taxonomy} />
       <section className="tour-page-shell">
         <div className="tour-hero-stage">
-          <TourGallery tour={tour} locale={locale} />
+          <TourGallery tour={tour} locale={locale} blurImages={blurImages} />
           <TourHero tour={tour} title={title} />
         </div>
         <TourPageNavigation

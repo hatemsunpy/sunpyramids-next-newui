@@ -11,10 +11,12 @@ export type HomeHeroCopySlide = {
 
 export function HomeHeroScene({
   images,
+  blurImages,
   alt,
   slides,
 }: {
   images: string[];
+  blurImages: Record<string, string>;
   alt: string;
   slides: HomeHeroCopySlide[];
 }) {
@@ -80,6 +82,8 @@ export function HomeHeroScene({
             key={image}
             ref={index === 0 ? firstImageRef : undefined}
             src={image}
+            placeholder={blurImages[image] ? "blur" : "empty"}
+            blurDataURL={blurImages[image]}
             alt={alt}
             fill
             preload={index === 0}

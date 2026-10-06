@@ -567,21 +567,128 @@
   gap: 1.5rem;
 }
 
-.site-shell-v2 .whatsapp-float {
+.site-shell-v2 :is(.whatsapp-float, .accessible-travel-widget) {
+  position: fixed;
   right: clamp(1rem, 2.5vw, 2rem);
-  bottom: 1.5rem;
   z-index: 45;
+  display: grid;
+  place-items: center;
   width: 52px;
   height: 52px;
-  border: 4px solid white;
+  border: 0;
   border-radius: 50%;
-  background: #25d366;
   box-shadow: 0 6px 8px rgb(0 0 0 / 18%);
 }
 
+.site-shell-v2 .whatsapp-float {
+  bottom: 1.5rem;
+  background: #25d366;
+}
+
+.site-shell-v2 .accessible-travel-widget {
+  bottom: calc(1.5rem + 64px);
+}
+
+.site-shell-v2 .accessible-travel-float {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--spt-anchor);
+  box-shadow: inset 0 4px 8px rgb(255 255 255 / 25%), inset 0 -4px 8px rgb(0 0 0 / 20%);
+  transition: transform 300ms ease;
+}
+
+.site-shell-v2 .accessible-travel-widget:is(:hover, :focus-within) .accessible-travel-float {
+  transform: rotate(-20deg);
+}
+
+.site-shell-v2 .accessible-travel-popup {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: min(800px, calc(100vw - 4rem));
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--spt-border);
+  border-radius: 16px;
+  background: var(--spt-surface-raised);
+  color: var(--spt-ink);
+  text-align: center;
+  box-shadow: 0 20px 40px rgb(0 0 0 / 15%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.95);
+  transform-origin: bottom right;
+  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms;
+}
+
+.site-shell-v2 .accessible-travel-popup::before {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 14px;
+}
+
+.site-shell-v2 .accessible-travel-popup::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 18px;
+  border: 8px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--spt-surface-raised);
+}
+
+.site-shell-v2 .accessible-travel-popup p {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.site-shell-v2 .accessible-travel-popup .btn {
+  min-width: 174px;
+  border-radius: 999px;
+}
+
+.site-shell-v2 .accessible-travel-widget:is(:hover, :focus-within) .accessible-travel-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-shell-v2 :is(.accessible-travel-float, .accessible-travel-popup) {
+    transition: none;
+    transform: none;
+  }
+
+  .site-shell-v2 .accessible-travel-widget:is(:hover, :focus-within) .accessible-travel-float {
+    transform: none;
+  }
+}
+
+.site-shell-v2 .accessible-travel-float img {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0) invert(1);
+}
+
 .site-shell-v2 .whatsapp-float img {
-  width: 100%;
-  height: 100%;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+@media (max-width: 1023px) {
+  .site-shell-v2 .whatsapp-float {
+    display: none;
+  }
+
+  .site-shell-v2 .accessible-travel-widget {
+    bottom: calc(1.5rem + 64px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 .site-shell-v2 .bottom-bar {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 
 export function ThankfulGreeting({ template, fallback }: { template: string; fallback: string }) {
   const name = useSearchParams().get("name")?.trim().replace(/\s+/g, " ").slice(0, 100);

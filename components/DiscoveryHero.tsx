@@ -2,13 +2,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { Locale } from "@/types/api";
 import { DiscoveryHeroDescription } from "@/components/DiscoveryHeroDescription";
+import { getImageBlurDataURL } from "@/lib/image-blur.server";
+import { blurredImageBackground } from "@/lib/image-blur";
 
 export type BreadcrumbItem = {
   label: string;
   href?: string;
 };
 
-export function DiscoveryHero({
+export async function DiscoveryHero({
   title,
   breadcrumbs = [],
   eyebrow = "Sun Pyramids Tours",
@@ -30,11 +32,14 @@ export function DiscoveryHero({
   locale?: Locale | string;
 }) {
   const bannerImage = bgImage || "/images/mainBanner.webp";
+  const preview = await getImageBlurDataURL(bannerImage);
+  const backgroundImage = `url(${JSON.stringify(bannerImage)})${preview ? `, ${blurredImageBackground(preview)}` : ""}`;
 
   return (
     <header
       className="discovery-hero"
-      style={{ backgroundImage: `url(${JSON.stringify(bannerImage)})` }}
+      data-image-blur-preview={preview ? "" : undefined}
+      style={{ backgroundImage }}
     >
       <div className="discovery-hero-inner">
         {breadcrumbs.length > 0 && (

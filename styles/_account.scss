@@ -274,7 +274,7 @@
     height: 100svh;
     min-height: 38rem;
     overflow: hidden;
-    background: var(--spt-anchor-brand);
+    background: transparent;
     padding: 0;
   }
 
@@ -282,7 +282,7 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(180deg, rgba(10, 25, 66, 0.04) 48%, rgba(10, 25, 66, 0.78) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 48%, rgba(0, 0, 0, 0.78) 100%);
     content: "";
   }
 
@@ -343,7 +343,7 @@
     display: flex;
     min-height: 15rem;
     align-items: flex-end;
-    background-image: linear-gradient(90deg, rgba(8, 24, 65, 0.88), rgba(8, 24, 65, 0.18)), url("/images/Cairo_Egypt_Unsplash.webp");
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.18)), url("/images/Cairo_Egypt_Unsplash.webp"), var(--account-image-blur, none);
     background-position: center;
     background-size: cover;
     color: #ffffff;

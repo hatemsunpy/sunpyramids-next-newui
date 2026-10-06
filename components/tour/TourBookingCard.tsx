@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { ArrowRight, Bookmark, MessageCircle, Share2 } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { optionCost } from "@/components/CustomerFlows";

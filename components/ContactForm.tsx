@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { PhoneCountryInput, phoneCountryCopy, type PhoneCountry, type PhoneCountryLoadState } from "@/components/PhoneCountryInput";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { apiGet, apiPost } from "@/lib/client-api";

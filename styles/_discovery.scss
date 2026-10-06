@@ -12,7 +12,7 @@
     min-height: clamp(240px, 32vw, 380px);
     display: flex;
     align-items: flex-end;
-    background-color: #0b1a3d;
+    background-color: transparent;
     background-size: cover;
     background-position: center;
     color: #ffffff;
@@ -24,8 +24,8 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(13, 35, 89, 0.45) 0%,
-        rgba(10, 22, 54, 0.82) 100%
+        rgba(0, 0, 0, 0.25) 0%,
+        rgba(0, 0, 0, 0.65) 100%
       );
       z-index: 1;
     }
@@ -569,7 +569,7 @@
       overflow: hidden;
       border-radius: var(--spt-radius-card);
       aspect-ratio: 1.15 / 1;
-      background: #111;
+      background: transparent;
       box-shadow: 0 2px 8px rgba(16, 31, 64, 0.06);
       transition: transform 240ms var(--spt-ease), box-shadow 240ms ease;
 
@@ -613,7 +613,7 @@
         background: linear-gradient(
           180deg,
           rgba(0, 0, 0, 0.05) 30%,
-          rgba(10, 22, 54, 0.88) 100%
+          rgba(0, 0, 0, 0.88) 100%
         );
         z-index: 1;
         transition: background 240ms ease;
@@ -623,7 +623,7 @@
         background: linear-gradient(
           180deg,
           rgba(0, 0, 0, 0.1) 20%,
-          rgba(13, 35, 89, 0.92) 100%
+          rgba(0, 0, 0, 0.92) 100%
         );
       }
 
@@ -1113,9 +1113,61 @@
       .blogs-results .blogs-grid {
         grid-template-columns: 1fr;
       }
+
       .blogs-search-panel {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-radius: 16px;
+      }
+
+      .blogs-search-field {
+        min-height: 48px;
+        padding: 0 0.875rem;
+
+        svg {
+          display: none;
+        }
+
+        input {
+          min-width: 0;
+          font-size: 1rem;
+        }
+      }
+
+      .blogs-search-button {
+        flex: 0 0 48px;
+        width: 48px;
+        min-width: 48px;
+        min-height: 48px;
+      }
+
+      .blogs-filter-row {
+        gap: 1rem;
+        padding-top: 1.25rem;
+        overflow: visible;
+      }
+
+      .blogs-tags {
+        gap: 0.625rem;
+        padding: 0.25rem 0.25rem 0.5rem;
+
+        .blogs-tags-label,
+        button {
+          flex: 0 0 auto;
+        }
+
+        button {
+          min-height: 44px;
+          padding-inline: 1rem;
+        }
+      }
+
+      .blogs-sort .search-select-trigger {
+        min-height: 48px;
+        padding-inline: 1rem;
+        font-size: 0.95rem;
       }
     }
   }

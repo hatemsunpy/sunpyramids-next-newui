@@ -1,0 +1,83 @@
+.site-shell-v2:has(> #site-content > main > :is(.discovery-hero, .original-page-hero, .book-trip-hero, .page-hero, .editorial-hero, .planner-hero, .commerce-hero):first-child) {
+  --spt-image-header-height: 6rem;
+
+  .site-header {
+    padding-top: 0.75rem;
+    background: transparent;
+  }
+
+  .header-frame {
+    border-radius: 16px;
+  }
+
+  > #site-content {
+    margin-top: calc(-1 * var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .discovery-hero:first-child {
+    min-height: calc(clamp(240px, 32vw, 380px) + var(--spt-image-header-height));
+    padding-top: calc(clamp(3.5rem, 6vw, 5.5rem) + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .original-page-hero:first-child {
+    padding-top: calc(9rem + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .book-trip-hero:first-child {
+    padding-top: calc(clamp(3.5rem, 7vw, 6rem) + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .page-hero:first-child {
+    padding-top: calc(7rem + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .editorial-hero:first-child {
+    padding-top: calc(clamp(2rem, 4vw, 3.5rem) + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .editorial-hero--compact:first-child {
+    padding-top: calc(clamp(2rem, 3.5vw, 3rem) + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .planner-hero:first-child {
+    padding-top: calc(clamp(1.5rem, 3vw, 2.75rem) + var(--spt-image-header-height));
+  }
+
+  > #site-content > main > .commerce-hero:first-child {
+    padding-top: calc(clamp(2rem, 4vw, 3.25rem) + var(--spt-image-header-height));
+  }
+
+  @media (max-width: 720px) {
+    --spt-image-header-height: 4rem;
+
+    .site-header {
+      padding-top: 0;
+    }
+
+    .header-frame {
+      border-radius: 12px;
+    }
+  }
+}
+
+// Plain pages show their first section through the area around the white frame.
+.site-shell-v2:not(:has(> .site-header-home)):not(:has(> #site-content > main > :is(.discovery-hero, .original-page-hero, .book-trip-hero, .page-hero):first-child)) {
+  &:not(:has(> #site-content > .tour-page)) .site-header {
+    background: transparent;
+  }
+
+  .header-frame {
+    background: var(--spt-surface-raised);
+  }
+
+  .header-frame {
+    border: 1px solid var(--spt-border);
+    box-shadow: none;
+  }
+
+  @media (min-width: 721px) {
+    .header-frame {
+      border-radius: 16px;
+    }
+  }
+}
