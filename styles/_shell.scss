@@ -682,8 +682,12 @@
 }
 
 @media (max-width: 1023px) {
-  .site-shell-v2 :is(.whatsapp-float, .accessible-travel-widget) {
+  .site-shell-v2 .whatsapp-float {
     display: none;
+  }
+
+  .site-shell-v2 .accessible-travel-widget {
+    bottom: calc(1.5rem + 64px + env(safe-area-inset-bottom, 0px));
   }
 }
 
