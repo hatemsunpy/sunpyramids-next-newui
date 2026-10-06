@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import Link from "next/link";
 import { NavigationLoadingBar } from "@/components/NavigationLoadingBar";
 import { useProgressRouter } from "@/components/useProgressRouter";
 
@@ -18,10 +19,10 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
-function settle() { act(() => vi.advanceTimersByTime(300)); }
+function settle() { act(() => vi.advanceTimersByTime(350)); }
 
 it("keeps the bar pending through a slow link navigation and hides it after the route commits", () => {
-  const ui = render(<><NavigationLoadingBar /><a href="/accessible-travel">Accessible Travel</a></>);
+  const ui = render(<><NavigationLoadingBar /><Link href="/accessible-travel">Accessible Travel</Link></>);
   settle();
   expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   // Prevent jsdom's unsupported full-document navigation at the browser boundary.
@@ -30,7 +31,7 @@ it("keeps the bar pending through a slow link navigation and hides it after the 
   act(() => vi.advanceTimersByTime(15_000));
   expect(screen.getByRole("progressbar")).toHaveAttribute("data-state", "loading");
   route.pathname = "/accessible-travel";
-  ui.rerender(<><NavigationLoadingBar /><a href="/accessible-travel">Accessible Travel</a></>);
+  ui.rerender(<><NavigationLoadingBar /><Link href="/accessible-travel">Accessible Travel</Link></>);
   settle();
   expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
 });

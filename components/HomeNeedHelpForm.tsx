@@ -16,20 +16,22 @@ export function HomeNeedHelpForm({ locale = "en" }: { locale?: Locale }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [countries, setCountries] = useState<PhoneCountry[]>([]);
-  const [countryLoadState, setCountryLoadState] = useState<PhoneCountryLoadState>("loading");
+  const [countryResponse, setCountryResponse] = useState<{
+    locale: Locale; countries: PhoneCountry[]; loadState: PhoneCountryLoadState;
+  }>({ locale, countries: [], loadState: "loading" });
+  const countries = countryResponse.locale === locale ? countryResponse.countries : [];
+  const countryLoadState = countryResponse.locale === locale ? countryResponse.loadState : "loading";
 
   useEffect(() => {
     let active = true;
-    setCountryLoadState("loading");
     apiGet<{ data?: PhoneCountry[] }>("countries", locale, false)
       .then((response) => {
         if (!active) return;
         const loaded = Array.isArray(response.data) ? response.data : [];
-        setCountries(loaded);
-        setCountryLoadState(loaded.some((country) => country.name && country.phone_code) ? "ready" : "error");
+        setCountryResponse({ locale, countries: loaded,
+          loadState: loaded.some((country) => country.name && country.phone_code) ? "ready" : "error" });
       })
-      .catch(() => { if (active) setCountryLoadState("error"); });
+      .catch(() => { if (active) setCountryResponse({ locale, countries: [], loadState: "error" }); });
     return () => { active = false; };
   }, [locale]);
 

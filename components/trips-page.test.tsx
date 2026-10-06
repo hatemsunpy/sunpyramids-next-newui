@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createElement } from "react";
-import { cleanup, render, screen } from "@testing-library/react";
+import { createElement, type ReactNode } from "react";
+import { renderToReadableStream } from "react-dom/server";
+import { screen } from "@testing-library/react";
 import { TripsPage } from "@/components/TripsPage";
 import type { ApiPage, Locale, Tour, TripTaxonomy } from "@/types/api";
 
@@ -37,8 +38,15 @@ vi.mock("next/link", () => ({
 }));
 
 afterEach(() => {
-  cleanup();
+  document.body.innerHTML = "";
 });
+
+// Stream the real server tree so the async banner resolves before inspecting links.
+async function renderPage(element: ReactNode) {
+  const stream = await renderToReadableStream(element);
+  await stream.allReady;
+  document.body.innerHTML = await new Response(stream).text();
+}
 
 function page2Href() {
   const next = screen.getByRole("link", { name: /next/i });
@@ -46,15 +54,15 @@ function page2Href() {
 }
 
 describe("TripsPage pagination — days propagation", () => {
-  it("renders a wishlist button for every trips result card", () => {
-    render(
+  it("renders a wishlist button for every trips result card", async () => {
+    await renderPage(
       <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={{ page: 1 }} meta={meta} />,
     );
     expect(screen.getAllByRole("button", { name: "Add to wishlist" })).toHaveLength(tours.length);
   });
 
-  it("days=5 → page 2 preserves days=5", () => {
-    render(
+  it("days=5 → page 2 preserves days=5", async () => {
+    await renderPage(
       <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={{ days: 5, page: 1 }} meta={meta} />,
     );
     const href = page2Href();
@@ -62,8 +70,8 @@ describe("TripsPage pagination — days propagation", () => {
     expect(href).toContain("page=2");
   });
 
-  it("days=5 + destination → page 2 preserves both", () => {
-    render(
+  it("days=5 + destination → page 2 preserves both", async () => {
+    await renderPage(
       <TripsPage
         page={page}
         tours={tours}
@@ -79,8 +87,8 @@ describe("TripsPage pagination — days propagation", () => {
     expect(href).toContain("page=2");
   });
 
-  it("days=5 + main + destination → page 2 preserves all", () => {
-    render(
+  it("days=5 + main + destination → page 2 preserves all", async () => {
+    await renderPage(
       <TripsPage
         page={page}
         tours={tours}
@@ -97,15 +105,15 @@ describe("TripsPage pagination — days propagation", () => {
     expect(href).toContain("page=2");
   });
 
-  it("no days → pagination unchanged (no days param generated)", () => {
-    render(
+  it("no days → pagination unchanged (no days param generated)", async () => {
+    await renderPage(
       <TripsPage page={page} tours={tours} taxonomy={taxonomy} locale="en" active={{ page: 1 }} meta={meta} />,
     );
     expect(page2Href()).not.toContain("days=");
   });
 
-  it("existing filters without days → pagination preserves title as before (regression)", () => {
-    render(
+  it("existing filters without days → pagination preserves title as before (regression)", async () => {
+    await renderPage(
       <TripsPage
         page={page}
         tours={tours}

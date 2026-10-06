@@ -13,11 +13,14 @@ export function NavigationLoadingBar() {
   const tick = useRef<ReturnType<typeof setInterval> | null>(null);
   const hide = useRef<ReturnType<typeof setTimeout> | null>(null);
   const watchdog = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const commitFrame = useRef<number | null>(null);
 
   const clearTimers = useCallback(() => {
     if (tick.current) clearInterval(tick.current);
     if (hide.current) clearTimeout(hide.current);
     if (watchdog.current) clearTimeout(watchdog.current);
+    if (commitFrame.current !== null) window.cancelAnimationFrame(commitFrame.current);
+    commitFrame.current = null;
     tick.current = hide.current = watchdog.current = null;
   }, []);
 
@@ -43,7 +46,9 @@ export function NavigationLoadingBar() {
 
   useEffect(() => {
     committedHref.current = window.location.href;
-    complete();
+    const frame = window.requestAnimationFrame(complete);
+    commitFrame.current = frame;
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname, query, complete]);
 
   useEffect(() => {
