@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ApiPage, Locale, PublicSiteSettings, TeamMember, Tour } from "@/types/api";
 import { ContactForm } from "@/components/ContactForm";
+import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
+import { homeCopy } from "@/lib/home-copy";
 import { DestinationCard } from "@/components/DestinationCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
@@ -12,6 +14,12 @@ import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { uiCopy } from "@/lib/ui-copy";
 import { siteContact } from "@/lib/site-contact";
+import { accessibleTravelCopy } from "@/lib/accessible-travel-copy";
+import { sustainabilitySections } from "@/lib/sustainability-copy";
+import { SustainabilityTabs } from "@/components/SustainabilityTabs";
+import { SustainabilityCertification } from "@/components/SustainabilityCertification";
+import { TrustIndexLoader } from "@/components/TrustIndexLoader";
+import { LegalPage } from "@/components/LegalPage";
 
 type GenericPageProps = {
   page: ApiPage | null;
@@ -30,7 +38,7 @@ const fallbackBanners: Record<string, string> = {
   faqs: "/images/faqs-banner.webp",
   "contact-us": "/images/contactForm.webp",
   "about-us": "/images/aboutusmainbanner.webp",
-  sustainability: "/images/certification.webp",
+  sustainability: "/images/faqs-banner.webp",
   "accessible-travel": "/images/wheelChair.webp",
   "make-your-trip": "/images/makeYourTripImage.webp",
   "rent-car": "/images/Cairo_Egypt_Unsplash.webp",
@@ -100,6 +108,10 @@ export function GenericPage({
 
   if (route === "accessible-travel" || route === "sustainability") {
     return <ImpactPage page={page} title={title} image={image} route={route} locale={locale} tours={tours} blogs={blogs} faqs={faqs} />;
+  }
+
+  if (route === "privacy-and-cookies" || route === "terms-and-conditions") {
+    return <LegalPage page={page} title={title} image={image} locale={locale} />;
   }
 
   return <ContentPage page={page} title={title} image={image} locale={locale} />;
@@ -561,6 +573,7 @@ function PlannerPage({
 function ImpactPage({
   page,
   title,
+  image,
   route,
   locale,
   tours,
@@ -577,33 +590,73 @@ function ImpactPage({
   faqs: ApiPage[];
 }) {
   const isSustainability = route === "sustainability";
-  const eyebrow = isSustainability ? "Responsible Travel & Eco Commitment" : "Inclusive Travel Worldwide";
-  const illustration = isSustainability ? "/images/certification.webp" : "/images/wheelChair.webp";
+  const illustration = "/images/wheelChair.webp";
+  const accessibleCopy = accessibleTravelCopy(locale);
+  const sustainabilityCopy = sustainabilitySections(locale);
+  const bodyHtml = sanitizeHtml(page?.content || page?.description);
+  const hasPageBody = hasMeaningfulPageCopy(page?.content || page?.description, route, title);
 
   return (
-    <main>
-      <EditorialHeroCompact title={title} eyebrow={eyebrow} locale={locale} />
+    <main className={isSustainability ? "sustainability-page" : "accessible-travel-page"}>
+      <DiscoveryHero
+        title={title}
+        bgImage={image}
+        eyebrow=""
+        description={hasMeaningfulPageCopy(page?.short_description, route, title) ? page?.short_description : undefined}
+        breadcrumbs={[{ label: uiCopy(locale).home, href: withLocale("/", locale) }, { label: title }]}
+        locale={locale}
+      />
+      {isSustainability && (
+        <section className="sustainability-overview">
+          <div className="editorial-container sustainability-overview-grid">
+            <div>
+              {/* Frontend-owned introduction from the legacy Sustainability/Overview.vue. */}
+              <h2>Tailored <span>guidance</span> for your <span>sustainability</span> journey</h2>
+              <p>Sustainability is not an add-on — it is integrated into how we design, operate, and deliver travel experiences across Egypt.</p>
+              <p>Answer questions about sustainability at your property and we’ll use your answers—along with your property type and location—to offer you tailored ideas for the next steps in your sustainability journey.</p>
+            </div>
+            <Image src="/images/certified-logo.webp" alt="Travelife Certified — Excellence in sustainability" width={430} height={167} sizes="(max-width: 920px) 300px, 430px" />
+          </div>
+        </section>
+      )}
       <section className="editorial-main-section">
         <div className="editorial-container">
-          <div className="editorial-story-section">
-            <div className="story-content">
-              <span className="story-eyebrow">{isSustainability ? "Sustainable Journeys" : "Accessible Egypt"}</span>
-              <h2>{title}</h2>
-              <div
-                className="story-body editorial-prose"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
-              />
+          {isSustainability ? (
+            <SustainabilityTabs
+              sections={sustainabilityCopy.map((section, index) => ({
+                title: section.title,
+                html: index === 0 && hasPageBody ? bodyHtml : sanitizeHtml(section.html),
+              }))}
+            />
+          ) : (
+            <div className="editorial-story-section">
+              <div className="story-content">
+                <h2>{accessibleCopy.heading}</h2>
+                {bodyHtml ? (
+                  <div className="story-body editorial-prose" dangerouslySetInnerHTML={{ __html: bodyHtml }} />
+                ) : (
+                  <div className="story-body editorial-prose accessible-travel-overview">
+                    <p>{accessibleCopy.introduction}</p>
+                    <h3>{accessibleCopy.initiative}</h3>
+                    <p>{accessibleCopy.offer}</p>
+                    <h3>{accessibleCopy.reasonsHeading}</h3>
+                    <ul>{accessibleCopy.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+                    <p>{accessibleCopy.coverage}</p>
+                    <p>{accessibleCopy.verification}</p>
+                    <p><strong>{accessibleCopy.closing}</strong></p>
+                  </div>
+                )}
+              </div>
+              <div className="story-media">
+                <Image src={illustration} alt={title} fill sizes="(max-width: 920px) 100vw, 50vw" />
+              </div>
             </div>
-            <div className="story-media">
-              <Image
-                src={illustration}
-                alt={title}
-                fill
-                sizes="(max-width: 920px) 100vw, 50vw"
-              />
-            </div>
-          </div>
-
+          )}
+        </div>
+      </section>
+      {isSustainability && <SustainabilityCertification />}
+      <section className="editorial-main-section impact-related-content">
+        <div className="editorial-container">
           {tours.length > 0 && (
             <section className="editorial-related-section">
               <div className="section-header">
@@ -639,6 +692,22 @@ function ImpactPage({
           <FaqTeaser faqs={faqs} locale={locale} />
         </div>
       </section>
+      {isSustainability && (
+        <section className="sustainability-reviews home-review-section">
+          <div className="editorial-container" id="sustainability-reviews" />
+          <TrustIndexLoader containerId="sustainability-reviews" script="https://cdn.trustindex.io/loader.js?1d15b034519c8049128609a4d4e" />
+        </section>
+      )}
+      {isSustainability && (
+        <section className="sustainability-help-section" aria-labelledby="sustainability-help-title">
+          <div className="editorial-container">
+            <div className="home-help-panel-v2">
+              <h2 id="sustainability-help-title">{homeCopy(locale).needHelp}</h2>
+              <HomeNeedHelpForm locale={locale} />
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

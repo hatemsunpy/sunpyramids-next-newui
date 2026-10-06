@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { BlogCard } from "@/components/BlogCard";
 import { EmptyState } from "@/components/EmptyState";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";

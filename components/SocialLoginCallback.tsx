@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/types/api";
 import { setCookie } from "@/lib/client-api";

@@ -40,7 +40,7 @@ export async function SiteShell({
           nileCruisesChildren={egyptToursMenu.nileCruises}
         />
         <div id="site-content" tabIndex={-1}>{children}</div>
-        <aside aria-label="Direct support"><WhatsAppButton /></aside>
+        <aside aria-label="Direct support"><WhatsAppButton locale={locale} /></aside>
         <Footer locale={locale} settings={settings} />
         <BottomBar locale={locale} />
       </div>

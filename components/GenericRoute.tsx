@@ -16,11 +16,7 @@ export async function GenericRoute({ route, locale = "en" }: { route: string; lo
       : route === "sustainability"
         ? getTours("tours?categories.slug=sustainability&order_by=display_order,asc", locale, 4)
         : Promise.resolve([]),
-    route === "accessible-travel"
-      ? getBlogs(locale, 4)
-      : route === "sustainability"
-        ? getBlogs(locale, 4)
-        : Promise.resolve([]),
+    route === "accessible-travel" ? getBlogs(locale, 4) : Promise.resolve([]),
   ]);
   const tours = tourListData(toursResponse as ApiList<Tour> | null);
 

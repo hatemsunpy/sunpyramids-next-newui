@@ -1,0 +1,145 @@
+.site-shell-v2 :is(.accessible-travel-page, .sustainability-page) {
+  .discovery-hero {
+    min-height: calc(280px + var(--spt-image-header-height));
+    padding-top: calc(2rem + var(--spt-image-header-height));
+    padding-bottom: 2rem;
+
+    h1 {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      max-width: 24ch;
+      text-wrap: balance;
+    }
+  }
+
+  .editorial-main-section {
+    padding-block: 3rem;
+    background: var(--spt-surface);
+  }
+
+  &.accessible-travel-page {
+    > .editorial-main-section:not(.impact-related-content) {
+      padding-bottom: 0;
+    }
+
+    > .impact-related-content {
+      padding-top: 0;
+    }
+  }
+
+  .editorial-story-section {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+
+    .story-content {
+      min-width: 0;
+
+      > h2 {
+        margin-bottom: 1.25rem;
+        color: var(--spt-link);
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        line-height: 1.3;
+        text-wrap: balance;
+      }
+
+      .story-body {
+        max-width: 70ch;
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+    }
+
+    .story-media {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border-radius: 16px;
+      box-shadow: none;
+
+      img {
+        object-fit: contain;
+      }
+    }
+  }
+
+  .accessible-travel-overview {
+    p {
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      margin: 1.5rem 0 0.5rem;
+      font-size: 1.125rem;
+      color: var(--spt-link);
+    }
+
+    ul {
+      margin: 0.5rem 0 1rem;
+      padding-inline-start: 1.25rem;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .editorial-related-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 0;
+    border-top: 1px solid var(--spt-border);
+    background: transparent;
+  }
+
+  .section-header {
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+      color: var(--spt-link);
+      line-height: 1.3;
+    }
+  }
+
+  @media (max-width: 920px) {
+    .editorial-story-section {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+
+      .story-media {
+        width: min(100%, 280px);
+        margin-inline: auto;
+      }
+    }
+  }
+
+  @media (max-width: 720px) {
+    .discovery-hero {
+      min-height: calc(220px + var(--spt-image-header-height));
+      padding-top: calc(1.5rem + var(--spt-image-header-height));
+      padding-bottom: 1.5rem;
+    }
+
+    .editorial-main-section {
+      padding-block: 2rem;
+    }
+
+    .editorial-story-section {
+      margin-bottom: 2rem;
+    }
+
+    .editorial-related-section {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+    }
+
+    .editorial-faq-item summary {
+      font-size: 1rem;
+      padding: 1rem;
+    }
+  }
+}

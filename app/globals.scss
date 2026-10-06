@@ -1129,7 +1129,7 @@ input[data-native-type] {
   min-height: 18rem;
   overflow: hidden;
   border-radius: 1rem;
-  background: #111;
+  background: transparent;
 }
 
 .destination-card a {
@@ -1395,7 +1395,7 @@ input[data-native-type] {
 .tour-page-hero {
   position: relative;
   overflow: hidden;
-  background: #111;
+  background: transparent;
 }
 
 .tour-page-hero::after {
@@ -2514,7 +2514,7 @@ input[data-native-type] {
   margin-inline: auto;
   overflow: hidden;
   border-radius: var(--tour-photo-radius);
-  background: var(--tour-surface-cool);
+  background: transparent;
   isolation: isolate;
   box-shadow: 0 16px 36px rgba(23, 58, 150, 0.08);
 }
@@ -2523,7 +2523,7 @@ input[data-native-type] {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(8, 17, 38, 0.05) 15%, rgba(8, 17, 38, 0.45) 55%, rgba(8, 17, 38, 0.84) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 15%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.84) 100%);
   content: "";
   pointer-events: none;
 }
@@ -2535,7 +2535,7 @@ input[data-native-type] {
   grid-template-columns: minmax(0, 2.35fr) minmax(17rem, 0.75fr);
   grid-template-rows: minmax(0, 1fr);
   gap: 0.35rem;
-  background: var(--tour-surface);
+  background: transparent;
   outline: none;
 }
 
@@ -2548,7 +2548,7 @@ input[data-native-type] {
   height: 100%;
   aspect-ratio: auto;
   border-radius: 0;
-  background: var(--tour-surface-cool);
+  background: transparent;
 }
 
 .tour-page-redesign .tour-gallery-slide {
@@ -2575,7 +2575,7 @@ input[data-native-type] {
   overflow: hidden;
   border: 0;
   padding: 0;
-  background: var(--tour-surface-cool);
+  background: transparent;
   cursor: pointer;
   transition: flex-grow 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -2672,7 +2672,7 @@ input[data-native-type] {
   border: 2px solid transparent;
   border-radius: 0.7rem;
   padding: 0;
-  background: #dbe2ef;
+  background: transparent;
   cursor: pointer;
   opacity: 0.72;
   transition: border-color 180ms ease, opacity 180ms ease, transform 180ms ease;
@@ -2699,8 +2699,8 @@ input[data-native-type] {
 .tour-page-redesign .tour-gallery-empty {
   display: grid;
   place-items: center;
-  background: var(--tour-primary);
-  color: #ffffff;
+  background: var(--tour-surface-cool);
+  color: var(--tour-muted);
 }
 
 .tour-page-redesign .tour-gallery-empty p {
@@ -3205,7 +3205,7 @@ input[data-native-type] {
   min-height: 10.5rem;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: var(--tour-primary);
+  background: transparent;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(23, 58, 150, 0.08);
 }
@@ -3236,7 +3236,7 @@ input[data-native-type] {
 .tour-page-redesign .tour-destination-story-media::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 17, 38, 0.06) 15%, rgba(8, 17, 38, 0.78) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06) 15%, rgba(0, 0, 0, 0.78) 100%);
   content: "";
 }
 
@@ -3833,7 +3833,7 @@ input[data-native-type] {
   position: relative;
   height: 14.5rem;
   overflow: hidden;
-  background: var(--tour-primary);
+  background: transparent;
 }
 
 .tour-page-redesign .tour-related-media img {
@@ -3967,7 +3967,7 @@ input[data-native-type] {
   overflow: hidden;
   border-radius: var(--tour-photo-radius);
   padding: clamp(2rem, 4vw, 4rem);
-  background: #2e3440;
+  background: transparent;
   color: #ffffff;
 }
 
@@ -3975,7 +3975,7 @@ input[data-native-type] {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(8, 17, 38, 0.08) 8%, rgba(8, 17, 38, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 8%, rgba(0, 0, 0, 0.88) 100%);
   content: "";
   pointer-events: none;
 }
@@ -4197,7 +4197,7 @@ input[data-native-type] {
   max-height: none;
   border: 0;
   padding: 0;
-  background: #081126;
+  background: #111111;
   color: #ffffff;
 }
 
@@ -4208,7 +4208,7 @@ input[data-native-type] {
 }
 
 .tour-page-redesign .tour-gallery-viewer::backdrop {
-  background: rgba(4, 10, 25, 0.9);
+  background: rgba(0, 0, 0, 0.9);
 }
 
 .tour-page-redesign .tour-gallery-viewer-inner {
@@ -4241,7 +4241,7 @@ input[data-native-type] {
   left: 0;
   z-index: 4;
   padding: 2.75rem 4.75rem 1rem;
-  background: linear-gradient(180deg, transparent, rgba(8, 17, 38, 0.88));
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.88));
 }
 
 .tour-page-redesign .tour-gallery-viewer-thumbnails .tour-gallery-thumbnail-rail {
@@ -4540,7 +4540,7 @@ input[data-native-type] {
     flex-direction: column;
     border-radius: 0;
     overflow: visible;
-    background: var(--tour-primary);
+    background: transparent;
   }
 
   .tour-page-redesign .tour-gallery {
@@ -4601,7 +4601,7 @@ input[data-native-type] {
     position: absolute;
     inset: auto 0 0;
     height: 42%;
-    background: linear-gradient(180deg, transparent, rgba(8, 17, 38, 0.46));
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.46));
     content: "";
     pointer-events: none;
   }
@@ -4974,7 +4974,7 @@ input[data-native-type] {
   aspect-ratio: 16 / 10;
   border-radius: 1rem;
   overflow: hidden;
-  background: #e6e9ee;
+  background: transparent;
 }
 
 .tour-gallery-arrow,
@@ -5084,7 +5084,7 @@ input[data-native-type] {
   border-radius: 1rem;
   overflow: hidden;
   border: 2px solid transparent;
-  background: #e6e9ee;
+  background: transparent;
   cursor: pointer;
   padding: 0;
 }
@@ -6193,7 +6193,7 @@ input[data-native-type] {
   padding: clamp(3rem, 6vw, 5rem) 0;
   overflow: hidden;
   background:
-    linear-gradient(color-mix(in srgb, var(--primary) 88%, transparent), color-mix(in srgb, var(--primary) 88%, transparent)),
+    linear-gradient(rgb(0 0 0 / 20%), rgb(0 0 0 / 20%)),
     url("/images/makeYourTripImage.png") center/cover no-repeat;
 }
 
@@ -7585,17 +7585,19 @@ input[data-native-type] {
     color: var(--secondary);
   }
 
-  .bottom-whatsapp {
+  .bottom-bar .bottom-whatsapp {
     position: relative;
     align-self: start;
     justify-self: center;
+    justify-content: center;
+    gap: 0;
     width: 58px;
     min-width: 58px !important;
     height: 58px;
     min-height: 58px !important;
     margin-top: -2rem;
     border-radius: 50%;
-    background: linear-gradient(90deg, #1faf38, #60d669);
+    background: #25d366;
   }
 
   .bottom-whatsapp img {

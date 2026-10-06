@@ -1,5 +1,5 @@
 .site-shell-v2 .site-header {
-  background: transparent;
+  background: var(--spt-surface-raised);
   box-shadow: none;
   backdrop-filter: none;
   pointer-events: none;
@@ -7,6 +7,10 @@
 
 .site-shell-v2 .site-header > * {
   pointer-events: auto;
+}
+
+.site-shell-v2 .site-header-home {
+  background: transparent;
 }
 
 .site-shell-v2 .site-header-modal-open {
@@ -636,7 +640,7 @@
   border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
-  background: #0f172a;
+  background: transparent;
   box-shadow: 0 4px 14px rgb(0 0 0 / 12%);
 }
 
@@ -665,7 +669,7 @@
 .site-shell-v2 .dropdown-preview-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 15%, rgba(15, 23, 42, 0.45) 55%, rgba(15, 23, 42, 0.92) 100%);
+  background: linear-gradient(180deg, rgb(0 0 0 / 5%) 15%, rgb(0 0 0 / 45%) 55%, rgb(0 0 0 / 92%) 100%);
   pointer-events: none;
 }
 
@@ -977,16 +981,14 @@
   }
 
   .site-shell-v2 .header-frame,
-  .site-shell-v2 .header-main,
   .site-shell-v2 .promo-strip {
-    width: 100%;
+    width: calc(100% - 12px);
+    margin-inline: auto;
   }
 
   .site-shell-v2 .header-frame,
   .site-shell-v2 .site-header-at-top .header-frame {
-    margin-inline: 0;
-    border-inline: 0;
-    border-radius: 0;
+    border-radius: 12px;
   }
 
   .site-shell-v2 .header-main {

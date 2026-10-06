@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { useEffect, useRef } from "react";
 import type { Locale } from "@/types/api";
 import { languageOptions } from "@/lib/locales";

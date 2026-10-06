@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { withLocale } from "@/lib/locales";
 import type { HeaderVoiceFilters, HeaderVoiceResolution } from "@/lib/header-voice-resolution";
 import { browserRecognizerFactory, isSpeechRecognitionSupported } from "@/lib/voice/browser-speech-recognizer";

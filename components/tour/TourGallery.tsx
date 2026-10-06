@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTourActions } from "@/components/tour/TourActions";
 import type { Locale, Tour } from "@/types/api";
 
-export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Locale }) {
+export function TourGallery({ tour, locale, blurImages = {} }: { tour: Tour | null; locale: Locale; blurImages?: Record<string, string> }) {
   const [active, setActive] = useState(0);
   const [displayed, setDisplayed] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -90,6 +90,8 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
         <Image
           key={`${gallery[displayed]}-${displayed}`}
           src={gallery[displayed]}
+          placeholder={blurImages[gallery[displayed]] ? "blur" : "empty"}
+          blurDataURL={blurImages[gallery[displayed]]}
           alt={`${tour?.title || tour?.name || "Tour"} photo ${displayed + 1}`}
           fill
           preload={displayed === 0}
@@ -157,7 +159,7 @@ export function TourGallery({ tour, locale }: { tour: Tour | null; locale: Local
                 onClick={() => isLastWithMore ? openViewer(index) : showPhoto(index)}
                 aria-label={isLastWithMore ? "Open full tour photo gallery" : `View photo ${index + 1}`}
               >
-                <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" />
+                <Image src={src} alt="" fill sizes="(max-width: 767px) 0px, (max-width: 1024px) 32vw, 24vw" loading="lazy" placeholder={blurImages[src] ? "blur" : "empty"} blurDataURL={blurImages[src]} />
                 {isLastWithMore ? (
                   <span className="tour-gallery-more-overlay" aria-hidden="true">
                     <span>+{remainingCount + 1} photos</span>

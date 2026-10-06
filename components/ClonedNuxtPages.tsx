@@ -15,6 +15,8 @@ import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 import { uiCopy } from "@/lib/ui-copy";
+import { getImageBlurDataURL } from "@/lib/image-blur.server";
+import { blurredImageBackground } from "@/lib/image-blur";
 
 const bookTripGallery = [
   ["/images/shorts.webp", "/images/shorts-gallary.webp", "YouTube Shorts"],
@@ -24,8 +26,9 @@ const bookTripGallery = [
   ["/images/youtubetwo.webp", "/images/fb-logo.webp", "Facebook"],
 ] as const;
 
-export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Locale }) {
+export async function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Locale }) {
   const copy = uiCopy(locale);
+  const imagePreview = await getImageBlurDataURL("/images/Cairo_Egypt_Unsplash.webp");
   return (
     <main className="auth-clone">
       <section className="auth-panel">
@@ -39,7 +42,7 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
         </Suspense>
       </section>
       <section className="auth-image" aria-hidden="true">
-        <Image src="/images/Cairo_Egypt_Unsplash.webp" alt="" fill sizes="(max-width: 1023px) 0px, 48vw" priority />
+        <Image src="/images/Cairo_Egypt_Unsplash.webp" alt="" fill sizes="(max-width: 1023px) 0px, 48vw" priority placeholder={imagePreview ? "blur" : "empty"} blurDataURL={imagePreview} />
         <div className="auth-image-caption">
           <span>{copy.egyptTours}</span>
           <strong>Sun Pyramids Tours</strong>
@@ -49,8 +52,9 @@ export function AuthPage({ mode, locale = "en" }: { mode: string; locale?: Local
   );
 }
 
-export function AccountPage({ view = "profile", locale = "en" }: { view?: string; locale?: Locale }) {
+export async function AccountPage({ view = "profile", locale = "en" }: { view?: string; locale?: Locale }) {
   const copy = uiCopy(locale);
+  const imagePreview = await getImageBlurDataURL("/images/Cairo_Egypt_Unsplash.webp");
   const heading = view === "bookings" ? copy.myBookings : view === "favourites" ? copy.myFavorites : copy.myProfile;
   const accountLinks = [
     { label: copy.personalInfo, href: "/profile", active: view === "profile" },
@@ -60,7 +64,7 @@ export function AccountPage({ view = "profile", locale = "en" }: { view?: string
   ];
   return (
     <main className="account-page">
-      <section className="account-hero">
+      <section className="account-hero" data-image-blur-preview={imagePreview ? "" : undefined} style={{ "--account-image-blur": imagePreview ? blurredImageBackground(imagePreview) : "none" } as CSSProperties}>
         <div className="container-shell">
           <p>Sun Pyramids Tours</p>
           <h1>{heading}</h1>
@@ -132,7 +136,7 @@ function PaymentCallbackShell({ provider, title }: { provider: string; title: st
   );
 }
 
-export function TripsListingPage({
+export async function TripsListingPage({
   page,
   tours,
   taxonomy,
@@ -147,6 +151,8 @@ export function TripsListingPage({
 }) {
   const copy = uiCopy(locale);
   const tripsPath = withLocale("/trips", locale);
+  const banner = page?.banner || "/images/mainBanner.webp";
+  const imagePreview = await getImageBlurDataURL(banner);
   const filterHref = (key: "main" | "category" | "destination", value: string | number) => {
     const query = new URLSearchParams();
     if (active.title) query.set("title", active.title);
@@ -155,7 +161,7 @@ export function TripsListingPage({
   };
   return (
     <main>
-      <section className="original-page-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${page?.banner || "/images/mainBanner.webp"})` }}>
+      <section className="original-page-hero" data-image-blur-preview={imagePreview ? "" : undefined} style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.55)), url(${JSON.stringify(banner)})${imagePreview ? `, ${blurredImageBackground(imagePreview)}` : ""}` }}>
         <h1>{page?.title || copy.egyptTours}</h1>
       </section>
       <section className="trips-layout">
@@ -367,11 +373,12 @@ export function EventDetailPage({
   );
 }
 
-export function MarketingLandingPage({ page, tours, locale = "en" }: { page: ApiPage | null; tours: Tour[]; locale?: Locale }) {
+export async function MarketingLandingPage({ page, tours, locale = "en" }: { page: ApiPage | null; tours: Tour[]; locale?: Locale }) {
   const copy = uiCopy(locale);
   const banner = page?.banner || "/images/mainBanner.webp";
+  const imagePreview = await getImageBlurDataURL(banner);
   const heroStyle = {
-    backgroundImage: `url(${banner})`,
+    backgroundImage: `url(${JSON.stringify(banner)})${imagePreview ? `, ${blurredImageBackground(imagePreview)}` : ""}`,
   } as CSSProperties;
   const reasons = [
     [copy.licensedTitle, copy.licensedDescription],
@@ -381,7 +388,7 @@ export function MarketingLandingPage({ page, tours, locale = "en" }: { page: Api
 
   return (
     <main className="book-trip-page">
-      <section className="book-trip-hero" style={heroStyle}>
+      <section className="book-trip-hero" data-image-blur-preview={imagePreview ? "" : undefined} style={heroStyle}>
         <div className="hero-content">
           <p className="eyebrow">Sun Pyramids Concierge</p>
           <h1>{copy.bookTripTitle}</h1>
