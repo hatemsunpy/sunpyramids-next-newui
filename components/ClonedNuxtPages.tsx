@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import { Suspense, type CSSProperties } from "react";
 import type { ApiPage, Locale, Tour, TripTaxonomy } from "@/types/api";

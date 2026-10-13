@@ -287,6 +287,10 @@
   display: none;
 }
 
+.site-shell-v2 .header-actions > .mobile-search-action {
+  display: none;
+}
+
 .site-shell-v2 :is(.circle-action, .theme-toggle) svg,
 .site-shell-v2 .make-trip-action svg,
 .site-shell-v2 .mobile-links svg,
@@ -991,8 +995,23 @@
     border-radius: 12px;
   }
 
-  .site-shell-v2 .header-main {
+  .site-shell-v2 .header-main,
+  .site-shell-v2 .site-header-at-top .header-main {
     width: 100%;
+    min-height: 54px;
+    padding: 0.25rem 0.625rem;
+    gap: 0.5rem;
+  }
+
+  .site-shell-v2 .header-logo img {
+    width: clamp(6.5rem, 30vw, 8rem);
+    height: auto;
+  }
+
+  .site-shell-v2 .header-actions {
+    flex-shrink: 0;
+    margin-inline-start: auto;
+    gap: 0.25rem;
   }
 
   .site-shell-v2 .header-actions > :is(.header-language, .header-theme-toggle, .signin-action),
@@ -1002,16 +1021,21 @@
 
   /* Keep comfortable touch targets on small screens */
   .site-shell-v2 :is(.header-language, .circle-action, .signin-action, .theme-toggle) {
-    min-height: 40px;
+    min-height: 44px;
   }
 
   .site-shell-v2 :is(.circle-action, .theme-toggle) {
-    width: 40px;
-    min-width: 40px;
+    width: 44px;
+    min-width: 44px;
   }
 
-  .site-shell-v2 .header-actions > .cart-action {
+  .site-shell-v2 .header-actions > .circle-action:is(.cart-action, .mobile-search-action) {
     display: inline-flex;
+  }
+
+  .site-shell-v2 .header-actions > .circle-action svg {
+    width: 18px;
+    height: 18px;
   }
 
   .site-shell-v2 .mobile-drawer .header-language {

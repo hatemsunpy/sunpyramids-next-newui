@@ -124,6 +124,29 @@ export function TourPageNavigation({
     };
   }, [links]);
 
+  useEffect(() => {
+    const rail = navRef.current?.querySelector<HTMLDivElement>(".tour-page-nav-scroll");
+    if (!rail) return;
+
+    const revealActiveLink = () => {
+      if (drag.current || rail.scrollWidth <= rail.clientWidth) return;
+      const activeLink = rail.querySelector<HTMLAnchorElement>('[aria-current="location"]');
+      if (!activeLink) return;
+      const viewport = rail.getBoundingClientRect();
+      const link = activeLink.getBoundingClientRect();
+      const distance = link.left < viewport.left ? link.left - viewport.left - 8
+        : link.right > viewport.right ? link.right - viewport.right + 8 : 0;
+      if (!distance) return;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // Move only the horizontal rail; revealing a tab must not move the page.
+      rail.scrollBy({ left: distance, behavior: reduceMotion ? "auto" : "smooth" });
+    };
+
+    revealActiveLink();
+    window.addEventListener("resize", revealActiveLink);
+    return () => window.removeEventListener("resize", revealActiveLink);
+  }, [activeId]);
+
   if (links.length < 2) return null;
 
   return (

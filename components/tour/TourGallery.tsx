@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { useEffect, useRef, useState } from "react";
 import { useTourActions } from "@/components/tour/TourActions";
 import type { Locale, Tour } from "@/types/api";

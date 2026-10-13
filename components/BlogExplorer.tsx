@@ -6,6 +6,7 @@ import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { BlogCard } from "@/components/BlogCard";
 import { EmptyState } from "@/components/EmptyState";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
+import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { apiGet } from "@/lib/client-api";
 import { blogCopy } from "@/lib/blog-copy";
 import type { BlogListing } from "@/lib/data";
@@ -125,7 +126,7 @@ export function BlogExplorer({
         </form>
 
         <div className="blogs-filter-row">
-          <div className="blogs-tags" role="group" aria-label={labels.popularTags}>
+          <SwipeCarousel className="blogs-tags" ariaLabel={labels.popularTags}>
             <span className="blogs-tags-label">{labels.popularTags}</span>
             {categories.map((categoryTag) => {
               const slug = categoryTag.slug || String(categoryTag.id || "");
@@ -137,7 +138,7 @@ export function BlogExplorer({
                 </button>
               );
             })}
-          </div>
+          </SwipeCarousel>
           <div className="blogs-sort">
             <span className="sr-only">{labels.sortBy}</span>
             <SearchSelectDropdown

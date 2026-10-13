@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { ApiPage, Locale } from "@/types/api";
 import { withLocale } from "@/lib/locales";

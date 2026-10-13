@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { Locale, Tour } from "@/types/api";
 import { tourPath } from "@/lib/locales";

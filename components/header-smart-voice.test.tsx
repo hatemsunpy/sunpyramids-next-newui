@@ -35,6 +35,17 @@ async function say(form: HTMLFormElement, transcript: string, locale: Locale = "
 function lastFilters() { return Object.fromEntries(new URL(boundary.push.mock.calls.at(-1)![0], "https://fixture.test").searchParams); }
 
 describe("Header Smart Voice — reported structured search defect", () => {
+  it("the search shortcut focuses the drawer input and Escape returns to its opener", async () => {
+    await setup();
+    const shortcut = screen.getByRole("button", { name: "Search", exact: true });
+    fireEvent.click(shortcut);
+    const drawer = screen.getByRole("dialog", { name: "Site navigation" });
+    expect(within(drawer).getByRole("textbox", { name: "Search", exact: true })).toHaveFocus();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Site navigation" })).not.toBeInTheDocument();
+    expect(shortcut).toHaveFocus();
+  });
+
   it("a simple command resolves once after quiet and the native final drain", async () => {
     const ui = await setup(); vi.useFakeTimers();
     fireEvent.click(within(ui.desktop).getByRole("button", { name: /search by voice/i }));
