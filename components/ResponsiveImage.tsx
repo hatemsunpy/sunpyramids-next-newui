@@ -9,9 +9,13 @@ function imageLoader({ src, width }: ImageLoaderProps) {
 }
 
 // Use the existing backend image URL; resizing never owns or snapshots CMS data.
-export default function ResponsiveImage(props: ImageProps & { ref?: Ref<HTMLImageElement> }) {
+export default function ResponsiveImage({
+  alt = "",
+  ...props
+}: ImageProps & { ref?: Ref<HTMLImageElement> }) {
   const source = typeof props.src === "string" ? props.src : undefined;
-  if (!source || props.unoptimized || !remoteImageURL(source)) return <Image alt="" {...props} />;
-  return <Image alt="" {...props} data-image-source={source} unoptimized={false} loader={imageLoader} />;
+  if (!source || props.unoptimized || !remoteImageURL(source)) return <Image alt={alt} {...props} />;
+  return <Image alt={alt} {...props} data-image-source={source} unoptimized={false} loader={imageLoader} />;
 }
+
 
