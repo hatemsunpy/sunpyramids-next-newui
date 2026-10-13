@@ -42,6 +42,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang={lang} data-theme="light" suppressHydrationWarning>
       <head>
+        <link rel="preload" href="/fonts/TripSans-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/TripSans-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>

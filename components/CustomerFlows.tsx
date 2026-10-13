@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { useSearchParams } from "next/navigation";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";

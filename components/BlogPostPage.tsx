@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import { BlogCard } from "@/components/BlogCard";
 import { BlogTableOfContents, type BlogHeading } from "@/components/BlogTableOfContents";

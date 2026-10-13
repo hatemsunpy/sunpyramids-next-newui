@@ -78,7 +78,7 @@ export function ImageBlurEffects() {
       }
       const backgroundURL = background.match(/url\((?:"([^"]*)"|'([^']*)'|([^)]*))\)/);
       const source = isImage
-        ? element.src || element.currentSrc
+        ? element.getAttribute("data-image-source") || element.src || element.currentSrc
         : backgroundURL?.[1] || backgroundURL?.[2] || backgroundURL?.[3]?.trim();
       if (!source || source.startsWith("data:") || source.startsWith("blob:")) return;
       if (previous && background.includes("data:image/svg+xml")) return;
@@ -147,7 +147,7 @@ export function ImageBlurEffects() {
       }
     });
     scan(document);
-    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["src", "srcset", "style"] });
+    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["src", "srcset", "style", "data-image-source"] });
     return () => {
       disposed = true;
       clearTimeout(timer);

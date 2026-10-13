@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
 import { uiCopy } from "@/lib/ui-copy";
 import type { Locale, Tour } from "@/types/api";

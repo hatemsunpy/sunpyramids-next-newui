@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { ArrowRight } from "lucide-react";
 import { HomeSearchShortcuts } from "@/components/HomeSearchShortcuts";
 import { whatsappInquiryUrl } from "@/lib/site-contact";

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { ApiPage, Locale, PublicSiteSettings, TeamMember, Tour } from "@/types/api";
 import { ContactForm } from "@/components/ContactForm";

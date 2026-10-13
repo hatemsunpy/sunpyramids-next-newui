@@ -1,9 +1,10 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Locale } from "@/types/api";
 import { DiscoveryHeroDescription } from "@/components/DiscoveryHeroDescription";
 import { getImageBlurDataURL } from "@/lib/image-blur.server";
 import { blurredImageBackground } from "@/lib/image-blur";
+import { responsiveImageSource } from "@/lib/responsive-image";
 
 export type BreadcrumbItem = {
   label: string;
@@ -33,13 +34,23 @@ export async function DiscoveryHero({
 }) {
   const bannerImage = bgImage || "/images/mainBanner.webp";
   const preview = await getImageBlurDataURL(bannerImage);
-  const backgroundImage = `url(${JSON.stringify(bannerImage)})${preview ? `, ${blurredImageBackground(preview)}` : ""}`;
+  const blurLayer = preview ? `, ${blurredImageBackground(preview)}` : "";
+  const mobileImage = responsiveImageSource(bannerImage, 828);
+  const desktopImage = responsiveImageSource(bannerImage, 1920);
 
   return (
+    <>
+    <link rel="preload" as="image" href={mobileImage} media="(max-width: 768px)" fetchPriority="high" />
+    <link rel="preload" as="image" href={desktopImage} media="(min-width: 769px)" fetchPriority="high" />
     <header
       className="discovery-hero"
       data-image-blur-preview={preview ? "" : undefined}
-      style={{ backgroundImage }}
+      data-image-source={bannerImage}
+      style={{
+        backgroundImage: `var(--discovery-image, url(${JSON.stringify(bannerImage)})${blurLayer})`,
+        "--discovery-image-desktop": `url(${JSON.stringify(desktopImage)})${blurLayer}`,
+        "--discovery-image-mobile": `url(${JSON.stringify(mobileImage)})${blurLayer}`,
+      } as CSSProperties}
     >
       <div className="discovery-hero-inner">
         {breadcrumbs.length > 0 && (
@@ -88,5 +99,6 @@ export async function DiscoveryHero({
         {children}
       </div>
     </header>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import { PriceText } from "@/components/PriceText";
 import { tourPath } from "@/lib/locales";

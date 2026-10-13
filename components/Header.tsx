@@ -342,6 +342,8 @@ export function Header({
   const [isTop, setIsTop] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const focusDrawerSearch = useRef(false);
   const drawerRef = useRef<HTMLDivElement>(null);
   // Instance-local ownership for Header Voice: each search form owns
   // its refs, so a voice session can only ever touch its own input + form.
@@ -386,7 +388,7 @@ export function Header({
   useEffect(() => {
     if (!menuOpen) return;
     const previousOverflow = document.body.style.overflow;
-    const menuButton = menuButtonRef.current;
+    const drawerTrigger = drawerTriggerRef.current ?? menuButtonRef.current;
     const getFocusable = () => Array.from(drawerRef.current?.querySelectorAll<HTMLElement>(
       'a[href], button:not([disabled]), summary, input, [tabindex]:not([tabindex="-1"])',
     ) ?? []).filter((element) => element.getClientRects().length > 0);
@@ -395,7 +397,8 @@ export function Header({
     const previousInert = background.map((element) => element.inert);
     background.forEach((element) => { element.inert = true; });
     document.body.style.overflow = "hidden";
-    getFocusable()[0]?.focus();
+    if (focusDrawerSearch.current) mobileInputRef.current?.focus();
+    else getFocusable()[0]?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -420,7 +423,7 @@ export function Header({
       document.body.style.overflow = previousOverflow;
       background.forEach((element, index) => { element.inert = previousInert[index]; });
       document.removeEventListener("keydown", handleKeyDown);
-      menuButton?.focus();
+      drawerTrigger?.focus();
     };
   }, [menuOpen]);
 
@@ -519,11 +522,20 @@ export function Header({
             <VoiceSearchButton key={locale} locale={locale} inputRef={desktopInputRef} formRef={desktopFormRef} />
           </form>
           <div className="header-actions">
+            <button className="circle-action mobile-search-action" type="button" aria-label={copy.search} aria-controls="mobile-navigation" aria-expanded={menuOpen} onClick={(event) => {
+              drawerTriggerRef.current = event.currentTarget;
+              focusDrawerSearch.current = true;
+              setMenuOpen(true);
+            }}><SearchIcon /></button>
             <LanguageCurrencyTrigger locale={locale} onClick={openLangModal} />
             <ThemeToggle className="header-theme-toggle" labels={currentThemeLabels} />
-            <Link className="circle-action cart-action" href={withLocale("/cart", locale)} aria-label="Cart"><CartIcon /></Link>
+            <Link className="circle-action cart-action" href={withLocale("/cart", locale)} aria-label={copy.cart}><CartIcon /></Link>
             <Link className="signin-action" href={withLocale("/auth/sign-in", locale)}>{copy.signIn}</Link>
-            <button aria-controls="mobile-navigation" aria-expanded={menuOpen} aria-label="Open menu" className="circle-action menu-action" onClick={() => setMenuOpen(true)} ref={menuButtonRef} type="button"><MenuIcon /></button>
+            <button aria-controls="mobile-navigation" aria-expanded={menuOpen} aria-label="Open menu" className="circle-action menu-action" onClick={(event) => {
+              drawerTriggerRef.current = event.currentTarget;
+              focusDrawerSearch.current = false;
+              setMenuOpen(true);
+            }} ref={menuButtonRef} type="button"><MenuIcon /></button>
           </div>
         </div>
         <div className="header-nav-row">

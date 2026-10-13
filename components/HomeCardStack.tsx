@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 // Frontend-owned guest photos provided for this editorial gallery.

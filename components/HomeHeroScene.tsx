@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import { useEffect, useRef, useState } from "react";
 
 export type HomeHeroCopySlide = {
@@ -21,6 +21,7 @@ export function HomeHeroScene({
   slides: HomeHeroCopySlide[];
 }) {
   const [active, setActive] = useState(0);
+  const [prepared, setPrepared] = useState<number[]>([0]);
   const firstImageRef = useRef<HTMLImageElement>(null);
   const count = images.length;
 
@@ -33,43 +34,28 @@ export function HomeHeroScene({
   }, [count]);
 
   useEffect(() => {
-    const remaining = Array.from(new Set(images.slice(1).filter((image) => image !== images[0])));
-    if (!remaining.length) return;
-
+    if (count < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const firstImage = firstImageRef.current;
-    const preloads: HTMLImageElement[] = [];
-    let cursor = 0;
-    let inFlight = 0;
-    let cancelled = false;
-
-    function loadNext() {
-      while (!cancelled && inFlight < 2 && cursor < remaining.length) {
-        const image = new window.Image();
-        image.decoding = "async";
-        image.fetchPriority = cursor === 0 ? "auto" : "low";
-        image.onload = image.onerror = () => {
-          inFlight--;
-          loadNext();
-        };
-        preloads.push(image);
-        inFlight++;
-        image.src = remaining[cursor++];
-      }
+    let timer: number | undefined;
+    function prepareNext() {
+      // The next slide can load after the visible image, without downloading
+      // the whole gallery or a second copy of each original CMS image.
+      timer = window.setTimeout(() => {
+        const next = (active + 1) % count;
+        setPrepared(current => current.includes(next) ? current : [...current, next]);
+      }, 250);
     }
-
-    if (!firstImage || firstImage.complete) loadNext();
+    if (firstImage?.complete) prepareNext();
     else {
-      firstImage?.addEventListener("load", loadNext, { once: true });
-      firstImage?.addEventListener("error", loadNext, { once: true });
+      firstImage?.addEventListener("load", prepareNext, { once: true });
+      firstImage?.addEventListener("error", prepareNext, { once: true });
     }
-
     return () => {
-      cancelled = true;
-      firstImage?.removeEventListener("load", loadNext);
-      firstImage?.removeEventListener("error", loadNext);
-      preloads.forEach((image) => { image.onload = image.onerror = null; });
+      window.clearTimeout(timer);
+      firstImage?.removeEventListener("load", prepareNext);
+      firstImage?.removeEventListener("error", prepareNext);
     };
-  }, [images]);
+  }, [active, count]);
 
   const copy = slides.length ? slides[active % slides.length] : null;
   const TitleTag = copy && active % slides.length === 0 ? "h1" : "h2";
@@ -77,7 +63,7 @@ export function HomeHeroScene({
   return (
     <>
       <div className="home-hero-v2__media">
-        {images.map((image, index) => (
+        {images.map((image, index) => prepared.includes(index) || index === active ? (
           <Image
             key={image}
             ref={index === 0 ? firstImageRef : undefined}
@@ -86,13 +72,14 @@ export function HomeHeroScene({
             blurDataURL={blurImages[image]}
             alt={alt}
             fill
-            preload={index === 0}
+            loading="eager"
+            fetchPriority={index === 0 ? "high" : "low"}
             sizes="100vw"
             className="hero-media-slide"
             style={{ opacity: index === active ? 1 : 0 }}
             aria-hidden={index !== active}
           />
-        ))}
+        ) : null)}
         {count > 1 && (
           <>
             <button type="button" className="hero-arrow hero-arrow-prev" aria-label="Previous slide" onClick={() => goTo(active - 1)}>

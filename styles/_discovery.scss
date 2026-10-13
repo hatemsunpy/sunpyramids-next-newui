@@ -7,6 +7,10 @@
   // Discovery Hero (Editorial Header)
   // ---------------------------------------------------------------------------
   .discovery-hero {
+    --discovery-image: var(--discovery-image-desktop);
+    @media (max-width: 768px) {
+      --discovery-image: var(--discovery-image-mobile);
+    }
     position: relative;
     overflow: hidden;
     min-height: clamp(240px, 32vw, 380px);
@@ -1152,6 +1156,15 @@
       .blogs-tags {
         gap: 0.625rem;
         padding: 0.25rem 0.25rem 0.5rem;
+        touch-action: pan-x pan-y pinch-zoom;
+        overscroll-behavior-x: contain;
+        cursor: grab;
+
+        &.is-dragging,
+        &.is-dragging button {
+          cursor: grabbing;
+          user-select: none;
+        }
 
         .blogs-tags-label,
         button {
