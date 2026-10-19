@@ -1,50 +1,94 @@
 import sharp from "sharp";
 import { remoteImageURL } from "@/lib/responsive-image";
+import { forgetRemoteImageSource, getRemoteImageSource } from "@/lib/remote-image.server";
 
 export const runtime = "nodejs";
 
 const widths = new Set([16, 32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840]);
-const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
 const MAX_CACHE_BYTES = 32 * 1024 * 1024;
-const TTL_MS = 300_000;
+const MAX_CACHE_ENTRIES = 128;
+// Bounds the ENTIRE upstream lifetime: download, buffering, metadata decode,
+// and transform share one slot each. A waiter holds no buffers and performs
+// no fetch until it owns a slot.
+const MAX_CONCURRENT_REQUESTS = 4;
+// Bounds unique in-flight work (active slots + queued waiters). Beyond this,
+// new unique keys fall back to the same live original URL without caching,
+// so an overload spike can never buffer unbounded 12MB payloads.
+const MAX_PENDING_REQUESTS = 8;
 type CachedImage = { bytes: Buffer; expires: number };
 const images = new Map<string, CachedImage>();
 const pending = new Map<string, Promise<CachedImage>>();
 let cacheBytes = 0;
+let activeRequests = 0;
+const requestWaiters: Array<() => void> = [];
 
-async function sourceBytes(url: URL) {
-  const response = await fetch(url, { cache: "no-store", redirect: "error", signal: AbortSignal.timeout(8000) });
-  if (!response.ok || !response.headers.get("content-type")?.startsWith("image/")) throw new Error("Image source unavailable");
-  if (Number(response.headers.get("content-length")) > MAX_SOURCE_BYTES) throw new Error("Image source too large");
-  const reader = response.body?.getReader();
-  if (!reader) throw new Error("Image source has no body");
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  try {
-    while (true) {
-      const chunk = await reader.read();
-      if (chunk.done) return Buffer.concat(chunks);
-      size += chunk.value.byteLength;
-      if (size > MAX_SOURCE_BYTES) throw new Error("Image source too large");
-      chunks.push(chunk.value);
-    }
-  } finally {
-    await reader.cancel();
+async function acquireRequestSlot(): Promise<void> {
+  if (activeRequests < MAX_CONCURRENT_REQUESTS) {
+    activeRequests += 1;
+    return;
   }
+  await new Promise<void>((resolve) => requestWaiters.push(resolve));
+  // Resumed via direct handoff from releaseRequestSlot: the slot ownership
+  // transferred to this waiter, so the count already includes it.
+}
+
+function releaseRequestSlot(): void {
+  const next = requestWaiters.shift();
+  if (next) {
+    // Hand the slot to the oldest waiter with no decrement/increment gap,
+    // so a newcomer racing in cannot steal the released slot.
+    next();
+    return;
+  }
+  activeRequests = Math.max(0, activeRequests - 1);
+}
+
+// Internal control-flow signal for the documented fallback below: serve the
+// same live original URL (never cached), used for animated input, overload,
+// and any upstream/transform failure. GET converts every rejection to that
+// redirect, so no caller matches on message strings.
+class PreserveOriginal extends Error {}
+
+async function transformImage(original: Buffer, width: number): Promise<Buffer> {
+  // A single metadata probe decides the path. Unreadable input throws here
+  // and reaches the original-image fallback directly: it is never decoded
+  // a second time by a resize attempt.
+  const metadata = await sharp(original, { limitInputPixels: 40_000_000 }).metadata();
+  // Animated input (multi-page WebP/AVIF/PNG) must keep playing: fall back to
+  // the same live original instead of silently flattening to one static frame.
+  // GIF/SVG never reach here; request validation already rejects them so the
+  // browser keeps serving the original animated file.
+  if ((metadata.pages ?? 1) > 1) throw new PreserveOriginal("Animated input preserved as-is");
+  return sharp(original, { limitInputPixels: 40_000_000 })
+    .rotate().resize({ width, withoutEnlargement: true }).webp({ quality: 85 }).toBuffer();
 }
 
 async function resizeImage(url: URL, width: number): Promise<CachedImage> {
-  const original = await sourceBytes(url);
-  const bytes = await sharp(original, { limitInputPixels: 40_000_000 })
-    .rotate().resize({ width, withoutEnlargement: true }).webp({ quality: 85 }).toBuffer();
-  return { bytes, expires: Date.now() + TTL_MS };
+  await acquireRequestSlot();
+  try {
+    const source = await getRemoteImageSource(url, { cache: "no-store", signal: AbortSignal.timeout(8000) });
+    try {
+      const bytes = await transformImage(source.bytes, width);
+      return { bytes, expires: source.expires };
+    } catch (error) {
+      forgetRemoteImageSource(url, source);
+      throw error;
+    }
+  } finally {
+    releaseRequestSlot();
+  }
 }
 
 function cacheImage(key: string, image: CachedImage) {
+  const existing = images.get(key);
+  if (existing) {
+    images.delete(key);
+    cacheBytes = Math.max(0, cacheBytes - existing.bytes.length);
+  }
   for (const [cachedKey, cached] of images) {
-    if (cached.expires <= Date.now() || cacheBytes + image.bytes.length > MAX_CACHE_BYTES || images.size >= 128) {
+    if (cached.expires <= Date.now() || cacheBytes + image.bytes.length > MAX_CACHE_BYTES || images.size >= MAX_CACHE_ENTRIES) {
       images.delete(cachedKey);
-      cacheBytes -= cached.bytes.length;
+      cacheBytes = Math.max(0, cacheBytes - cached.bytes.length);
     }
   }
   if (image.bytes.length > MAX_CACHE_BYTES) return;
@@ -58,6 +102,7 @@ async function optimizedImage(url: URL, width: number) {
   if (cached && cached.expires > Date.now()) return cached;
   const current = pending.get(key);
   if (current) return current;
+  if (pending.size >= MAX_PENDING_REQUESTS) throw new PreserveOriginal("Image service overloaded");
   const request = resizeImage(url, width).then(image => { cacheImage(key, image); return image; });
   pending.set(key, request);
   try { return await request; } finally { pending.delete(key); }
@@ -76,8 +121,11 @@ export async function GET(request: Request) {
       "X-Content-Type-Options": "nosniff",
     } });
   } catch {
-    // Resizing is optional: a failure falls back to this same live image,
-    // never to copied production content, and the redirect is never cached.
+    // Resizing is optional: every failure mode (unreachable upstream, bad
+    // payload, unreadable metadata, animated input, overload) falls back to
+    // this same live image URL, never to copied production content, and the
+    // redirect is never cached. Failures and overloads are never cached, so
+    // the next request retries the live source.
     return new Response(null, { status: 302, headers: { Location: url.href, "Cache-Control": "no-store" } });
   }
 }

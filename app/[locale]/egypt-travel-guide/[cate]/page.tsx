@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/SiteShell";

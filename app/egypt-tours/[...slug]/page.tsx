@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { CategoryChildrenIndex } from "@/components/CategoryChildrenIndex";

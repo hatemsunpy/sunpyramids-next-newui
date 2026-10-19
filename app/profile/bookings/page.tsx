@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { SiteShell } from "@/components/SiteShell";
 import { AccountPage } from "@/components/ClonedNuxtPages";
 

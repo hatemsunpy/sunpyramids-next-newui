@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { SiteShell } from "@/components/SiteShell";
 import { ThankfulPage } from "@/components/ThankfulPage";
 

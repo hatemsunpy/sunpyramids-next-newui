@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { toggleWishlist } from "@/components/CustomerFlows";
+import { toggleWishlist } from "@/lib/wishlist";
 import type { Locale, Tour } from "@/types/api";
 
-export function useTourActions(tour: Tour | null, locale: Locale) {
+export function useTourActions(tour: Pick<Tour, "id" | "title" | "wishlisted_exists"> | null, locale: Locale) {
   const [actionMessage, setActionMessage] = useState("");
   const [isFavorite, setIsFavorite] = useState(Boolean(tour?.wishlisted_exists));
   const [isFavoritePending, setIsFavoritePending] = useState(false);

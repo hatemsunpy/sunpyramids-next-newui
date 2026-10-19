@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { LocalizedGenericRoute } from "@/components/LocalizedGenericRoute";
 import { localizedGenericMetadata } from "@/lib/localized-generic-metadata";
 type Props = { params: Promise<{ locale: string }> };

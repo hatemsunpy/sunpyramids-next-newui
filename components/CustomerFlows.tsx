@@ -13,7 +13,6 @@ import {
   apiPatch,
   apiPost,
   apiPostForm,
-  apiPut,
   ApiClientError,
   clientApiUrl,
   getCookie,
@@ -27,6 +26,9 @@ import { uiCopy } from "@/lib/ui-copy";
 import { siteContact } from "@/lib/site-contact";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
+export { toggleWishlist } from "@/lib/wishlist";
+import { optionCost } from "@/lib/option-cost";
+export { optionCost };
 import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 import {
   PhoneCountryInput,
@@ -105,20 +107,6 @@ function matchingSeason(tour: any, dateString?: string) {
       availability.years_numbers?.includes(parsed.year)
     );
   }) ?? null;
-}
-
-export function optionCost(option: any, adults: number, children: number): number {
-  const baseAdultPrice = Number(option?.adult_price ?? 0);
-  const baseChildPrice = Number(option?.child_price ?? 0);
-  const groups = Array.isArray(option?.pricing_groups) ? option.pricing_groups : [];
-  if (groups.length) {
-    const totalPeople = adults + children;
-    const group = groups.find((g: any) => totalPeople >= Number(g?.from) && totalPeople <= Number(g?.to));
-    if (group) {
-      return Number(group.price ?? baseAdultPrice) * adults + Number(group.child_price ?? baseChildPrice) * children;
-    }
-  }
-  return baseAdultPrice * adults + baseChildPrice * children;
 }
 
 function cartItemTotal(item: any): number | null {
@@ -1330,13 +1318,6 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
       {orderSummaryAside}
     </div>
   );
-}
-
-export async function toggleWishlist(tourId: number | string, locale: Locale = "en") {
-  if (!getCookie("sunpyramids-token")) {
-    throw new Error("Please login to like the tour");
-  }
-  return apiPut<ApiResponse>(`wishlist/${tourId}/toggle`, locale, true);
 }
 
 export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your-trip" | "rent-car"; locale?: Locale }) {

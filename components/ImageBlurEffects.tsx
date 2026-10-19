@@ -138,6 +138,10 @@ export function ImageBlurEffects() {
     const mutations = new MutationObserver((records) => {
       for (const record of records) {
         if (record.type === "attributes" && record.target instanceof HTMLElement) {
+          // Skip style writes on elements that can never be blur candidates
+          // (e.g. button glass --button-glass-x/y vars). Same final blur
+          // result; avoids getComputedStyle/layout work on every pointermove.
+          if (!(record.target instanceof HTMLImageElement) && !record.target.matches(candidates)) continue;
           if (record.attributeName !== "style" || !(record.target instanceof HTMLImageElement)) track(record.target);
         }
         record.addedNodes.forEach((node) => { if (node instanceof HTMLElement) scan(node); });

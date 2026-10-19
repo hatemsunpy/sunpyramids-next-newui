@@ -45,10 +45,18 @@ export function HomeUpcomingEventsCarousel({
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    checkScroll();
+    // Avoid a synchronous mount geometry read; ResizeObserver fires post-layout before paint, fallback keeps current behavior.
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(checkScroll);
+      ro.observe(el, { box: "border-box" });
+    } else {
+      checkScroll();
+    }
     el.addEventListener("scroll", checkScroll, { passive: true });
     window.addEventListener("resize", checkScroll);
     return () => {
+      ro?.disconnect();
       el.removeEventListener("scroll", checkScroll);
       window.removeEventListener("resize", checkScroll);
     };

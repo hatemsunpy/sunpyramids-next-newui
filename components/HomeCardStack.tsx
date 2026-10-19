@@ -78,7 +78,7 @@ export function HomeCardStack({
       if (!entry.isIntersecting) return;
       observer.disconnect();
       loadNext();
-    }, { rootMargin: "1000px 0px" });
+    }, { rootMargin: "400px 0px" });
 
     observer.observe(stage);
     return () => {

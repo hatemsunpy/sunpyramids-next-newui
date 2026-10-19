@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { SiteShell } from "@/components/SiteShell";
 import { TravelGuidePage } from "@/components/ClonedNuxtPages";

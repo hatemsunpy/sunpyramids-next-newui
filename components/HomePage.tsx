@@ -1,3 +1,4 @@
+import { Activity } from "react";
 import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { ApiPage, Locale, SocialLink, Tour } from "@/types/api";
@@ -17,6 +18,7 @@ import { HomeUpcomingEvents } from "@/components/HomeUpcomingEvents";
 import { HomeCardStack } from "@/components/HomeCardStack";
 import { WhyTravelWithSunPyramids } from "@/components/WhyTravelWithSunPyramids";
 import { sanitizeHtml } from "@/lib/sanitize-html";
+import { toTourCardData } from "@/lib/tour-card-data";
 import { homeCopy } from "@/lib/home-copy";
 import { homeSectionLabels } from "@/lib/home-section-labels";
 import { getImageBlurPlaceholders } from "@/lib/image-blur.server";
@@ -96,7 +98,9 @@ export async function HomePage({
       </section>
 
       <section className="home-search-bridge container-shell" aria-label="Search and plan your trip">
-        <HomeSearchShortcuts locale={locale} destinations={highlights} rootCategories={rootCategories} />
+        <Activity mode="visible">
+          <HomeSearchShortcuts locale={locale} destinations={highlights} rootCategories={rootCategories} />
+        </Activity>
       </section>
 
       <WhyTravelWithSunPyramids locale={locale} />
@@ -128,7 +132,9 @@ export async function HomePage({
             linkLabel={copy.seeMore}
             title={copy.popularTitle}
           />
-          <HomePopularTours initialTours={popularTours} locale={locale} />
+          <Activity mode="visible">
+            <HomePopularTours initialTours={popularTours.map(toTourCardData)} locale={locale} />
+          </Activity>
         </div>
       </section>
 
@@ -139,7 +145,9 @@ export async function HomePage({
         <div className="home-plan-section__form">
           <SectionEyebrow>{labels.plan}</SectionEyebrow>
           <h2>{copy.makeYourTrip}</h2>
-          <HomeSearchShortcuts locale={locale} destinations={highlights} modeOnly="make" />
+          <Activity mode="visible">
+            <HomeSearchShortcuts locale={locale} destinations={highlights} modeOnly="make" />
+          </Activity>
         </div>
       </section>
 
@@ -240,7 +248,9 @@ export async function HomePage({
       </section>
 
       <div className="home-card-stack-section">
-        <HomeCardStack previousLabel={copy.stackPrevious} nextLabel={copy.stackNext} cardLabel={copy.stackCard} />
+        <Activity mode="visible">
+          <HomeCardStack previousLabel={copy.stackPrevious} nextLabel={copy.stackNext} cardLabel={copy.stackCard} />
+        </Activity>
       </div>
 
       <section className="home-review-section container-shell">
@@ -269,7 +279,7 @@ export async function HomePage({
       ) : null}
 
       <section className="home-help-section-v2 container-shell">
-        <div className="home-help-panel-v2"><SectionEyebrow>{labels.help}</SectionEyebrow><h2>{copy.needHelp}</h2><HomeNeedHelpForm locale={locale} /></div>
+        <div className="home-help-panel-v2"><SectionEyebrow>{labels.help}</SectionEyebrow><h2>{copy.needHelp}</h2><Activity mode="visible"><HomeNeedHelpForm locale={locale} /></Activity></div>
       </section>
 
       <TravelPartners />

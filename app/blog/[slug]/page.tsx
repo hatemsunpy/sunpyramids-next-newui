@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { BlogPostPage } from "@/components/BlogPostPage";
 import { JsonLd } from "@/components/JsonLd";

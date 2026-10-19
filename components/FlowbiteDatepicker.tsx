@@ -358,6 +358,7 @@ export function FlowbiteDatepicker({
 
   // Calendar Day Generation
   const calendarDays = React.useMemo(() => {
+    if (!isOpen) return [];
     const days: Array<{
       date: Date;
       isCurrentMonth: boolean;
@@ -404,7 +405,7 @@ export function FlowbiteDatepicker({
     }
 
     return days;
-  }, [viewYear, viewMonth, parsedMinDate, parsedMaxDate, isDateAvailable]);
+  }, [isOpen, viewYear, viewMonth, parsedMinDate, parsedMaxDate, isDateAvailable]);
 
   const todayIso = React.useMemo(() => toISODateString(new Date()), []);
   const todayDisabled =
@@ -414,9 +415,10 @@ export function FlowbiteDatepicker({
 
   // Decade years calculation for year view
   const decadeYears = React.useMemo(() => {
+    if (!isOpen) return [];
     const decadeStart = Math.floor(viewYear / 10) * 10;
     return Array.from({ length: 12 }, (_, i) => decadeStart - 1 + i);
-  }, [viewYear]);
+  }, [isOpen, viewYear]);
 
   const togglePicker = () => {
     if (isOpen) {

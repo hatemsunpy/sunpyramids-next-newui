@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { getPageReliable } from "@/lib/data";
 import { resolveRequiredApiResult } from "@/lib/resolve-api-result";
