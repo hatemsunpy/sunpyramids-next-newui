@@ -34,25 +34,30 @@ jobs:
         with:
           node-version: 22.23.2
 
-      - name: Install toolchain (Lighthouse global, browser under RUNNER_TEMP)
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pw-browsers
+      - name: Install toolchain (Lighthouse global, official Stable Chrome under RUNNER_TEMP)
         run: |
           set -euo pipefail
-          npm install -g --ignore-scripts lighthouse@13.3.0
+          npm install -g --ignore-scripts lighthouse@13.5.0
           npm install --prefix "$RUNNER_TEMP/pwtool" --no-audit --no-fund --ignore-scripts playwright-core@1.62.1
-          node "$RUNNER_TEMP/pwtool/node_modules/playwright-core/cli.js" install --with-deps chromium-headless-shell
-          mapfile -t exes < <(find "$PLAYWRIGHT_BROWSERS_PATH" -type f \( -name headless_shell -o -name chrome-headless-shell \))
+          node "$RUNNER_TEMP/pwtool/node_modules/playwright-core/cli.js" install-deps chromium
+          mkdir -p "$RUNNER_TEMP/chrome-stable"
+          curl -fL --retry 3 https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.84/linux64/chrome-linux64.zip -o "$RUNNER_TEMP/chrome-stable.zip"
+          unzip -q "$RUNNER_TEMP/chrome-stable.zip" -d "$RUNNER_TEMP/chrome-stable"
+          mapfile -t exes < <(find "$RUNNER_TEMP/chrome-stable" -type f -name chrome)
           if [ "${#exes[@]}" -ne 1 ]; then
-            echo "::error::Expected exactly 1 headless-shell executable, found ${#exes[@]}:"
+            echo "::error::Expected exactly 1 chrome executable, found ${#exes[@]}:"
             printf '%s\n' "${exes[@]}"
+            exit 1
+          fi
+          if [ ! -x "${exes[0]}" ]; then
+            echo "::error::Chrome binary is not executable: ${exes[0]}"
             exit 1
           fi
           ver="$("${exes[0]}" --version)"
           echo "Browser ${exes[0]} -> $ver"
           case "$ver" in
-            *151.0.7922.34*) ;;
-            *) echo "::error::Unexpected browser version '$ver' (expected 151.0.7922.34)"; exit 1 ;;
+            *155.0.8059.84*) ;;
+            *) echo "::error::Unexpected browser version '$ver' (expected 155.0.8059.84)"; exit 1 ;;
           esac
           echo "CHROME_PATH=${exes[0]}" >> "$GITHUB_ENV"
 
@@ -101,8 +106,8 @@ jobs:
         if: always()
         env:
           PHASES_BASE: cloud-mobile-${{ github.run_id }}-${{ github.run_attempt }}
-          EXPECTED_LIGHTHOUSE: 13.3.0
-          EXPECTED_BROWSER_VERSION: 151.0.7922.34
+          EXPECTED_LIGHTHOUSE: 13.5.0
+          EXPECTED_BROWSER_VERSION: 155.0.8059.84
           MIN_MEDIAN: 70
         run: |
           node <<'NODE'
