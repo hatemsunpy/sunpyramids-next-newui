@@ -1,5 +1,5 @@
 const imageHosts = new Set([
-  "sunpyramidtours.com", "sunpyramidstours.com", "new-sunpyramids-demo.vercel.app",
+  "sunpyramidtours.com", "sunpyramidstours.com", "cdn.sunpyramidstours.com", "new-sunpyramids-demo.vercel.app",
   "pub-5ccb6ad334fb427684d7f3fa11a34197.r2.dev",
 ]);
 

@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { notFound } from "next/navigation";
 import { PaymentStatusPage } from "@/components/ClonedNuxtPages";
 import type { PaymentCallbackKind } from "@/components/PaymentCallbackStatus";

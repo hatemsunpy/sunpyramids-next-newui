@@ -45,10 +45,13 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    // Vercel's image optimization is disabled because the current plan
-    // returns 402 Payment Required for external media. Serve images directly
-    // from the configured remote hosts (sunpyramidtours.com, R2, etc.).
-    unoptimized: true,
+    // Verified bug repair (get-img-props.js forces unoptimized=true when
+    // config.unoptimized is true, disabling all custom loaders): use a global
+    // custom loader backed by the existing /media/image service instead of
+    // Vercel's billed /_next/image (prior deployment returned 402). Remote
+    // hosts below are unchanged; no redirects/routes/cache flags modified.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
     remotePatterns: [
       {
         protocol: "https",

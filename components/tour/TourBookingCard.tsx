@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { ArrowRight, Bookmark, MessageCircle, Share2 } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
-import { optionCost } from "@/components/CustomerFlows";
+import { optionCost } from "@/lib/option-cost";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { TourBookingAddOns } from "@/components/tour/TourAddOns";
 import { useTourActions } from "@/components/tour/TourActions";

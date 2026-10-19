@@ -72,8 +72,8 @@ export function HomeHeroScene({
             blurDataURL={blurImages[image]}
             alt={alt}
             fill
-            loading="eager"
-            fetchPriority={index === 0 ? "high" : "low"}
+            loading={index === active ? "eager" : "lazy"}
+            fetchPriority={index === active ? "high" : "low"}
             sizes="100vw"
             className="hero-media-slide"
             style={{ opacity: index === active ? 1 : 0 }}

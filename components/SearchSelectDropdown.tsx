@@ -214,34 +214,12 @@ export function SearchSelectDropdown({
             </div>
           )}
 
-          <div className="search-select-items-list">
-            {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-center text-xs text-muted-foreground">
-                No results found
-              </div>
-            ) : (
-              filteredOptions.map((opt) => {
-                const isSelected = String(opt.value) === String(currentValue);
-                const formattedItemLabel = getFormattedLabel(String(opt.value), opt.label);
-                return (
-                  <DropdownMenuItem
-                    key={opt.value}
-                    active={isSelected}
-                    onSelect={() => handleSelect(String(opt.value))}
-                    className={cn(
-                      "search-select-item flex items-center justify-between gap-3 text-[0.85rem] cursor-pointer",
-                      isSelected && "font-semibold text-primary is-active"
-                    )}
-                  >
-                    <span className="truncate">{formattedItemLabel}</span>
-                    {isSelected && (
-                      <Check className="search-select-check h-4 w-4 shrink-0 text-primary font-bold" />
-                    )}
-                  </DropdownMenuItem>
-                );
-              })
-            )}
-          </div>
+          <SearchSelectItemsList
+            filteredOptions={filteredOptions}
+            currentValue={currentValue}
+            getFormattedLabel={getFormattedLabel}
+            handleSelect={handleSelect}
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -249,3 +227,48 @@ export function SearchSelectDropdown({
 }
 
 export const SelectDropdown = SearchSelectDropdown;
+
+// Rendered only while the Radix Portal mounts the popover content, so the
+// option list is built exactly when it becomes visible.
+function SearchSelectItemsList({
+  filteredOptions,
+  currentValue,
+  getFormattedLabel,
+  handleSelect,
+}: {
+  filteredOptions: SelectOption[];
+  currentValue?: string;
+  getFormattedLabel: (optVal: string, optLabel: string) => string;
+  handleSelect: (val: string) => void;
+}) {
+  return (
+    <div className="search-select-items-list">
+      {filteredOptions.length === 0 ? (
+        <div className="px-4 py-3 text-center text-xs text-muted-foreground">
+          No results found
+        </div>
+      ) : (
+        filteredOptions.map((opt) => {
+          const isSelected = String(opt.value) === String(currentValue);
+          const formattedItemLabel = getFormattedLabel(String(opt.value), opt.label);
+          return (
+            <DropdownMenuItem
+              key={opt.value}
+              active={isSelected}
+              onSelect={() => handleSelect(String(opt.value))}
+              className={cn(
+                "search-select-item flex items-center justify-between gap-3 text-[0.85rem] cursor-pointer",
+                isSelected && "font-semibold text-primary is-active"
+              )}
+            >
+              <span className="truncate">{formattedItemLabel}</span>
+              {isSelected && (
+                <Check className="search-select-check h-4 w-4 shrink-0 text-primary font-bold" />
+              )}
+            </DropdownMenuItem>
+          );
+        })
+      )}
+    </div>
+  );
+}

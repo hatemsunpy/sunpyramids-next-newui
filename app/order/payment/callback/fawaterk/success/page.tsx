@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { PaymentStatusPage } from "@/components/ClonedNuxtPages";
 
 export default function Page() {

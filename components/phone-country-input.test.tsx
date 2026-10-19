@@ -189,6 +189,53 @@ describe("PhoneCountryInput", () => {
     expect(new FormData(form).get("phone")).toBe("");
   });
 
+  it("reflects countries that arrive before and while the popover is open", async () => {
+    const ui = render(
+      <form data-testid="form">
+        <PhoneCountryInput id="phone" countries={[countries[0]]} copy={copy} loadState="ready" required />
+      </form>
+    );
+
+    // Records changed while the menu was still closed (e.g. API response appended).
+    ui.rerender(
+      <form data-testid="form">
+        <PhoneCountryInput id="phone" countries={countries} copy={copy} loadState="ready" required />
+      </form>
+    );
+
+    const trigger = screen.getByRole("button", { name: "Country calling code: Afghanistan +93" });
+    fireEvent.pointerDown(trigger, { button: 0, ctrlKey: false });
+    await screen.findByRole("searchbox", { name: copy.searchCountryCode });
+
+    expect(screen.getByRole("menuitem", { name: /Albania.*\+355/ })).toBeInTheDocument();
+
+    // Records changed again while the menu stays open appear immediately.
+    ui.rerender(
+      <form data-testid="form">
+        <PhoneCountryInput
+          id="phone"
+          countries={[
+            ...countries,
+            { id: 9, name: "Chile", code: "CL", phone_code: "+56", length: 9 },
+          ]}
+          copy={copy}
+          loadState="ready"
+          required
+        />
+      </form>
+    );
+    expect(screen.getByRole("menuitem", { name: /Chile.*\+56/ })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("menuitem", { name: /Albania.*\+355/ }));
+    fireEvent.change(ui.container.querySelector<HTMLInputElement>("#phone")!, {
+      target: { value: "123456789" },
+    });
+
+    expect(new FormData(ui.container.querySelector<HTMLFormElement>("[data-testid='form']")!).get("phone")).toBe(
+      "+355123456789"
+    );
+  });
+
   it("does not change the dial code after typing if delayed geo detection arrives", async () => {
     let finishLookup!: (value: Response) => void;
     vi.mocked(fetch).mockImplementation(() => new Promise((resolve) => { finishLookup = resolve; }));

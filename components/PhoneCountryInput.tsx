@@ -345,36 +345,12 @@ export function PhoneCountryInput({
               />
             </div>
 
-            <div className="phone-country-options">
-              {filteredCountries.length ? (
-                filteredCountries.map((country) => {
-                  const key = countryKey(country);
-                  const code = dialCode(country);
-                  const isSelected = selectedCountry ? key === countryKey(selectedCountry) : false;
-                  return (
-                    <DropdownMenuItem
-                      key={key}
-                      active={isSelected}
-                      onSelect={() => selectCountry(country)}
-                      className="phone-country-option"
-                    >
-                      <span
-                        className={`phone-country-flag ${flagStyle(country) ? "has-image" : ""}`}
-                        style={flagStyle(country)}
-                        aria-hidden="true"
-                      >
-                        {country.code || "--"}
-                      </span>
-                      <span className="phone-country-name">{country.name}</span>
-                      <span className="phone-country-option-code">{code}</span>
-                      {isSelected ? <Check className="phone-country-check" aria-hidden="true" /> : null}
-                    </DropdownMenuItem>
-                  );
-                })
-              ) : (
-                <p className="phone-country-empty">{copy.noCountriesFound}</p>
-              )}
-            </div>
+            <PhoneCountryOptionsList
+              countries={filteredCountries}
+              selectedCountry={selectedCountry}
+              selectCountry={selectCountry}
+              noCountriesFound={copy.noCountriesFound}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -418,6 +394,53 @@ export function PhoneCountryInput({
           {countryStatus === "error" ? copy.countryCodesUnavailable : copy.loadingCountryCodes}
         </p>
       ) : null}
+    </div>
+  );
+}
+
+// Rendered only while the Radix Portal mounts the popover content, so the
+// country option list is built exactly when it becomes visible.
+function PhoneCountryOptionsList({
+  countries,
+  selectedCountry,
+  selectCountry,
+  noCountriesFound,
+}: {
+  countries: PhoneCountry[];
+  selectedCountry: PhoneCountry | null;
+  selectCountry: (country: PhoneCountry) => void;
+  noCountriesFound: string;
+}) {
+  return (
+    <div className="phone-country-options">
+      {countries.length ? (
+        countries.map((country) => {
+          const key = countryKey(country);
+          const code = dialCode(country);
+          const isSelected = selectedCountry ? key === countryKey(selectedCountry) : false;
+          return (
+            <DropdownMenuItem
+              key={key}
+              active={isSelected}
+              onSelect={() => selectCountry(country)}
+              className="phone-country-option"
+            >
+              <span
+                className={`phone-country-flag ${flagStyle(country) ? "has-image" : ""}`}
+                style={flagStyle(country)}
+                aria-hidden="true"
+              >
+                {country.code || "--"}
+              </span>
+              <span className="phone-country-name">{country.name}</span>
+              <span className="phone-country-option-code">{code}</span>
+              {isSelected ? <Check className="phone-country-check" aria-hidden="true" /> : null}
+            </DropdownMenuItem>
+          );
+        })
+      ) : (
+        <p className="phone-country-empty">{noCountriesFound}</p>
+      )}
     </div>
   );
 }

@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   toggleWishlist: vi.fn(),
 }));
 
-vi.mock("@/components/CustomerFlows", () => ({
+vi.mock("@/lib/wishlist", () => ({
   toggleWishlist: mocks.toggleWishlist,
 }));
 

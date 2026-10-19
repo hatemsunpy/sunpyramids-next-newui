@@ -1,3 +1,4 @@
+import "@/styles/interior.scss";
 import { Suspense } from "react";
 import { SocialLoginCallback } from "@/components/SocialLoginCallback";
 
