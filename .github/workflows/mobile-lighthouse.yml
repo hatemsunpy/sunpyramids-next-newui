@@ -1,0 +1,209 @@
+name: Mobile Lighthouse Audit
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/mobile-lighthouse.yml"
+      - "scripts/performance-audit.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AUDIT_ORIGIN: https://sunpyramids-next-newui.vercel.app
+  AUDIT_PROFILE: mobile
+
+jobs:
+  cloud-mobile-audit:
+    name: Home / mobile (3 live runs on Vercel deployment)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.23.2
+
+      - name: Install toolchain (Lighthouse global, browser under RUNNER_TEMP)
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pw-browsers
+        run: |
+          set -euo pipefail
+          npm install -g --ignore-scripts lighthouse@13.3.0
+          npm install --prefix "$RUNNER_TEMP/pwtool" --no-audit --no-fund --ignore-scripts playwright-core@1.62.1
+          node "$RUNNER_TEMP/pwtool/node_modules/playwright-core/cli.js" install --with-deps chromium-headless-shell
+          mapfile -t exes < <(find "$PLAYWRIGHT_BROWSERS_PATH" -type f \( -name headless_shell -o -name chrome-headless-shell \))
+          if [ "${#exes[@]}" -ne 1 ]; then
+            echo "::error::Expected exactly 1 headless-shell executable, found ${#exes[@]}:"
+            printf '%s\n' "${exes[@]}"
+            exit 1
+          fi
+          ver="$("${exes[0]}" --version)"
+          echo "Browser ${exes[0]} -> $ver"
+          case "$ver" in
+            *151.0.7922.34*) ;;
+            *) echo "::error::Unexpected browser version '$ver' (expected 151.0.7922.34)"; exit 1 ;;
+          esac
+          echo "CHROME_PATH=${exes[0]}" >> "$GITHUB_ENV"
+
+      - name: Collect machine info (checkout SHA is NOT the deployed SHA)
+        run: |
+          set -euo pipefail
+          mkdir -p output/performance
+          node --input-type=module <<'NODE'
+          import os from "node:os";
+          import { execSync } from "node:child_process";
+          import { writeFileSync } from "node:fs";
+          const cpus = os.cpus();
+          writeFileSync("output/performance/cloud-machine.json", JSON.stringify({
+            os: `${os.type()} ${os.release()}`,
+            cpu: { model: cpus[0]?.model, cores: cpus.length, speedMHz: cpus[0]?.speed },
+            loadavg: os.loadavg(),
+            memoryFreeBytes: os.freemem(),
+            memoryTotalBytes: os.totalmem(),
+            node: process.version,
+            lighthouse: execSync("lighthouse --version").toString().trim(),
+            browser: process.env.CHROME_PATH ?? null,
+            browserVersion: process.env.CHROME_PATH ? execSync(`"${process.env.CHROME_PATH}" --version`).toString().trim() : null,
+            requestedOrigin: process.env.AUDIT_ORIGIN,
+            checkoutSha: execSync("git rev-parse HEAD").toString().trim(),
+            checkoutShaNote: "Local checkout SHA (git rev-parse HEAD); it is NOT proof of the deployed SHA.",
+            timestamp: new Date().toISOString(),
+          }, null, 2));
+          NODE
+
+      - name: Run 3 sequential audits
+        run: |
+          set -uo pipefail
+          overall=0
+          for r in 1 2 3; do
+            phase="cloud-mobile-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-r${r}"
+            echo "::group::Audit ${phase}"
+            if ! node scripts/performance-audit.mjs "$phase" home; then
+              echo "::error::Audit run failed: ${phase} (reports preserved; continuing remaining runs)"
+              overall=1
+            fi
+            echo "::endgroup::"
+          done
+          echo "AUDIT_RUNS_STATUS=$overall" >> "$GITHUB_ENV"
+
+      - name: Validate runs, summaries and SDKs (always runs)
+        if: always()
+        env:
+          PHASES_BASE: cloud-mobile-${{ github.run_id }}-${{ github.run_attempt }}
+          EXPECTED_LIGHTHOUSE: 13.3.0
+          EXPECTED_BROWSER_VERSION: 151.0.7922.34
+          MIN_MEDIAN: 70
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+          const base = process.env.PHASES_BASE, orig = process.env.AUDIT_ORIGIN;
+          const apiHost = "sunpyramidtours.com";
+          const issues = [], warnings = [], scores = [];
+          for (const r of ["r1", "r2", "r3"]) {
+            const dir = `output/performance/${base}-${r}`;
+            const sumP = `${dir}/summary.json`, lhrP = `${dir}/home-mobile.json`;
+            if (!fs.existsSync(sumP)) { issues.push(`${r}: missing ${sumP}`); continue; }
+            if (!fs.existsSync(lhrP)) { issues.push(`${r}: missing ${lhrP}`); continue; }
+            let rows, lhr;
+            try { rows = JSON.parse(fs.readFileSync(sumP, "utf8")); } catch { issues.push(`${r}: summary.json is not valid JSON`); continue; }
+            try { lhr = JSON.parse(fs.readFileSync(lhrP, "utf8")); } catch { issues.push(`${r}: home LHR is not valid JSON`); continue; }
+            if (!lhr || typeof lhr !== "object" || Array.isArray(lhr)) { issues.push(`${r}: LHR must be an object`); continue; }
+            if (!Array.isArray(rows)) { issues.push(`${r}: summary.json is not an array`); continue; }
+            const ok = rows.filter(x => x && x.name === "home" && x.profile === "mobile" && x.status === "ok" && x.httpStatus === 200 && x.bodyLength > 0);
+            if (rows.length !== 1 || ok.length !== 1) {
+              issues.push(`${r}: expected exactly 1 valid home/mobile HTTP200 nonempty ok row, got ${rows.length} row(s), ${ok.length} valid`); continue;
+            }
+            const row = ok[0];
+            if (!row.scores || Object.values(row.scores).some(v => !Number.isFinite(v) || v < 0 || v > 100)) {
+              issues.push(`${r}: summary scores are not finite 0..100`); continue;
+            }
+            if (lhr.runtimeError) { issues.push(`${r}: LHR runtimeError: ${lhr.runtimeError.message || JSON.stringify(lhr.runtimeError)}`); continue; }
+            const lpc = lhr.categories?.performance?.score;
+            if (!Number.isFinite(lpc) || lpc < 0 || lpc > 1 || Math.round(lpc * 100) !== row.scores.performance) {
+              issues.push(`${r}: LHR performance score (${lpc}) does not match summary row score (${row.scores.performance})`); continue;
+            }
+            const isHome = (candidate, label) => {
+              try {
+                const u = new URL(candidate);
+                return u.origin === orig && u.pathname === "/" && u.href === `${orig}/`;
+              } catch { issues.push(`${r}: unparseable ${label}: ${candidate}`); return false; }
+            };
+            if (!isHome(row.requestedUrl, "row requestedUrl") | !isHome(row.url, "row final url")
+              | !isHome(lhr.requestedUrl, "LHR requestedUrl") | !isHome(lhr.finalDisplayedUrl, "LHR finalDisplayedUrl")) {
+              issues.push(`${r}: requested and final URLs must both be exactly ${orig}/`);
+            }
+            const cs = lhr.configSettings || {}, emu = [];
+            if (cs.formFactor !== "mobile") emu.push(`formFactor=${cs.formFactor}`);
+            if (!cs.screenEmulation || cs.screenEmulation.mobile !== true) emu.push("screenEmulation.mobile!=true");
+            if (cs.throttlingMethod !== "simulate") emu.push(`throttlingMethod=${cs.throttlingMethod}`);
+            if (lhr.lighthouseVersion !== process.env.EXPECTED_LIGHTHOUSE) emu.push(`lighthouse=${lhr.lighthouseVersion}!=${process.env.EXPECTED_LIGHTHOUSE}`);
+            const hostUA = (lhr.environment && lhr.environment.hostUserAgent) || "";
+            if (!hostUA.includes(process.env.EXPECTED_BROWSER_VERSION)) emu.push(`hostUserAgent=${hostUA} missing ${process.env.EXPECTED_BROWSER_VERSION}`);
+            if (emu.length) issues.push(`${r}: unexpected audit settings: ${emu.join("; ")}`);
+            const items = (lhr.audits["network-requests"]?.details?.items) || [];
+            const urlOf = i => { try { return new URL(i.url); } catch { return null; } };
+            const scripts = p => items.filter(i => i && urlOf(i) && i.resourceType === "Script" && i.statusCode === 200 && urlOf(i).pathname === p);
+            const google = scripts("/gtm.js").some(i => urlOf(i).host.endsWith("googletagmanager.com"))
+              || scripts("/gtag/js").some(i => urlOf(i).host.endsWith("googletagmanager.com"));
+            const tagPath = u => u.pathname === "/tag" || u.pathname.startsWith("/tag/");
+            const clarity = items.some(i => i && urlOf(i) && i.resourceType === "Script" && i.statusCode === 200
+              && ((tagPath(urlOf(i)) && (urlOf(i).host === "clarity.ms" || urlOf(i).host === "www.clarity.ms")) || urlOf(i).host === "scripts.clarity.ms"));
+            const tiktok = items.some(i => i && urlOf(i) && urlOf(i).host === "analytics.tiktok.com" && urlOf(i).pathname === "/i18n/pixel/events.js" && i.resourceType === "Script" && i.statusCode === 200);
+            const apis = ["currencies", "countries"].map(a => items.some(i => i && urlOf(i) && urlOf(i).host === apiHost && urlOf(i).pathname === `/api/${a}` && (i.resourceType === "Fetch" || i.resourceType === "XHR") && i.statusCode === 200));
+            if (!google) issues.push(`${r}: missing googletagmanager.com gtm.js/gtag/js Script 200`);
+            if (!clarity) issues.push(`${r}: missing clarity.ms/tag or scripts.clarity.ms Script 200`);
+            if (!tiktok) issues.push(`${r}: missing analytics.tiktok.com/i18n/pixel/events.js Script 200`);
+            apis.forEach((okFlag, idx) => { if (!okFlag) issues.push(`${r}: missing ${apiHost} /api/${["currencies", "countries"][idx]} Fetch/XHR 200`); });
+            if (!Number.isFinite(row.scores.performance)) { issues.push(`${r}: performance score missing/not finite`); continue; }
+            scores.push({ run: r, ...row.scores });
+            warnings.push({ run: r, warnings: Array.isArray(lhr.runWarnings) ? lhr.runWarnings : [String(lhr.runWarnings)] });
+          }
+          let median = null;
+          if (scores.length === 3) {
+            const s = scores.map(x => x.performance).sort((a, b) => a - b);
+            median = s[1];
+          } else issues.push(`cannot compute median: ${scores.length} of 3 runs validated`);
+          if (median === null) issues.push("missing valid runs: median cannot prove gate");
+          else if (median < Number(process.env.MIN_MEDIAN)) issues.push(`median performance ${median} is below gate ${process.env.MIN_MEDIAN}`);
+          if (process.env.AUDIT_RUNS_STATUS === "1") issues.push("one or more audit invocations exited nonzero (see run step logs)");
+          const gate = median !== null && median >= Number(process.env.MIN_MEDIAN) && issues.length === 0;
+          fs.mkdirSync("output/performance", { recursive: true });
+          const validated = { generatedAt: new Date().toISOString(), requestedOrigin: orig, note: "Homepage-only evidence for the Vercel deployment; SDK delivery alone does not prove all tracked events.", runs: scores, warnings, medianPerformance: median, minMedian: Number(process.env.MIN_MEDIAN), gate, issues };
+          fs.writeFileSync("output/performance/cloud-validation.json", JSON.stringify(validated, null, 2));
+          const rows = scores.map(s => `| ${s.run} | ${s.performance} | ${s.accessibility ?? "-"} | ${s["best-practices"] ?? "-"} | ${s.seo ?? "-"} |`).join("\n");
+          const body = [
+            "## Mobile Lighthouse cloud audit (home / mobile, 3 runs)",
+            rows ? `| run | performance | accessibility | best-practices | seo |\n|---|---|---|---|---|\n${rows}` : "No validated runs.",
+            `Median of all 3 performance scores: **${median ?? "N/A"}** (gate \u2265 ${process.env.MIN_MEDIAN}, no weak run dropped)`,
+            `Gate: **${gate ? "PASS" : "FAIL"}**`,
+            warnings.filter(w => w.warnings.length).map(w => `- ${w.run} warnings: ${w.warnings.join(" | ")}`).join("\n"),
+            issues.length ? `### Failures\n${issues.map(i => `- ${i}`).join("\n")}` : "No issues.",
+          ].filter(Boolean).join("\n\n");
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, body + "\n");
+          issues.forEach(i => console.error("GATE ISSUE: " + i));
+          if (!gate) process.exitCode = 1;
+          NODE
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mobile-lighthouse-cloud-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            output/performance/cloud-mobile-*-r?/*.json
+            output/performance/cloud-mobile-*-r?/*.html
+            output/performance/cloud-machine.json
+            output/performance/cloud-validation.json
+          retention-days: 7
+          if-no-files-found: error
