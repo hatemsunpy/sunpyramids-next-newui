@@ -20,9 +20,9 @@ env:
 
 jobs:
   cloud-mobile-audit:
-    name: Home / mobile (3 live runs on Vercel deployment)
+    name: Home / mobile (3 live runs on Vercel deployment) + exploratory all-route sweep
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -102,6 +102,13 @@ jobs:
           done
           echo "AUDIT_RUNS_STATUS=$overall" >> "$GITHUB_ENV"
 
+      - name: Exploratory all-route sweep (not a gate)
+        env:
+          PHASE: full-mobile-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          node scripts/performance-audit.mjs "$PHASE"
+
       - name: Validate runs, summaries and SDKs (always runs)
         if: always()
         env:
@@ -115,6 +122,18 @@ jobs:
           const base = process.env.PHASES_BASE, orig = process.env.AUDIT_ORIGIN;
           const apiHost = "sunpyramidtours.com";
           const issues = [], warnings = [], scores = [];
+          const machineP = "output/performance/cloud-machine.json";
+          let machine = null;
+          if (!fs.existsSync(machineP)) issues.push(`missing browser-machine evidence: ${machineP}`);
+          else {
+            try { machine = JSON.parse(fs.readFileSync(machineP, "utf8")); } catch { issues.push(`${machineP} is not valid JSON`); }
+            if (machine && (typeof machine !== "object" || Array.isArray(machine))) { issues.push(`${machineP} is not a JSON object`); machine = null; }
+            if (machine && !(typeof machine.browserVersion === "string" && machine.browserVersion.includes(process.env.EXPECTED_BROWSER_VERSION))) {
+              issues.push(`${machineP}: browserVersion=${JSON.stringify(machine.browserVersion)} does not include expected full version ${process.env.EXPECTED_BROWSER_VERSION}`);
+              machine = null;
+            }
+          }
+          const expectedMajor = String(process.env.EXPECTED_BROWSER_VERSION).split(".")[0];
           for (const r of ["r1", "r2", "r3"]) {
             const dir = `output/performance/${base}-${r}`;
             const sumP = `${dir}/summary.json`, lhrP = `${dir}/home-mobile.json`;
@@ -154,7 +173,10 @@ jobs:
             if (cs.throttlingMethod !== "simulate") emu.push(`throttlingMethod=${cs.throttlingMethod}`);
             if (lhr.lighthouseVersion !== process.env.EXPECTED_LIGHTHOUSE) emu.push(`lighthouse=${lhr.lighthouseVersion}!=${process.env.EXPECTED_LIGHTHOUSE}`);
             const hostUA = (lhr.environment && lhr.environment.hostUserAgent) || "";
-            if (!hostUA.includes(process.env.EXPECTED_BROWSER_VERSION)) emu.push(`hostUserAgent=${hostUA} missing ${process.env.EXPECTED_BROWSER_VERSION}`);
+            const uaMajor = /(?:^|\s|;)(?:Headless)?Chrome\/(\d+)\./.exec(hostUA);
+            if (!uaMajor) emu.push(`hostUserAgent=${JSON.stringify(hostUA)} has no Chrome major`);
+            else if (uaMajor[1] !== expectedMajor) emu.push(`hostUserAgent major=${uaMajor[1]} != expected ${expectedMajor} (full version ${process.env.EXPECTED_BROWSER_VERSION} from 155.0.0.0 UA reduction is accepted)`);
+            else if (!machine) emu.push(`hostUserAgent verified to major ${expectedMajor}, but machine evidence (cloud-machine.json) is missing/malformed; full version unverified`);
             if (emu.length) issues.push(`${r}: unexpected audit settings: ${emu.join("; ")}`);
             const items = (lhr.audits["network-requests"]?.details?.items) || [];
             const urlOf = i => { try { return new URL(i.url); } catch { return null; } };
@@ -200,6 +222,68 @@ jobs:
           if (!gate) process.exitCode = 1;
           NODE
 
+      - name: Compact full-sweep summary (always runs; ONE exploratory all-route sweep)
+        if: always()
+        env:
+          FULL_PHASE: full-mobile-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+          const fp = `output/performance/${process.env.FULL_PHASE}/summary.json`;
+          const issues = [], rowsOut = [];
+          let rows = null;
+          if (!fs.existsSync(fp)) {
+            issues.push(`missing ${fp}`);
+          } else {
+            try { rows = JSON.parse(fs.readFileSync(fp, "utf8")); } catch { issues.push(`${fp} is not valid JSON`); }
+          }
+          if (!Array.isArray(rows) || rows.length === 0) {
+            if (rows !== null) issues.push(`${fp} is not a nonempty array`);
+            rows = [];
+          }
+          if (rows.length !== 16) issues.push(`expected exactly 16 rows, got ${rows.length}`);
+          const isValid = r => r && typeof r === "object" && !Array.isArray(r) && typeof r.name === "string" && r.name
+            && r.profile === "mobile" && (r.status === "ok" || r.status === "redirected")
+            && r.httpStatus === 200 && r.bodyLength > 0
+            && r.scores && typeof r.scores === "object" && Number.isFinite(r.scores.performance)
+            && r.scores.performance >= 0 && r.scores.performance <= 100;
+          const okRows = rows.filter(isValid);
+          const byName = new Map(okRows.map(r => [r.name, r]));
+          const names = rows.map(r => (r && typeof r === "object" && typeof r.name === "string") ? r.name : "(unnameable)");
+          const dupCounts = {};
+          for (const n of names) dupCounts[n] = (dupCounts[n] || 0) + 1;
+          const dups = Object.entries(dupCounts).filter(([, c]) => c > 1);
+          if (dups.length) issues.push(`duplicate name rows: ${dups.map(([n, c]) => `${n}x${c}`).join(", ")}`);
+          if (byName.size !== 16) {
+            const missing = [];
+            for (const r of rows) {
+              if (!r || typeof r !== "object" || !r.name) continue;
+              if (byName.has(r.name)) continue;
+              missing.push(`${r.name}: status=${r.status ?? "-"} http=${r.httpStatus ?? "-"} error=${r.error ?? "(none reported)"}`);
+            }
+            issues.push(`expected 16 distinct route names with valid mobile rows, got ${byName.size}: ${[...byName.keys()].join(",") || "(none)"}`);
+            issues.push(`failed/empty/missing route(s) (never counted as success): ${missing.join(" | ") || "(none reported)"}`);
+          }
+          for (const r of rows) {
+            if (!r || typeof r !== "object") continue;
+            const valid = byName.get(r.name) === r && isValid(r);
+            const lp = r.metrics?.["largest-contentful-paint"], tbt = r.metrics?.["total-blocking-time"];
+            if (valid && r.scores.performance < 70) issues.push(`${r.name}: performance score ${r.scores.performance} below 70`);
+            rowsOut.push(`| ${r.name ?? "-"} | ${r.requestedUrl ?? "-"} | ${r.url ?? "-"} | ${r.status ?? "-"}${valid ? "" : " (INVALID)"} | ${r.httpStatus ?? "-"} | ${(r.scores && Number.isFinite(r.scores.performance)) ? r.scores.performance : "MISSING"} | ${Number.isFinite(lp) ? Math.round(lp) + " ms" : "MISSING"} | ${Number.isFinite(tbt) ? Math.round(tbt) + " ms" : "MISSING"} | ${(Array.isArray(r.warnings) && r.warnings.length) ? r.warnings.join("; ") : "-"} |`);
+          }
+          fs.mkdirSync("output/performance", { recursive: true });
+          fs.writeFileSync("output/performance/full-validation.json", JSON.stringify({ generatedAt: new Date().toISOString(), phase: process.env.FULL_PHASE, note: "ONE exploratory all-route sweep; not three-run per-route medians or site-wide acceptance. Homepage has a separate three-run median>=70 gate.", runs: rows, validRoutes: [...byName.keys()], issues }, null, 2));
+          const body = [
+            "## Full-mobile sweep (ONE exploratory all-route sweep)",
+            "ONE exploratory all-route sweep; not three-run per-route medians or site-wide acceptance. Homepage has a separate three-run median \u2265 70 gate.",
+            rowsOut.length ? `| route | requested | final | status | http | perf | LCP | TBT | warnings |\n|---|---|---|---|---|---|---|---|---|\n${rowsOut.join("\n")}` : "No rows parsed.",
+            issues.length ? `### Failures\n${issues.map(i => `- ${i}`).join("\n")}` : "No issues.",
+          ].join("\n\n");
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, body + "\n");
+          issues.forEach(i => console.error("SWEEP ISSUE: " + i));
+          if (issues.length) process.exitCode = 1;
+          NODE
+
       - name: Upload audit reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -208,7 +292,10 @@ jobs:
           path: |
             output/performance/cloud-mobile-*-r?/*.json
             output/performance/cloud-mobile-*-r?/*.html
+            output/performance/full-mobile-*/*.json
+            output/performance/full-mobile-*/*.html
             output/performance/cloud-machine.json
             output/performance/cloud-validation.json
+            output/performance/full-validation.json
           retention-days: 7
           if-no-files-found: error

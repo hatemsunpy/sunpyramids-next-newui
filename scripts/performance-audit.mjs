@@ -174,8 +174,10 @@ try {
         const prefix = uniquePrefix(name, profile);
         await writeFile(`${prefix}.json`, audit.report[0]);
         await writeFile(`${prefix}.html`, audit.report[1]);
-        // Persist raw trace after scoring completes; audit settings unchanged.
-        await writeFile(`${prefix}.trace.json`, JSON.stringify(audit.artifacts.Trace));
+        // Persist raw trace for home only (bounded addition); audit settings unchanged.
+        if (name === "home") {
+          await writeFile(`${prefix}.trace.json`, JSON.stringify(audit.artifacts.Trace));
+        }
         const finalUrl = audit.lhr.finalDisplayedUrl || requestedUrl;
         const summary = {
           name, requestedUrl, url: finalUrl, profile,
