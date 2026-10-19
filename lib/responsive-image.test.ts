@@ -28,4 +28,18 @@ describe("responsive image helpers", () => {
       "https://external.example.com/photo.png"
     );
   });
+
+  it.each([256, 384, 500])("serves the approved logo from the exact-aspect variant at width %i", (width) => {
+    expect(responsiveImageSource("/images/logo.webp", width)).toBe("/images/logo-500.webp");
+  });
+
+  it.each([501, 640, 1920])("keeps the original logo beyond the variant width at width %i", (width) => {
+    expect(responsiveImageSource("/images/logo.webp", width)).toBe("/images/logo.webp");
+  });
+
+  it("keeps local URLs that are not the exact logo path untouched", () => {
+    expect(responsiveImageSource("/images/logo.webp?q=1", 190)).toBe("/images/logo.webp?q=1");
+    expect(responsiveImageSource("/images/logos.webp", 190)).toBe("/images/logos.webp");
+    expect(responsiveImageSource("/images/banner.webp", 190)).toBe("/images/banner.webp");
+  });
 });
