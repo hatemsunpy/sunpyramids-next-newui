@@ -1,12 +1,14 @@
 # Published mobile audit review — 20 October 2026
 
+Latest verification: Google homepage mobile median **82** (52/82/87), desktop median **83** (72/83/88). The separate GitHub/Chrome 155 home median is **40**. Results remain variable; a stable site-wide minimum and desktop 90 are not established. No application code changed between these captures.
+
 Target: https://sunpyramids-next-newui.vercel.app/
 Deployment: dpl_H2xqHwmR5p43zv1vuZvPbgbfeRY9; app SHA 58facbb59e8d0050f157dc48b0a634e928f3a0c0.
 [Complete cloud run](https://github.com/hatemsunpy/sunpyramids-next-newui/actions/runs/39269448641). Lighthouse 13.5.0; official full Stable Chrome 155.0.8059.84; Ubuntu 24.04; normal tracking; default simulated mobile profile.
 
-Homepage: 33 / 34 / 40; median **34**. The only homepage gate failure is below 70; API and required SDK delivery checks passed, with no Lighthouse warnings. **The 70–80 target has not been achieved.**
+Initial cloud capture on 19 October: homepage 33 / 34 / 40; median **34**. The only homepage gate failure is below 70; API and required SDK delivery checks passed, with no Lighthouse warnings. **That capture does not meet the 70–80 target.**
 
-All 16 routes returned HTTP 200/nonempty and valid mobile reports. This is ONE exploratory sweep, not three-run route medians.
+In that initial capture, all 16 routes returned HTTP 200/nonempty and valid mobile reports. This is ONE exploratory sweep, not three-run route medians.
 
 | Route | Performance | Accessibility | Best practices | SEO | LCP ms | TBT ms |
 |---|---:|---:|---:|---:|---:|---:|
@@ -65,3 +67,23 @@ The cloud workflow adds a separate home capture with `AUDIT_JS_SAMPLING=1` and t
 ## Verification of the audit changes
 
 Independent actionlint, Node syntax and scoped ESLint checks accompany 25 existing offline gate cases and seven added isolation checks. These include normal evidence as a passing control, diagnostic summaries and sampled LHRs rejected from acceptance, and both directions of summary-history mixing rejected before Chrome launch. Fixture scores are not website measurements. Application builds/tests are not repeated for these tooling/documentation-only changes.
+
+## Follow-up on 20 October: independent Google reports
+
+Google PageSpeed UI succeeded despite the direct API returning its daily-quota error. Three sequential reports measured the SAME production application SHA 58facbb, with no application changes between them:
+
+| Run | Mobile | Desktop | Mobile LCP | Mobile TBT | Google report |
+|---|---:|---:|---:|---:|---|
+| 1 | 52 | 72 | 12.2 s | 430 ms | [Report 1](https://pagespeed.web.dev/analysis/https-sunpyramids-next-newui-vercel-app/6kobllt325?form_factor=mobile) |
+| 2 | 82 | 83 | 3.8 s | 240 ms | [Report 2](https://pagespeed.web.dev/analysis/https-sunpyramids-next-newui-vercel-app/0tyx3z0fop?form_factor=mobile) |
+| 3 | 87 | 88 | 3.8 s | 120 ms | [Report 3](https://pagespeed.web.dev/analysis/https-sunpyramids-next-newui-vercel-app/70wc0a9t2b?form_factor=mobile) |
+
+Mobile median 82, range 52–87; desktop median 83, range 72–88. The mobile homepage median exceeds the 70–80 milestone, but the 52 sample remains and no site-wide minimum or desktop 90 has been established. This is verification of the existing deployment, not a causal speed improvement from PR 58. Google used Lighthouse 13.5.0 / HeadlessChromium 153.0.8010.36 and reported no CrUX field data. Do not combine these scores with the separate Chrome 155 workflow samples into one median.
+
+## Follow-up cloud capture and CPU attribution
+
+[Cloud run 39393062210](https://github.com/hatemsunpy/sunpyramids-next-newui/actions/runs/39393062210) completed on 20 October. Normal home scores 33/40/41, median 40; the only home gate failure remains below 70. Required API and SDK delivery checks passed. All 16 exploratory routes returned HTTP 200/nonempty reports, performance 39–70; contact and rent reached 70. The gate is still failing and no weak samples have been discarded.
+
+The isolated CPU capture succeeded and retained 23,143 page-process samples; it is excluded from all acceptance scores. Median sample interval 174µs, p95 249µs, maximum 8.924ms, with no gaps over 10ms in that page profile. Sampled self time attributed to first-party URLs totals approximately 244ms; Google Tag Manager URLs 345ms, TikTok 144ms, Clarity 117ms, Hotjar 45ms and Trustindex 41ms. These are observed sampled attribution estimates, not simulated TBT, and unassigned/native/idle time remains separate. The leading first-party frame was Turbopack module initialization (~55ms across 294 samples); no large application calculation has been identified that justifies changing the locked UI/API behavior.
+
+The current evidence supports further investigation of paint timing and the remaining startup cost. It does not establish why Chrome 153/Google and Chrome 155/GitHub differ, or prove that changing a particular application component will stabilize every run above 70. Immediate required tracking, UI, API calls and dynamic ownership are preserved.
