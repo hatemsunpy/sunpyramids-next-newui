@@ -1,3 +1,4 @@
+import "@/styles/tour-detail.scss";
 import "@/styles/interior.scss";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";

@@ -1,6 +1,6 @@
 # Published mobile audit review — 20 October 2026
 
-Acceptance source selected by the owner: **Google PageSpeed Insights for every audited route**. Google homepage mobile median **82** (52/82/87), desktop median **83** (72/83/88). The separate GitHub/Chrome 155 home median is **40**. Results remain variable; a stable site-wide minimum and desktop 90 are not established. No application code changed between those published captures. A subsequently reviewed local voice-label payload change is documented separately below.
+Acceptance source selected by the owner: **Google PageSpeed Insights for every audited route**. The completed [16-route Google mobile matrix](google-mobile-16-routes-2026-10-20.md) has three eligible reports per route: **6 medians at least 70; 10 below 70**. The site-wide milestone is not achieved. Google homepage mobile median is **82** (52/82/87), desktop median **83** (72/83/88); desktop 90 is not established. The earlier separate GitHub/Chrome 155 home median was **40**. The published application code was unchanged between these Google captures; mutable CMS content remained live. A subsequently reviewed local voice-label payload change is documented separately below.
 
 Target: https://sunpyramids-next-newui.vercel.app/
 Deployment: dpl_H2xqHwmR5p43zv1vuZvPbgbfeRY9; app SHA 58facbb59e8d0050f157dc48b0a634e928f3a0c0.
@@ -87,6 +87,8 @@ Mobile median 82, range 52–87; desktop median 83, range 72–88. The mobile ho
 The isolated CPU capture succeeded and retained 23,143 page-process samples; it is excluded from all acceptance scores. Median sample interval 174µs, p95 249µs, maximum 8.924ms, with no gaps over 10ms in that page profile. Sampled self time attributed to first-party URLs totals approximately 244ms; Google Tag Manager URLs 345ms, TikTok 144ms, Clarity 117ms, Hotjar 45ms and Trustindex 41ms. These are observed sampled attribution estimates, not simulated TBT, and unassigned/native/idle time remains separate. The leading first-party frame was Turbopack module initialization (~55ms across 294 samples); no large application calculation has been identified that justifies changing the locked UI/API behavior.
 
 The current evidence supports further investigation of paint timing and the remaining startup cost. It does not establish why Chrome 153/Google and Chrome 155/GitHub differ, or prove that changing a particular application component will stabilize every run above 70. Immediate required tracking, UI, API calls and dynamic ownership are preserved.
+
+[Cloud run 39400454456](https://github.com/hatemsunpy/sunpyramids-next-newui/actions/runs/39400454456) later completed against the same public application. Home 35/37/38, median 37; the home gate again failed only for its score. All 16 exploratory routes returned valid reports; nine were below the separate workflow's 70 threshold. This is not a deployed regression from the voice-label commit: that commit was only on the PR branch, while the audited alias still ran app SHA 58facbb. Google remains the owner-selected acceptance source.
 
 ## Subsequent local application change
 
