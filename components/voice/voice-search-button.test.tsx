@@ -3,6 +3,7 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { useRef } from "react";
 import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
 import { createFakeRecorder, type FakeRecorder } from "@/tests/test-utils/fake-speech-recognizer";
+import { pickVoiceLabels } from "@/lib/home-client-labels";
 import type { Locale } from "@/types/api";
 
 const navigation = vi.hoisted(() => ({ push: vi.fn() }));
@@ -38,6 +39,7 @@ function Harness({
       <input ref={inputRef} name="title" defaultValue="" aria-label="Search" />
       <VoiceSearchButton
         locale={locale}
+        voiceLabels={pickVoiceLabels(locale)}
         inputRef={inputRef}
         formRef={formRef}
         factory={recorder.factory}

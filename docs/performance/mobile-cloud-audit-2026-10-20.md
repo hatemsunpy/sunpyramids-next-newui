@@ -1,6 +1,6 @@
 # Published mobile audit review — 20 October 2026
 
-Latest verification: Google homepage mobile median **82** (52/82/87), desktop median **83** (72/83/88). The separate GitHub/Chrome 155 home median is **40**. Results remain variable; a stable site-wide minimum and desktop 90 are not established. No application code changed between these captures.
+Acceptance source selected by the owner: **Google PageSpeed Insights for every audited route**. Google homepage mobile median **82** (52/82/87), desktop median **83** (72/83/88). The separate GitHub/Chrome 155 home median is **40**. Results remain variable; a stable site-wide minimum and desktop 90 are not established. No application code changed between those published captures. A subsequently reviewed local voice-label payload change is documented separately below.
 
 Target: https://sunpyramids-next-newui.vercel.app/
 Deployment: dpl_H2xqHwmR5p43zv1vuZvPbgbfeRY9; app SHA 58facbb59e8d0050f157dc48b0a634e928f3a0c0.
@@ -49,11 +49,11 @@ In that initial capture, all 16 routes returned HTTP 200/nonempty and valid mobi
 
 - SDK deliveries pass; not proof all analytics events preserve measurement
 
-- No new app optimization in PR 58; target not reached
+- The voice-label optimization described below has not been verified on the public alias; the site-wide target is not reached
 
 ## Dynamic source guard
 
-No application change in PR 58. Existing dynamic data stays Laravel-owned and API-fetched. No production data copied into source/JSON; downloaded reports are ignored diagnostic artifacts. Dashboard changes still propagate under existing cache/revalidation behavior without frontend code deployment. API failures, SEO ownership, routes, and stale behavior remain unchanged.
+The audit tooling does not change application behavior. The subsequent application change only moves frontend-owned voice UI label dictionaries out of the browser bundle. Existing dynamic data stays Laravel-owned and API-fetched. No production data copied into source/JSON; downloaded reports are ignored diagnostic artifacts. Dashboard changes still propagate under existing cache/revalidation behavior without frontend code deployment. API failures, SEO ownership, routes, and stale behavior remain unchanged.
 
 
 ## Separate CPU diagnostic (not acceptance)
@@ -66,7 +66,7 @@ The cloud workflow adds a separate home capture with `AUDIT_JS_SAMPLING=1` and t
 
 ## Verification of the audit changes
 
-Independent actionlint, Node syntax and scoped ESLint checks accompany 25 existing offline gate cases and seven added isolation checks. These include normal evidence as a passing control, diagnostic summaries and sampled LHRs rejected from acceptance, and both directions of summary-history mixing rejected before Chrome launch. Fixture scores are not website measurements. Application builds/tests are not repeated for these tooling/documentation-only changes.
+Independent actionlint, Node syntax and scoped ESLint checks accompany 25 existing offline gate cases and seven added isolation checks. These include normal evidence as a passing control, diagnostic summaries and sampled LHRs rejected from acceptance, and both directions of summary-history mixing rejected before Chrome launch. Fixture scores are not website measurements. These were tooling/documentation-only checks; the later application change has its own full build and 549-test validation.
 
 ## Follow-up on 20 October: independent Google reports
 
@@ -87,3 +87,7 @@ Mobile median 82, range 52–87; desktop median 83, range 72–88. The mobile ho
 The isolated CPU capture succeeded and retained 23,143 page-process samples; it is excluded from all acceptance scores. Median sample interval 174µs, p95 249µs, maximum 8.924ms, with no gaps over 10ms in that page profile. Sampled self time attributed to first-party URLs totals approximately 244ms; Google Tag Manager URLs 345ms, TikTok 144ms, Clarity 117ms, Hotjar 45ms and Trustindex 41ms. These are observed sampled attribution estimates, not simulated TBT, and unassigned/native/idle time remains separate. The leading first-party frame was Turbopack module initialization (~55ms across 294 samples); no large application calculation has been identified that justifies changing the locked UI/API behavior.
 
 The current evidence supports further investigation of paint timing and the remaining startup cost. It does not establish why Chrome 153/Google and Chrome 155/GitHub differ, or prove that changing a particular application component will stabilize every run above 70. Immediate required tracking, UI, API calls and dynamic ownership are preserved.
+
+## Subsequent local application change
+
+[Voice-label payload review](voice-label-payload-2026-10-20.md) records a bounded OpenCode implementation and independent review. Initial JavaScript is 12,692 raw bytes / 4,859 gzip bytes smaller; measured HTML plus JavaScript is about 4KB gzip smaller, with a documented live CMS image-URL input change. All 549 tests, scoped ESLint, live Next/browser checks and the production build passed. UI declarations, voice behavior, API requests, dynamic ownership and immediate tracking are unchanged. These local results do not establish a deployed Google performance improvement.

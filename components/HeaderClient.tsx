@@ -10,6 +10,7 @@ import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
+import type { VoiceLabels } from "@/lib/voice-client-labels";
 import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
 
 const tourLinks = [
@@ -351,6 +352,7 @@ export function HeaderClient({
   nileCruisesChildren = [],
   labels,
   uiLabels,
+  voiceLabels,
 }: {
   locale?: Locale;
   siteTitle?: string | null;
@@ -360,6 +362,7 @@ export function HeaderClient({
   nileCruisesChildren?: EgyptToursMenuChild[];
   labels: HeaderLabels;
   uiLabels: HeaderUiLabels;
+  voiceLabels: VoiceLabels;
 }) {
   const copy: Record<string, string> = uiLabels;
   const currentThemeLabels = themeLabels[locale];
@@ -549,7 +552,7 @@ export function HeaderClient({
           </Link>
           <form className="header-search" action={withLocale("/trips", locale)} ref={desktopFormRef}>
             <SearchIcon /><input name="title" ref={desktopInputRef} placeholder={copy.search} aria-label={copy.search} />
-            <VoiceSearchButton key={locale} locale={locale} inputRef={desktopInputRef} formRef={desktopFormRef} />
+            <VoiceSearchButton key={locale} locale={locale} voiceLabels={voiceLabels} inputRef={desktopInputRef} formRef={desktopFormRef} />
           </form>
           <div className="header-actions">
             <button className="circle-action mobile-search-action" type="button" aria-label={copy.search} aria-controls="mobile-navigation" aria-expanded={menuOpen} onClick={(event) => {
@@ -591,7 +594,7 @@ export function HeaderClient({
               <Link href={withLocale("/", locale)} aria-label="Sun Pyramids home" onClick={closeMenu}><Image src={APPROVED_BRAND_LOGO} alt={siteTitle || "Sun Pyramids Tours"} width={180} height={51} /></Link>
               <button className="circle-action" type="button" onClick={closeMenu} aria-label="Close menu"><CloseIcon /></button>
             </div>
-            <form className="mobile-drawer-search" action={withLocale("/trips", locale)} ref={mobileFormRef}><SearchIcon /><input name="title" ref={mobileInputRef} placeholder={copy.search} aria-label={copy.search} /><VoiceSearchButton key={locale} locale={locale} inputRef={mobileInputRef} formRef={mobileFormRef} onNavigate={closeMenu} /></form>
+            <form className="mobile-drawer-search" action={withLocale("/trips", locale)} ref={mobileFormRef}><SearchIcon /><input name="title" ref={mobileInputRef} placeholder={copy.search} aria-label={copy.search} /><VoiceSearchButton key={locale} locale={locale} voiceLabels={voiceLabels} inputRef={mobileInputRef} formRef={mobileFormRef} onNavigate={closeMenu} /></form>
             <nav className="mobile-links" aria-label="Primary navigation">{renderPrimaryNavigation(true)}</nav>
             <div className="mobile-drawer-utilities">
               <ThemeToggle labels={currentThemeLabels} withLabel />

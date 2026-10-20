@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { voiceCopy } from "@/lib/voice-copy";
+import { readVoiceLabels, type VoiceLabels } from "@/lib/voice-client-labels";
 import { useSpeechRecognition } from "@/lib/voice/use-speech-recognition";
 import type { RecognizerFactory } from "@/lib/voice/speech-recognizer";
 import type { CapabilityField, CapabilityResult, SpeechErrorCode, VoiceTaxonomyInput } from "@/lib/voice/types";
@@ -11,6 +11,7 @@ export type FindTripValues = { destination: string; duration: string; category: 
 
 type Props = VoiceTaxonomyInput & {
   locale: Locale;
+  voiceLabels: VoiceLabels;
   values: FindTripValues;
   onApply: (changes: Partial<FindTripValues>) => void;
   factory?: RecognizerFactory;
@@ -31,8 +32,7 @@ const errorKeys: Record<SpeechErrorCode, string> = {
   aborted: "cancelled", unsupported: "recognitionUnavailable", unknown: "recognitionError",
 };
 
-function informationalText(field: CapabilityField, locale: Locale): string {
-  const copy = voiceCopy(locale);
+function informationalText(field: CapabilityField, locale: Locale, copy: VoiceLabels): string {
   if (field.field === "month") return new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(2020, Number(field.value) - 1, 1)));
   if (field.field === "privacy") return copy[String(field.value)];
   if (field.field === "travelers" && typeof field.value === "object" && !("raw" in field.value)) {
@@ -42,8 +42,8 @@ function informationalText(field: CapabilityField, locale: Locale): string {
   return field.raw || "";
 }
 
-export function VoiceFindTripPanel({ locale, destinations, rootCategories, values, onApply, factory, isSupported }: Props) {
-  const copy = voiceCopy(locale);
+export function VoiceFindTripPanel({ locale, voiceLabels, destinations, rootCategories, values, onApply, factory, isSupported }: Props) {
+  const copy = readVoiceLabels(voiceLabels);
   const voice = useSpeechRecognition(locale, factory, isSupported);
   const statusId = useId();
   const [review, setReview] = useState<CapabilityResult | null>(null);
@@ -121,7 +121,7 @@ export function VoiceFindTripPanel({ locale, destinations, rootCategories, value
       const choices = [...new Set(days)].filter(validDays);
       return <li key={index}><strong>{copy.duration}: {field.status === "ambiguous" ? copy.chooseOne : copy.didYouMean}</strong> <span>{field.raw}</span><div className="voice-find-trip__choices">{choices.map((days) => <button type="button" key={days} aria-pressed={values.duration === String(days)} onClick={() => onApply({ duration: String(days) })}>{dayLabel(days)}</button>)}</div>{!choices.length ? <span>{copy.notFilter}</span> : null}</li>;
     }
-    return <li key={index}><strong>{copy[field.field]}:</strong> {informationalText(field, locale)} <span>({copy.notFilter})</span></li>;
+    return <li key={index}><strong>{copy[field.field]}:</strong> {informationalText(field, locale, copy)} <span>({copy.notFilter})</span></li>;
   }
 
   return <div className="voice-find-trip" data-hj-suppress data-clarity-mask="true">

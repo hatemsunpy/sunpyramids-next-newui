@@ -6,6 +6,7 @@ import { apiGet, apiPost } from "@/lib/client-api";
 import { withLocale } from "@/lib/locales";
 import type { ApiPage, Locale } from "@/types/api";
 import { VoiceFindTripPanel, type FindTripValues } from "@/components/voice/VoiceFindTripPanel";
+import type { VoiceLabels } from "@/lib/voice-client-labels";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 
@@ -57,7 +58,7 @@ function listData<T>(response: ApiListResponse<T>): T[] {
 
 
 
-export function HomeSearchShortcutsClient({ locale = "en", destinations, rootCategories = emptyRootCategories, modeOnly, makeButtonIcon, labels }: { locale?: Locale; destinations: ApiPage[]; rootCategories?: ApiPage[]; modeOnly?: SearchMode; makeButtonIcon?: ReactNode; labels: HomeSearchShortcutsLabels }) {
+export function HomeSearchShortcutsClient({ locale = "en", destinations, rootCategories = emptyRootCategories, modeOnly, makeButtonIcon, labels, voiceLabels }: { locale?: Locale; destinations: ApiPage[]; rootCategories?: ApiPage[]; modeOnly?: SearchMode; makeButtonIcon?: ReactNode; labels: HomeSearchShortcutsLabels; voiceLabels: VoiceLabels }) {
   const router = useRouter();
   const copy: Record<string, string> = labels;
   const [mode, setMode] = useState<SearchMode>(modeOnly ?? "make");
@@ -227,7 +228,7 @@ export function HomeSearchShortcutsClient({ locale = "en", destinations, rootCat
           </label>
           <button className="btn-primary" type="submit">{copy.search}</button>
         </div>
-        <VoiceFindTripPanel key={locale} locale={locale} destinations={destinations} rootCategories={rootCategories} values={{ ...findValues, category: reviewedCategory }} onApply={applyVoiceValues} />
+        <VoiceFindTripPanel key={locale} locale={locale} voiceLabels={voiceLabels} destinations={destinations} rootCategories={rootCategories} values={{ ...findValues, category: reviewedCategory }} onApply={applyVoiceValues} />
       </> : null}
       {mode === "car" ? (
         <div className="home-search-fields home-search-car-fields">
