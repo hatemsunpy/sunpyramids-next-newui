@@ -109,6 +109,16 @@ jobs:
           set -euo pipefail
           node scripts/performance-audit.mjs "$PHASE"
 
+      - name: Diagnostic home CPU sampling (excluded from acceptance)
+        if: always()
+        env:
+          AUDIT_JS_SAMPLING: "1"
+          PHASE: diagnostic-mobile-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -uo pipefail
+          echo "**Diagnostic CPU sampling:** scores below are diagnostic only and do NOT count toward the acceptance median/gate." >> "$GITHUB_STEP_SUMMARY"
+          node scripts/performance-audit.mjs "$PHASE" home
+
       - name: Validate runs, summaries and SDKs (always runs)
         if: always()
         env:
@@ -179,6 +189,14 @@ jobs:
             else if (!machine) emu.push(`hostUserAgent verified to major ${expectedMajor}, but machine evidence (cloud-machine.json) is missing/malformed; full version unverified`);
             if (emu.length) issues.push(`${r}: unexpected audit settings: ${emu.join("; ")}`);
             const items = (lhr.audits["network-requests"]?.details?.items) || [];
+            const rawCats = lhr.configSettings ? lhr.configSettings.additionalTraceCategories : null;
+            const catStr = Array.isArray(rawCats) ? rawCats.join(",") : (rawCats == null ? "" : String(rawCats));
+            if (catStr.includes("disabled-by-default-v8.cpu_profiler")) {
+              issues.push(`${r}: home LHR configSettings.additionalTraceCategories contains disabled-by-default-v8.cpu_profiler; diagnostic CPU sampling must never appear in acceptance evidence`);
+            }
+            if (row.diagnosticOnly === true) {
+              issues.push(`${r}: home summary row is diagnosticOnly; diagnostic scores must never be counted as acceptance`);
+            }
             const urlOf = i => { try { return new URL(i.url); } catch { return null; } };
             const scripts = p => items.filter(i => i && urlOf(i) && i.resourceType === "Script" && i.statusCode === 200 && urlOf(i).pathname === p);
             const google = scripts("/gtm.js").some(i => urlOf(i).host.endsWith("googletagmanager.com"))
@@ -243,6 +261,7 @@ jobs:
           }
           if (rows.length !== 16) issues.push(`expected exactly 16 rows, got ${rows.length}`);
           const isValid = r => r && typeof r === "object" && !Array.isArray(r) && typeof r.name === "string" && r.name
+            && r.diagnosticOnly !== true
             && r.profile === "mobile" && (r.status === "ok" || r.status === "redirected")
             && r.httpStatus === 200 && r.bodyLength > 0
             && r.scores && typeof r.scores === "object" && Number.isFinite(r.scores.performance)
@@ -294,6 +313,8 @@ jobs:
             output/performance/cloud-mobile-*-r?/*.html
             output/performance/full-mobile-*/*.json
             output/performance/full-mobile-*/*.html
+            output/performance/diagnostic-mobile-*/*.json
+            output/performance/diagnostic-mobile-*/*.html
             output/performance/cloud-machine.json
             output/performance/cloud-validation.json
             output/performance/full-validation.json
