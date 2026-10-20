@@ -1,6 +1,6 @@
 import type { Locale } from "@/types/api";
 import type { EgyptToursMenuChild } from "@/lib/egypt-tours-menu";
-import { pickHomeLabels, pickUiLabels } from "@/lib/home-client-labels";
+import { pickHomeLabels, pickUiLabels, pickVoiceLabels } from "@/lib/home-client-labels";
 import { HeaderClient, type HeaderTourCategory } from "@/components/HeaderClient";
 
 const HEADER_LABEL_KEYS = ["promoTitle", "promoButton"] as const;
@@ -41,6 +41,7 @@ export function Header({
 }) {
   const labels = pickHomeLabels(locale, HEADER_LABEL_KEYS);
   const uiLabels = pickUiLabels(locale, HEADER_UI_LABEL_KEYS);
+  const voiceLabels = pickVoiceLabels(locale);
   return (
     <HeaderClient
       locale={locale}
@@ -51,6 +52,7 @@ export function Header({
       nileCruisesChildren={nileCruisesChildren}
       labels={labels}
       uiLabels={uiLabels}
+      voiceLabels={voiceLabels}
     />
   );
 }

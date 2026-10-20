@@ -13,6 +13,15 @@ const { launch } = await import(pathToFileURL(join(lighthouseRoot, "node_modules
 // user agent). Mobile uses the default config (undefined) which is mobile.
 const { default: desktopConfig } = await import(pathToFileURL(join(lighthouseRoot, "core/config/desktop-config.js")));
 const lighthousePkg = JSON.parse(await readFile(join(lighthouseRoot, "package.json"), "utf8"));
+// Opt-in CPU sampling diagnostics: default (unset/!== "1") leaves every
+// Lighthouse flag, setting, and summary row exactly as before. When enabled,
+// a diagnostic phase must be isolated — never mixed with
+// acceptance-run summaries, and its scores are excluded from acceptance.
+const diagnosticSampling = process.env.AUDIT_JS_SAMPLING === "1";
+const samplingFlags = diagnosticSampling
+  ? { additionalTraceCategories: "disabled-by-default-v8.cpu_profiler" }
+  : {};
+
 const origin = process.env.AUDIT_ORIGIN || "http://localhost:3003";
 const phase = process.argv[2] || "baseline";
 const routes = {
@@ -71,6 +80,10 @@ const runMeta = {
   timestamp: new Date().toISOString(),
   onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
 };
+if (diagnosticSampling) {
+  runMeta.diagnosticOnly = true;
+  runMeta.scoreNote = "CPU sampling diagnostic; scores excluded from acceptance";
+}
 
 // Preserve earlier summary entries across invocations (append, never overwrite).
 // Recover ONLY when no summary exists yet; a malformed or non-array summary
@@ -94,6 +107,24 @@ try {
     summaries = [];
   } else {
     throw error;
+  }
+}
+
+if (diagnosticSampling) {
+  if (!phase.startsWith("diagnostic-")) {
+    console.error(`AUDIT_JS_SAMPLING=1 requires a phase name starting with "diagnostic-"; got: ${JSON.stringify(phase)}. Refusing to run (diagnostic data must never be mixed with acceptance phases).`);
+    process.exit(1);
+  }
+  const nonDiagnostic = summaries.filter((row) => !(row && typeof row === "object" && row.diagnosticOnly === true));
+  if (nonDiagnostic.length > 0) {
+    console.error(`Existing summary at ${summaryPath} contains ${nonDiagnostic.length} non-diagnostic row(s); refusing to append diagnostic rows. Use a fresh diagnostic- phase directory.`);
+    process.exit(1);
+  }
+} else {
+  const diagnostic = summaries.filter((row) => row && typeof row === "object" && row.diagnosticOnly === true);
+  if (diagnostic.length > 0) {
+    console.error(`AUDIT_JS_SAMPLING is not "1" but existing summary at ${summaryPath} contains ${diagnostic.length} diagnosticOnly row(s); refusing to append normal rows. Use a fresh non-diagnostic phase directory.`);
+    process.exit(1);
   }
 }
 
@@ -169,11 +200,20 @@ try {
         const audit = await lighthouse(requestedUrl, {
           port: chrome.port, output: ["json", "html"], logLevel: "error",
           onlyCategories: runMeta.onlyCategories,
+          ...samplingFlags,
         }, config);
         if (audit.lhr.runtimeError) throw new Error(audit.lhr.runtimeError.message);
         const prefix = uniquePrefix(name, profile);
         await writeFile(`${prefix}.json`, audit.report[0]);
         await writeFile(`${prefix}.html`, audit.report[1]);
+        // Persist raw trace for home only (bounded addition); audit settings unchanged.
+        if (name === "home") {
+          await writeFile(`${prefix}.trace.json`, JSON.stringify(audit.artifacts.Trace));
+          if (diagnosticSampling && !audit.artifacts.Trace.traceEvents.some(event =>
+            event.name === "ProfileChunk" && event.args?.data?.cpuProfile?.samples?.length > 0)) {
+            throw new Error("CPU sampling diagnostic captured no ProfileChunk samples; raw trace retained for inspection.");
+          }
+        }
         const finalUrl = audit.lhr.finalDisplayedUrl || requestedUrl;
         const summary = {
           name, requestedUrl, url: finalUrl, profile,

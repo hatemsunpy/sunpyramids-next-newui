@@ -8,6 +8,7 @@ import { TourCard } from "@/components/TourCard";
 import { blogPostCopy } from "@/lib/blog-copy";
 import { homeCopy } from "@/lib/home-copy";
 import { withLocale } from "@/lib/locales";
+import { prepareBlogArticleImages } from "@/lib/blog-article-images.server";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import type { ApiPage, Locale } from "@/types/api";
 
@@ -52,7 +53,7 @@ function prepareArticle(rawArticleHtml: unknown) {
       return `<h${level}${attributes} id="${id}">${innerHtml}</h${level}>`;
     },
   );
-  return { html, headings };
+  return { html: prepareBlogArticleImages(html), headings };
 }
 
 function formatDate(dateValue: string | null | undefined, locale: Locale) {

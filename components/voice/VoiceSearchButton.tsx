@@ -9,12 +9,13 @@ import { useSpeechRecognition } from "@/lib/voice/use-speech-recognition";
 import { HEADER_COMMAND_CAPTURE } from "@/lib/voice/command-speech-recognizer";
 import type { RecognizerFactory } from "@/lib/voice/speech-recognizer";
 import type { SpeechErrorCode } from "@/lib/voice/types";
-import { voiceCopy } from "@/lib/voice-copy";
+import { readVoiceLabels, type VoiceLabels } from "@/lib/voice-client-labels";
 import { voiceReleasePolicy } from "@/lib/voice-release-policy";
 import type { Locale } from "@/types/api";
 
 export type VoiceSearchButtonProps = {
   locale?: Locale;
+  voiceLabels: VoiceLabels;
   // Explicit ownership: the exact pre-existing input + form this instance
   // may write to and submit. Never a global document query.
   inputRef: React.RefObject<HTMLInputElement | null>;
@@ -57,6 +58,7 @@ function errorMessageKey(code: SpeechErrorCode): string {
 
 export function VoiceSearchButton({
   locale = "en",
+  voiceLabels,
   inputRef,
   formRef,
   factory,
@@ -64,7 +66,7 @@ export function VoiceSearchButton({
   onNavigate,
 }: VoiceSearchButtonProps) {
   const { push } = useRouter();
-  const copy = voiceCopy(locale);
+  const copy = readVoiceLabels(voiceLabels);
   const voice = useSpeechRecognition(
     locale,
     factory ?? browserRecognizerFactory,
