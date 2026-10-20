@@ -3,6 +3,8 @@
 Acceptance source selected by the owner: **Google PageSpeed Insights for every audited route**. The completed [16-route Google mobile matrix](google-mobile-16-routes-2026-10-20.md) has three eligible reports per route: **6 medians at least 70; 10 below 70**. The site-wide milestone is not achieved. Google homepage mobile median is **82** (52/82/87), desktop median **83** (72/83/88); desktop 90 is not established. The earlier separate GitHub/Chrome 155 home median was **40**. The published application code was unchanged between these Google captures; mutable CMS content remained live. A subsequently reviewed local voice-label payload change is documented separately below.
 
 Target: https://sunpyramids-next-newui.vercel.app/
+
+Subsequent local delivery changes are reviewed in [voice label payload](voice-label-payload-2026-10-20.md), [tour stylesheet delivery](tour-css-delivery-2026-10-20.md) and [blog article image delivery](blog-image-delivery-2026-10-20.md). Their local byte/behavior checks are not new Google scores for the published deployment.
 Deployment: dpl_H2xqHwmR5p43zv1vuZvPbgbfeRY9; app SHA 58facbb59e8d0050f157dc48b0a634e928f3a0c0.
 [Complete cloud run](https://github.com/hatemsunpy/sunpyramids-next-newui/actions/runs/39269448641). Lighthouse 13.5.0; official full Stable Chrome 155.0.8059.84; Ubuntu 24.04; normal tracking; default simulated mobile profile.
 
