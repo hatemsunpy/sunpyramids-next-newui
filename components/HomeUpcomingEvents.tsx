@@ -5,6 +5,7 @@ import { withLocale } from "@/lib/locales";
 import { HomeUpcomingEventCard } from "@/components/HomeUpcomingEventCard";
 import { HomeUpcomingEventsCarousel } from "@/components/HomeUpcomingEventsCarousel";
 import { SectionEyebrow } from "@/components/SectionHeading";
+import { currentEvents } from "@/lib/current-events";
 
 type Props = {
   events: ApiPage[];
@@ -13,7 +14,7 @@ type Props = {
 
 export function HomeUpcomingEvents({ events, locale = "en" }: Props) {
   // Filter out any invalid items without fabricated content
-  const validEvents = events.filter((event): event is ApiPage & { slug: string; title: string } => {
+  const validEvents = currentEvents(events).filter((event): event is ApiPage & { slug: string; title: string } => {
     const title =
       typeof event.title === "string"
         ? event.title

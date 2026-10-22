@@ -21,6 +21,7 @@ import { SustainabilityTabs } from "@/components/SustainabilityTabs";
 import { SustainabilityCertification } from "@/components/SustainabilityCertification";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { LegalPage } from "@/components/LegalPage";
+import { currentEvents } from "@/lib/current-events";
 
 type GenericPageProps = {
   page: ApiPage | null;
@@ -424,6 +425,7 @@ function FaqPage({
 }
 
 function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
+  const visibleEvents = currentEvents(categories);
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },
     { label: title },
@@ -440,15 +442,15 @@ function EventsPage({ page, title, image, categories, locale }: { page: ApiPage 
           page?.description ||
           "Experience Egypt's rich cultural calendar, sound and light spectacles, and seasonal festivities."
         }
-        totalCount={categories.length > 0 ? categories.length : undefined}
+        totalCount={visibleEvents.length > 0 ? visibleEvents.length : undefined}
         bgImage={image}
       />
 
       <section className="discovery-section">
         <div className="container-shell">
-          {categories.length > 0 ? (
+          {visibleEvents.length > 0 ? (
             <div className="events-list-grid">
-              {categories.map((category) => (
+              {visibleEvents.map((category) => (
                 <HomeUpcomingEventCard
                   key={category.id || category.slug}
                   event={category}
