@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
 import { homeCopy } from "@/lib/home-copy";
 import { DestinationCard } from "@/components/DestinationCard";
+import { HomeUpcomingEventCard } from "@/components/HomeUpcomingEventCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
 import { TourCard } from "@/components/TourCard";
@@ -446,12 +447,11 @@ function EventsPage({ page, title, image, categories, locale }: { page: ApiPage 
       <section className="discovery-section">
         <div className="container-shell">
           {categories.length > 0 ? (
-            <div className="destination-mosaic-grid">
+            <div className="events-list-grid">
               {categories.map((category) => (
-                <DestinationCard
+                <HomeUpcomingEventCard
                   key={category.id || category.slug}
-                  destination={category}
-                  basePath="/event"
+                  event={category}
                   locale={locale}
                 />
               ))}
