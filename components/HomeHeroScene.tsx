@@ -74,7 +74,7 @@ export function HomeHeroScene({
             fill
             loading={index === active ? "eager" : "lazy"}
             fetchPriority={index === active ? "high" : "low"}
-            sizes="100vw"
+            sizes="(max-width: 640px) max(100vw, 1200px), (max-width: 1180px) max(100vw, 1680px), 100vw"
             className="hero-media-slide"
             style={{ opacity: index === active ? 1 : 0 }}
             aria-hidden={index !== active}

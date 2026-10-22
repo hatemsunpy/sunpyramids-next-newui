@@ -116,7 +116,15 @@ export async function HomePage({
           />
           <SwipeCarousel className="home-signature-grid" ariaLabel={copy.seasonalTitle}>
             {tours.map((tour, index) => (
-              <TourCard className={index === 0 ? "tour-card--feature" : ""} key={tour.id || tour.slug} tour={tour} locale={locale} />
+              <TourCard
+                className={index === 0 ? "tour-card--feature" : ""}
+                key={tour.id || tour.slug}
+                tour={tour}
+                locale={locale}
+                imageSizes={index === 0
+                  ? "(max-width: 640px) 850px, (max-width: 1180px) 100vw, 1200px"
+                  : "(max-width: 640px) 750px, (max-width: 1180px) 100vw, 800px"}
+              />
             ))}
           </SwipeCarousel>
         </section>
@@ -140,7 +148,12 @@ export async function HomePage({
 
       <section className="home-plan-section container-shell">
         <div className="home-plan-section__media">
-          <Image src={heroImages[1] || heroImages[0]} alt="Plan a journey across Egypt" fill sizes="(max-width: 900px) 100vw, 42vw" />
+          <Image
+            src={heroImages[1] || heroImages[0]}
+            alt="Plan a journey across Egypt"
+            fill
+            sizes="(max-width: 640px) max(100vw, 600px), (max-width: 1180px) max(100vw, 840px), max(42vw, 1240px)"
+          />
         </div>
         <div className="home-plan-section__form">
           <SectionEyebrow>{labels.plan}</SectionEyebrow>
@@ -219,7 +232,15 @@ export async function HomePage({
             />
             <div className="home-editorial-grid">
               {blogs.slice(0, 4).map((blog, index) => (
-                <BlogCard className={index === 0 ? "blog-card--lead" : ""} key={blog.id || blog.slug} blog={blog} locale={locale} />
+                <BlogCard
+                  className={index === 0 ? "blog-card--lead" : ""}
+                  imageSizes={index === 0
+                    ? "(max-width: 640px) max(100vw, 960px), (max-width: 1180px) 100vw, 80vw"
+                    : undefined}
+                  key={blog.id || blog.slug}
+                  blog={blog}
+                  locale={locale}
+                />
               ))}
             </div>
           </div>

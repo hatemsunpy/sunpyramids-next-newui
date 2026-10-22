@@ -93,12 +93,14 @@ export function TourCardView({
   className = "",
   isSpecialOffer = false,
   labels,
+  imageSizes = "(max-width: 768px) 100vw, 25vw",
 }: {
   tour: Tour;
   locale?: Locale;
   className?: string;
   isSpecialOffer?: boolean;
   labels: TourCardViewLabels;
+  imageSizes?: string;
 }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
@@ -141,7 +143,7 @@ export function TourCardView({
       ) : null}
       <Link href={tourPath(slug, locale)}>
         <div className="tour-card-media">
-          <Image src={imageOf(tour)} alt={title} fill sizes="(max-width: 768px) 100vw, 25vw" />
+          <Image src={imageOf(tour)} alt={title} fill sizes={imageSizes} />
         </div>
         <div className="tour-card-body">
           <h3 className="line-clamp-2">{title}</h3>
