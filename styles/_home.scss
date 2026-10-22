@@ -2017,6 +2017,14 @@
   box-shadow: 0 0 0 64px rgb(255 255 255 / 5%), 0 0 0 128px rgb(255 255 255 / 4%);
 }
 
+.home-page--redesign .home-help-panel-v2 {
+  background: linear-gradient(rgb(22 58 150 / 75%), rgb(22 58 150 / 75%)), url("/images/linearNeedHelp-repaired.png") center / cover no-repeat;
+}
+
+.home-page--redesign .home-help-panel-v2::after {
+  display: none;
+}
+
 .home-help-panel-v2 h2 {
   position: relative;
   z-index: 1;
