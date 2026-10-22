@@ -925,29 +925,41 @@
   background: transparent;
 }
 
-.home-signature-grid .tour-card--feature > a {
+.home-signature-grid .tour-card > a {
   position: relative;
   justify-content: flex-end;
 }
 
-.home-signature-grid .tour-card--feature .tour-card-media {
+.home-signature-grid .tour-card .tour-card-media {
   position: absolute;
   inset: 0;
   aspect-ratio: auto;
 }
 
-.home-signature-grid .tour-card--feature .tour-card-media::after {
+.home-signature-grid .tour-card .tour-card-media::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgb(0 0 0 / 88%), rgb(0 0 0 / 4%) 72%);
+  background: linear-gradient(0deg, rgb(0 0 0 / 80%), rgb(0 0 0 / 20%) 72%);
 }
 
-.home-signature-grid .tour-card--feature .tour-card-body {
+.home-signature-grid .tour-card .tour-card-body {
   position: relative;
   z-index: 1;
   flex: 0 0 auto;
+  color: white;
+  text-shadow: 0 2px 6px rgb(0 0 0 / 75%);
+}
+
+.home-signature-grid .tour-card .tour-card-summary {
+  display: none;
+}
+
+.home-signature-grid .tour-card--feature .tour-card-body {
   padding: clamp(1.4rem, 3vw, 2.5rem);
+}
+
+.home-signature-grid .tour-card .tour-card-body h3 {
   color: white;
 }
 
@@ -958,39 +970,30 @@
   line-height: 1.02;
 }
 
-.home-signature-grid .tour-card--feature .tour-card-summary,
-.home-signature-grid .tour-card--feature .tour-card-meta span,
-.home-signature-grid .tour-card--feature .tour-card-bottom :is(span, p) {
+.home-signature-grid .tour-card .tour-card-summary,
+.home-signature-grid .tour-card .tour-card-meta span,
+.home-signature-grid .tour-card .tour-card-bottom :is(span, p) {
   color: rgb(255 255 255 / 78%);
 }
 
-.home-signature-grid .tour-card--feature .tour-card-meta span {
+.home-signature-grid .tour-card .tour-card-meta span {
   background: rgb(255 255 255 / 14%);
 }
 
-.home-signature-grid .tour-card--feature .tour-card-bottom {
+.home-signature-grid .tour-card .tour-card-bottom {
   border-color: rgb(255 255 255 / 24%);
 }
 
-.home-signature-grid .tour-card--feature .tour-card-bottom strong {
+.home-signature-grid .tour-card .tour-card-bottom strong {
   color: white;
 }
 
-.home-signature-grid .tour-card--feature .tour-card-duration-icon svg {
+.home-signature-grid .tour-card .tour-card-duration-icon svg {
   box-shadow: 0 0 0 1.2px rgba(255, 255, 255, 0.6);
 }
 
 .home-signature-grid .tour-card:last-child {
   grid-column: span 2;
-}
-
-.home-signature-grid .tour-card:last-child > a {
-  display: grid;
-  grid-template-columns: minmax(180px, 0.85fr) 1fr;
-}
-
-.home-signature-grid .tour-card:last-child .tour-card-media {
-  aspect-ratio: auto;
 }
 
 .home-discovery-section {
@@ -1106,7 +1109,7 @@
   grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
   min-height: 620px;
   margin-block: var(--spt-section);
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--spt-radius-panel);
   background: var(--spt-surface);
 }
@@ -1115,6 +1118,7 @@
   position: relative;
   min-height: 100%;
   overflow: hidden;
+  border-radius: var(--spt-radius-panel);
   background: transparent;
 }
 
@@ -2017,6 +2021,14 @@
   box-shadow: 0 0 0 64px rgb(255 255 255 / 5%), 0 0 0 128px rgb(255 255 255 / 4%);
 }
 
+.home-page--redesign .home-help-panel-v2 {
+  background: linear-gradient(rgb(22 58 150 / 75%), rgb(22 58 150 / 75%)), url("/images/linearNeedHelp-repaired.png") center / cover no-repeat;
+}
+
+.home-page--redesign .home-help-panel-v2::after {
+  display: none;
+}
+
 .home-help-panel-v2 h2 {
   position: relative;
   z-index: 1;
@@ -2167,14 +2179,6 @@
 
   .home-signature-grid .tour-card:last-child {
     grid-column: auto;
-  }
-
-  .home-signature-grid .tour-card:last-child > a {
-    display: flex;
-  }
-
-  .home-signature-grid .tour-card:last-child .tour-card-media {
-    aspect-ratio: 1.4 / 1;
   }
 
   .home-page--redesign .home-tour-grid,
@@ -2666,15 +2670,20 @@
   .home-plan-section {
     width: 100%;
     margin-block: 0;
-    border-radius: 0;
+    border-radius: var(--spt-radius-panel);
   }
 
   .home-plan-section__media {
     min-height: 300px;
+    border-radius: var(--spt-radius-panel);
   }
 
   .home-plan-section__form {
     padding: 2rem 1rem 3rem;
+  }
+
+  .home-offers-section {
+    padding-top: 3rem;
   }
 
   .home-plan-section .home-search-fields {
@@ -2751,6 +2760,10 @@
   .home-help-panel-v2 {
     border-radius: 0;
     padding: 4rem 1rem;
+  }
+
+  .home-page--redesign .home-help-panel-v2 {
+    border-radius: var(--spt-radius-panel);
   }
 
   .home-help-panel-v2 .home-help-form {

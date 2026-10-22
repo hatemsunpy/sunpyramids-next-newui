@@ -15,6 +15,7 @@ import { isTourDateAvailable } from "@/lib/tour-availability";
 import { withLocale } from "@/lib/locales";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
 import type { Locale, Tour } from "@/types/api";
+import { useOfferDateActive } from "@/components/OfferValidity";
 
 export function matchingSeason(tour: Tour | null | undefined, dateString?: string) {
   if (!Array.isArray(tour?.seasons)) return null;
@@ -44,6 +45,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
+  const offerIsActive = useOfferDateActive(tour?.offer_end_date);
 
   useEffect(() => {
     const openBookingPanel = () => {
@@ -94,7 +96,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   const childRate = group ? Number(group.child_price) : Number(source?.child_price ?? tour?.child_price ?? 0);
   const infantRate = Number(source?.infant_price ?? tour?.infant_price ?? 0);
   const price = adultRate;
-  const offer = Number(tour?.offer || 0);
+  const offer = offerIsActive ? Number(tour?.offer || 0) : 0;
   const baseTotal = price * adults + childRate * children + infantRate * infants;
   const passengerTotal = offer ? baseTotal - baseTotal * (offer / 100) : baseTotal;
   const optionsTotal = (tour?.options ?? [])

@@ -60,7 +60,8 @@ export function HomeUpcomingEventCard({ event, locale = "en" }: Props) {
             src={image}
             alt={title}
             fill
-            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 33vw"
+            // Landscape photos cover a portrait card, so their painted width exceeds the card width.
+            sizes="(max-width: 640px) 170vw, (max-width: 1024px) 100vw, 66vw"
             loading="lazy"
             draggable={false}
           />
