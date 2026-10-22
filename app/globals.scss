@@ -1273,7 +1273,7 @@ input[data-native-type] {
 .home-faq-title { min-height: 180px; background: url('/images/mark.svg') no-repeat right center / contain; }
 .home-faq-title h2 { margin: 0 0 1.5rem; font-size: clamp(2rem, 3.5vw, 3rem); }
 .home-help-section { padding-top: 4rem; padding-bottom: 4rem; }
-.home-help-panel { padding: 4rem 3rem; border-radius: 32px; background: linear-gradient(rgb(22 58 150 / 45%), rgb(22 58 150 / 45%)), url('/images/linearNeedHelp-repaired.png') center / cover no-repeat; color: #fff; }
+.home-help-panel { padding: 4rem 3rem; border-radius: 32px; background: linear-gradient(rgb(22 58 150 / 75%), rgb(22 58 150 / 75%)), url('/images/linearNeedHelp-repaired.png') center / cover no-repeat; color: #fff; }
 .home-help-panel h2 { margin: 0 0 2.5rem; text-align: center; font-size: clamp(2rem, 4vw, 3rem); }
 .home-help-form { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 1rem; align-items: end; }
 .home-help-form label > span { display: block; margin-bottom: .4rem; font-weight: 600; }
