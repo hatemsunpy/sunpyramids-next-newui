@@ -1109,7 +1109,7 @@
   grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
   min-height: 620px;
   margin-block: var(--spt-section);
-  overflow: hidden;
+  overflow: visible;
   border-radius: var(--spt-radius-panel);
   background: var(--spt-surface);
 }
