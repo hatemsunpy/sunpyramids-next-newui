@@ -2761,6 +2761,10 @@
     padding: 4rem 1rem;
   }
 
+  .home-page--redesign .home-help-panel-v2 {
+    border-radius: var(--spt-radius-panel);
+  }
+
   .home-help-panel-v2 .home-help-form {
     grid-template-columns: 1fr;
   }
