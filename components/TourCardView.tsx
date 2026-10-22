@@ -4,6 +4,7 @@ import type { Locale, Tour } from "@/types/api";
 import { tourPath } from "@/lib/locales";
 import { PriceText } from "@/components/PriceText";
 import { TourWishlistButtonView } from "@/components/TourWishlistButtonView";
+import { OfferCountdown } from "@/components/OfferCountdown";
 
 export type TourCardViewLabels = {
   specialOffer: string;
@@ -146,6 +147,7 @@ export function TourCardView({
             <span>{placeOf(tour)}</span>
             <span>{categoryOf(tour)}</span>
           </div>
+          {isOffer && tour.offer_end_date ? <OfferCountdown endDate={tour.offer_end_date} locale={locale} /> : null}
           <div className="tour-card-bottom">
             <div>
               <span>Start From</span>

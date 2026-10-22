@@ -1050,6 +1050,39 @@ input[data-native-type] {
   font-size: 0.82rem;
 }
 
+.offer-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3px;
+  margin-block: 0.85rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  text-shadow: none;
+}
+
+.offer-countdown > * {
+  padding: 0.3rem 0.2rem;
+  background: #fff2f3;
+  text-align: center;
+}
+
+.offer-countdown-value,
+.offer-countdown-label {
+  display: block;
+  line-height: 1.4;
+}
+
+.offer-countdown-value {
+  color: #c43445;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.offer-countdown-label {
+  color: #b53241;
+  font-size: 0.75rem;
+}
+
 .tour-card-bottom {
   display: flex;
   align-items: end;

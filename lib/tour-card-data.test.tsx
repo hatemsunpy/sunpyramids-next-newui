@@ -28,6 +28,7 @@ function fullOfferFixture(): Tour {
     start_from: 180,
     adult_price: 190,
     offer: 20,
+    offer_end_date: "2030-12-01T00:00:00.000Z",
     duration: "5 Days",
     wishlisted_exists: true,
     category: { id: 7, slug: "synthetic-category", title: "Synthetic Category", name: "Synthetic Category" } as Tour["category"],
@@ -102,6 +103,7 @@ describe("toTourCardData TourCard markup parity", () => {
     expect(projected.images).not.toBe(full.images);
     expect(projected.title).toBe("Synthetic Card Fixture Alpha");
     expect(projected.offer).toBe(20);
+    expect(projected.offer_end_date).toBe(full.offer_end_date);
     expect(projected.price).toBe(200);
     expect(projected.wishlisted_exists).toBe(true);
     expect(projected.categories?.[0]?.id).toBe(53);

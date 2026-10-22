@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { TourCard } from "@/components/TourCard";
 import type { Tour } from "@/types/api";
+import { toTourCardData } from "@/lib/tour-card-data";
 
 vi.mock("@/components/CustomerFlows", () => ({
   toggleWishlist: vi.fn(),
@@ -16,9 +17,21 @@ vi.mock("@/components/CurrencyProvider", () => ({
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
 });
 
 describe("TourCard Special Offer Badge", () => {
+  it("preserves the API expiry through client projection and displays its countdown without changing prices", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2030-01-01T00:00:00Z"));
+    const tour = toTourCardData({ title: "Synthetic timed offer", price: 100, offer: 10, offer_end_date: "2030-01-03T00:00:00Z" });
+    render(<TourCard tour={tour} locale="en" />);
+    act(() => { vi.advanceTimersByTime(1000); });
+    expect(screen.getByText("Days")).toBeInTheDocument();
+    expect(screen.getByText("$90.00")).toBeInTheDocument();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+  });
+
   it("does not render Special Offer badge for a standard tour", () => {
     const tour: Tour = { id: 1, title: "Standard Tour", price: 100 };
     render(<TourCard tour={tour} locale="en" />);

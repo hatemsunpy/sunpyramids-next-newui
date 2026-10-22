@@ -4,7 +4,7 @@ import type { Tour } from "@/types/api";
  * Pure server -> client projection for TourCard.
  *
  * Keeps only the raw API fields read by `components/TourCard.tsx`
- * (image fallback chain, place/category fallbacks, raw price/offer,
+ * (image fallback chain, place/category fallbacks, raw price/offer/expiry,
  * duration, wishlist flag). No truncation, no price/offer precomputation,
  * no fetch/query change. The Laravel API remains the source of truth;
  * this only narrows what the server serializes to the client island.
@@ -28,6 +28,7 @@ export function toTourCardData(tour: Tour): Tour {
     start_from: tour.start_from,
     adult_price: tour.adult_price,
     offer: tour.offer,
+    offer_end_date: tour.offer_end_date,
     duration: tour.duration,
     wishlisted_exists: tour.wishlisted_exists,
     category: tour.category ? { ...tour.category } : tour.category,
