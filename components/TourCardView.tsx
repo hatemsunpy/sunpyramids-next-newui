@@ -5,6 +5,7 @@ import { tourPath } from "@/lib/locales";
 import { PriceText } from "@/components/PriceText";
 import { TourWishlistButtonView } from "@/components/TourWishlistButtonView";
 import { OfferCountdown } from "@/components/OfferCountdown";
+import { OfferValidity } from "@/components/OfferValidity";
 
 export type TourCardViewLabels = {
   specialOffer: string;
@@ -47,6 +48,7 @@ function DiscountBadgeIcon({ className = "" }: { className?: string }) {
 }
 
 function checkSpecialOffer(tour: Tour, forceSpecialOffer?: boolean): boolean {
+  if (tour.offer !== undefined && Number(tour.offer) === 0) return false;
   if (forceSpecialOffer) return true;
   if (tour.offer && Number(tour.offer) > 0) return true;
   const categories = [...(tour.categories || [])];
@@ -103,7 +105,6 @@ export function TourCardView({
   const description = tour.short_description || tour.description || title;
   const price = priceOf(tour);
   const isOffer = checkSpecialOffer(tour, isSpecialOffer);
-
   const rawOffer = tour.offer;
   const offerPercent =
     typeof rawOffer === "number"
@@ -131,10 +132,12 @@ export function TourCardView({
         labels={{ addToWishlist: labels.addToWishlist, removeFromWishlist: labels.removeFromWishlist }}
       />
       {isOffer ? (
-        <div className="tour-card-offer-badge">
-          <DiscountBadgeIcon className="tour-card-offer-icon" />
-          <span>{labels.specialOffer || "Special Offer"}</span>
-        </div>
+        <OfferValidity endDate={tour.offer_end_date}>
+          <div className="tour-card-offer-badge">
+            <DiscountBadgeIcon className="tour-card-offer-icon" />
+            <span>{labels.specialOffer || "Special Offer"}</span>
+          </div>
+        </OfferValidity>
       ) : null}
       <Link href={tourPath(slug, locale)}>
         <div className="tour-card-media">
@@ -152,6 +155,9 @@ export function TourCardView({
             <div>
               <span>Start From</span>
               <div className="tour-card-price-wrap">
+                <OfferValidity endDate={tour.offer_end_date} fallback={
+                  <strong>{price !== null && price !== undefined ? <PriceText amount={price} /> : "Request Price"}</strong>
+                }>
                 <strong>
                   {discountedPrice !== null && discountedPrice !== undefined ? (
                     <PriceText amount={discountedPrice} />
@@ -164,6 +170,7 @@ export function TourCardView({
                     <PriceText amount={price} />
                   </span>
                 ) : null}
+                </OfferValidity>
               </div>
             </div>
             <p className="tour-card-duration">

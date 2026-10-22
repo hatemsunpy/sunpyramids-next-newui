@@ -121,8 +121,9 @@ describe("toTourCardData TourCard markup parity", () => {
     expect(projectedDestination).not.toHaveProperty("pivot");
 
     expect(renderMarkup(projected)).toBe(renderMarkup(full));
-    // Discounted $200 at 20% off renders $160.00 alongside $200.00.
-    expect(renderMarkup(projected)).toContain("$160.00");
+    // Dated promotions wait for the browser clock, preserving SSR/hydration parity.
+    expect(renderMarkup(projected)).toContain("$200.00");
+    expect(renderMarkup(projected)).not.toContain("$160.00");
   });
 
   it("renders identical TourCard markup for fallback-only tour (image, description, place, category, duration fallbacks)", () => {

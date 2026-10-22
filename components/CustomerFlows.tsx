@@ -28,6 +28,7 @@ import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 export { toggleWishlist } from "@/lib/wishlist";
 import { optionCost } from "@/lib/option-cost";
+import { activeOfferPercent } from "@/lib/tour-offer";
 export { optionCost };
 import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 import {
@@ -126,7 +127,7 @@ function cartItemTotal(item: any): number | null {
     if (Array.isArray(item.options)) {
       total += item.options.reduce((sum: number, option: any) => sum + optionCost(option, adults, children), 0);
     }
-    const offer = Number(tour.offer) || 0;
+    const offer = activeOfferPercent(tour, Date.now());
     if (offer) total -= total * (offer / 100);
     return Number.isFinite(total) ? total : null;
   }
