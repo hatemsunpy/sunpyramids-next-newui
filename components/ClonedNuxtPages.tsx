@@ -8,6 +8,9 @@ import { AccountFlow, AuthFlow, CartFlow } from "@/components/CustomerFlows";
 import { DestinationCard } from "@/components/DestinationCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
+import { EventDetails } from "@/components/EventDetails";
+import { EventRelatedBlogs } from "@/components/EventRelatedBlogs";
+import { OfferCountdown } from "@/components/OfferCountdown";
 import { PaymentCallbackKind, PaymentCallbackStatus } from "@/components/PaymentCallbackStatus";
 import { TourCard } from "@/components/TourCard";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
@@ -300,11 +303,7 @@ export function EventDetailPage({
 }) {
   const title = event?.title || event?.name || "Egypt Event";
   const image = event?.banner || event?.featured_image || event?.image || "/images/eventsHero.png";
-  const breadcrumbs = [
-    { label: "Home", href: withLocale("/", locale) },
-    { label: "Events", href: withLocale("/events", locale) },
-    { label: title },
-  ];
+  const eventDate = typeof event?.date === "string" && event.date.trim().length > 0 ? event.date.trim() : null;
 
   return (
     <main className="event-detail-page">
@@ -320,6 +319,12 @@ export function EventDetailPage({
 
           <span className="editorial-eyebrow">Cultural Celebration</span>
           <h1 className="editorial-title">{title}</h1>
+
+          {eventDate && (
+            <div className="event-countdown" role="timer" aria-label={`Time remaining before ${title}`}>
+              <OfferCountdown endDate={eventDate} locale={locale} />
+            </div>
+          )}
 
           {image && (
             <div className="editorial-lead-media">
@@ -344,8 +349,9 @@ export function EventDetailPage({
             />
 
             <aside className="event-booking-panel">
+              <EventDetails event={event} />
               <p className="panel-eyebrow">Event Attendance</p>
-              <h3>Plan Your Visit</h3>
+              <h3>Book Your Ticket</h3>
               <ContactForm locale={locale} submitLabel="Inquire About Event" />
             </aside>
           </div>
@@ -369,6 +375,17 @@ export function EventDetailPage({
           </div>
         </section>
       )}
+
+      <Suspense fallback={null}><EventRelatedBlogs locale={locale} /></Suspense>
+
+      <section className="section-pad container-shell event-reviews-block">
+        <h2 className="event-reviews-heading">Clients Feedback</h2>
+        <div className="event-reviews" id="event-reviews" />
+      </section>
+      <TrustIndexLoader
+        containerId="event-reviews"
+        script="https://cdn.trustindex.io/loader.js?1d15b034519c8049128609a4d4e"
+      />
     </main>
   );
 }
