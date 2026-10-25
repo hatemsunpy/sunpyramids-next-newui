@@ -149,14 +149,49 @@ export function EventDetails({ event }: { event: ApiPage | null }) {
       <dl className="event-details-list">
         {rows.map((row) => (
           <div className="event-details-row" key={row.key}>
-            <DetailIcon className="event-details-icon">{row.icon}</DetailIcon>
-            <div className="event-details-copy">
-              <dt>{row.label}</dt>
-              <dd>{row.value}</dd>
-            </div>
+            <dt>
+              <DetailIcon className="event-details-icon">{row.icon}</DetailIcon>
+              <span>{row.label}</span>
+            </dt>
+            <dd>{row.value}</dd>
           </div>
         ))}
       </dl>
     </section>
+  );
+}
+
+// Hero facts for the event detail header: same API fields and the same
+// calendar formatting rules as the details card, string-validated and
+// row-omitted when the API payload has nothing usable to show.
+export function EventHeroFacts({ event }: { event: ApiPage | null }) {
+  const dateRaw = nonEmptyString(event?.date);
+  const formattedDate = dateRaw ? formatEventDate(dateRaw) : null;
+  const location = nonEmptyString(event?.location);
+  if (!formattedDate && !location) return null;
+
+  return (
+    <dl className="event-hero-facts">
+      {formattedDate && (
+        <div className="event-hero-fact" key="date">
+          <dt>
+            <DetailIcon className="event-hero-fact-icon"><path d="M8 2v4m8-4v4M3.5 8.5h17M4 4h16a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" /></DetailIcon>
+            <span>Date</span>
+          </dt>
+          <dd>
+            <time dateTime={dateRaw ?? undefined}>{formattedDate}</time>
+          </dd>
+        </div>
+      )}
+      {location && (
+        <div className="event-hero-fact" key="location">
+          <dt>
+            <DetailIcon className="event-hero-fact-icon"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></DetailIcon>
+            <span>Location</span>
+          </dt>
+          <dd>{location}</dd>
+        </div>
+      )}
+    </dl>
   );
 }

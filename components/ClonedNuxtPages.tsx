@@ -8,7 +8,7 @@ import { AccountFlow, AuthFlow, CartFlow } from "@/components/CustomerFlows";
 import { DestinationCard } from "@/components/DestinationCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
-import { EventDetails } from "@/components/EventDetails";
+import { EventDetails, EventHeroFacts } from "@/components/EventDetails";
 import { EventRelatedBlogs } from "@/components/EventRelatedBlogs";
 import { OfferCountdown } from "@/components/OfferCountdown";
 import { PaymentCallbackKind, PaymentCallbackStatus } from "@/components/PaymentCallbackStatus";
@@ -307,8 +307,8 @@ export function EventDetailPage({
 
   return (
     <main className="event-detail-page">
-      <header className="editorial-hero">
-        <div className="editorial-hero-inner">
+      <header className="event-hero">
+        <div className="event-hero-inner">
           <nav className="editorial-breadcrumb" aria-label="Breadcrumb">
             <Link href={withLocale("/", locale)}>Home</Link>
             <span className="separator" aria-hidden="true">›</span>
@@ -317,42 +317,52 @@ export function EventDetailPage({
             <span className="current" aria-current="page">{title}</span>
           </nav>
 
-          <span className="editorial-eyebrow">Cultural Celebration</span>
-          <h1 className="editorial-title">{title}</h1>
-
-          {eventDate && (
-            <div className="event-countdown" role="timer" aria-label={`Time remaining before ${title}`}>
-              <OfferCountdown endDate={eventDate} locale={locale} />
+          <div className="event-hero-grid">
+            <div className="event-hero-copy">
+              <h1 className="event-hero-title">{title}</h1>
+              <EventHeroFacts event={event} />
+              {eventDate && (
+                <div className="event-countdown" role="timer" aria-label={`Time remaining before ${title}`}>
+                  <OfferCountdown endDate={eventDate} locale={locale} />
+                </div>
+              )}
+              <div className="event-hero-actions">
+                <a className="event-cta-primary" href="#event-booking">Inquire About Event</a>
+                <a className="event-cta-secondary" href="#event-overview">About the event</a>
+              </div>
             </div>
-          )}
-
-          {image && (
-            <div className="editorial-lead-media">
+            <div className="event-hero-media">
               <Image
                 src={image}
                 alt={title}
                 fill
                 priority
-                sizes="(max-width: 1440px) 100vw, 1440px"
+                sizes="(max-width: 960px) 100vw, 55vw"
               />
             </div>
-          )}
+          </div>
         </div>
       </header>
 
-      <section className="editorial-main-section">
+      <section className="event-main">
         <div className="editorial-container">
-          <div className="editorial-event-layout">
-            <article
-              className="editorial-prose"
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(event?.description || event?.content) }}
-            />
+          <div className="event-layout">
+            <article id="event-overview" className="event-overview" tabIndex={-1}>
+              <h2 className="event-overview-head">About the event</h2>
+              <div
+                className="editorial-prose"
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(event?.description || event?.content) }}
+              />
+            </article>
 
-            <aside className="event-booking-panel">
-              <EventDetails event={event} />
-              <p className="panel-eyebrow">Event Attendance</p>
-              <h3>Book Your Ticket</h3>
-              <ContactForm locale={locale} submitLabel="Inquire About Event" />
+            <aside className="event-rail">
+              <div className="event-rail-inner">
+                <EventDetails event={event} />
+                <div id="event-booking" className="event-booking-card" tabIndex={-1}>
+                  <h3 className="event-booking-head">Book Your Ticket</h3>
+                  <ContactForm locale={locale} submitLabel="Inquire About Event" />
+                </div>
+              </div>
             </aside>
           </div>
         </div>

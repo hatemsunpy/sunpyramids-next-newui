@@ -1,6 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { EventDetails } from "@/components/EventDetails";
+import { EventDetails, EventHeroFacts } from "@/components/EventDetails";
 import { siteContact } from "@/lib/site-contact";
 import type { ApiPage } from "@/types/api";
 
@@ -75,6 +75,44 @@ describe("EventDetails", () => {
 
   it("renders nothing for a null event", () => {
     const { container } = render(<EventDetails event={null} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("uses valid dl row groups with dt/dd siblings", () => {
+    const { container } = render(<EventDetails event={eventFixture()} />);
+
+    const rows = [...container.querySelectorAll("dl > div")];
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect([...row.children].map((child) => child.tagName)).toEqual(["DT", "DD"]);
+    }
+  });
+});
+
+describe("EventHeroFacts", () => {
+  it("shows only the API date and location in the hero", () => {
+    render(<EventHeroFacts event={eventFixture()} />);
+
+    expect(screen.getByText("Date")).toBeInTheDocument();
+    expect(screen.getByText("18/11/2026")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
+    expect(screen.getByText("Cairo Opera House")).toBeInTheDocument();
+
+    expect(screen.queryByText("Start Date")).toBeNull();
+    expect(screen.queryByText("Status")).toBeNull();
+  });
+
+  it("omits each fact independently when its API string is unusable", () => {
+    render(<EventHeroFacts event={eventFixture({ location: "" })} />);
+
+    expect(screen.getByText("Date")).toBeInTheDocument();
+    expect(screen.queryByText("Location")).toBeNull();
+  });
+
+  it("renders nothing without a usable date or location", () => {
+    const { container } = render(
+      <EventHeroFacts event={eventFixture({ date: "", location: "" })} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 });
