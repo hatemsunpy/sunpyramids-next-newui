@@ -288,12 +288,42 @@
         margin: 0 0 1.5rem;
       }
 
-      // CMS tables stay readable on narrow screens without page overflow.
+      // CMS spreadsheet heights must not clip content when the viewport narrows.
       .editorial-prose table {
-        display: block;
+        display: table;
         width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        height: auto !important;
+        table-layout: fixed;
+        overflow: visible;
+
+        tr,
+        th,
+        td {
+          height: auto !important;
+          overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 640px) {
+          &,
+          tbody,
+          thead,
+          tfoot,
+          tr,
+          th,
+          td {
+            display: block;
+            width: 100% !important;
+          }
+
+          colgroup {
+            display: none;
+          }
+
+          td:first-child {
+            background: var(--spt-surface-soft);
+            color: var(--spt-link);
+          }
+        }
       }
     }
 
