@@ -324,6 +324,60 @@
             color: var(--spt-link);
           }
         }
+
+        &[data-sheets-root] {
+          display: block;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          box-shadow: none;
+          font-size: 1rem;
+
+          colgroup {
+            display: none;
+          }
+
+          tbody {
+            display: grid;
+            gap: 1.25rem;
+          }
+
+          tr {
+            display: block;
+            min-width: 0;
+            border: 1px solid var(--spt-border);
+            border-radius: var(--spt-radius-card);
+            background: var(--spt-surface);
+          }
+
+          td {
+            display: block;
+            width: 100% !important;
+            padding: clamp(1rem, 2vw, 1.5rem);
+            border: 0;
+            line-height: 1.8;
+          }
+
+          td:first-child {
+            border-inline-start: 3px solid var(--spt-amber);
+            border-bottom: 1px solid var(--spt-border);
+            border-radius: 15px 15px 0 0;
+            background: var(--spt-surface-soft);
+            color: var(--spt-link);
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.5;
+          }
+
+          td:not(:first-child) {
+            background: transparent;
+            border-radius: 0 0 15px 15px;
+
+            > :last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
       }
     }
 
