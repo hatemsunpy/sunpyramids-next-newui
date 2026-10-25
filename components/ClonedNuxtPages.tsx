@@ -16,6 +16,7 @@ import { TourCard } from "@/components/TourCard";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
+import { removeItinerarySeparators } from "@/lib/event-itinerary-html";
 import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 import { uiCopy } from "@/lib/ui-copy";
 import { getImageBlurDataURL } from "@/lib/image-blur.server";
@@ -351,7 +352,7 @@ export function EventDetailPage({
               <h2 className="event-overview-head">About the event</h2>
               <div
                 className="editorial-prose"
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(event?.description || event?.content) }}
+                dangerouslySetInnerHTML={{ __html: removeItinerarySeparators(sanitizeHtml(event?.description || event?.content)) }}
               />
             </article>
 
