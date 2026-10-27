@@ -1634,6 +1634,31 @@
   background: var(--tour-surface);
 }
 
+.tour-page-redesign .tour-inquiry-date {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--tour-action);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--tour-action) 10%, var(--tour-surface));
+  color: var(--tour-ink);
+  font-size: 0.9rem;
+}
+
+.tour-page-redesign .tour-inquiry-date button {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--spt-link);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 @media (min-width: 1024px) {
   .tour-page-redesign .tour-season-grid {
     display: grid;

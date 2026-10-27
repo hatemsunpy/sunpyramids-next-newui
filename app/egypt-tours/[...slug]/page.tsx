@@ -4,6 +4,15 @@ import { notFound, redirect } from "next/navigation";
 import { CategoryChildrenIndex } from "@/components/CategoryChildrenIndex";
 import { CategorySubcategoryFilter } from "@/components/CategorySubcategoryFilter";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
+import { MultiCountryIntro, MultiCountryOverview } from "@/components/multi-country/MultiCountryIntro";
+import { MultiCountryTailorMade } from "@/components/multi-country/MultiCountryTailorMade";
+import { TravelMomentsGallery } from "@/components/TravelMomentsGallery";
+import { TravellerReviews } from "@/components/TravellerReviews";
+import { MultiCountrySubcategoryIntro } from "@/components/multi-country/MultiCountrySubcategoryIntro";
+import { MultiCountrySubcategoryToolbar } from "@/components/multi-country/MultiCountrySubcategoryToolbar";
+import { McScrollReveal } from "@/components/multi-country/McScrollReveal";
+import { MultiCountryTripHelp } from "@/components/multi-country/MultiCountryTripHelp";
+import { isMultiCountryParent, isMultiCountrySubcategory } from "@/components/multi-country/routes";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { Pagination } from "@/components/Pagination";
@@ -11,7 +20,7 @@ import { ResultCount } from "@/components/ResultCount";
 import { SiteShell } from "@/components/SiteShell";
 import { TourCard } from "@/components/TourCard";
 import { DestinationCard } from "@/components/DestinationCard";
-import { getDestinations, getTours, tourListData, tourMeta } from "@/lib/data";
+import { getDestinations, getPublicSiteSettings, getTours, tourListData, tourMeta } from "@/lib/data";
 import { resolveEgyptToursPage } from "@/lib/egypt-tours";
 import { formatApiError } from "@/lib/api";
 import { decodePathSegment } from "@/lib/locales";
@@ -50,6 +59,8 @@ export default async function Page({ params, searchParams }: Props) {
   const rawOrder = query.order;
   const currentOrder = typeof rawOrder === "string" ? rawOrder : Array.isArray(rawOrder) ? rawOrder[0] : "display_order,asc";
 
+  const isMultiCountry = isMultiCountryParent(slug);
+  const isMcSubcategory = isMultiCountrySubcategory(slug);
   const isOneDayRoute = slug[0] === "one-day-tours";
   const isOneDayIndex = isOneDayRoute && slug.length === 1;
   const isCategoryChildrenIndex = slug.length === 1 && (slug[0] === "multi-days-tours" || slug[0] === "nile-cruises");
@@ -161,27 +172,43 @@ export default async function Page({ params, searchParams }: Props) {
     ...(slug.length > 1 ? [{ label: pageTitle }] : []),
   ];
 
+  const settings = isMultiCountry ? await getPublicSiteSettings("en") : undefined;
+
   return (
-    <SiteShell locale="en">
+    <SiteShell locale="en" settings={settings}>
       <JsonLd schema={page.seo?.structure_schema} />
-      <main>
-        <DiscoveryHero
+      <main className={isMultiCountry ? "multi-country-page" : isMcSubcategory ? "multi-country-subcategory-page" : undefined}>
+        {isMultiCountry ? <MultiCountryIntro page={page} categoryCount={children.length} locale="en" /> : isMcSubcategory ? (
+          <MultiCountrySubcategoryIntro page={page} locale="en" />
+        ) : <DiscoveryHero
           title={pageTitle}
           breadcrumbs={breadcrumbs}
           eyebrow={isOneDayIndex ? "Egypt Destinations" : "Curated Egypt Packages"}
           description={page?.short_description || page?.description || page?.content}
           totalCount={isOneDayIndex ? items.length : meta?.total}
           bgImage={page?.banner || "/images/mainBanner.webp"}
-        />
-        <section className="discovery-section">
+          mobileBgImage={typeof page.phone_banner === "string" ? page.phone_banner : undefined}
+        />}
+        <section className="discovery-section" id={isMultiCountry ? "multi-country-tours" : undefined}>
           <div className="container-shell">
             {hasChildren && (
               <CategorySubcategoryFilter
+                variant={isMultiCountry ? "journeys" : "pills"}
                 childrenCategories={children}
                 basePath={routePath(slug)}
                 locale="en"
                 activeSub={activeSub}
                 currentOrder={currentOrder}
+              />
+            )}
+            {isMcSubcategory && (
+              <MultiCountrySubcategoryToolbar
+                basePath={routePath(slug)}
+                locale="en"
+                currentOrder={currentOrder}
+                from={meta?.from ?? 0}
+                to={meta?.to ?? 0}
+                total={meta?.total ?? 0}
               />
             )}
             {isOneDayIndex ? (
@@ -235,6 +262,17 @@ export default async function Page({ params, searchParams }: Props) {
             )}
           </div>
         </section>
+        {isMultiCountry && <MultiCountryOverview page={page} locale="en" />}
+        {isMultiCountry && <MultiCountryTailorMade locale="en" />}
+        {isMultiCountry && <>
+          <TravelMomentsGallery socialLinks={settings?.socialLinks ?? []} locale="en" className="mc-social-gallery mc-shell" />
+          <TravellerReviews containerId="multi-country-reviews" locale="en" className="mc-reviews mc-shell" />
+          <MultiCountryTripHelp locale="en" />
+        </>}
+        {isMcSubcategory && <MultiCountryOverview page={page} locale="en" fullFirst />}
+        {(isMultiCountry || isMcSubcategory) && (
+          <McScrollReveal key={`${slug.join("/")}:${currentOrder}:${currentPage}:${activeSub || ""}`} selector=".category-sub-pill.mc-journey-card, .discovery-full-grid > *, .mc-overview" />
+        )}
       </main>
     </SiteShell>
   );

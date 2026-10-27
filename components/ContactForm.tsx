@@ -7,6 +7,7 @@ import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { apiGet, apiPost } from "@/lib/client-api";
 import { generateRecaptchaToken } from "@/lib/recaptcha";
 import { withLocale } from "@/lib/locales";
+import { parseLocalCalendarDate } from "@/lib/local-date";
 import { uiCopy } from "@/lib/ui-copy";
 import type { Locale } from "@/types/api";
 
@@ -14,11 +15,13 @@ export function ContactForm({
   locale = "en",
   tourId,
   tourTitle,
+  tourDate,
   submitLabel,
 }: {
   locale?: Locale;
   tourId?: number;
   tourTitle?: string;
+  tourDate?: string;
   submitLabel?: string;
 }) {
   const router = useRouter();
@@ -55,21 +58,25 @@ export function ContactForm({
     }
     setStatus("loading");
     const form = new FormData(formElement);
-    const token = await generateRecaptchaToken("submit");
+    // The published Nuxt inquiry form sends a nullable token; other forms retain reCAPTCHA.
+    const token = isTourInquiry ? null : await generateRecaptchaToken("submit");
     const name = String(form.get("name") || "");
-    const payload: Record<string, string> = {
+    const requestedDate = isTourInquiry ? parseLocalCalendarDate(tourDate) : null;
+    const inquirySubject = `contact us from Tour (${tourTitle || `Tour #${tourId}`}) ${requestedDate ? `to check availability in (${requestedDate.day}/${requestedDate.monthIndex + 1}/${requestedDate.year})` : ""}`;
+    const payload: Record<string, string | null> = {
       name,
       email: String(form.get("email") || ""),
       phone: String(form.get("phone") || ""),
       country: String(form.get("country") || ""),
-      subject: isTourInquiry ? `Tour inquiry: ${tourTitle || `Tour #${tourId}`}` : "contact-us",
+      subject: isTourInquiry ? inquirySubject : "contact-us",
       message: String(form.get("message") || ""),
-      type: "form_contact",
+      type: isTourInquiry ? "inquiry_contact" : "form_contact",
     };
-    if (token) payload.recaptcha_token = token;
+    if (isTourInquiry || token) payload.recaptcha_token = token;
 
     try {
-      await apiPost("contact-requests", payload, locale);
+      if (isTourInquiry) await apiPost("contact-requests", payload, locale, true);
+      else await apiPost("contact-requests", payload, locale);
       setStatus("success");
       formElement.reset();
       router.push(`${withLocale("/thankful", locale)}?name=${encodeURIComponent(name)}`);

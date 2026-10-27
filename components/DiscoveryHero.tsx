@@ -19,6 +19,7 @@ export async function DiscoveryHero({
   totalCount,
   metaBadges = [],
   bgImage,
+  mobileBgImage,
   children,
   locale = "en",
 }: {
@@ -29,13 +30,19 @@ export async function DiscoveryHero({
   totalCount?: number | null;
   metaBadges?: string[];
   bgImage?: string | null;
+  mobileBgImage?: string | null;
   children?: ReactNode;
   locale?: Locale | string;
 }) {
   const bannerImage = bgImage || "/images/mainBanner.webp";
-  const preview = await getImageBlurDataURL(bannerImage);
+  const mobileBannerImage = mobileBgImage || bannerImage;
+  const [preview, mobilePreview] = await Promise.all([
+    getImageBlurDataURL(bannerImage),
+    getImageBlurDataURL(mobileBannerImage),
+  ]);
   const blurLayer = preview ? `, ${blurredImageBackground(preview)}` : "";
-  const mobileImage = responsiveImageSource(bannerImage, 828);
+  const mobileBlurLayer = mobilePreview ? `, ${blurredImageBackground(mobilePreview)}` : "";
+  const mobileImage = responsiveImageSource(mobileBannerImage, 828);
   const desktopImage = responsiveImageSource(bannerImage, 1920);
 
   return (
@@ -44,12 +51,12 @@ export async function DiscoveryHero({
     <link rel="preload" as="image" href={desktopImage} media="(min-width: 769px)" fetchPriority="high" />
     <header
       className="discovery-hero"
-      data-image-blur-preview={preview ? "" : undefined}
+      data-image-blur-preview={preview || mobilePreview ? "" : undefined}
       data-image-source={bannerImage}
       style={{
         backgroundImage: `var(--discovery-image, url(${JSON.stringify(bannerImage)})${blurLayer})`,
         "--discovery-image-desktop": `url(${JSON.stringify(desktopImage)})${blurLayer}`,
-        "--discovery-image-mobile": `url(${JSON.stringify(mobileImage)})${blurLayer}`,
+        "--discovery-image-mobile": `url(${JSON.stringify(mobileImage)})${mobileBlurLayer}`,
       } as CSSProperties}
     >
       <div className="discovery-hero-inner">

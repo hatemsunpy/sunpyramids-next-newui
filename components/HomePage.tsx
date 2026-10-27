@@ -7,7 +7,8 @@ import { TourCard } from "@/components/TourCard";
 import { BlogCard } from "@/components/BlogCard";
 import { DestinationCard } from "@/components/DestinationCard";
 import { SectionEyebrow, SectionHeading } from "@/components/SectionHeading";
-import { TrustIndexLoader } from "@/components/TrustIndexLoader";
+import { TravelMomentsGallery } from "@/components/TravelMomentsGallery";
+import { TravellerReviews } from "@/components/TravellerReviews";
 import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
 import { HomeSearchShortcuts } from "@/components/HomeSearchShortcuts";
 import { HomePopularTours } from "@/components/HomePopularTours";
@@ -22,14 +23,6 @@ import { toTourCardData } from "@/lib/tour-card-data";
 import { homeCopy } from "@/lib/home-copy";
 import { homeSectionLabels } from "@/lib/home-section-labels";
 import { getImageBlurPlaceholders } from "@/lib/image-blur.server";
-
-const gallery = [
-  ["/images/shorts.webp", "/images/shorts-gallary.webp", "YouTube Shorts", "shorts"],
-  ["/images/youtubeone.webp", "/images/youtube-gallary.webp", "YouTube", "youtube-video-1"],
-  ["/images/tiktok.webp", "/images/tiktok-gallary.webp", "TikTok", "tiktok"],
-  ["/images/instagram.webp", "/images/insta-gallary.webp", "Instagram", "insta-link"],
-  ["/images/youtubetwo.webp", "/images/fb-logo.webp", "Facebook", "youtube-video-2"],
-];
 
 function ShortcutIcon({ type }: { type: "make" | "find" | "car" }) {
   if (type === "find") {
@@ -84,7 +77,6 @@ export async function HomePage({
     ["2", copy.bookingTitle, copy.bookingDescription],
     ["3", copy.enjoyTitle, copy.enjoyDescription],
   ];
-  const socialUrls = new Map(socialLinks.map((item) => [item.type, item.url]));
 
   return (
     <main className="home-page home-page--redesign">
@@ -257,16 +249,7 @@ export async function HomePage({
         <Image src="/images/certified-logo.webp" alt="Certified sustainable travel" width={430} height={167} />
       </section>
 
-      <section className="home-section container-shell home-gallery-section-v2">
-        <SectionHeading align="center" description={copy.galleryDescription} eyebrow={labels.gallery} title={copy.galleryTitle} />
-        <SwipeCarousel className="home-social-gallery-v2" ariaLabel={copy.galleryTitle}>
-          {gallery.map(([image, icon, label, type], index) => {
-            const content = <><Image src={image} alt={`${label} travel moments`} fill sizes="(max-width: 768px) 72vw, 25vw" /><Image className="home-gallery-icon" src={icon} alt="" width={54} height={54} /><span>{label}</span></>;
-            const url = socialUrls.get(type);
-            return <article className={index === 1 ? "is-tall" : ""} key={label}>{url ? <a href={url} target="_blank" rel="noreferrer" aria-label={label}>{content}</a> : content}</article>;
-          })}
-        </SwipeCarousel>
-      </section>
+      <TravelMomentsGallery socialLinks={socialLinks} locale={locale} />
 
       <div className="home-card-stack-section">
         <Activity mode="visible">
@@ -274,10 +257,7 @@ export async function HomePage({
         </Activity>
       </div>
 
-      <section className="home-review-section container-shell">
-        <div id="home-reviews" />
-        <TrustIndexLoader containerId="home-reviews" script="https://cdn.trustindex.io/loader.js?1d15b034519c8049128609a4d4e" />
-      </section>
+      <TravellerReviews containerId="home-reviews" locale={locale} />
 
       {faqs.length ? (
         <section className="home-faq-section-v2">
