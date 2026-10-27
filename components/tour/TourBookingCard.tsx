@@ -15,6 +15,7 @@ import { isTourDateAvailable } from "@/lib/tour-availability";
 import { withLocale } from "@/lib/locales";
 import { whatsappInquiryUrl } from "@/lib/site-contact";
 import type { Locale, Tour } from "@/types/api";
+import { useOfferDateActive } from "@/components/OfferValidity";
 
 export function matchingSeason(tour: Tour | null | undefined, dateString?: string) {
   if (!Array.isArray(tour?.seasons)) return null;
@@ -44,21 +45,16 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { actionMessage, favoriteTour, shareTour } = useTourActions(tour, locale);
+  const offerIsActive = useOfferDateActive(tour?.offer_end_date);
 
   useEffect(() => {
     const openBookingPanel = () => {
-      if (tour?.is_inquiry) {
-        requestAnimationFrame(() => {
-          document.querySelector("#tour-booking .tour-inquiry-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-        return;
-      }
       setMobileOpen(true);
-      requestAnimationFrame(() => document.querySelector<HTMLInputElement>(".tour-field input")?.focus());
+      requestAnimationFrame(() => document.querySelector<HTMLInputElement>("#tour-booking input:not([type=hidden])")?.focus());
     };
     window.addEventListener("tour:open-booking", openBookingPanel);
     return () => window.removeEventListener("tour:open-booking", openBookingPanel);
-  }, [tour?.is_inquiry]);
+  }, []);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -74,18 +70,6 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
     };
   }, [mobileOpen]);
 
-  // Inquiry tours bypass all booking/pricing logic and render a contact form instead.
-  if (tour?.is_inquiry) {
-    return (
-      <aside className="tour-right-panel" id="tour-booking">
-        <div className="tour-booking-card tour-inquiry-card">
-          <h3 className="tour-inquiry-title">Contact Us For Checking Availability</h3>
-          <ContactForm locale={locale} tourId={tour?.id} tourTitle={tour?.title} />
-        </div>
-      </aside>
-    );
-  }
-
   const season = matchingSeason(tour, date);
   const source = (season ?? tour) as Tour | null | undefined;
   const groups = Array.isArray(source?.pricing_groups) ? source.pricing_groups : [];
@@ -94,16 +78,19 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
   const childRate = group ? Number(group.child_price) : Number(source?.child_price ?? tour?.child_price ?? 0);
   const infantRate = Number(source?.infant_price ?? tour?.infant_price ?? 0);
   const price = adultRate;
-  const offer = Number(tour?.offer || 0);
+  const offer = offerIsActive ? Number(tour?.offer || 0) : 0;
   const baseTotal = price * adults + childRate * children + infantRate * infants;
   const passengerTotal = offer ? baseTotal - baseTotal * (offer / 100) : baseTotal;
   const optionsTotal = (tour?.options ?? [])
     .filter((option) => option?.id != null && selectedOptions.includes(Number(option.id)))
     .reduce((sum, option) => sum + optionCost(option, adults, children), 0);
   const total = passengerTotal + optionsTotal;
+  // A zero passenger price requests availability, even when add-ons have a price.
+  const requiresInquiry = Boolean(tour?.is_inquiry || (tour && passengerTotal === 0));
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (requiresInquiry) return;
     if (!tour?.id) return;
     if (!date || !isTourDateAvailable(tour, date)) {
       setStatus("error");
@@ -133,84 +120,102 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
 
   return (
     <aside className="tour-right-panel" id="tour-booking">
-      <div className={`tour-booking-dialog ${mobileOpen ? "is-open" : ""}`} role={mobileOpen ? "dialog" : undefined} aria-modal={mobileOpen || undefined} aria-label={mobileOpen ? "Book this tour" : undefined}>
+      <div className={`tour-booking-dialog ${mobileOpen ? "is-open" : ""}`} role={mobileOpen ? "dialog" : undefined} aria-modal={mobileOpen || undefined} aria-label={mobileOpen ? (requiresInquiry ? "Check tour availability" : "Book this tour") : undefined}>
         <button className="tour-booking-backdrop" type="button" onClick={() => setMobileOpen(false)} aria-label="Close booking panel" />
-        <div className="tour-booking-card">
+        <div className={`tour-booking-card${requiresInquiry ? " tour-inquiry-card" : ""}`}>
           <button className="tour-booking-close" type="button" onClick={() => setMobileOpen(false)} aria-label="Close booking panel">×</button>
-          <header className="tour-booking-intro">
-            <div className="tour-booking-price">
-              <div>
-                <span className="tour-booking-kicker">Plan your departure</span>
-                <span className="tour-booking-label">Current price</span>
-                <strong className="tour-price-current">{format(passengerTotal)}</strong>
-                {offer ? <span className="tour-price-original">{format(baseTotal)}</span> : null}
+          {requiresInquiry ? (
+            <>
+              <h3 className="tour-inquiry-title">Contact Us For Checking Availability</h3>
+              {date ? (
+                <div className="tour-inquiry-date" role="status">
+                  <p>Your inquiry will be submitted for <strong>{date}</strong>. To change your date, click the (×).</p>
+                  <button type="button" aria-label="Change inquiry date" onClick={() => {
+                    setDate("");
+                    setStatus("idle");
+                  }}>×</button>
+                </div>
+              ) : null}
+              <ContactForm locale={locale} tourId={tour?.id} tourTitle={tour?.title} tourDate={date || undefined} />
+            </>
+          ) : (
+            <>
+              <header className="tour-booking-intro">
+                <div className="tour-booking-price">
+                  <div>
+                    <span className="tour-booking-kicker">Plan your departure</span>
+                    <span className="tour-booking-label">Current price</span>
+                    <strong className="tour-price-current">{format(passengerTotal)}</strong>
+                    {offer ? <span className="tour-price-original">{format(baseTotal)}</span> : null}
+                  </div>
+                  <button type="button" className="tour-booking-share" onClick={shareTour}>
+                    <Share2 size={16} strokeWidth={2} aria-hidden="true" />
+                    Share
+                  </button>
+                </div>
+                <p className="tour-booking-assurance">Book directly with a local Egypt specialist.</p>
+              </header>
+
+              <form className="tour-booking-form" onSubmit={submit}>
+                <div className="tour-booking-step">
+                  <span className="tour-booking-step-number" aria-hidden="true">1</span>
+                  <div className="tour-field">
+                    <span>Choose your date</span>
+                    <FlowbiteDatepicker
+                      value={date}
+                      onChange={(val) => setDate(val)}
+                      isDateAvailable={(day) => isTourDateAvailable(tour, day)}
+                      minDate={new Date().toISOString().split("T")[0]}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="tour-booking-step">
+                  <span className="tour-booking-step-number" aria-live="polite" aria-label={`${travelerCount} travelers`}>{travelerCount}</span>
+                  <div className="tour-passengers">
+                    <span className="tour-booking-label">Who is traveling?</span>
+                    <Counter label="Adults (12+)" value={adults} onChange={setAdults} min={1} />
+                    <Counter label="Children (3 - 11)" value={children} onChange={setChildren} />
+                    <Counter label="Infants (0 - 2)" value={infants} onChange={setInfants} />
+                  </div>
+                </div>
+
+                {tour?.options?.length ? (
+                  <TourBookingAddOns options={tour.options} selected={selectedOptions} optionsTotal={optionsTotal} onChange={onSelectedOptionsChange} />
+                ) : null}
+
+                <div className="tour-booking-total">
+                  <span>Trip total</span>
+                  <strong>{format(total)}</strong>
+                </div>
+
+                <button type="submit" className="btn-primary" disabled={status === "loading"}>
+                  {status === "loading" ? "Booking..." : <>Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" /></>}
+                </button>
+                {status === "error" ? <p className="tour-booking-error" role="alert">Something went wrong. Please try again.</p> : null}
+              </form>
+
+              <div className="tour-booking-actions" aria-label="Other ways to continue">
+                <button type="button" className="tour-booking-secondary" onClick={favoriteTour}>
+                  <Bookmark size={17} strokeWidth={2} aria-hidden="true" />
+                  Save for later
+                </button>
+                <a className="tour-booking-question" href={whatsappInquiryUrl(`I want to inquire about a tour (${tour?.title})`)} target="_blank" rel="noreferrer">
+                  <MessageCircle size={17} strokeWidth={2} aria-hidden="true" />
+                  Ask a question
+                </a>
               </div>
-              <button type="button" className="tour-booking-share" onClick={shareTour}>
-                <Share2 size={16} strokeWidth={2} aria-hidden="true" />
-                Share
-              </button>
-            </div>
-            <p className="tour-booking-assurance">Book directly with a local Egypt specialist.</p>
-          </header>
-
-          <form className="tour-booking-form" onSubmit={submit}>
-            <div className="tour-booking-step">
-              <span className="tour-booking-step-number" aria-hidden="true">1</span>
-              <div className="tour-field">
-                <span>Choose your date</span>
-                <FlowbiteDatepicker
-                  value={date}
-                  onChange={(val) => setDate(val)}
-                  isDateAvailable={(day) => isTourDateAvailable(tour, day)}
-                  minDate={new Date().toISOString().split("T")[0]}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="tour-booking-step">
-              <span className="tour-booking-step-number" aria-live="polite" aria-label={`${travelerCount} travelers`}>{travelerCount}</span>
-              <div className="tour-passengers">
-                <span className="tour-booking-label">Who is traveling?</span>
-                <Counter label="Adults (12+)" value={adults} onChange={setAdults} min={1} />
-                <Counter label="Children (3 - 11)" value={children} onChange={setChildren} />
-                <Counter label="Infants (0 - 2)" value={infants} onChange={setInfants} />
-              </div>
-            </div>
-
-            {tour?.options?.length ? (
-              <TourBookingAddOns options={tour.options} selected={selectedOptions} optionsTotal={optionsTotal} onChange={onSelectedOptionsChange} />
-            ) : null}
-
-            <div className="tour-booking-total">
-              <span>Trip total</span>
-              <strong>{format(total)}</strong>
-            </div>
-
-            <button type="submit" className="btn-primary" disabled={status === "loading"}>
-              {status === "loading" ? "Booking..." : <>Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" /></>}
-            </button>
-            {status === "error" ? <p className="tour-booking-error" role="alert">Something went wrong. Please try again.</p> : null}
-          </form>
-
-          <div className="tour-booking-actions" aria-label="Other ways to continue">
-            <button type="button" className="tour-booking-secondary" onClick={favoriteTour}>
-              <Bookmark size={17} strokeWidth={2} aria-hidden="true" />
-              Save for later
-            </button>
-            <a className="tour-booking-question" href={whatsappInquiryUrl(`I want to inquire about a tour (${tour?.title})`)} target="_blank" rel="noreferrer">
-              <MessageCircle size={17} strokeWidth={2} aria-hidden="true" />
-              Ask a question
-            </a>
-          </div>
-          {actionMessage ? <p className="tour-booking-status" role="status">{actionMessage}</p> : null}
+              {actionMessage ? <p className="tour-booking-status" role="status">{actionMessage}</p> : null}
+            </>
+          )}
         </div>
       </div>
 
       <div className="tour-mobile-booking-bar">
-        <div><span>Price</span><strong>{format(total)}</strong></div>
+        <div>{requiresInquiry ? <strong>On request</strong> : <><span>Price</span><strong>{format(total)}</strong></>}</div>
         <button type="button" className="btn-primary" onClick={() => setMobileOpen(true)}>
-          Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
+          {requiresInquiry ? "Check availability" : "Book now"} <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
         </button>
       </div>
     </aside>

@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { TourCard } from "@/components/TourCard";
 import type { Tour } from "@/types/api";
+import { toTourCardData } from "@/lib/tour-card-data";
 
 vi.mock("@/components/CustomerFlows", () => ({
   toggleWishlist: vi.fn(),
@@ -16,9 +17,62 @@ vi.mock("@/components/CurrencyProvider", () => ({
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
 });
 
 describe("TourCard Special Offer Badge", () => {
+  it.each([
+    ["expired", "2030-01-01T11:59:59Z"],
+    ["at expiry", "2030-01-01T12:00:00Z"],
+    ["invalid", "invalid-date"],
+  ])("shows only the API base price for an %s deadline, even in a promoted category", (_state, offer_end_date) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2030-01-01T12:00:00Z"));
+    const tour: Tour = {
+      title: "Synthetic expired offer", price: 100, offer: 20, offer_end_date,
+      categories: [{ id: 53, slug: "special-offers", title: "Special Offers" }],
+    };
+    const { container } = render(<TourCard tour={tour} locale="en" isSpecialOffer />);
+    act(() => vi.advanceTimersByTime(1000));
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("$80.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(container.querySelector(".tour-card-price-original")).toBeNull();
+    expect(container.querySelector(".offer-countdown")).toBeNull();
+  });
+
+  it("keeps the base price when the API disables the discount", () => {
+    const { container } = render(<TourCard tour={{ price: 100, offer: 0, offer_end_date: "2030-12-01T00:00:00Z" }} isSpecialOffer />);
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(container.querySelector(".tour-card-price-original")).toBeNull();
+    expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+  });
+
+  it("restores the base price and removes promotion UI when an open card reaches expiry", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2030-01-01T00:00:00Z"));
+    const { container } = render(<TourCard tour={{ price: 100, offer: 20, offer_end_date: "2030-01-01T00:00:05Z" }} />);
+    expect(screen.getByText("$80.00")).toBeInTheDocument();
+    expect(screen.getByText("Special Offer")).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(5000));
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("$80.00")).not.toBeInTheDocument();
+    expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(container.querySelector(".tour-card-price-original")).toBeNull();
+    expect(container.querySelector(".offer-countdown")).toBeNull();
+  });
+
+  it("preserves the API expiry through client projection and displays its countdown without changing prices", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2030-01-01T00:00:00Z"));
+    const tour = toTourCardData({ title: "Synthetic timed offer", price: 100, offer: 10, offer_end_date: "2030-01-03T00:00:00Z" });
+    render(<TourCard tour={tour} locale="en" />);
+    act(() => { vi.advanceTimersByTime(1000); });
+    expect(screen.getByText("Days")).toBeInTheDocument();
+    expect(screen.getByText("$90.00")).toBeInTheDocument();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+  });
+
   it("does not render Special Offer badge for a standard tour", () => {
     const tour: Tour = { id: 1, title: "Standard Tour", price: 100 };
     render(<TourCard tour={tour} locale="en" />);

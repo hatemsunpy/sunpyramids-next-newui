@@ -24,9 +24,9 @@ afterEach(() => {
   window.sessionStorage.clear();
 });
 
-it("submits a tour inquiry with Laravel dashboard fields and the full dialled phone number", async () => {
+it.each([undefined, "2030-01-01"])("matches the published Nuxt inquiry contract for date %s", async (tourDate) => {
   const ui = render(
-    <ContactForm tourId={19} tourTitle="Star Watching Adventure By Jeep Safari In Hurghada" />
+    <ContactForm tourId={19} tourTitle="Star Watching Adventure By Jeep Safari In Hurghada" tourDate={tourDate} />
   );
   await waitFor(() => expect(screen.getByRole("button", { name: "Submit" })).toBeEnabled());
 
@@ -55,15 +55,18 @@ it("submits a tour inquiry with Laravel dashboard fields and the full dialled ph
   await waitFor(() =>
     expect(apiPost).toHaveBeenCalledWith(
       "contact-requests",
-      expect.objectContaining({
+      {
         name: "Test Guest",
         email: "guest@example.com",
         phone: "+201012345678",
         country: "Egypt",
-        subject: "Tour inquiry: Star Watching Adventure By Jeep Safari In Hurghada",
+        subject: "contact us from Tour (Star Watching Adventure By Jeep Safari In Hurghada) " + (tourDate ? "to check availability in (1/1/2030)" : ""),
         message: "Please confirm availability.",
-      }),
-      "en"
+        type: "inquiry_contact",
+        recaptcha_token: null,
+      },
+      "en",
+      true,
     )
   );
   expect(push).toHaveBeenCalledWith("/thankful?name=Test%20Guest");

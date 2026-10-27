@@ -1050,6 +1050,39 @@ input[data-native-type] {
   font-size: 0.82rem;
 }
 
+.offer-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3px;
+  margin-block: 0.85rem;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  text-shadow: none;
+}
+
+.offer-countdown > * {
+  padding: 0.3rem 0.2rem;
+  background: #fff2f3;
+  text-align: center;
+}
+
+.offer-countdown-value,
+.offer-countdown-label {
+  display: block;
+  line-height: 1.4;
+}
+
+.offer-countdown-value {
+  color: #c43445;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.offer-countdown-label {
+  color: #b53241;
+  font-size: 0.75rem;
+}
+
 .tour-card-bottom {
   display: flex;
   align-items: end;
@@ -1273,7 +1306,7 @@ input[data-native-type] {
 .home-faq-title { min-height: 180px; background: url('/images/mark.svg') no-repeat right center / contain; }
 .home-faq-title h2 { margin: 0 0 1.5rem; font-size: clamp(2rem, 3.5vw, 3rem); }
 .home-help-section { padding-top: 4rem; padding-bottom: 4rem; }
-.home-help-panel { padding: 4rem 3rem; border-radius: 32px; background: url('/images/linearNeedHelp.png') center / cover no-repeat; color: #fff; }
+.home-help-panel { padding: 4rem 3rem; border-radius: 32px; background: linear-gradient(rgb(22 58 150 / 75%), rgb(22 58 150 / 75%)), url('/images/linearNeedHelp-repaired.png') center / cover no-repeat; color: #fff; }
 .home-help-panel h2 { margin: 0 0 2.5rem; text-align: center; font-size: clamp(2rem, 4vw, 3rem); }
 .home-help-form { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: 1rem; align-items: end; }
 .home-help-form label > span { display: block; margin-bottom: .4rem; font-weight: 600; }
@@ -1658,7 +1691,7 @@ input[data-native-type] {
   justify-content: space-between;
   gap: 1.5rem;
   border-radius: 1rem;
-  background: var(--spt-surface) url("/images/linearNeedHelp.png") right center/auto 100% no-repeat;
+  background: var(--spt-surface) url("/images/linearNeedHelp-repaired.png") right center/auto 100% no-repeat;
   padding: 2rem;
 }
 

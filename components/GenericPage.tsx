@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
 import { homeCopy } from "@/lib/home-copy";
 import { DestinationCard } from "@/components/DestinationCard";
+import { HomeUpcomingEventCard } from "@/components/HomeUpcomingEventCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
 import { TourCard } from "@/components/TourCard";
@@ -20,6 +21,7 @@ import { SustainabilityTabs } from "@/components/SustainabilityTabs";
 import { SustainabilityCertification } from "@/components/SustainabilityCertification";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { LegalPage } from "@/components/LegalPage";
+import { currentEvents } from "@/lib/current-events";
 
 type GenericPageProps = {
   page: ApiPage | null;
@@ -423,6 +425,7 @@ function FaqPage({
 }
 
 function EventsPage({ page, title, image, categories, locale }: { page: ApiPage | null; title: string; image: string; categories: ApiPage[]; locale: Locale }) {
+  const visibleEvents = currentEvents(categories);
   const breadcrumbs = [
     { label: "Home", href: withLocale("/", locale) },
     { label: title },
@@ -439,19 +442,18 @@ function EventsPage({ page, title, image, categories, locale }: { page: ApiPage 
           page?.description ||
           "Experience Egypt's rich cultural calendar, sound and light spectacles, and seasonal festivities."
         }
-        totalCount={categories.length > 0 ? categories.length : undefined}
+        totalCount={visibleEvents.length > 0 ? visibleEvents.length : undefined}
         bgImage={image}
       />
 
       <section className="discovery-section">
         <div className="container-shell">
-          {categories.length > 0 ? (
-            <div className="destination-mosaic-grid">
-              {categories.map((category) => (
-                <DestinationCard
+          {visibleEvents.length > 0 ? (
+            <div className="events-list-grid">
+              {visibleEvents.map((category) => (
+                <HomeUpcomingEventCard
                   key={category.id || category.slug}
-                  destination={category}
-                  basePath="/event"
+                  event={category}
                   locale={locale}
                 />
               ))}
@@ -543,7 +545,7 @@ function PlannerPage({
                     rel="noreferrer"
                   >
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-                      <path d="M20.52 3.48A11.93 11.93 0 0 0 12.06 0C5.46 0 .09 5.37.09 11.97c0 2.11.55 4.17 1.6 5.99L0 24l6.2-1.63a11.9 11.9 0 0 0 5.86 1.52h.01c6.6 0 11.97-5.37 11.97-11.97 0-3.2-.1.25-1.25-3.52-4.44zM12.07 21.88h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.88 9.88 0 0 1-1.52-5.27c0-5.46 4.45-9.91 9.92-9.91 2.65 0 5.14 1.03 7.01 2.9 1.87 1.88 2.9 4.37 2.9 7.02 0 5.46-4.45 9.9-9.92 9.9zm5.43-7.42c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.68-1.64-.93-2.25-.25-.6-.5-.52-.68-.53l-.58-.01c-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.51 0 1.48 1.08 2.91 1.23 3.11.15.2 2.13 3.25 5.15 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35z" />
+                      <path d="M20.52 3.48A11.93 11.93 0 0 0 12.06 0C5.46 0 .09 5.37.09 11.97c0 2.11.55 4.17 1.6 5.99L0 24l6.2-1.63a11.9 11.9 0 0 0 5.86 1.52h.01c6.6 0 11.97-5.37 11.97-11.97 0-3.2-1.25-6.2-3.52-8.44zM12.07 21.88h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.88 9.88 0 0 1-1.52-5.27c0-5.46 4.45-9.91 9.92-9.91 2.65 0 5.14 1.03 7.01 2.9 1.87 1.88 2.9 4.37 2.9 7.02 0 5.46-4.45 9.9-9.92 9.9zm5.43-7.42c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.68-1.64-.93-2.25-.25-.6-.5-.52-.68-.53l-.58-.01c-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.51 0 1.48 1.08 2.91 1.23 3.11.15.2 2.13 3.25 5.15 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35z" />
                     </svg>
                     <span>Chat on WhatsApp</span>
                   </a>

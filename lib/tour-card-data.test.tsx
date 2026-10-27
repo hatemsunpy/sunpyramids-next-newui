@@ -28,6 +28,7 @@ function fullOfferFixture(): Tour {
     start_from: 180,
     adult_price: 190,
     offer: 20,
+    offer_end_date: "2030-12-01T00:00:00.000Z",
     duration: "5 Days",
     wishlisted_exists: true,
     category: { id: 7, slug: "synthetic-category", title: "Synthetic Category", name: "Synthetic Category" } as Tour["category"],
@@ -102,6 +103,7 @@ describe("toTourCardData TourCard markup parity", () => {
     expect(projected.images).not.toBe(full.images);
     expect(projected.title).toBe("Synthetic Card Fixture Alpha");
     expect(projected.offer).toBe(20);
+    expect(projected.offer_end_date).toBe(full.offer_end_date);
     expect(projected.price).toBe(200);
     expect(projected.wishlisted_exists).toBe(true);
     expect(projected.categories?.[0]?.id).toBe(53);
@@ -119,8 +121,9 @@ describe("toTourCardData TourCard markup parity", () => {
     expect(projectedDestination).not.toHaveProperty("pivot");
 
     expect(renderMarkup(projected)).toBe(renderMarkup(full));
-    // Discounted $200 at 20% off renders $160.00 alongside $200.00.
-    expect(renderMarkup(projected)).toContain("$160.00");
+    // Dated promotions wait for the browser clock, preserving SSR/hydration parity.
+    expect(renderMarkup(projected)).toContain("$200.00");
+    expect(renderMarkup(projected)).not.toContain("$160.00");
   });
 
   it("renders identical TourCard markup for fallback-only tour (image, description, place, category, duration fallbacks)", () => {

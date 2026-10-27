@@ -7,11 +7,13 @@ export function TourCard({
   locale = "en",
   className = "",
   isSpecialOffer = false,
+  imageSizes,
 }: {
   tour: Tour;
   locale?: Locale;
   className?: string;
   isSpecialOffer?: boolean;
+  imageSizes?: string;
 }) {
   const copy = uiCopy(locale);
   return (
@@ -20,6 +22,7 @@ export function TourCard({
       locale={locale}
       className={className}
       isSpecialOffer={isSpecialOffer}
+      imageSizes={imageSizes}
       labels={{
         specialOffer: copy.specialOffer,
         addToWishlist: copy.addToWishlist,

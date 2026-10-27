@@ -1,6 +1,7 @@
 import { PriceText } from "@/components/PriceText";
 import { TourBookingTrigger } from "@/components/tour/TourBookingTrigger";
 import type { Tour } from "@/types/api";
+import { OfferValidity } from "@/components/OfferValidity";
 
 export function TourHero({ tour, title }: { tour: Tour | null; title: string }) {
   const destination = tour?.destinations?.find((item) => item.global)?.title
@@ -25,7 +26,7 @@ export function TourHero({ tour, title }: { tour: Tour | null; title: string }) 
               <span className="tour-hero-context-item">{category}</span>
             </>
           ) : null}
-          {offer > 0 ? <span className="tour-hero-offer">Save {offer}%</span> : null}
+          {offer > 0 ? <OfferValidity endDate={tour?.offer_end_date}><span className="tour-hero-offer">Save {offer}%</span></OfferValidity> : null}
         </div>
       ) : null}
       {title ? <h1 className="tour-page-title tour-title--calm">{title}</h1> : null}
