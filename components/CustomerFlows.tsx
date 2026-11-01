@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "@/components/ResponsiveImage";
 import { useSearchParams } from "next/navigation";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
-import { FormEvent, Suspense, useEffect, useMemo, useState } from "react";
+import { FormEvent, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/types/api";
 import {
@@ -29,6 +29,7 @@ import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 export { toggleWishlist } from "@/lib/wishlist";
 import { optionCost } from "@/lib/option-cost";
 import { activeOfferPercent } from "@/lib/tour-offer";
+import { couponDiscount, couponIdFrom, couponTypeFrom, couponValueFrom } from "@/lib/coupon-discount";
 export { optionCost };
 import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 import {
@@ -80,10 +81,6 @@ function isAllowedPaymentRedirect(value: string) {
   } catch {
     return false;
   }
-}
-
-function couponIdFrom(value: any) {
-  return value?.id || value?.coupon_id || value?.coupon?.id || null;
 }
 
 function cartRemoveIdentifier(item: any) {
@@ -722,16 +719,22 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
   const [couponCode, setCouponCode] = useState("");
   const [editingItemId, setEditingItemId] = useState<string | number | null>(null);
   const [selectedPayment, setSelectedPayment] = useState<"card" | "paypal">("card");
+  const couponRequestRef = useRef(0);
+  const pendingCouponRequestRef = useRef<number | null>(null);
 
   async function loadCart(tokenExists = hasToken) {
     setState("loading");
     try {
       const res = await apiGet<ApiResponse<any[]>>("cart/list", locale, tokenExists);
-      setCart(Array.isArray(res.data) ? res.data : []);
+      const items = Array.isArray(res.data) ? res.data : [];
+      setCart(items);
       setState("success");
+      if (items.length === 0) clearValidatedCoupon();
+      return items;
     } catch (error) {
       setState("error");
       setMessage(messageFromError(error, copy.messageError));
+      return null;
     }
   }
 
@@ -740,13 +743,29 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     queueMicrotask(() => setHasToken(tokenExists));
     const raw = getCookie("sunpyramids-checkout-data");
     if (raw) {
+      let parsed: any = null;
       try {
-        queueMicrotask(() => setCheckoutData(JSON.parse(raw)));
+        parsed = JSON.parse(raw);
       } catch {
-        queueMicrotask(() => setCheckoutData(null));
+        parsed = null;
       }
+      const data = parsed;
+      queueMicrotask(() => {
+        setCheckoutData(data);
+        if (data?.discountID) {
+          setCoupon({
+            id: data.discountID,
+            value: data.discountValue ?? undefined,
+            discount_type: data.discountType ?? undefined,
+          });
+        }
+      });
     }
     queueMicrotask(() => loadCart(tokenExists));
+    return () => {
+      couponRequestRef.current += 1;
+      pendingCouponRequestRef.current = null;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkout, locale]);
 
@@ -757,6 +776,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
       setCart([]);
       setState("success");
       setMessage(res.message || copy.clearAll);
+      clearValidatedCoupon();
     } catch (error) {
       setState("error");
       setMessage(messageFromError(error, copy.messageError));
@@ -808,12 +828,26 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     }
   }
 
-  function clearValidatedCoupon() {
-    setCoupon(null);
+  function rememberCoupon(id: number | string | null, coupon: any) {
     const nextCheckoutData = { ...(checkoutData || {}) };
-    delete nextCheckoutData.discountID;
+    if (id === null) {
+      delete nextCheckoutData.discountID;
+      delete nextCheckoutData.discountValue;
+      delete nextCheckoutData.discountType;
+    } else {
+      nextCheckoutData.discountID = id;
+      nextCheckoutData.discountValue = couponValueFrom(coupon) || null;
+      nextCheckoutData.discountType = couponTypeFrom(coupon);
+    }
     setCheckoutData(nextCheckoutData);
     setCookie("sunpyramids-checkout-data", JSON.stringify(nextCheckoutData));
+  }
+
+  function clearValidatedCoupon() {
+    couponRequestRef.current += 1;
+    pendingCouponRequestRef.current = null;
+    setCoupon(null);
+    rememberCoupon(null, null);
   }
 
   async function applyCoupon(event: FormEvent<HTMLFormElement>) {
@@ -825,21 +859,23 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     }
     const code = couponCode.trim();
     if (!code) return;
+    const requestSeq = ++couponRequestRef.current;
+    pendingCouponRequestRef.current = requestSeq;
     setState("loading");
     try {
       const res = await apiGet<ApiResponse>(`coupons/${encodeURIComponent(code)}/validate`, locale, true);
+      if (requestSeq !== couponRequestRef.current) return;
+      pendingCouponRequestRef.current = null;
       const couponId = couponIdFrom(res.data);
       if (!couponId) {
-        clearValidatedCoupon();
         throw new Error(copy.messageError);
       }
       setCoupon(res.data);
-      const nextCheckoutData = { ...(checkoutData || {}), discountID: couponId };
-      setCheckoutData(nextCheckoutData);
-      setCookie("sunpyramids-checkout-data", JSON.stringify(nextCheckoutData));
+      rememberCoupon(couponId, res.data);
       setState("success");
       setMessage(res.message || copy.discount);
     } catch (error) {
+      if (requestSeq !== couponRequestRef.current) return;
       clearValidatedCoupon();
       setState("error");
       setMessage(messageFromError(error, copy.messageError));
@@ -905,8 +941,9 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     return cart.reduce((sum, item) => sum + (cartItemTotal(item) ?? 0), 0);
   }, [cart]);
 
-  const discountPercent = Number(coupon?.value || 0);
-  const discountAmount = discountPercent > 0 ? subtotal * (discountPercent / 100) : 0;
+  const couponType = couponTypeFrom(coupon);
+  const discountPercent = couponValueFrom(coupon);
+  const discountAmount = couponDiscount(coupon, subtotal);
   const grandTotal = Math.max(0, subtotal - discountAmount);
 
   const orderSummaryAside = (
@@ -951,7 +988,7 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
 
           {discountAmount > 0 ? (
             <div className="calc-row discount-row">
-              <span>{copy.discount} ({discountPercent}%)</span>
+              <span>{copy.discount}{couponType !== "fixed" ? ` (${discountPercent}%)` : ""}</span>
               <strong>-{format(discountAmount)}</strong>
             </div>
           ) : null}
@@ -974,7 +1011,11 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                 placeholder={copy.addCouponCode}
                 value={couponCode}
                 onChange={(event) => {
+                  const wasValidatingCoupon = pendingCouponRequestRef.current !== null;
+                  couponRequestRef.current += 1;
+                  pendingCouponRequestRef.current = null;
                   if (coupon || checkoutData?.discountID) clearValidatedCoupon();
+                  if (wasValidatingCoupon) setState("success");
                   setCouponCode(event.target.value);
                 }}
                 aria-label={copy.addCouponCode}
@@ -987,9 +1028,9 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
                 {copy.apply}
               </button>
             </form>
-            {coupon?.value ? (
+            {discountAmount > 0 ? (
               <div className="applied-coupon-pill">
-                <span>✓ {copy.discount} {coupon.value}%</span>
+                <span>✓ {copy.discount} {couponType === "fixed" ? format(discountPercent) : `${discountPercent}%`}</span>
               </div>
             ) : null}
             {state === "error" && message && !checkout ? (
