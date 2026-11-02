@@ -11,6 +11,7 @@ const HEADER_UI_LABEL_KEYS = [
   "oneDay",
   "multiDays",
   "nileCruises",
+  "multiCountry",
   "shoreExcursions",
   "rentCar",
   "about",
@@ -31,6 +32,7 @@ export function Header({
   oneDayChildren = [],
   multiDaysChildren = [],
   nileCruisesChildren = [],
+  multiCountryChildren = [],
 }: {
   locale?: Locale;
   siteTitle?: string | null;
@@ -38,6 +40,7 @@ export function Header({
   oneDayChildren?: EgyptToursMenuChild[];
   multiDaysChildren?: EgyptToursMenuChild[];
   nileCruisesChildren?: EgyptToursMenuChild[];
+  multiCountryChildren?: EgyptToursMenuChild[];
 }) {
   const labels = pickHomeLabels(locale, HEADER_LABEL_KEYS);
   const uiLabels = pickUiLabels(locale, HEADER_UI_LABEL_KEYS);
@@ -50,6 +53,7 @@ export function Header({
       oneDayChildren={oneDayChildren}
       multiDaysChildren={multiDaysChildren}
       nileCruisesChildren={nileCruisesChildren}
+      multiCountryChildren={multiCountryChildren}
       labels={labels}
       uiLabels={uiLabels}
       voiceLabels={voiceLabels}

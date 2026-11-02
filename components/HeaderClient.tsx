@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ApiPage, Locale } from "@/types/api";
 import type { EgyptToursMenuChild } from "@/lib/egypt-tours-menu";
+import { multiCountryChildPath } from "@/components/multi-country/routes";
 import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -18,7 +19,10 @@ const tourLinks = [
   ["multiDays", "/egypt-tours/multi-days-tours"],
   ["nileCruises", "/egypt-tours/nile-cruises"],
   ["shoreExcursions", "/egypt-tours/shore-excursions"],
+  ["multiCountry", "/egypt-tours/middle-east-tours"],
 ] as const;
+
+type TourLinkKey = (typeof tourLinks)[number][0];
 
 const primaryNavLinks = [
   ["home", "/"],
@@ -68,6 +72,19 @@ function isActivePath(pathname: string, href: string) {
   return targetPath === "/" ? currentPath === "/" : currentPath === targetPath || currentPath.startsWith(`${targetPath}/`);
 }
 
+function tourChildHref(key: TourLinkKey, sectionHref: string, slug: string) {
+  return key === "multiCountry" ? multiCountryChildPath(slug) : `${sectionHref}/${slug}`;
+}
+
+function activeTourLink(pathname: string, multiCountryChildren: EgyptToursMenuChild[]) {
+  const match = tourLinks.find(([, href]) => isActivePath(pathname, href));
+  if (match) return match;
+  if (multiCountryChildren.some((child) => isActivePath(pathname, multiCountryChildPath(child.slug)))) {
+    return tourLinks.find(([key]) => key === "multiCountry");
+  }
+  return undefined;
+}
+
 export type HeaderTourCategory = Pick<ApiPage, "slug" | "title" | "featured_image">;
 
 export type HeaderLabels = {
@@ -81,6 +98,7 @@ export type HeaderUiLabels = {
   oneDay: string;
   multiDays: string;
   nileCruises: string;
+  multiCountry: string;
   shoreExcursions: string;
   rentCar: string;
   about: string;
@@ -101,6 +119,7 @@ function NavDropdown({
   oneDayChildren = [],
   multiDaysChildren = [],
   nileCruisesChildren = [],
+  multiCountryChildren = [],
   uiLabels,
 }: {
   locale: Locale;
@@ -109,23 +128,24 @@ function NavDropdown({
   oneDayChildren?: EgyptToursMenuChild[];
   multiDaysChildren?: EgyptToursMenuChild[];
   nileCruisesChildren?: EgyptToursMenuChild[];
+  multiCountryChildren?: EgyptToursMenuChild[];
   uiLabels: HeaderUiLabels;
 }) {
   const copy: Record<string, string> = uiLabels;
   const [open, setOpen] = useState(false);
-  const currentActiveLink = tourLinks.find(([, href]) => isActivePath(pathname, href));
-  const [hoveredKey, setHoveredKey] = useState<(typeof tourLinks)[number][0]>(
+  const currentActiveLink = activeTourLink(pathname, multiCountryChildren);
+  const [hoveredKey, setHoveredKey] = useState<TourLinkKey>(
     currentActiveLink ? currentActiveLink[0] : "oneDay"
   );
   const [hoveredChild, setHoveredChild] = useState<EgyptToursMenuChild | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const active = tourLinks.some(([, href]) => isActivePath(pathname, href)) || stripLocale(pathname).startsWith("/tour/");
+  const active = activeTourLink(pathname, multiCountryChildren) !== undefined || stripLocale(pathname).startsWith("/tour/");
 
   // When the menu opens, reflect the current Egypt Tours section
   // instead of a stale hover from a previous page.
   const syncHoveredToRoute = () => {
-    const match = tourLinks.find(([, href]) => isActivePath(pathname, href));
+    const match = activeTourLink(pathname, multiCountryChildren);
     const nextKey = match ? match[0] : "oneDay";
     const nextHref = match ? match[1] : tourLinks[0][1];
     const routeChildren = nextKey === "oneDay"
@@ -134,9 +154,11 @@ function NavDropdown({
         ? multiDaysChildren
         : nextKey === "nileCruises"
           ? nileCruisesChildren
-          : [];
+          : nextKey === "multiCountry"
+            ? multiCountryChildren
+            : [];
     const currentChild = routeChildren.find((child) =>
-      isActivePath(pathname, `${nextHref}/${child.slug}`)
+      isActivePath(pathname, tourChildHref(nextKey, nextHref, child.slug))
     ) ?? null;
 
     setHoveredKey(nextKey);
@@ -189,14 +211,19 @@ function NavDropdown({
   const activeLink = tourLinks.find(([key]) => key === hoveredKey) || tourLinks[0];
   const activeHref = activeLink[1];
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
+  const hasMultiCountry = categoryBySlug.has("middle-east-tours");
   const activeCategorySlug = activeHref.split("/").filter(Boolean).pop();
   const activeCategory = categoryBySlug.get(activeCategorySlug);
   const previewImage = hoveredChild?.featured_image || activeCategory?.featured_image;
   const previewTitle = hoveredChild ? hoveredChild.title : activeCategory?.title;
-  const childrenByKey: Record<(typeof tourLinks)[number][0], EgyptToursMenuChild[]> = {
+  const previewHref = hoveredKey === "multiCountry" && hoveredChild
+    ? multiCountryChildPath(hoveredChild.slug)
+    : activeHref;
+  const childrenByKey: Record<TourLinkKey, EgyptToursMenuChild[]> = {
     oneDay: oneDayChildren,
     multiDays: multiDaysChildren,
     nileCruises: nileCruisesChildren,
+    multiCountry: multiCountryChildren,
     shoreExcursions: [],
   };
   const activeChildren = childrenByKey[hoveredKey] ?? [];
@@ -206,7 +233,8 @@ function NavDropdown({
   const hasChildMenus =
     oneDayChildren.length > 0 ||
     multiDaysChildren.length > 0 ||
-    nileCruisesChildren.length > 0;
+    nileCruisesChildren.length > 0 ||
+    multiCountryChildren.length > 0;
 
   return (
     <div
@@ -247,6 +275,7 @@ function NavDropdown({
       <div className={`dropdown-panel dropdown-panel--with-preview ${hasChildMenus ? "dropdown-panel--with-children" : ""}`} role="menu">
         <div className="dropdown-panel__links">
           {tourLinks.map(([key, href]) => {
+            if (key === "multiCountry" && !hasMultiCountry) return null;
             const isHovered = hoveredKey === key;
             const isCurrentPage = isActivePath(pathname, href);
             return (
@@ -282,7 +311,7 @@ function NavDropdown({
               <nav aria-label={copy[hoveredKey]}>
                 <ul>
                   {activeChildren.map((child) => {
-                    const childHref = `${activeHref}/${child.slug}`;
+                    const childHref = tourChildHref(hoveredKey, activeHref, child.slug);
                     const isCurrentChild = isActivePath(pathname, childHref);
                     return (
                       <li key={child.slug}>
@@ -311,7 +340,7 @@ function NavDropdown({
         ) : null}
         <div className="dropdown-panel__preview" aria-hidden="true">
           <Link
-            href={withLocale(activeHref, locale)}
+            href={withLocale(previewHref, locale)}
             className="dropdown-preview-card"
             tabIndex={-1}
             onClick={() => {
@@ -350,6 +379,7 @@ export function HeaderClient({
   oneDayChildren = [],
   multiDaysChildren = [],
   nileCruisesChildren = [],
+  multiCountryChildren = [],
   labels,
   uiLabels,
   voiceLabels,
@@ -360,6 +390,7 @@ export function HeaderClient({
   oneDayChildren?: EgyptToursMenuChild[];
   multiDaysChildren?: EgyptToursMenuChild[];
   nileCruisesChildren?: EgyptToursMenuChild[];
+  multiCountryChildren?: EgyptToursMenuChild[];
   labels: HeaderLabels;
   uiLabels: HeaderUiLabels;
   voiceLabels: VoiceLabels;
@@ -475,14 +506,17 @@ export function HeaderClient({
             oneDayChildren={oneDayChildren}
             multiDaysChildren={multiDaysChildren}
             nileCruisesChildren={nileCruisesChildren}
+            multiCountryChildren={multiCountryChildren}
             uiLabels={uiLabels}
           />
         );
-      const toursActive = tourLinks.some(([, tourHref]) => isActivePath(pathname, tourHref)) || stripLocale(pathname).startsWith("/tour/");
-      const mobileChildrenByKey: Record<string, EgyptToursMenuChild[]> = {
+      const toursActive = activeTourLink(pathname, multiCountryChildren) !== undefined || stripLocale(pathname).startsWith("/tour/");
+      const mobileChildrenByKey: Record<TourLinkKey, EgyptToursMenuChild[]> = {
         oneDay: oneDayChildren,
         multiDays: multiDaysChildren,
         nileCruises: nileCruisesChildren,
+        multiCountry: multiCountryChildren,
+        shoreExcursions: [],
       };
       return (
         <details className={`mobile-tour-group ${toursActive ? "nav-item-active" : ""}`} key={key}>
@@ -493,6 +527,7 @@ export function HeaderClient({
           <div>
             {tourLinks.map(([tourKey, tourHref]) => {
               const children = mobileChildrenByKey[tourKey] ?? [];
+              if (tourKey === "multiCountry" && !categories.some((category) => category.slug === "middle-east-tours")) return null;
               if (children.length === 0) {
                 return (
                   <Link key={tourHref} href={withLocale(tourHref, locale)} aria-current={isActivePath(pathname, tourHref) ? "page" : undefined} onClick={closeMenu}>
@@ -512,7 +547,7 @@ export function HeaderClient({
                     </summary>
                     <ul className="mobile-sub-links">
                       {children.map((child) => {
-                        const childHref = `${tourHref}/${child.slug}`;
+                        const childHref = tourChildHref(tourKey, tourHref, child.slug);
                         return (
                           <li key={child.slug}>
                             <Link

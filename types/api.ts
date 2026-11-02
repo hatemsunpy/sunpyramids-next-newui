@@ -31,6 +31,7 @@ export type ApiPage = {
   featured_image?: string;
   image?: string;
   gallery?: string[];
+  footer_gallery?: string[] | null;
   created_at?: string | null;
   published_at?: string | null;
   related_tours?: Tour[];

@@ -10,6 +10,11 @@ import { TravelMomentsGallery } from "@/components/TravelMomentsGallery";
 import { TravellerReviews } from "@/components/TravellerReviews";
 import { MultiCountrySubcategoryIntro } from "@/components/multi-country/MultiCountrySubcategoryIntro";
 import { MultiCountrySubcategoryToolbar } from "@/components/multi-country/MultiCountrySubcategoryToolbar";
+import { MultiCountrySiblingNav } from "@/components/multi-country/MultiCountrySiblingNav";
+import { MultiCountryTourList } from "@/components/multi-country/MultiCountryTourList";
+import { MultiCountryPlaces } from "@/components/multi-country/MultiCountryPlaces";
+import { MultiCountryPlanningNote } from "@/components/multi-country/MultiCountryPlanningNote";
+import { MultiCountryComparisonBoundary } from "@/components/multi-country/MultiCountryComparisonBoundary";
 import { McScrollReveal } from "@/components/multi-country/McScrollReveal";
 import { MultiCountryTripHelp } from "@/components/multi-country/MultiCountryTripHelp";
 import { isMultiCountryParent, isMultiCountrySubcategory } from "@/components/multi-country/routes";
@@ -20,7 +25,8 @@ import { ResultCount } from "@/components/ResultCount";
 import { SiteShell } from "@/components/SiteShell";
 import { TourCard } from "@/components/TourCard";
 import { DestinationCard } from "@/components/DestinationCard";
-import { getDestinations, getPublicSiteSettings, getTours, tourListData, tourMeta } from "@/lib/data";
+import { getDestinations, getPublicSiteSettings, getTours, getTripTaxonomy, tourListData, tourMeta } from "@/lib/data";
+import { buildEgyptToursMenu } from "@/lib/egypt-tours-menu";
 import { resolveEgyptToursPage } from "@/lib/egypt-tours";
 import { formatApiError } from "@/lib/api";
 import { decodePathSegment } from "@/lib/locales";
@@ -172,14 +178,16 @@ export default async function Page({ params, searchParams }: Props) {
     ...(slug.length > 1 ? [{ label: pageTitle }] : []),
   ];
 
-  const settings = isMultiCountry ? await getPublicSiteSettings("en") : undefined;
+  const settings = isMultiCountry || isMcSubcategory ? await getPublicSiteSettings("en") : undefined;
+  const taxonomy = isMcSubcategory ? await getTripTaxonomy("en") : undefined;
 
   return (
-    <SiteShell locale="en" settings={settings}>
+    <SiteShell locale="en" settings={settings} taxonomy={taxonomy}>
       <JsonLd schema={page.seo?.structure_schema} />
+      <MultiCountryComparisonBoundary collectionSlug={isMcSubcategory ? slug[0] : undefined} locale="en" currentTitles={Object.fromEntries(items.flatMap((tour) => tour.slug ? [[tour.slug, tour.title || tour.name || tour.slug]] : []))}>
       <main className={isMultiCountry ? "multi-country-page" : isMcSubcategory ? "multi-country-subcategory-page" : undefined}>
         {isMultiCountry ? <MultiCountryIntro page={page} categoryCount={children.length} locale="en" /> : isMcSubcategory ? (
-          <MultiCountrySubcategoryIntro page={page} locale="en" />
+          <MultiCountrySubcategoryIntro page={page} locale="en" tours={items as Tour[]} total={meta?.total ?? 0} />
         ) : <DiscoveryHero
           title={pageTitle}
           breadcrumbs={breadcrumbs}
@@ -233,11 +241,14 @@ export default async function Page({ params, searchParams }: Props) {
               )
             ) : items.length > 0 ? (
               <>
-                <div className="discovery-full-grid">
+                {isMcSubcategory ? <div className="mc-collection-layout">
+                  <MultiCountryTourList tours={items as Tour[]} locale="en" />
+                  <MultiCountryPlanningNote locale="en" />
+                </div> : <div className="discovery-full-grid">
                   {items.map((tour) => (
                     <TourCard key={tour.id || tour.slug} tour={tour as Tour} locale="en" />
                   ))}
-                </div>
+                </div>}
                 {meta && (
                   <div className="discovery-pagination-bar">
                     <ResultCount from={meta.from} to={meta.to} total={meta.total} />
@@ -270,10 +281,26 @@ export default async function Page({ params, searchParams }: Props) {
           <MultiCountryTripHelp locale="en" />
         </>}
         {isMcSubcategory && <MultiCountryOverview page={page} locale="en" fullFirst />}
+        {isMcSubcategory && <>
+          <MultiCountryPlaces tours={items as Tour[]} locale="en" />
+        </>}
+        {isMcSubcategory && (
+          <MultiCountrySiblingNav
+            journeys={taxonomy ? buildEgyptToursMenu(taxonomy).multiCountry : []}
+            currentSlug={slug[0]}
+            locale="en"
+          />
+        )}
+        {isMcSubcategory && <>
+          <TravelMomentsGallery socialLinks={settings?.socialLinks ?? []} locale="en" className="mc-social-gallery mc-shell" />
+          <div id="mc-traveller-reviews"><TravellerReviews containerId="multi-country-subcategory-reviews" locale="en" className="mc-reviews mc-shell" /></div>
+          <div id="mc-trip-help"><MultiCountryTripHelp locale="en" /></div>
+        </>}
         {(isMultiCountry || isMcSubcategory) && (
-          <McScrollReveal key={`${slug.join("/")}:${currentOrder}:${currentPage}:${activeSub || ""}`} selector=".category-sub-pill.mc-journey-card, .discovery-full-grid > *, .mc-overview" />
+          <McScrollReveal key={`${slug.join("/")}:${currentOrder}:${currentPage}:${activeSub || ""}`} selector=".category-sub-pill.mc-journey-card, .discovery-full-grid > *, .mc-overview, .mc-itinerary, .mc-place, .mc-sub-siblings" />
         )}
       </main>
+      </MultiCountryComparisonBoundary>
     </SiteShell>
   );
 }

@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { BlogCard } from "@/components/BlogCard";
+import { BlogHighlights } from "@/components/BlogHighlights";
 import { EmptyState } from "@/components/EmptyState";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
 import { SwipeCarousel } from "@/components/SwipeCarousel";
@@ -12,8 +13,19 @@ import { blogCopy } from "@/lib/blog-copy";
 import type { BlogListing } from "@/lib/data";
 import type { ApiList, ApiPage, Locale } from "@/types/api";
 
-type SortOrder = "asc" | "desc";
-type BlogRequest = { page: number; title: string; category: string; order: SortOrder; append?: boolean };
+const HIGHLIGHT_COUNT = 5;
+const DEFAULT_ORDER = "newest";
+
+type SortKey = typeof DEFAULT_ORDER | "oldest" | "az" | "za";
+type SortDirection = "asc" | "desc";
+type BlogRequest = { page: number; title: string; category: string; order: SortKey; append?: boolean };
+
+const SORT_PARAMS: Record<SortKey, { field: string; direction: SortDirection }> = {
+  newest: { field: "created_at", direction: "desc" },
+  oldest: { field: "created_at", direction: "asc" },
+  az: { field: "title", direction: "asc" },
+  za: { field: "title", direction: "desc" },
+};
 
 function listingFromResponse(response: ApiList<ApiPage>): BlogListing {
   const pagination = Array.isArray(response.data) ? response : response.data;
@@ -28,10 +40,11 @@ function listingFromResponse(response: ApiList<ApiPage>): BlogListing {
 }
 
 function blogEndpoint(request: BlogRequest) {
+  const sort = SORT_PARAMS[request.order];
   const params = new URLSearchParams({
     includes: "categories,seo",
     page_limit: "10",
-    order_by: `display_order,${request.order}`,
+    order_by: `${sort.field},${sort.direction}`,
     page: String(request.page),
   });
   if (request.category) params.set("categories.slug", request.category);
@@ -63,9 +76,17 @@ export function BlogExplorer({
   const [searchInput, setSearchInput] = useState(initialTitle);
   const [title, setTitle] = useState(initialTitle);
   const [category, setCategory] = useState("");
-  const [order, setOrder] = useState<"" | SortOrder>("");
+  const [order, setOrder] = useState<SortKey>(DEFAULT_ORDER);
   const [pending, setPending] = useState(false);
   const [failed, setFailed] = useState(false);
+
+  // The grouped "newest articles" block exists only for the resting listing
+  // view; any search, category filter or explicit sort shows everything in
+  // the grid instead.
+  const showHighlights = !title && !category && order === DEFAULT_ORDER;
+  const highlightCount = showHighlights ? HIGHLIGHT_COUNT : 0;
+  const highlights = blogs.slice(0, highlightCount);
+  const visibleBlogs = blogs.slice(highlightCount);
 
   async function loadBlogs(request: BlogRequest) {
     setPending(true);
@@ -96,22 +117,24 @@ export function BlogExplorer({
     const nextTitle = searchInput.trim();
     setTitle(nextTitle);
     updateTitleQuery(nextTitle);
-    void loadBlogs({ page: 1, title: nextTitle, category, order: order || "asc" });
+    void loadBlogs({ page: 1, title: nextTitle, category, order });
   }
 
   function selectCategory(nextSlug: string) {
     const nextCategory = category === nextSlug ? "" : nextSlug;
     setCategory(nextCategory);
-    void loadBlogs({ page: 1, title, category: nextCategory, order: order || "asc" });
+    void loadBlogs({ page: 1, title, category: nextCategory, order });
   }
 
-  function selectOrder(nextOrder: SortOrder) {
+  function selectOrder(nextOrder: SortKey) {
     setOrder(nextOrder);
     void loadBlogs({ page: 1, title, category, order: nextOrder });
   }
 
   return (
     <>
+      {showHighlights ? <BlogHighlights articles={highlights} locale={locale} heading={labels.newestTitle} /> : null}
+
       <section className="blogs-controls">
         <form className="blogs-search-panel" role="search" onSubmit={submitSearch}>
           <label className="blogs-search-field">
@@ -149,41 +172,47 @@ export function BlogExplorer({
               iconType="sort"
               menuTitle={labels.sortBy}
               options={[
-                { value: "asc", label: labels.asc },
-                { value: "desc", label: labels.desc },
+                { value: "newest", label: labels.sortNewest },
+                { value: "oldest", label: labels.sortOldest },
+                { value: "az", label: labels.asc },
+                { value: "za", label: labels.desc },
               ]}
-              onChange={(value) => selectOrder(value as SortOrder)}
+              onChange={(value) => selectOrder(value as SortKey)}
             />
           </div>
         </div>
       </section>
 
       <section className="blogs-results" aria-busy={pending}>
-        <h2 className="blogs-results-title">Latest travel stories</h2>
-        <div className="blogs-grid">
-          {blogs.map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} variant="listing" />)}
-        </div>
+        {visibleBlogs.length ? (
+          <>
+            <h2 className="blogs-results-title">{labels.resultsTitle}</h2>
+            <div className="blogs-grid">
+              {visibleBlogs.map((blog) => <BlogCard key={blog.id || blog.slug} blog={blog} locale={locale} variant="listing" />)}
+            </div>
+          </>
+        ) : null}
         {!blogs.length && !pending ? (
           <EmptyState
-            title="No articles found"
+            title={labels.emptyTitle}
             description={labels.empty}
-            actionLabel="Reset search & filters"
+            actionLabel={labels.resetFilters}
             onAction={() => {
               setSearchInput("");
               setTitle("");
               setCategory("");
-              setOrder("");
+              setOrder(DEFAULT_ORDER);
               updateTitleQuery("");
-              void loadBlogs({ page: 1, title: "", category: "", order: "asc" });
+              void loadBlogs({ page: 1, title: "", category: "", order: DEFAULT_ORDER });
             }}
           />
         ) : null}
 
-        {failed ? <p className="blogs-error" role="alert">Something went wrong. Please try again.</p> : null}
+        {failed ? <p className="blogs-error" role="alert">{labels.error}</p> : null}
         {currentPage < lastPage ? (
           <div className="blogs-see-more">
             <span />
-            <button className="btn-primary" type="button" disabled={pending} onClick={() => loadBlogs({ page: currentPage + 1, title, category, order: order || "asc", append: true })}>
+            <button className="btn-primary" type="button" disabled={pending} onClick={() => loadBlogs({ page: currentPage + 1, title, category, order, append: true })}>
               {pending ? "…" : labels.seeMore}
               <span aria-hidden="true">⌄</span>
             </button>

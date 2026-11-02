@@ -6,6 +6,7 @@ import {
   subcategoryOrderHref,
 } from "@/components/multi-country/routes";
 import { MultiCountrySubcategoryToolbar } from "@/components/multi-country/MultiCountrySubcategoryToolbar";
+import { MultiCountrySiblingNav } from "@/components/multi-country/MultiCountrySiblingNav";
 
 let mockSearchParams = new URLSearchParams();
 
@@ -70,7 +71,7 @@ describe("MultiCountrySubcategoryToolbar", () => {
       />
     );
 
-    const heading = screen.getByRole("heading", { level: 2, name: "Egypt Multi-Country Tour Packages" });
+    const heading = screen.getByRole("heading", { level: 2, name: "Explore tours" });
     expect(heading.id).toBe("mc-results");
     expect(screen.getByText("Showing 1–3 of 5 experiences")).toBeDefined();
     expect(screen.getByRole("link", { name: "All journeys" }).getAttribute("href")).toBe("/egypt-tours/middle-east-tours");
@@ -89,7 +90,7 @@ describe("MultiCountrySubcategoryToolbar", () => {
       />
     );
 
-    expect(screen.getByRole("heading", { name: "Explorer la collection" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Voir les circuits" })).toBeDefined();
     expect(screen.getByText("Affichage de 1–2 sur 2 expériences")).toBeDefined();
     expect(screen.getByRole("link", { name: "Tous les voyages" }).getAttribute("href")).toBe("/fr/egypt-tours/middle-east-tours");
     expect(screen.getByRole("button", { name: "Trier par" })).toBeDefined();
@@ -100,10 +101,21 @@ describe("MultiCountrySubcategoryToolbar", () => {
       <MultiCountrySubcategoryToolbar basePath="/egypt-tours/egypt-and-turkey-tour-packages" from={0} to={0} total={0} />
     );
 
-    expect(screen.getByRole("heading", { name: "Egypt Multi-Country Tour Packages" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "Explore tours" })).toBeDefined();
     expect(screen.queryByText(/Showing/)).toBeNull();
     expect(container.querySelector(".mc-sub-sort")).toBeNull();
     expect(screen.queryByRole("button", { name: "Sort by" })).toBeNull();
     expect(screen.getByRole("link", { name: "All journeys" })).toBeDefined();
   });
+});
+
+it("uses current API sibling labels and canonical localized links", () => {
+  render(<MultiCountrySiblingNav
+    locale="fr"
+    currentSlug="new-combination"
+    journeys={[{ slug: "new-combination", label: "Nouveau circuit" }, { slug: "custom & journey", label: "Autre voyage" }]}
+  />);
+  expect(screen.getByRole("link", { name: "Nouveau circuit" })).toHaveAttribute("href", "/fr/egypt-tours/new-combination");
+  expect(screen.getByRole("link", { name: "Nouveau circuit" })).toHaveAttribute("aria-current", "page");
+  expect(screen.getByRole("link", { name: "Autre voyage" })).toHaveAttribute("href", "/fr/egypt-tours/custom%20%26%20journey");
 });

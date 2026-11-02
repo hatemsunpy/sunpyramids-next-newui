@@ -61,6 +61,9 @@ export async function HomePage({
 }) {
   const copy = homeCopy(locale);
   const labels = homeSectionLabels(locale);
+  const guestPhotos = Array.isArray(page?.footer_gallery)
+    ? page.footer_gallery.filter((photo) => typeof photo === "string" && photo.trim())
+    : [];
   const heroImages = page?.gallery?.length
     ? page.gallery
     : [page?.banner || page?.image || "/images/mainBanner.webp"];
@@ -251,11 +254,13 @@ export async function HomePage({
 
       <TravelMomentsGallery socialLinks={socialLinks} locale={locale} />
 
-      <div className="home-card-stack-section">
-        <Activity mode="visible">
-          <HomeCardStack previousLabel={copy.stackPrevious} nextLabel={copy.stackNext} cardLabel={copy.stackCard} />
-        </Activity>
-      </div>
+      {guestPhotos.length ? (
+        <div className="home-card-stack-section">
+          <Activity mode="visible">
+            <HomeCardStack photos={guestPhotos} previousLabel={copy.stackPrevious} nextLabel={copy.stackNext} cardLabel={copy.stackCard} />
+          </Activity>
+        </div>
+      ) : null}
 
       <TravellerReviews containerId="home-reviews" locale={locale} />
 

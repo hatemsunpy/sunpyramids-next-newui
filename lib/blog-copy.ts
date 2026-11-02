@@ -1,14 +1,34 @@
 import type { Locale } from "@/types/api";
 
-const copy = {
-  en: { search: "Search", placeholder: "What article are you looking for", popularTags: "Popular tags:", sortBy: "Sort by", asc: "A to Z", desc: "Z to A", empty: "There are no blogs found :)", seeMore: "See more" },
-  fr: { search: "Rechercher", placeholder: "Quel article recherchez-vous ?", popularTags: "Tags populaires :", sortBy: "Trier par", asc: "A à Z", desc: "Z à A", empty: "Aucun blog trouvé.", seeMore: "Voir plus" },
-  de: { search: "Suchen", placeholder: "Welchen Artikel suchen Sie?", popularTags: "Beliebte Tags:", sortBy: "Sortieren nach", asc: "A bis Z", desc: "Z bis A", empty: "Keine Blogs gefunden.", seeMore: "Mehr ansehen" },
-  it: { search: "Cerca", placeholder: "Quale articolo stai cercando?", popularTags: "Tag popolari:", sortBy: "Ordina per", asc: "A–Z", desc: "Z–A", empty: "Nessun blog trovato.", seeMore: "Vedi altro" },
-  pt: { search: "Pesquisar", placeholder: "Que artigo procura?", popularTags: "Tags populares:", sortBy: "Ordenar por", asc: "A a Z", desc: "Z a A", empty: "Nenhum blog encontrado.", seeMore: "Ver mais" },
-  es: { search: "Buscar", placeholder: "¿Qué artículo estás buscando?", popularTags: "Etiquetas populares:", sortBy: "Ordenar por", asc: "A a Z", desc: "Z a A", empty: "No se encontraron blogs.", seeMore: "Ver más" },
-  zh: { search: "搜索", placeholder: "您正在查找哪篇文章？", popularTags: "热门标签：", sortBy: "排序方式", asc: "A 到 Z", desc: "Z 到 A", empty: "未找到博客。", seeMore: "查看更多" },
-} satisfies Record<Locale, Record<string, string>>;
+const listingEn = {
+  search: "Search",
+  placeholder: "What article are you looking for",
+  popularTags: "Popular tags:",
+  sortBy: "Sort by",
+  sortNewest: "Newest",
+  sortOldest: "Oldest",
+  asc: "A to Z",
+  desc: "Z to A",
+  newestTitle: "Newest articles",
+  resultsTitle: "Latest travel stories",
+  empty: "There are no blogs found :)",
+  emptyTitle: "No articles found",
+  resetFilters: "Reset search & filters",
+  error: "Something went wrong. Please try again.",
+  seeMore: "See more",
+};
+
+type ListingCopy = typeof listingEn;
+
+const copy: Record<Locale, ListingCopy> = {
+  en: listingEn,
+  fr: { search: "Rechercher", placeholder: "Quel article recherchez-vous ?", popularTags: "Tags populaires :", sortBy: "Trier par", sortNewest: "Plus récents", sortOldest: "Plus anciens", asc: "A à Z", desc: "Z à A", newestTitle: "Articles les plus récents", resultsTitle: "Dernières histoires de voyage", empty: "Aucun blog trouvé.", emptyTitle: "Aucun article trouvé", resetFilters: "Réinitialiser la recherche et les filtres", error: "Une erreur est survenue. Veuillez réessayer.", seeMore: "Voir plus" },
+  de: { search: "Suchen", placeholder: "Welchen Artikel suchen Sie?", popularTags: "Beliebte Tags:", sortBy: "Sortieren nach", sortNewest: "Neueste", sortOldest: "Älteste", asc: "A bis Z", desc: "Z bis A", newestTitle: "Neueste Artikel", resultsTitle: "Neueste Reiseberichte", empty: "Keine Blogs gefunden.", emptyTitle: "Keine Artikel gefunden", resetFilters: "Suche & Filter zurücksetzen", error: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.", seeMore: "Mehr ansehen" },
+  it: { search: "Cerca", placeholder: "Quale articolo stai cercando?", popularTags: "Tag popolari:", sortBy: "Ordina per", sortNewest: "Più recenti", sortOldest: "Più vecchi", asc: "A–Z", desc: "Z–A", newestTitle: "Articoli più recenti", resultsTitle: "Ultime storie di viaggio", empty: "Nessun blog trovato.", emptyTitle: "Nessun articolo trovato", resetFilters: "Reimposta ricerca e filtri", error: "Qualcosa è andato storto. Riprova.", seeMore: "Vedi altro" },
+  pt: { search: "Pesquisar", placeholder: "Que artigo procura?", popularTags: "Tags populares:", sortBy: "Ordenar por", sortNewest: "Mais recentes", sortOldest: "Mais antigos", asc: "A a Z", desc: "Z a A", newestTitle: "Artigos mais recentes", resultsTitle: "Últimas histórias de viagem", empty: "Nenhum blog encontrado.", emptyTitle: "Nenhum artigo encontrado", resetFilters: "Reiniciar pesquisa e filtros", error: "Algo deu errado. Tente novamente.", seeMore: "Ver mais" },
+  es: { search: "Buscar", placeholder: "¿Qué artículo estás buscando?", popularTags: "Etiquetas populares:", sortBy: "Ordenar por", sortNewest: "Más recientes", sortOldest: "Más antiguos", asc: "A a Z", desc: "Z a A", newestTitle: "Artículos más recientes", resultsTitle: "Últimas historias de viaje", empty: "No se encontraron blogs.", emptyTitle: "No se encontraron artículos", resetFilters: "Restablecer búsqueda y filtros", error: "Algo salió mal. Inténtalo de nuevo.", seeMore: "Ver más" },
+  zh: { search: "搜索", placeholder: "您正在查找哪篇文章？", popularTags: "热门标签：", sortBy: "排序方式", sortNewest: "最新", sortOldest: "最早", asc: "A 到 Z", desc: "Z 到 A", newestTitle: "最新文章", resultsTitle: "最新旅行故事", empty: "未找到博客。", emptyTitle: "未找到文章", resetFilters: "重置搜索和筛选", error: "出现问题，请重试。", seeMore: "查看更多" },
+};
 
 export function blogCopy(locale: Locale) {
   return copy[locale] ?? copy.en;
