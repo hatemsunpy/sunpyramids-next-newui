@@ -594,7 +594,7 @@ export async function getBlogListing(
   const params = new URLSearchParams({
     includes: "categories,seo",
     page_limit: "10",
-    order_by: "display_order,asc",
+    order_by: "created_at,desc",
     page: "1",
   });
   if (title.trim()) params.set("title", `*${title.trim()}*`);
