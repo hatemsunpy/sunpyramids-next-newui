@@ -21,6 +21,31 @@ export function isMultiCountrySubcategory(slug: string[]): boolean {
 
 export const multiCountryParentPath = `/egypt-tours/${MULTI_COUNTRY_PARENT_SLUG}`;
 
+const MULTI_COUNTRY_TRIPLE_SLUG = "egypt-jordan-turkey-tours";
+
+export function isTripleCountryJourney(slug: string): boolean {
+  return slug === MULTI_COUNTRY_TRIPLE_SLUG;
+}
+
+/**
+ * Presentation-only ordering for the Multi-Country collection: live records
+ * keep their backend order and the canonical triple-country combination is
+ * moved last. Never reorders anything outside this collection.
+ */
+export function orderTripleCountryJourneyLast<T extends { slug: string }>(items: T[]): T[] {
+  const triple = items.filter((item) => isTripleCountryJourney(item.slug));
+  if (triple.length === 0 || triple.length === items.length) return items;
+  return [...items.filter((item) => !isTripleCountryJourney(item.slug)), ...triple];
+}
+
+/**
+ * Canonical direct path for a Multi-Country journey: a sibling of the parent
+ * category, never nested under `middle-east-tours` and never a `?sub` filter.
+ */
+export function multiCountryChildPath(slug: string): string {
+  return `/egypt-tours/${encodeURIComponent(slug)}`;
+}
+
 /**
  * Order-switch URL for the subcategory toolbar: reuses the existing `order`
  * query contract, preserves every other current param, and resets pagination.

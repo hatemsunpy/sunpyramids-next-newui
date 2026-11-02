@@ -38,6 +38,7 @@ export async function SiteShell({
           oneDayChildren={egyptToursMenu.oneDay}
           multiDaysChildren={egyptToursMenu.multiDays}
           nileCruisesChildren={egyptToursMenu.nileCruises}
+          multiCountryChildren={egyptToursMenu.multiCountry}
         />
         <div id="site-content" tabIndex={-1}>{children}</div>
         <aside aria-label="Direct support"><WhatsAppButton locale={locale} /></aside>

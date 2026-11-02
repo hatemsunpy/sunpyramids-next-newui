@@ -3,27 +3,6 @@
 import Image from "@/components/ResponsiveImage";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 
-// Frontend-owned guest photos provided for this editorial gallery.
-const photos = [
-  "01_white_desert_group_1080x1350.webp",
-  "02_giza_atv_1080x1350.webp",
-  "03_abu_simbel_1080x1350.webp",
-  "04_giza_horse_1080x1350.webp",
-  "05_white_desert_couple_1080x1350.webp",
-  "06_giza_rearing_horse_1080x1350.webp",
-  "07_citadel_group_1080x1350.webp",
-  "08_giza_family_1080x1350.webp",
-  "09_gem_indoor_group_1080x1350.webp",
-  "10_sun_pyramids_van_1080x1350.webp",
-  "11_giza_proposal_1080x1350.webp",
-  "01_old_cairo_family_1080x1350.webp",
-  "02_gem_group_1080x1350.webp",
-  "03_cairo_cafe_family_1080x1350.webp",
-  "04_egyptian_temple_1080x1350.webp",
-  "05_giza_camel_1080x1350.webp",
-  "06_islamic_courtyard_1080x1350.webp",
-] as const;
-
 const visibleOffsets = [-2, -1, 0, 1, 2] as const;
 
 function ArrowIcon({ direction }: { direction: "previous" | "next" }) {
@@ -35,10 +14,12 @@ function ArrowIcon({ direction }: { direction: "previous" | "next" }) {
 }
 
 export function HomeCardStack({
+  photos = [],
   previousLabel,
   nextLabel,
   cardLabel,
 }: {
+  photos?: string[];
   previousLabel: string;
   nextLabel: string;
   cardLabel: string;
@@ -47,12 +28,14 @@ export function HomeCardStack({
   const startX = useRef<number | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const count = photos.length;
+  const currentIndex = count ? activeIndex % count : 0;
 
   useEffect(() => {
     const stage = stageRef.current;
-    if (!stage) return;
+    if (!stage || !count) return;
 
-    const order = Array.from(new Set([0, 1, count - 1, 2, count - 2, 3, count - 3, ...photos.map((_, index) => index)]));
+    const order = Array.from(new Set([0, 1, count - 1, 2, count - 2, 3, count - 3, ...photos.map((_, index) => index)]))
+      .filter((index) => index >= 0 && index < count);
     const preloads: HTMLImageElement[] = [];
     let cursor = 0;
     let inFlight = 0;
@@ -70,7 +53,7 @@ export function HomeCardStack({
         };
         preloads.push(image);
         inFlight++;
-        image.src = `/images/guest-photos/${photos[index]}`;
+        image.src = photos[index];
       }
     }
 
@@ -85,9 +68,11 @@ export function HomeCardStack({
       cancelled = true;
       observer.disconnect();
     };
-  }, [count]);
+  }, [count, photos]);
 
-  const move = (step: number) => setActiveIndex((index) => (index + step + count) % count);
+  const move = (step: number) => {
+    if (count > 1) setActiveIndex((index) => (index + step + count) % count);
+  };
 
   function endSwipe(event: PointerEvent<HTMLDivElement>) {
     if (startX.current === null) return;
@@ -95,6 +80,8 @@ export function HomeCardStack({
     startX.current = null;
     if (Math.abs(distance) > 45) move(distance < 0 ? 1 : -1);
   }
+
+  if (!count) return null;
 
   return (
     <div className="home-card-stack">
@@ -111,15 +98,15 @@ export function HomeCardStack({
         onPointerCancel={() => { startX.current = null; }}
         onDragStart={(event) => event.preventDefault()}
       >
-        {visibleOffsets.map((offset) => {
-          const index = (activeIndex + offset + count) % count;
+        {visibleOffsets.filter((offset) => offset >= -Math.floor((count - 1) / 2) && offset <= Math.floor(count / 2)).map((offset) => {
+          const index = (currentIndex + offset + count) % count;
           const photo = photos[index];
           const position = offset === 0 ? "active" : offset === -1 ? "previous" : offset === 1 ? "next" : offset === -2 ? "far-previous" : "far-next";
 
           return (
-            <div className={`home-card-stack__card is-${position}`} key={photo} aria-hidden={offset !== 0}>
+            <div className={`home-card-stack__card is-${position}`} key={`${index}:${photo}`} aria-hidden={offset !== 0}>
               <Image
-                src={`/images/guest-photos/${photo}`}
+                src={photo}
                 alt={offset === 0 ? `${cardLabel} ${index + 1}` : ""}
                 fill
                 sizes="(max-width: 640px) 75vw, (max-width: 1200px) 30vw, 420px"
@@ -128,14 +115,16 @@ export function HomeCardStack({
           );
         })}
       </div>
-      <div className="home-card-stack__controls">
-        <button type="button" onClick={() => move(-1)} aria-label={previousLabel}><ArrowIcon direction="previous" /></button>
-        <div className="home-card-stack__progress" aria-hidden="true">
-          {photos.map((photo, index) => <span className={index === activeIndex ? "is-active" : ""} key={photo} />)}
+      {count > 1 ? (
+        <div className="home-card-stack__controls">
+          <button type="button" onClick={() => move(-1)} aria-label={previousLabel}><ArrowIcon direction="previous" /></button>
+          <div className="home-card-stack__progress" aria-hidden="true">
+            {photos.map((photo, index) => <span className={index === currentIndex ? "is-active" : ""} key={`${index}:${photo}`} />)}
+          </div>
+          <button type="button" onClick={() => move(1)} aria-label={nextLabel}><ArrowIcon direction="next" /></button>
         </div>
-        <button type="button" onClick={() => move(1)} aria-label={nextLabel}><ArrowIcon direction="next" /></button>
-      </div>
-      <span className="sr-only" aria-live="polite">{cardLabel} {activeIndex + 1} / {count}</span>
+      ) : null}
+      <span className="sr-only" aria-live="polite">{cardLabel} {currentIndex + 1} / {count}</span>
     </div>
   );
 }

@@ -32,6 +32,30 @@ function taxonomyFixture(): TripTaxonomy {
 }
 
 describe("buildEgyptToursMenu", () => {
+  it("uses live Multi-Country parent membership and translated labels, with the triple journey last", () => {
+    const taxonomy = taxonomyFixture();
+    taxonomy.allCategories.push(
+      { id: 9000, slug: "middle-east-tours", title: "API collection" },
+      { id: 9001, parent_id: 9000, slug: "egypt-jordan-turkey-tours", title: "Three countries" },
+      { id: 9002, parent_id: 9000, slug: "new-api-combination", title: "API translated journey", featured_image: "https://cdn.example/new.webp" },
+    );
+    expect(buildEgyptToursMenu(taxonomy).multiCountry).toEqual([
+      { slug: "new-api-combination", label: "API translated journey", title: "API translated journey", featured_image: "https://cdn.example/new.webp" },
+      { slug: "egypt-jordan-turkey-tours", label: "Three countries", title: "Three countries" },
+    ]);
+    taxonomy.allCategories.find((category) => category.id === 9000)!.id = 9100;
+    expect(buildEgyptToursMenu(taxonomy).multiCountry).toEqual([]);
+    taxonomy.allCategories.find((category) => category.id === 9002)!.parent_id = 9100;
+    taxonomy.allCategories.find((category) => category.id === 9002)!.title = "Updated API title";
+    expect(buildEgyptToursMenu(taxonomy).multiCountry[0].label).toBe("Updated API title");
+  });
+
+  it("does not invent a Multi-Country group from orphaned category records", () => {
+    const taxonomy = taxonomyFixture();
+    taxonomy.allCategories.push({ id: 9001, parent_id: 9000, slug: "egypt-jordan-turkey-tours", title: "Orphaned journey" });
+    expect(buildEgyptToursMenu(taxonomy).multiCountry).toEqual([]);
+  });
+
   it("reuses destinations for One Day children in backend order", () => {
     const menu = buildEgyptToursMenu(taxonomyFixture());
     expect(menu.oneDay).toEqual([
@@ -76,7 +100,7 @@ describe("buildEgyptToursMenu", () => {
     expect(buildEgyptToursMenu(taxonomy)).toEqual({
       oneDay: [{ slug: "cairo", label: "Cairo Tours", title: "Cairo Tours", featured_image: "https://cdn.example/cairo.jpg" }],
       multiDays: [{ slug: "desert-tours", label: "Desert Tours", title: "Desert Tours", featured_image: "https://cdn.example/desert.jpg" }],
-      nileCruises: [],
+      nileCruises: [], multiCountry: [],
     });
   });
 
@@ -133,8 +157,8 @@ describe("buildEgyptToursMenu", () => {
   });
 
   it("returns empty menu for null taxonomy (header hides child panel)", () => {
-    expect(buildEgyptToursMenu(null)).toEqual({ oneDay: [], multiDays: [], nileCruises: [] });
-    expect(buildEgyptToursMenu(undefined)).toEqual({ oneDay: [], multiDays: [], nileCruises: [] });
+    expect(buildEgyptToursMenu(null)).toEqual({ oneDay: [], multiDays: [], nileCruises: [], multiCountry: [] });
+    expect(buildEgyptToursMenu(undefined)).toEqual({ oneDay: [], multiDays: [], nileCruises: [], multiCountry: [] });
   });
 
   it("does not mutate the input taxonomy", () => {

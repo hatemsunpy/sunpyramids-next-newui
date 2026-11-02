@@ -510,13 +510,13 @@
 .site-shell-v2 .dropdown-link-item--active .dropdown-link-indicator,
 .site-shell-v2 .dropdown-link-item:focus-visible .dropdown-link-indicator,
 .site-shell-v2 .dropdown-link-item[aria-current="page"] .dropdown-link-indicator {
-  background: #00828a;
+  background: var(--spt-amber);
 }
 
 :root[data-theme="dark"] .site-shell-v2 .dropdown-link-item:focus-visible .dropdown-link-indicator,
 :root[data-theme="dark"] .site-shell-v2 .dropdown-link-item--active .dropdown-link-indicator,
 :root[data-theme="dark"] .site-shell-v2 .dropdown-link-item[aria-current="page"] .dropdown-link-indicator {
-  background: #00b4d8;
+  background: var(--spt-amber);
 }
 
 .site-shell-v2 .dropdown-link-item--active svg,
@@ -831,14 +831,13 @@
 
 /* Nested mobile subgroups: parent stays navigable, children disclose */
 .site-shell-v2 .mobile-subgroup {
-  display: flex;
-  align-items: stretch;
-  gap: 0.25rem;
+  position: relative;
+  display: block;
 }
 
-.site-shell-v2 .mobile-subgroup > a {
-  flex: 1;
+.site-shell-v2 .mobile-tour-group .mobile-subgroup > a {
   min-width: 0;
+  padding-right: 60px;
 }
 
 .site-shell-v2 .mobile-sub {
@@ -846,6 +845,10 @@
 }
 
 .site-shell-v2 .mobile-sub > summary {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;

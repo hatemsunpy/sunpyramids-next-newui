@@ -54,7 +54,7 @@ export function MultiCountrySubcategoryToolbar({
   return (
     <div className="mc-sub-toolbar">
       <div className="mc-sub-toolbar-lead">
-        <h2 className="mc-sub-results-title" id="mc-results">{labels.results}</h2>
+        <h2 className="mc-sub-results-title" id="mc-results">{labels.explore}</h2>
         {total > 0 && <p className="mc-sub-count">{countLine}</p>}
       </div>
       <div className="mc-sub-toolbar-side">

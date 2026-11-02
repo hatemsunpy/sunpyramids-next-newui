@@ -1,4 +1,5 @@
 import type { ApiPage, TripTaxonomy } from "@/types/api";
+import { orderTripleCountryJourneyLast } from "@/components/multi-country/routes";
 
 export type EgyptToursMenuChild = {
   slug: string;
@@ -11,6 +12,7 @@ export type EgyptToursMenu = {
   oneDay: EgyptToursMenuChild[];
   multiDays: EgyptToursMenuChild[];
   nileCruises: EgyptToursMenuChild[];
+  multiCountry: EgyptToursMenuChild[];
 };
 
 type MenuSource = Pick<TripTaxonomy, "allCategories" | "childCategories" | "destinations"> & {
@@ -19,6 +21,7 @@ type MenuSource = Pick<TripTaxonomy, "allCategories" | "childCategories" | "dest
 
 const MULTI_DAYS_ROOT_SLUG = "multi-days-tours";
 const NILE_CRUISES_ROOT_SLUG = "nile-cruises";
+const MULTI_COUNTRY_ROOT_SLUG = "middle-east-tours";
 
 function toChild(page: ApiPage): EgyptToursMenuChild | null {
   const slug = typeof page.slug === "string" ? page.slug.trim() : "";
@@ -47,10 +50,16 @@ function toChild(page: ApiPage): EgyptToursMenuChild | null {
  * - Nile Cruises children reuse `taxonomy.childCategories` filtered by
  *   the live `nile-cruises` category id — excluding categories without active tours (e.g. dahabiyat).
  *
- * Pure function: no fetching, no hardcoded labels/slugs/ids, no ordering.
+ * - Multi Country children are scoped to the live `middle-east-tours`
+ *   category id using `taxonomy.allCategories` (a zero-tour parent can be
+ *   omitted from `childCategories`), preserving backend order with the
+ *   canonical triple-country combination last. The section is empty unless
+ *   the API parent record exists.
+ *
+ * Pure presentation mapping: no fetching or copied production records/IDs.
  */
 export function buildEgyptToursMenu(taxonomy: MenuSource | null | undefined): EgyptToursMenu {
-  if (!taxonomy) return { oneDay: [], multiDays: [], nileCruises: [] };
+  if (!taxonomy) return { oneDay: [], multiDays: [], nileCruises: [], multiCountry: [] };
 
   const oneDay: EgyptToursMenuChild[] = [];
   for (const destination of taxonomy.destinations ?? []) {
@@ -88,5 +97,22 @@ export function buildEgyptToursMenu(taxonomy: MenuSource | null | undefined): Eg
     }
   }
 
-  return { oneDay, multiDays, nileCruises };
+  const multiCountryRoot = (taxonomy.allCategories ?? []).find(
+    (category) => category.slug === MULTI_COUNTRY_ROOT_SLUG,
+  );
+  const multiCountry: EgyptToursMenuChild[] = [];
+  if (multiCountryRoot?.id != null) {
+    for (const category of taxonomy.allCategories ?? []) {
+      if ((category.parent_id as number | undefined) !== multiCountryRoot.id) continue;
+      const child = toChild(category);
+      if (child) multiCountry.push(child);
+    }
+  }
+
+  return {
+    oneDay,
+    multiDays,
+    nileCruises,
+    multiCountry: orderTripleCountryJourneyLast(multiCountry),
+  };
 }
