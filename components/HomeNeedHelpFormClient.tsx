@@ -8,6 +8,8 @@ import { withLocale } from "@/lib/locales";
 import type { Locale } from "@/types/api";
 import { PhoneCountryInput, phoneCountryCopy, type PhoneCountry, type PhoneCountryLoadState } from "@/components/PhoneCountryInput";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
+import { emitGenerateLead } from "@/lib/analytics/datalayer";
+import { SENSITIVE_HANDOFF_KEYS, boundedHandoffText, saveSensitiveHandoff } from "@/lib/analytics/sensitive-session";
 
 export type HomeNeedHelpFormLabels = {
   fullName: string;
@@ -64,7 +66,7 @@ export function HomeNeedHelpFormClient({ locale = "en", labels, uiLabels }: { lo
     const name = String(form.get("name") || "");
     const token = await generateRecaptchaToken("submit");
     try {
-      await apiPost("contact-requests", {
+      const res = await apiPost<{ status?: boolean; message?: string; data?: unknown }>("contact-requests", {
         name,
         phone: String(form.get("phone") || ""),
         country: String(form.get("country") || ""),
@@ -74,7 +76,14 @@ export function HomeNeedHelpFormClient({ locale = "en", labels, uiLabels }: { lo
         type: "home_contact",
         ...(token ? { recaptcha_token: token } : {}),
       }, locale);
-      router.push(`${withLocale("/thankful", locale)}?name=${encodeURIComponent(name)}`);
+      // Body status:false must not count as a conversion signal.
+      if (res.status !== false) {
+        emitGenerateLead("contact");
+      }
+      // The thank-you greeting moves to short-lived tab-scoped session state;
+      // the visitor's name no longer travels in the destination URL.
+      saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.thankfulName, { text: boundedHandoffText(name) });
+      router.push(withLocale("/thankful", locale));
     } catch {
       setFailed(true);
       setPending(false);

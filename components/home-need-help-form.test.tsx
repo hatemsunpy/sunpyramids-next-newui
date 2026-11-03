@@ -45,7 +45,11 @@ it("opens the personalized thank-you page after a successful help request", asyn
     expect.objectContaining({ name: "Hatem Sunpyramids", phone: "+201012345678", country: "Egypt" }),
     "en",
   ));
-  expect(push).toHaveBeenCalledWith("/thankful?name=Hatem%20Sunpyramids");
+  const stored = window.sessionStorage.getItem("sunpyramids-handoff:thankful-name");
+  expect(stored).not.toBeNull();
+  expect(JSON.parse(stored!)).toEqual({ value: { text: "Hatem Sunpyramids" }, expiresAt: expect.any(Number) });
+  // The visitor's name travels through tab-scoped session state, never a URL.
+  expect(push).toHaveBeenCalledWith("/thankful");
 });
 
 it("stays on the form when the API rejects the request", async () => {

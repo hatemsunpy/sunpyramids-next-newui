@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 import { HtmlLangSynchronizer } from "@/components/HtmlLangSynchronizer";
+import { RouteAnalytics } from "@/components/RouteAnalytics";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 import { DatePickerEnhancer } from "@/components/DatePickerEnhancer";
 import { ButtonGlassEffects } from "@/components/ButtonGlassEffects";
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           />
         </noscript>
         {children}
+        <Suspense fallback={null}><RouteAnalytics /></Suspense>
         <ThirdPartyScripts />
       </body>
     </html>

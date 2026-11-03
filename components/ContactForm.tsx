@@ -9,7 +9,15 @@ import { generateRecaptchaToken } from "@/lib/recaptcha";
 import { withLocale } from "@/lib/locales";
 import { parseLocalCalendarDate } from "@/lib/local-date";
 import { uiCopy } from "@/lib/ui-copy";
+import { emitGenerateLead } from "@/lib/analytics/datalayer";
+import { SENSITIVE_HANDOFF_KEYS, boundedHandoffText, saveSensitiveHandoff } from "@/lib/analytics/sensitive-session";
 import type { Locale } from "@/types/api";
+
+type LeadApiResponse = {
+  status?: boolean;
+  message?: string;
+  data?: unknown;
+};
 
 export function ContactForm({
   locale = "en",
@@ -75,11 +83,19 @@ export function ContactForm({
     if (isTourInquiry || token) payload.recaptcha_token = token;
 
     try {
-      if (isTourInquiry) await apiPost("contact-requests", payload, locale, true);
-      else await apiPost("contact-requests", payload, locale);
+      const res = isTourInquiry
+        ? await apiPost<LeadApiResponse>("contact-requests", payload, locale, true)
+        : await apiPost<LeadApiResponse>("contact-requests", payload, locale);
+      // Body status:false must not count as a conversion signal.
+      if (res.status !== false) {
+        emitGenerateLead(isTourInquiry ? "tour_inquiry" : "contact");
+      }
       setStatus("success");
       formElement.reset();
-      router.push(`${withLocale("/thankful", locale)}?name=${encodeURIComponent(name)}`);
+      // The thank-you greeting moves to short-lived tab-scoped session state;
+      // the visitor's name no longer travels in the destination URL.
+      saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.thankfulName, { text: boundedHandoffText(name) });
+      router.push(withLocale("/thankful", locale));
     } catch {
       setStatus("error");
     }

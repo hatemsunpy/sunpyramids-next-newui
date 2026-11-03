@@ -30,6 +30,23 @@ export { toggleWishlist } from "@/lib/wishlist";
 import { optionCost } from "@/lib/option-cost";
 import { activeOfferPercent } from "@/lib/tour-offer";
 import { couponDiscount, couponIdFrom, couponTypeFrom, couponValueFrom } from "@/lib/coupon-discount";
+import {
+  emitAddPaymentInfo,
+  emitAddToCart,
+  emitBeginCheckout,
+  emitGenerateLead,
+  emitRemoveFromCart,
+  emitViewCart,
+  type AnalyticsItemInput,
+} from "@/lib/analytics/datalayer";
+import {
+  SENSITIVE_HANDOFF_KEYS,
+  boundedHandoffText,
+  clearSensitiveHandoff,
+  readSensitiveHandoff,
+  saveSensitiveHandoff,
+} from "@/lib/analytics/sensitive-session";
+import { stripQueryParamsOnSelf } from "@/lib/analytics/url-privacy";
 export { optionCost };
 import { ApiPhoneCountryInput } from "@/components/ApiPhoneCountryInput";
 import {
@@ -132,6 +149,43 @@ function cartItemTotal(item: any): number | null {
   return Number.isFinite(fallback) && fallback > 0 ? fallback : null;
 }
 
+// Bounded allowlist mapping of one cart row for analytics. Reuses
+// cartItemTotal - the exact amount the UI displays - so pricing is never
+// reimplemented; the title fallback mirrors the cart UI's own fallback label.
+function cartItemAnalyticsInput(item: any): AnalyticsItemInput | null {
+  if (!item) return null;
+  const id = item?.tour?.id ?? item?.id;
+  if (id == null) return null;
+  const title = item?.tour?.title || item?.title || item?.name;
+  const isTour = item?.type === "tour" || !!item?.tour;
+  const itemName = typeof title === "string" && title.trim() ? title : isTour ? null : "Car rental";
+  if (!itemName) return null;
+  return {
+    itemId: id,
+    itemName,
+    quantity: 1,
+    itemCategory: isTour ? "tour" : "rental",
+    amountBase: cartItemTotal(item),
+  };
+}
+
+// Whole-cart mapping: null when ANY row cannot be mapped. A partial basket
+// would understate the displayed whole-cart value, so the event is suppressed
+// instead of emitting money that covers only part of the cart.
+function cartAnalyticsInputs(cart: any[]): AnalyticsItemInput[] | null {
+  const inputs: AnalyticsItemInput[] = [];
+  for (const item of cart) {
+    const input = cartItemAnalyticsInput(item);
+    if (!input) return null;
+    inputs.push(input);
+  }
+  return inputs;
+}
+
+type AuthResetHandoff = { email?: string; otp?: string };
+
+const PASSWORD_ENTRY_MODES: readonly string[] = ["sign-in", "sign-up", "create-password", "reset-password"];
+
 export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Locale }) {
   const copy = uiCopy(locale);
   const router = useRouter();
@@ -139,6 +193,8 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
   const [state, setState] = useState<LoadState>("idle");
   const [message, setMessage] = useState("");
   const [rememberEmail, setRememberEmail] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetOtp, setResetOtp] = useState("");
   const title = {
     "sign-in": copy.welcome,
     "sign-up": copy.createAccount,
@@ -151,6 +207,43 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
   useEffect(() => {
     queueMicrotask(() => setRememberEmail(getCookie("sunpyramids-email") || ""));
   }, []);
+
+  useEffect(() => {
+    if (mode !== "confirm-code" && mode !== "create-password") return;
+    // Reset context lives in the tab-scoped handoff, never in URLs. Legacy
+    // inbound links with ?email= / ?otp= stay functional: ANY legacy parameter
+    // - including an empty one - makes this a fresh link that REPLACES the
+    // stale stored context (a new attempt never combines one person's email
+    // with another's token), then the identifiers are stripped from the
+    // address bar. localStorage/cookies are not used.
+    const emailParam = params.get("email");
+    const otpParam = mode === "create-password" ? params.get("otp") : null;
+    const stored = readSensitiveHandoff<AuthResetHandoff>(SENSITIVE_HANDOFF_KEYS.authReset) ?? {};
+    const storedEmail = typeof stored.email === "string" ? stored.email : "";
+    const storedOtp = typeof stored.otp === "string" ? stored.otp : "";
+    const legacyParamsPresent = emailParam !== null || otpParam !== null;
+    // Fresh link values win; values absent from the link are dropped instead
+    // of merged from the previous attempt.
+    const nextEmail = emailParam ?? (legacyParamsPresent ? "" : storedEmail);
+    const nextOtp = otpParam ?? (legacyParamsPresent ? "" : storedOtp);
+    queueMicrotask(() => {
+      setResetEmail(nextEmail);
+      setResetOtp(nextOtp);
+      if (legacyParamsPresent) {
+        if (nextEmail || nextOtp) {
+          saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset, {
+            email: nextEmail || undefined,
+            otp: nextOtp || undefined,
+          });
+        } else {
+          // Empty legacy parameters are presence without data: the stale
+          // stored context must never revive.
+          clearSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset);
+        }
+        stripQueryParamsOnSelf(["email", "otp"]);
+      }
+    });
+  }, [mode, params]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -193,10 +286,14 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
 
       if (mode === "forget-password") {
         const email = String(form.get("email") || "");
+        // A new attempt begins at submission - previous reset context in this
+        // tab is stale from here and cleared even if the request fails.
+        clearSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset);
         const res = await apiPost<ApiResponse>("auth/password/forget", { email }, locale);
         setMessage(res.message || "Confirmation code sent.");
         setState("success");
-        router.push(`${withLocale("/auth/confirm-code", locale)}?email=${encodeURIComponent(email)}`);
+        saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset, { email });
+        router.push(withLocale("/auth/confirm-code", locale));
         return;
       }
 
@@ -206,7 +303,8 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
         await apiPost<ApiResponse>("auth/password/otp/verify", { email, otp }, locale);
         setMessage("Code confirmed.");
         setState("success");
-        router.push(`${withLocale("/auth/create-password", locale)}?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`);
+        saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset, { email, otp });
+        router.push(withLocale("/auth/create-password", locale));
         return;
       }
 
@@ -220,6 +318,7 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
         const res = await apiPost<ApiResponse>("auth/password/reset", body, locale);
         setMessage(res.message || "Password updated.");
         setState("success");
+        clearSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset);
         router.push(withLocale("/auth/sign-in", locale));
         return;
       }
@@ -234,6 +333,7 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
         const res = await apiPost<ApiResponse>("auth/password/reset", body, locale);
         setMessage(res.message || "Password updated.");
         setState("success");
+        clearSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.authReset);
         router.push(withLocale("/auth/sign-in", locale));
       }
     } catch (error) {
@@ -254,7 +354,10 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
     }
   }
 
-  const isPasswordMode = mode.includes("password") || mode === "sign-in" || mode === "sign-up";
+  // Password entry only on the modes that actually ask for one. An explicit
+  // list replaces the old substring match, which also rendered an unrelated
+  // required password field on forget-password and blocked submissions there.
+  const isPasswordMode = PASSWORD_ENTRY_MODES.includes(mode);
 
   return (
     <div className={`auth-form-wrap auth-mode-${mode}`}>
@@ -295,7 +398,13 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
             <input id="auth-name" name="name" placeholder={copy.fullName} autoComplete="name" required />
           </div>
         ) : null}
-        {mode === "confirm-code" || mode === "create-password" || mode === "reset-password" ? (
+        {mode === "confirm-code" || mode === "create-password" ? (
+          <div className="auth-field">
+            <label htmlFor="auth-email">{copy.email}</label>
+            <input id="auth-email" name="email" type="email" placeholder={copy.email} value={resetEmail} onChange={(event) => setResetEmail(event.target.value)} autoComplete="email" required />
+          </div>
+        ) : null}
+        {mode === "reset-password" ? (
           <div className="auth-field">
             <label htmlFor="auth-email">{copy.email}</label>
             <input id="auth-email" name="email" type="email" placeholder={copy.email} defaultValue={params.get("email") || ""} autoComplete="email" required />
@@ -322,7 +431,7 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
         {mode === "create-password" ? (
           <div className="auth-field auth-code-field">
             <label htmlFor="auth-otp">Confirmation code</label>
-            <input id="auth-otp" name="otp" placeholder="Confirmation code" defaultValue={params.get("otp") || ""} required />
+            <input id="auth-otp" name="otp" placeholder="Confirmation code" inputMode="numeric" value={resetOtp} onChange={(event) => setResetOtp(event.target.value)} required />
           </div>
         ) : null}
         {isPasswordMode ? (
@@ -721,17 +830,32 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
   const [selectedPayment, setSelectedPayment] = useState<"card" | "paypal">("card");
   const couponRequestRef = useRef(0);
   const pendingCouponRequestRef = useRef<number | null>(null);
+  // Entry signals (view_cart / begin_checkout) fire once per cart-page
+  // identity (checkout flag + locale), only from the accepted cart load of
+  // THAT identity - a checkout/locale change expires both the emitted marker
+  // and the accepted snapshot, so reloads/StrictMode cannot duplicate signals
+  // and old view rows can never emit under the new identity.
+  const cartSignalEmittedRef = useRef(false);
+  const cartListAcceptedRef = useRef(false);
+  const cartEntryIdentityRef = useRef("");
+  const cartLoadSeqRef = useRef(0);
 
   async function loadCart(tokenExists = hasToken) {
+    const requestSeq = ++cartLoadSeqRef.current;
     setState("loading");
     try {
       const res = await apiGet<ApiResponse<any[]>>("cart/list", locale, tokenExists);
+      // Only the newest request wins: a delayed response from a previous
+      // identity must not overwrite the cart, re-accept it, or emit analytics.
+      if (requestSeq !== cartLoadSeqRef.current) return null;
       const items = Array.isArray(res.data) ? res.data : [];
+      cartListAcceptedRef.current = res.status !== false;
       setCart(items);
       setState("success");
       if (items.length === 0) clearValidatedCoupon();
       return items;
     } catch (error) {
+      if (requestSeq !== cartLoadSeqRef.current) return null;
       setState("error");
       setMessage(messageFromError(error, copy.messageError));
       return null;
@@ -765,14 +889,51 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     return () => {
       couponRequestRef.current += 1;
       pendingCouponRequestRef.current = null;
+      // Invalidate any in-flight cart/list immediately (view identity change
+      // or unmount): a response arriving in the gap before the next queued
+      // load starts must not be accepted, overwrite the cart, or emit under
+      // the new identity.
+      cartLoadSeqRef.current += 1;
+      cartListAcceptedRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkout, locale]);
+
+  // Entry-signal identity: view changes reset the emitted marker AND expire
+  // the accepted snapshot; the new view accepts only its own cart/list load.
+  useEffect(() => {
+    const identity = `${checkout}:${locale}`;
+    if (cartEntryIdentityRef.current !== identity) {
+      cartEntryIdentityRef.current = identity;
+      cartSignalEmittedRef.current = false;
+      cartListAcceptedRef.current = false;
+    }
+  }, [checkout, locale]);
+
+  // Entry signal after the first accepted non-empty load: body success
+  // (status !== false), not the shared UI success state. Money converts with
+  // the same selected API currency the UI formats with; unloaded currency
+  // omits monetary fields rather than mislabelling them.
+  useEffect(() => {
+    if (state !== "success" || cart.length === 0 || !cartListAcceptedRef.current) return;
+    if (cartSignalEmittedRef.current) return;
+    cartSignalEmittedRef.current = true;
+    if (checkout) {
+      emitBeginCheckout(cartAnalyticsInputs(cart), selected);
+    } else {
+      emitViewCart(cartAnalyticsInputs(cart), selected);
+    }
+  }, [cart, checkout, selected, state]);
 
   async function clearCart() {
     setState("loading");
     try {
       const res = await apiDelete<ApiResponse>("cart/clear", locale);
+      // Snapshot the pre-clear rows, convert with the same currency the UI
+      // shows, fire once after the confirmed mutation.
+      if (res.status !== false) {
+        emitRemoveFromCart(cartAnalyticsInputs(cart), selected);
+      }
       setCart([]);
       setState("success");
       setMessage(res.message || copy.clearAll);
@@ -793,6 +954,12 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
     setState("loading");
     try {
       const res = await apiDelete<ApiResponse>(`cart/remove/${removeId}`, locale, true);
+      // Fire after the deletion is confirmed and before loadCart so a failing
+      // refresh cannot lose the signal; the snapshot is the pre-mutation row.
+      if (res.status !== false) {
+        const removed = cartItemAnalyticsInput(item);
+        if (removed) emitRemoveFromCart([removed], selected);
+      }
       await loadCart(hasToken);
       setMessage(res.message || copy.delete);
     } catch (error) {
@@ -918,6 +1085,15 @@ export function CartFlow({ checkout = false, locale = "en" }: { checkout?: boole
       const res = await apiPost<ApiResponse<{ payment?: { redirect?: { location?: string } }; booking?: { id?: number } }>>("bookings", body, locale, true);
       const bookingId = res.data?.booking?.id;
       bookingCreated = !!bookingId;
+      // Emit once per accepted checkout (real booking id + body success) with
+      // the chosen method, before any gateway redirect; failures stay silent.
+      if (res.status !== false && typeof bookingId === "number" && Number.isSafeInteger(bookingId) && bookingId > 0) {
+        emitAddPaymentInfo(
+          cartAnalyticsInputs(cart),
+          selected,
+          paymentMethod === "paypal" ? "paypal" : "card",
+        );
+      }
       const redirect = res.data?.payment?.redirect?.location;
       if (redirect && isAllowedPaymentRedirect(redirect)) {
         window.location.href = redirect;
@@ -1487,6 +1663,12 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
           body.return_time = returnTime;
         }
         const res = await apiPost<ApiResponse>("cart/rentals/append", body, locale, !!getCookie("sunpyramids-token"));
+        // A rental quote has no confirmed price at request time, so the item
+        // carries no monetary fields. `selected` is non-null here by contract:
+        // the branch above throws before reaching this when currency is down.
+        if (res.status !== false) {
+          emitAddToCart([{ itemId: "car-rental", itemName: "Car rental", itemCategory: "rental" }], selected);
+        }
         setState("success");
         setMessage(res.message || "Rental added to cart.");
         router.push(withLocale("/cart", locale));
@@ -1541,9 +1723,14 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
         }
         body.days = days;
       }
-      await apiPost<ApiResponse>("custom/trips", body, locale, !!getCookie("sunpyramids-token"));
+      const res = await apiPost<ApiResponse>("custom/trips", body, locale, !!getCookie("sunpyramids-token"));
+      // Body status:false must not count as a conversion signal.
+      if (res.status !== false) {
+        emitGenerateLead("custom_trip");
+      }
+      saveSensitiveHandoff(SENSITIVE_HANDOFF_KEYS.thankfulName, { text: boundedHandoffText(fullName) });
       setState("success");
-      router.push(`${withLocale("/thankful", locale)}?name=${encodeURIComponent(String(form.get("fullName") || ""))}`);
+      router.push(withLocale("/thankful", locale));
     } catch (error) {
       setState("error");
       setMessage(messageFromError(error));
