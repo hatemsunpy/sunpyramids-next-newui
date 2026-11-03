@@ -28,7 +28,7 @@ export function TourOverview({ tour }: { tour: Tour | null }) {
   const duration = tour?.duration || (tour?.duration_in_days ? `${tour.duration_in_days} ${Number(tour.duration_in_days) === 1 ? "Day" : "Days"}` : "");
   const facts = [
     duration ? { type: "duration" as const, label: "Duration", value: duration } : null,
-    destinationCount ? { type: "cities" as const, label: "Places", value: `${destinationCount} ${destinationCount === 1 ? "Place" : "Places"}` } : null,
+    destinationCount ? { type: "cities" as const, label: "Cities", value: `${destinationCount} ${destinationCount === 1 ? "City" : "Cities"}` } : null,
     tour?.type ? { type: "type" as const, label: "Tour style", value: tour.type } : null,
     category ? { type: "category" as const, label: "Category", value: category } : null,
   ].filter((fact): fact is { type: "duration" | "cities" | "type" | "category"; label: string; value: string } => Boolean(fact));
@@ -77,7 +77,7 @@ export function TourOverview({ tour }: { tour: Tour | null }) {
 function TourInfoIcon({ type }: { type: "duration" | "cities" | "type" | "category" }) {
   const paths = {
     duration: <><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></>,
-    cities: <><path d="M5 21v-8l7-4 7 4v8" /><path d="M9 21v-4h6v4M12 3v6" /></>,
+    cities: <><path d="M3 21h18" /><path d="M5.25 21V10h4v11" /><path d="M9.25 21V4.75h5.5V21" /><path d="M14.75 21v-8.5h4V21" /><path d="M7 12.75h.01M7 15.75h.01M11.75 8.25h.01M11.75 11.75h.01M11.75 16.75h.01M16.5 15.75h.01" /></>,
     type: <><path d="M4 20V9l8-5 8 5v11" /><path d="M8 20v-6h8v6" /></>,
     category: <><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v6H4zM14 15h6v6h-6z" /></>,
   } as const;

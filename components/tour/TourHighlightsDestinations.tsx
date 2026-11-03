@@ -16,7 +16,7 @@ export function TourHighlightsDestinations({ tour, locale }: { tour: Tour | null
     <>
       <div className="tour-destination-story">
         {displayDestinations.map((destination, index) => {
-          const image = destination.banner || destination.phone_banner || destination.featured_image || destination.gallery?.[0];
+          const image = destination.featured_image;
           const isLead = index === 0 && displayDestinations.length > 1;
           return (
             <article

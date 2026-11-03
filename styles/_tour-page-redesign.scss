@@ -571,11 +571,7 @@
 .tour-page-redesign .tour-info-grid {
   display: flex;
   min-width: 0;
-  border: 1px solid var(--tour-border-subtle);
-  border-radius: var(--tour-panel-radius);
-  overflow: hidden;
-  background: var(--tour-surface-cool);
-  box-shadow: 0 4px 14px rgba(23, 58, 150, 0.04);
+  gap: 0.85rem;
 }
 
 .tour-page-redesign .tour-info-card {
@@ -585,15 +581,12 @@
   grid-template-columns: auto minmax(0, 1fr);
   justify-content: start;
   gap: 0.35rem 0.85rem;
-  border: 0;
-  border-right: 1px solid var(--tour-border-subtle);
+  border: 1px solid var(--tour-border-subtle);
+  border-radius: 0.75rem;
+  background: var(--tour-surface-cool);
   padding: 1.4rem clamp(1rem, 2vw, 1.6rem);
   color: var(--tour-ink);
   text-align: left;
-}
-
-.tour-page-redesign .tour-info-card:last-child {
-  border-right: 0;
 }
 
 .tour-page-redesign .tour-info-icon {
@@ -865,20 +858,23 @@
 }
 
 .tour-page-redesign .tour-itinerary .tour-days {
-  gap: 0;
+  gap: 0.85rem;
 }
 
 .tour-page-redesign .tour-day {
   position: relative;
+  border: 1px solid var(--tour-border-subtle);
+  border-radius: 1rem;
+  background: var(--tour-surface);
   padding: 0;
 }
 
-/* Vertical connected timeline guide */
+/* Vertical timeline guide, kept inside each bordered day card */
 .tour-page-redesign .tour-day::before {
   position: absolute;
   top: 5.2rem;
-  bottom: -0.8rem;
-  left: 2.15rem;
+  bottom: 1.35rem;
+  left: 3.675rem;
   width: 2px;
   background: linear-gradient(180deg, var(--tour-border-subtle), color-mix(in srgb, var(--tour-primary) 35%, transparent));
   content: "";
@@ -895,13 +891,17 @@
   align-items: center;
   gap: clamp(1rem, 2.5vw, 2rem);
   border: 0;
-  border-bottom: 1px solid var(--tour-border-subtle);
-  border-radius: 0;
-  padding: 1.35rem 0;
+  border-radius: calc(1rem - 1px);
+  padding: 1.35rem 1.5rem;
   background: transparent;
   color: var(--tour-ink);
   cursor: pointer;
   transition: background 150ms ease;
+}
+
+.tour-page-redesign .tour-day[open] > summary {
+  border-bottom: 1px solid var(--tour-border-subtle);
+  border-radius: calc(1rem - 1px) calc(1rem - 1px) 0 0;
 }
 
 .tour-page-redesign .tour-day summary::-webkit-details-marker {
@@ -963,10 +963,10 @@
 
 .tour-page-redesign .tour-day-body {
   max-width: var(--tour-reading-width);
-  margin-left: calc(4.35rem + clamp(1rem, 2.5vw, 2rem));
+  margin-left: calc(1.5rem + 4.35rem + clamp(1rem, 2.5vw, 2rem));
   border: 0;
   border-radius: 0;
-  padding: 1.5rem 0 2.5rem;
+  padding: 1.5rem 1.5rem 2.5rem 0;
 }
 
 /* ==========================================================================
@@ -1007,9 +1007,7 @@
 }
 
 .tour-page-redesign .tour-inclusions-grid .tour-bullet-icon.cross {
-  border-color: var(--tour-border-subtle);
-  background: transparent;
-  color: var(--tour-muted);
+  transform: none;
 }
 
 /* ==========================================================================
@@ -1864,11 +1862,6 @@
     width: 100%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
-    border: 0;
-    border-radius: 0;
-    overflow: visible;
-    background: transparent;
-    box-shadow: none;
     scroll-snap-type: none;
   }
 
@@ -1878,15 +1871,8 @@
     flex: none;
     align-content: start;
     gap: 0.5rem 0.6rem;
-    border: 1px solid var(--tour-border-subtle);
-    border-radius: 0.75rem;
     padding: 1rem 0.8rem;
-    background: var(--tour-surface-cool);
     scroll-snap-align: none;
-  }
-
-  .tour-page-redesign .tour-info-card:last-child {
-    border-right: 1px solid var(--tour-border-subtle);
   }
 
   .tour-page-redesign .tour-info-value {
@@ -2235,6 +2221,7 @@
   .tour-page-redesign .tour-day summary {
     grid-template-columns: 3.25rem minmax(0, 1fr) 2.35rem;
     gap: 0.8rem;
+    padding-inline: 1.1rem;
   }
 
   .tour-page-redesign .tour-day-index {
@@ -2242,11 +2229,12 @@
   }
 
   .tour-page-redesign .tour-day::before {
-    left: 1.6rem;
+    left: calc(1.1rem + 1.625rem);
   }
 
   .tour-page-redesign .tour-day-body {
-    margin-left: calc(3.25rem + 0.8rem);
+    margin-left: calc(1.1rem + 3.25rem + 0.8rem);
+    padding-right: 1.1rem;
   }
 
   .tour-page-redesign .tour-season-grid {
@@ -2342,7 +2330,7 @@
   }
 
   .tour-page-redesign .tour-day-body {
-    margin-left: 3.25rem;
+    margin-left: calc(1.1rem + 3.25rem);
   }
 }
 
