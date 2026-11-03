@@ -2357,3 +2357,265 @@
     animation: none;
   }
 }
+
+/* ==========================================================================
+   10. SATELLITE DESTINATIONS MAP (Esri World Imagery, native SVG viewer)
+   ========================================================================== */
+.tour-page-redesign .tour-satellite-map {
+  background: var(--tour-surface-cool);
+}
+
+.tour-page-redesign .tour-satellite-viewport {
+  position: absolute;
+  inset: 0 0 2.625rem;
+  overflow: hidden;
+  outline: none;
+  background: var(--tour-surface-cool);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.tour-page-redesign .tour-satellite-viewport:active {
+  cursor: grabbing;
+}
+
+.tour-page-redesign .tour-satellite-viewport:focus-visible {
+  outline: 2px solid var(--tour-focus);
+  outline-offset: -2px;
+}
+
+.tour-page-redesign .tour-satellite-image,
+.tour-page-redesign .tour-satellite-leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tour-page-redesign .tour-satellite-leaders {
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.tour-page-redesign .tour-satellite-leaders line {
+  stroke: #f2f4f7;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 1.5px rgba(15, 20, 27, 0.9));
+}
+
+.tour-page-redesign .tour-satellite-pin {
+  position: absolute;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tour-page-redesign .tour-satellite-pin span {
+  display: grid;
+  width: 1.85rem;
+  height: 1.85rem;
+  place-items: center;
+  border: 2px solid var(--tour-surface);
+  border-radius: 999px;
+  background: var(--tour-primary);
+  color: var(--tour-surface);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.tour-page-redesign .tour-satellite-pin:hover span {
+  border-color: var(--tour-action);
+}
+
+.tour-page-redesign .tour-satellite-pin.is-active span {
+  background: var(--tour-action);
+  border-color: var(--tour-surface);
+  color: var(--tour-ink);
+  box-shadow: 0 0 0 4px rgba(247, 149, 29, 0.35), 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.tour-page-redesign .tour-satellite-pin:focus-visible {
+  outline: 2px solid var(--tour-focus);
+  outline-offset: 0;
+}
+
+.tour-page-redesign .tour-satellite-controls,
+.tour-page-redesign .tour-satellite-pan-controls {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.tour-page-redesign .tour-satellite-controls {
+  top: 0.75rem;
+  right: 0.75rem;
+  grid-auto-flow: column;
+}
+
+.tour-page-redesign .tour-satellite-pan-controls {
+  right: 0.75rem;
+  bottom: 3rem;
+  grid-template-columns: repeat(2, 2.75rem);
+}
+
+.tour-page-redesign .tour-satellite-control {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--tour-border-subtle);
+  border-radius: 12px;
+  background: var(--tour-surface);
+  color: var(--tour-ink);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+}
+
+.tour-page-redesign .tour-satellite-control:hover {
+  background: var(--tour-primary-soft);
+  color: var(--tour-primary);
+}
+
+.tour-page-redesign .tour-satellite-control:focus-visible {
+  outline: 2px solid var(--tour-focus);
+  outline-offset: 1px;
+}
+
+.tour-page-redesign .tour-satellite-status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  border-radius: 0.75rem;
+  padding: 0.8rem 1.1rem;
+  background: rgba(23, 30, 39, 0.85);
+  color: #f2f4f7;
+  font-size: 0.85rem;
+  transform: translate(-50%, -50%);
+}
+
+.tour-page-redesign .tour-satellite-status button {
+  padding: 0.4rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--tour-action);
+  color: #1d1f1f;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tour-page-redesign .tour-satellite-status.is-loading span::before {
+  content: "";
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.5rem;
+  vertical-align: -0.12rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #f2f4f7;
+  border-radius: 50%;
+  animation: tour-satellite-spin 900ms linear infinite;
+}
+
+@keyframes tour-satellite-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tour-page-redesign .tour-satellite-missing {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.35rem;
+  max-width: min(70%, calc(100% - 6.5rem));
+  margin: 0;
+  z-index: 4;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(247, 248, 251, 0.92);
+  color: #4b535a;
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.tour-page-redesign .tour-satellite-attribution {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.4rem;
+  z-index: 4;
+  max-width: none;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(247, 248, 251, 0.92);
+  color: #1d1f1f;
+  font-size: 0.66rem;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.tour-page-redesign .tour-satellite-attribution:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 800px) {
+  .tour-page-redesign .tour-satellite-pan-controls {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .tour-page-redesign .tour-destinations-map.tour-satellite-map {
+    min-height: 16rem;
+  }
+
+  .tour-page-redesign .tour-satellite-pin span {
+    width: 1.65rem;
+    height: 1.65rem;
+    font-size: 0.66rem;
+  }
+
+  .tour-page-redesign .tour-satellite-control {
+    font-size: 0.9rem;
+  }
+
+  .tour-page-redesign .tour-satellite-missing {
+    max-width: calc(100% - 6.5rem);
+    font-size: 0.6rem;
+  }
+
+  .tour-page-redesign .tour-satellite-attribution {
+    font-size: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-page-redesign .tour-satellite-pin,
+  .tour-page-redesign .tour-satellite-status.is-loading span::before {
+    transition: none;
+    animation: none;
+  }
+}
