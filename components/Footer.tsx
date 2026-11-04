@@ -14,6 +14,16 @@ const links = [
   ["events", "/events"], ["accessible", "/accessible-travel"],
 ] as const;
 
+// User-requested static navigation labels (frontend-owned UI). These are not
+// backend destination records: each link reuses the existing live tour-search
+// route /trips?title=<English country name> via lib/trips-query.ts, so no
+// destination IDs or slugs are invented. Search values stay English; labels
+// are localized through lib/ui-copy.ts.
+const destinations = [
+  ["destJordan", "Jordan"], ["destMorocco", "Morocco"], ["destTunisia", "Tunisia"],
+  ["destTurkey", "Turkey"], ["destGreece", "Greece"], ["destTanzania", "Tanzania"],
+] as const;
+
 const footerSocialTypes = new Set(["youtube", "google-plus", "facebook", "instagram", "pinterest", "tripadvisor", "tiktok"]);
 
 function socialLabel(type: string) {
@@ -71,6 +81,16 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
           <nav className="footer-links footer-route-links" aria-label="Footer navigation">
             {links.map(([key, href]) => (
               <Link key={href} href={withLocale(href, locale)}>
+                <span>{copy[key]}</span><span aria-hidden="true">↗</span>
+              </Link>
+            ))}
+          </nav>
+        </section>
+        <section aria-labelledby="footer-destinations-title">
+          <h2 className="footer-title" id="footer-destinations-title">{copy.destinations}</h2>
+          <nav className="footer-links footer-destination-links" aria-label="Destinations">
+            {destinations.map(([key, title]) => (
+              <Link key={title} href={withLocale(`/trips?title=${encodeURIComponent(title)}`, locale)}>
                 <span>{copy[key]}</span><span aria-hidden="true">↗</span>
               </Link>
             ))}
