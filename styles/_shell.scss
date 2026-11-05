@@ -813,6 +813,22 @@
   .site-shell-v2:has(.tour-page) > .bottom-bar {
     display: none;
   }
+
+  // On tour details (mobile), lift the fixed float buttons above the taller
+  // booking bar (measured ~85.4px at 375) and show WhatsApp above the
+  // wheelchair (52px height + 12px gap), both clear of the safe area.
+  .site-shell-v2:has(.tour-page) {
+    --tour-float-offset: 104px;
+
+    .accessible-travel-widget {
+      bottom: calc(var(--tour-float-offset) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .whatsapp-float {
+      display: grid;
+      bottom: calc(var(--tour-float-offset) + 64px + env(safe-area-inset-bottom, 0px));
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
