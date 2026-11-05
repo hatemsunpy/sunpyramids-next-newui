@@ -9,6 +9,7 @@ import { useCurrency } from "@/components/CurrencyProvider";
 import { TourBookingAddOns } from "@/components/tour/TourAddOns";
 import { useTourActions } from "@/components/tour/TourActions";
 import { apiPost } from "@/lib/client-api";
+import { emitAddToCart } from "@/lib/analytics/datalayer";
 import { FlowbiteDatepicker } from "@/components/FlowbiteDatepicker";
 import { parseLocalCalendarDate } from "@/lib/local-date";
 import { isTourDateAvailable } from "@/lib/tour-availability";
@@ -36,7 +37,7 @@ export function matchingSeason(tour: Tour | null | undefined, dateString?: strin
 
 export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptionsChange }: { tour: Tour | null; locale: Locale; selectedOptions: number[]; onSelectedOptionsChange: (ids: number[]) => void }) {
   const router = useRouter();
-  const { format } = useCurrency();
+  const { format, selected } = useCurrency();
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -98,7 +99,7 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
     }
     setStatus("loading");
     try {
-      await apiPost(
+      const res = await apiPost<{ status?: boolean; message?: string; data?: unknown }>(
         "cart/tours/append",
         {
           tour_id: tour.id,
@@ -111,6 +112,20 @@ export function TourBookingCard({ tour, locale, selectedOptions, onSelectedOptio
         locale,
         true,
       );
+      // The cart row is one booking group, so quantity stays 1 while the
+      // travelers are priced inside the total. Money converts with the same
+      // selected API currency the UI formats with; body status:false and
+      // failed requests never emit.
+      if (res.status !== false) {
+        emitAddToCart([
+          {
+            itemId: tour.id,
+            itemName: tour.title || `Tour ${tour.id}`,
+            itemCategory: tour.category?.name || tour.category?.title,
+            amountBase: total,
+          },
+        ], selected);
+      }
       setStatus("success");
       router.push(withLocale("/cart", locale));
     } catch {

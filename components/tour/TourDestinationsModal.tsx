@@ -3,42 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { useTourActions } from "@/components/tour/TourActions";
+import { TourSatelliteMap } from "@/components/tour/TourSatelliteMap";
 import type { Locale, Tour } from "@/types/api";
 
 export type TourDestination = NonNullable<Tour["destinations"]>[number];
-
-function destinationMapUrl(destinations: TourDestination[], activeDestination: TourDestination) {
-  const coordinates = destinations
-    .map((destination) => ({ latitude: Number(destination.latitude), longitude: Number(destination.longitude) }))
-    .filter(({ latitude, longitude }) => Number.isFinite(latitude) && Number.isFinite(longitude));
-  const activeLatitude = Number(activeDestination.latitude);
-  const activeLongitude = Number(activeDestination.longitude);
-  if (!coordinates.length || !Number.isFinite(activeLatitude) || !Number.isFinite(activeLongitude)) return "";
-  const latitudes = coordinates.map(({ latitude }) => latitude);
-  const longitudes = coordinates.map(({ longitude }) => longitude);
-  const latitudePadding = Math.max(0.8, (Math.max(...latitudes) - Math.min(...latitudes)) * 0.18);
-  const longitudePadding = Math.max(0.8, (Math.max(...longitudes) - Math.min(...longitudes)) * 0.18);
-  const bounds = [Math.min(...longitudes) - longitudePadding, Math.min(...latitudes) - latitudePadding, Math.max(...longitudes) + longitudePadding, Math.max(...latitudes) + latitudePadding];
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${bounds.join("%2C")}&layer=mapnik&marker=${activeLatitude}%2C${activeLongitude}`;
-}
 
 export function DeferredTourMapImage({ sizes }: { sizes: string }) {
   return (
     <div className="tour-deferred-map-image tour-map-unavailable" data-sizes={sizes}>
       <span>Map preview is not available for this destination.</span>
-    </div>
-  );
-}
-
-function DestinationMap({ destinations, activeDestination }: { destinations: TourDestination[]; activeDestination: TourDestination }) {
-  const mapUrl = destinationMapUrl(destinations, activeDestination);
-  return (
-    <div className="tour-destinations-map">
-      {mapUrl ? (
-        <iframe key={mapUrl} src={mapUrl} title={`Map showing ${activeDestination.title || "tour destination"}`} loading="lazy" />
-      ) : (
-        <DeferredTourMapImage sizes="(max-width: 800px) 100vw, 50vw" />
-      )}
     </div>
   );
 }
@@ -111,7 +84,7 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
           <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">×</button>
         </header>
         <div className="tour-destinations-layout">
-          <DestinationMap destinations={destinations} activeDestination={activeDestination} />
+          <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} />
           <div className="tour-destinations-summary">
             <h3>{tour.title || tour.name}</h3>
             <div className="tour-destinations-price-row">

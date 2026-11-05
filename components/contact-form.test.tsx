@@ -69,5 +69,9 @@ it.each([undefined, "2030-01-01"])("matches the published Nuxt inquiry contract 
       true,
     )
   );
-  expect(push).toHaveBeenCalledWith("/thankful?name=Test%20Guest");
+  const stored = window.sessionStorage.getItem("sunpyramids-handoff:thankful-name");
+  expect(stored).not.toBeNull();
+  expect(JSON.parse(stored!)).toEqual({ value: { text: "Test Guest" }, expiresAt: expect.any(Number) });
+  // The visitor's name travels through tab-scoped session state, never a URL.
+  expect(push).toHaveBeenCalledWith("/thankful");
 });
