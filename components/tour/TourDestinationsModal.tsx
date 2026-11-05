@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { useTourActions } from "@/components/tour/TourActions";
 import { TourSatelliteMap } from "@/components/tour/TourSatelliteMap";
@@ -16,11 +16,11 @@ export function DeferredTourMapImage({ sizes }: { sizes: string }) {
   );
 }
 
-function DestinationList({ destinations, activeDestination, onSelect }: { destinations: TourDestination[]; activeDestination: TourDestination; onSelect: (destination: TourDestination) => void }) {
+function DestinationList({ destinations, activeDestination, onSelect, registerRow }: { destinations: TourDestination[]; activeDestination: TourDestination; onSelect: (destination: TourDestination) => void; registerRow: (destination: TourDestination, node: HTMLButtonElement | null) => void }) {
   return (
     <div className="tour-destinations-list" aria-label="Tour destinations">
       {destinations.map((destination) => (
-        <button key={destination.id || destination.slug} type="button" className={destination === activeDestination ? "is-active" : ""} onClick={() => onSelect(destination)}>
+        <button key={destination.id || destination.slug} ref={(node) => registerRow(destination, node)} type="button" className={destination === activeDestination ? "is-active" : ""} onClick={() => onSelect(destination)} aria-pressed={destination === activeDestination}>
           <span className="tour-destination-marker" aria-hidden="true" />
           <span>{destination.title || destination.name}</span>
         </button>
@@ -36,6 +36,20 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
   const { actionMessage, shareTour } = useTourActions(tour, locale);
   const modalRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const listRowsRef = useRef(new Map<TourDestination, HTMLButtonElement>());
+
+  const registerRow = useCallback((destination: TourDestination, node: HTMLButtonElement | null) => {
+    if (node) listRowsRef.current.set(destination, node);
+    else listRowsRef.current.delete(destination);
+  }, []);
+
+  const handleMapSelect = useCallback((destination: TourDestination) => {
+    setActiveDestination(destination);
+    const row = listRowsRef.current.get(destination);
+    if (!row) return;
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    row.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -84,7 +98,7 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
           <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">×</button>
         </header>
         <div className="tour-destinations-layout">
-          <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} />
+          <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={handleMapSelect} />
           <div className="tour-destinations-summary">
             <h3>{tour.title || tour.name}</h3>
             <div className="tour-destinations-price-row">
@@ -93,7 +107,7 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
             </div>
             <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now</button>
             <h4>Destinations</h4>
-            <DestinationList destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} />
+            <DestinationList destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} registerRow={registerRow} />
             {actionMessage ? <p className="tour-booking-status" role="status">{actionMessage}</p> : null}
           </div>
         </div>

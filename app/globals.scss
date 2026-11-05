@@ -3159,6 +3159,8 @@ input[data-native-type] {
 }
 
 .tour-destinations-list button.is-active {
+  background: var(--spt-surface-soft);
+  border-radius: 0.5rem;
   color: var(--spt-link);
 }
 
@@ -3922,6 +3924,7 @@ input[data-native-type] {
   .tour-destinations-modal {
     height: min(48rem, calc(100vh - 1rem));
     overflow-y: auto;
+    scroll-padding-top: 4.5rem;
   }
 
   .tour-destinations-head {
@@ -4065,6 +4068,7 @@ input[data-native-type] {
     width: calc(100vw - 0.5rem);
     height: calc(100vh - 0.5rem);
     border-radius: 1rem;
+    scroll-padding-top: 4rem;
   }
 
   .tour-destinations-head {
