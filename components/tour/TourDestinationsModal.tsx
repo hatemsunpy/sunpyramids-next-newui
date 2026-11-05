@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowRight, MapPin, Share2, X } from "lucide-react";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { useTourActions } from "@/components/tour/TourActions";
 import { TourSatelliteMap } from "@/components/tour/TourSatelliteMap";
@@ -94,21 +95,38 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
     <div className="tour-destinations-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <section ref={modalRef} className="tour-destinations-modal" role="dialog" aria-modal="true" aria-labelledby="tour-destinations-title">
         <header className="tour-destinations-head">
-          <h2 id="tour-destinations-title">View Destinations</h2>
-          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">×</button>
+          <div className="tour-destinations-head-group">
+            <span className="tour-destinations-head-icon" aria-hidden="true">
+              <MapPin size={20} strokeWidth={2} />
+            </span>
+            <h2 id="tour-destinations-title">View Destinations</h2>
+          </div>
+          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">
+            <X size={20} strokeWidth={2} aria-hidden="true" />
+          </button>
         </header>
         <div className="tour-destinations-layout">
           <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={handleMapSelect} />
           <div className="tour-destinations-summary">
             <h3>{tour.title || tour.name}</h3>
-            <div className="tour-destinations-price-row">
-              {price !== null && price !== undefined && price !== "" ? <div><span>Price</span><strong>{format(price)}</strong></div> : <span />}
-              <button className="btn-outline" type="button" onClick={shareTour}>Share</button>
+            <div className="tour-destinations-card">
+              {price !== null && price !== undefined && price !== "" ? (
+                <div className="tour-destinations-price">
+                  <span>Price</span>
+                  <strong>{format(price)}</strong>
+                </div>
+              ) : null}
+              <div className="tour-destinations-actions">
+                <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" /></button>
+                <button className="btn-outline tour-destinations-share" type="button" onClick={shareTour}>
+                  <Share2 size={16} strokeWidth={2} aria-hidden="true" />
+                  Share
+                </button>
+              </div>
+              {actionMessage ? <p className="tour-destinations-status" role="status">{actionMessage}</p> : null}
             </div>
-            <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now</button>
             <h4>Destinations</h4>
             <DestinationList destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} registerRow={registerRow} />
-            {actionMessage ? <p className="tour-booking-status" role="status">{actionMessage}</p> : null}
           </div>
         </div>
       </section>
