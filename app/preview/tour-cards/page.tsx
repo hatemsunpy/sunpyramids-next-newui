@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -32,8 +33,12 @@ function slugOf(tour: Tour) {
 }
 
 function hasImage(tour: Tour) {
-  return Boolean(
-    tour.featured_image || tour.image || tour.banner || tour.gallery?.[0] || tour.images?.[0],
+  return Boolean(photoOf(tour));
+}
+
+function photoOf(tour: Tour) {
+  return (
+    tour.featured_image || tour.image || tour.banner || tour.gallery?.[0] || tour.images?.[0] || ""
   );
 }
 
@@ -49,13 +54,18 @@ function TourCardDesign({
   tour: Tour;
 }) {
   const ctaLabel = `View tour - ${titleOf(tour)}`;
+  const photo = photoOf(tour);
+  const frameStyle =
+    variant === "s02" && photo
+      ? ({ "--s02-photo": `url(${JSON.stringify(photo)})` } as CSSProperties)
+      : undefined;
   return (
     <section className="tour-card-preview-item">
       <p className="tour-card-preview-label">
         <span className="tour-card-preview-label-text">{label}</span>
         <span className="tour-card-preview-caption">{caption}</span>
       </p>
-      <div className={`tour-card-frame tour-card-frame-${variant}`}>
+      <div className={`tour-card-frame tour-card-frame-${variant}`} style={frameStyle}>
         <TourCard
           tour={tour}
           locale="en"
@@ -107,7 +117,7 @@ export default async function TourCardDesignsPreviewPage() {
           {tour ? (
             <div className="tour-card-preview-grid">
               <TourCardDesign variant="s01" label="Design 01" caption="Soft cut-out" tour={tour} />
-              <TourCardDesign variant="s02" label="Design 02" caption="Blue gradient" tour={tour} />
+              <TourCardDesign variant="s02" label="Design 02" caption="Frosted blur" tour={tour} />
               <TourCardDesign variant="s03" label="Design 03" caption="Full-photo" tour={tour} />
             </div>
           ) : (
