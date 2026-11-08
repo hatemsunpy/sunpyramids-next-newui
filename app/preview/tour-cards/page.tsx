@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ShoppingCart } from "lucide-react";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { TourCard } from "@/components/TourCard";
 import { getHomeTours } from "@/lib/data";
@@ -68,7 +68,11 @@ function TourCardDesign({
           aria-label={ctaLabel}
         >
           <span className="preview-cta-label">View tour</span>
-          <ArrowUpRight size={variant === "s02" ? 16 : 22} strokeWidth={2.4} aria-hidden="true" />
+          {variant === "s01" ? (
+            <ShoppingCart size={22} strokeWidth={1.7} aria-hidden="true" />
+          ) : (
+            <ArrowUpRight size={variant === "s02" ? 16 : 22} strokeWidth={2.4} aria-hidden="true" />
+          )}
         </Link>
       </div>
     </section>

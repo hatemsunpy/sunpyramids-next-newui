@@ -161,29 +161,53 @@
 // ---------------------------------------------------------------------------
 
 .tour-card.preview-card-s01 {
-  --s01-void: 130px;
-
-  background: #fff;
-  border: 1px solid #e7eaee;
-  border-radius: 24px;
+  background: transparent;
+  border: 0;
+  border-radius: 36px;
   height: 620px;
   padding: 12px;
-  box-shadow: 0 24px 48px rgba(23, 32, 52, 0.1);
-  -webkit-mask-image: radial-gradient(
-    circle var(--s01-void) at calc(100% + 16px) calc(100% + 16px),
-    transparent calc(var(--s01-void) - 1px),
-    #000 var(--s01-void)
-  );
-  mask-image: radial-gradient(
-    circle var(--s01-void) at calc(100% + 16px) calc(100% + 16px),
-    transparent calc(var(--s01-void) - 1px),
-    #000 var(--s01-void)
-  );
+  box-shadow: none;
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background: #fff;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  &::before {
+    inset: 0 0 96px;
+    border-radius: 36px 36px 36px 0;
+  }
+
+  &::after {
+    left: 0;
+    bottom: 0;
+    width: calc(100% - 72px);
+    height: 132px;
+    border-radius: 0 0 36px 36px;
+  }
 
   > a {
     display: flex;
     flex-direction: column;
+    position: relative;
     height: 100%;
+
+    &::before {
+      content: "";
+      position: absolute;
+      right: 24px;
+      bottom: 48px;
+      width: 36px;
+      height: 36px;
+      background: radial-gradient(circle at 100% 100%, transparent 36px, #fff 36.5px);
+      pointer-events: none;
+      z-index: -1;
+    }
   }
 
   .tour-card-media {
@@ -218,9 +242,9 @@
     margin-top: auto;
     flex-wrap: wrap;
     gap: 12px;
-    border-top: 1px solid #eef1f4;
+    border-top: 0;
     padding-top: 12px;
-    padding-right: 118px;
+    padding-right: 84px;
 
     strong {
       font-size: 1.3rem;
@@ -240,20 +264,20 @@
 
 .preview-cta.preview-cta-s01 {
   position: absolute;
-  right: 18px;
-  bottom: 18px;
+  right: 0;
+  bottom: 0;
   width: 64px;
-  height: 64px;
-  border-radius: 20px;
+  height: 84px;
+  border-radius: 28px;
   display: grid;
   place-items: center;
   background: #fff;
-  color: var(--preview-brand);
-  box-shadow: 0 2px 6px rgba(20, 28, 44, 0.18), 0 12px 26px rgba(20, 28, 44, 0.14);
+  color: var(--preview-ink);
+  box-shadow: 0 2px 4px rgba(20, 28, 44, 0.08);
   transition: box-shadow 160ms ease, color 160ms ease;
 
   &:hover {
-    box-shadow: 0 4px 10px rgba(20, 28, 44, 0.22), 0 16px 32px rgba(20, 28, 44, 0.2);
+    box-shadow: 0 4px 8px rgba(20, 28, 44, 0.12);
     color: #10296c;
   }
 
