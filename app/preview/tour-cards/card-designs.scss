@@ -308,36 +308,43 @@
   box-shadow: 0 24px 48px rgba(17, 25, 40, 0.18);
 
   > a {
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
   }
 
   .tour-card-media {
-    position: absolute;
-    inset: 0;
-    height: 100%;
+    position: relative;
+    inset: auto;
+    flex: 1 1 auto;
+    min-height: 180px;
+    height: auto;
     aspect-ratio: auto;
 
     &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(11, 17, 30, 0) 20%,
-        color-mix(in srgb, var(--s02-panel) 70%, transparent) 40%,
-        var(--s02-panel) 56%,
-        var(--s02-panel-deep) 100%
-      );
+      content: none;
     }
   }
 
   .tour-card-body {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    flex: 0 0 auto;
     padding: 16px 20px 88px;
+    background: linear-gradient(
+      180deg,
+      var(--s02-panel) 0%,
+      color-mix(in srgb, var(--s02-panel) 60%, var(--s02-panel-deep)) 46%,
+      var(--s02-panel-deep) 100%
+    );
+
+    // Tie the photo fade to the content edge as its height changes.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -40px 0 100%;
+      background: linear-gradient(180deg, transparent, var(--s02-panel));
+      pointer-events: none;
+    }
 
     h3 {
       margin: 0 0 8px;
@@ -463,9 +470,12 @@
 
   .tour-card-media {
     position: absolute;
-    inset: 0;
-    height: 100%;
-    aspect-ratio: auto;
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    height: auto;
+    aspect-ratio: 5 / 6;
 
     &::after {
       content: "";
@@ -473,9 +483,9 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(9, 12, 18, 0) 30%,
-        rgba(9, 12, 18, 0.58) 55%,
-        rgba(6, 9, 14, 0.96) 100%
+        rgba(9, 12, 18, 0) 45%,
+        rgba(9, 12, 18, 0.55) 78%,
+        #10141c 100%
       );
     }
   }
