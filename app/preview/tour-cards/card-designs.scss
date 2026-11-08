@@ -1,0 +1,594 @@
+.tour-card-preview-root {
+  --preview-brand: #163a96;
+  --preview-amber: #f7951d;
+  --preview-ink: #10151f;
+  --preview-muted: #5d6672;
+
+  // Fixed light-theme semantics so the preview is independent of the site's
+  // dark-mode token overrides; dark card designs set explicit whites.
+  --spt-ink: #1d1f1f;
+  --spt-muted: #626971;
+  --spt-link: #163a96;
+  --spt-surface: #fff;
+  --spt-surface-soft: #f7f8fb;
+  --spt-border: #dfe3e8;
+
+  min-height: 100vh;
+  background: #eef0f2;
+  color: var(--preview-ink);
+  padding-bottom: 64px;
+}
+
+.tour-card-preview-root :is(a, button):focus-visible {
+  outline: 3px solid var(--spt-focus, #2f6fdd);
+  outline-offset: 2px;
+}
+
+.tour-card-preview-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e3e6ea;
+  padding: 12px 20px;
+}
+
+.tour-card-preview-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.tour-card-preview-logo {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
+.tour-card-preview-title {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.tour-card-preview-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 20px;
+  border: 1px solid #d7dce3;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--preview-brand);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+
+  &:hover {
+    background: #f2f4f8;
+    border-color: #c3cad6;
+  }
+}
+
+.tour-card-preview-main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 30px 20px 0;
+}
+
+.tour-card-preview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 48px 40px;
+}
+
+@media (min-width: 1100px) {
+  .tour-card-preview-grid {
+    grid-template-columns: repeat(3, minmax(0, 344px));
+  }
+}
+
+.tour-card-preview-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 344px;
+}
+
+.tour-card-preview-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+
+  &::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--preview-amber);
+    align-self: center;
+    flex-shrink: 0;
+  }
+}
+
+.tour-card-preview-label-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #2b3444;
+}
+
+.tour-card-preview-caption {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--preview-muted);
+}
+
+.tour-card-preview-empty {
+  margin: 0;
+  padding: 72px 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--preview-muted);
+}
+
+.tour-card-frame {
+  position: relative;
+}
+
+.preview-cta {
+  font-family: inherit;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.preview-cta:focus-visible {
+  outline: 3px solid var(--spt-focus, #2f6fdd);
+  outline-offset: 2px;
+}
+
+// ---------------------------------------------------------------------------
+// Design 01 - Soft cut-out
+// ---------------------------------------------------------------------------
+
+.tour-card.preview-card-s01 {
+  --s01-void: 130px;
+
+  background: #fff;
+  border: 1px solid #e7eaee;
+  border-radius: 24px;
+  height: 620px;
+  padding: 12px;
+  box-shadow: 0 24px 48px rgba(23, 32, 52, 0.1);
+  -webkit-mask-image: radial-gradient(
+    circle var(--s01-void) at calc(100% + 16px) calc(100% + 16px),
+    transparent calc(var(--s01-void) - 1px),
+    #000 var(--s01-void)
+  );
+  mask-image: radial-gradient(
+    circle var(--s01-void) at calc(100% + 16px) calc(100% + 16px),
+    transparent calc(var(--s01-void) - 1px),
+    #000 var(--s01-void)
+  );
+
+  > a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .tour-card-media {
+    border-radius: 16px;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .tour-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 16px 6px 0;
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.12rem;
+      color: var(--preview-ink);
+    }
+  }
+
+  .tour-card-summary {
+    margin: 0 0 14px;
+  }
+
+  .tour-card-meta {
+    margin-bottom: 0;
+  }
+
+  .tour-card-bottom {
+    margin-top: auto;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid #eef1f4;
+    padding-top: 12px;
+    padding-right: 118px;
+
+    strong {
+      font-size: 1.3rem;
+    }
+  }
+
+  .tour-card-duration {
+    font-size: 0.86rem;
+    color: #39424f;
+  }
+
+  .tour-card-wishlist-wrap {
+    top: 26px;
+    right: 26px;
+  }
+}
+
+.preview-cta.preview-cta-s01 {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: var(--preview-brand);
+  box-shadow: 0 2px 6px rgba(20, 28, 44, 0.18), 0 12px 26px rgba(20, 28, 44, 0.14);
+  transition: box-shadow 160ms ease, color 160ms ease;
+
+  &:hover {
+    box-shadow: 0 4px 10px rgba(20, 28, 44, 0.22), 0 16px 32px rgba(20, 28, 44, 0.2);
+    color: #10296c;
+  }
+
+  .preview-cta-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Design 02 - Blue gradient
+// ---------------------------------------------------------------------------
+
+.tour-card.preview-card-s02 {
+  --s02-panel: color-mix(in srgb, #163a96 30%, #0b1120);
+  --s02-panel-deep: color-mix(in srgb, #163a96 20%, #080d18);
+
+  height: 620px;
+  background: var(--s02-panel-deep);
+  border: 0;
+  border-radius: 24px;
+  box-shadow: 0 24px 48px rgba(17, 25, 40, 0.18);
+
+  > a {
+    display: block;
+    height: 100%;
+  }
+
+  .tour-card-media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(11, 17, 30, 0) 20%,
+        color-mix(in srgb, var(--s02-panel) 70%, transparent) 40%,
+        var(--s02-panel) 56%,
+        var(--s02-panel-deep) 100%
+      );
+    }
+  }
+
+  .tour-card-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 16px 20px 88px;
+
+    h3 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-size: 1.18rem;
+      line-height: 1.35;
+    }
+  }
+
+  .tour-card-summary {
+    color: rgba(255, 255, 255, 0.84);
+  }
+
+  .tour-card-meta {
+    gap: 8px;
+    margin: 12px 0 14px;
+
+    span {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 4px 11px;
+      backdrop-filter: blur(6px);
+    }
+  }
+
+  .tour-card-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    padding-top: 12px;
+
+    :is(span, p) {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    strong {
+      color: #fff;
+      font-size: 1.28rem;
+    }
+  }
+
+  .tour-card-price-original {
+    color: rgba(255, 255, 255, 0.62) !important;
+  }
+
+  .tour-card-duration {
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    gap: 8px;
+    backdrop-filter: blur(6px);
+  }
+
+  .offer-countdown {
+    > * {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .offer-countdown-value {
+      color: #fff;
+    }
+
+    .offer-countdown-label {
+      color: rgba(255, 255, 255, 0.78);
+    }
+  }
+
+  .tour-card-wishlist {
+    background: rgba(17, 24, 39, 0.38);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    backdrop-filter: blur(8px);
+
+    &:hover:not(:disabled) {
+      background: rgba(17, 24, 39, 0.56);
+    }
+  }
+}
+
+.preview-cta.preview-cta-s02 {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--preview-brand);
+  font-size: 0.98rem;
+  font-weight: 700;
+  box-shadow: 0 12px 26px rgba(15, 22, 36, 0.16);
+  transition: background 160ms ease;
+
+  &:hover {
+    background: #f2f4f9;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Design 03 - Full-photo
+// ---------------------------------------------------------------------------
+
+.tour-card.preview-card-s03 {
+  height: 620px;
+  background: #10141c;
+  border: 0;
+  border-radius: 24px;
+  box-shadow: 0 24px 48px rgba(17, 25, 40, 0.18);
+
+  > a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .tour-card-media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(9, 12, 18, 0) 30%,
+        rgba(9, 12, 18, 0.58) 55%,
+        rgba(6, 9, 14, 0.96) 100%
+      );
+    }
+  }
+
+  .tour-card-body {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px 16px;
+
+    h3 {
+      margin: auto 0 10px;
+      color: #fff;
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  .tour-card-summary {
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 12px;
+  }
+
+  .tour-card-meta {
+    order: -1;
+    align-self: flex-start;
+    gap: 8px;
+    margin: 58px 0 0;
+
+    span {
+      background: rgba(13, 17, 24, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      backdrop-filter: blur(6px);
+    }
+  }
+
+  .tour-card-bottom {
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(10, 14, 21, 0.55);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 10px 70px 10px 14px;
+
+    :is(span, p) {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    strong {
+      color: #fff;
+      font-size: 1.22rem;
+    }
+  }
+
+  .tour-card-price-original {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .tour-card-duration {
+    color: #fff;
+  }
+
+  .offer-countdown {
+    margin-bottom: 10px;
+
+    > * {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .offer-countdown-value {
+      color: #fff;
+    }
+
+    .offer-countdown-label {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  .tour-card-wishlist {
+    background: rgba(13, 17, 24, 0.5);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #fff;
+    backdrop-filter: blur(8px);
+
+    &:hover:not(:disabled) {
+      background: rgba(13, 17, 24, 0.68);
+    }
+  }
+}
+
+.preview-cta.preview-cta-s03 {
+  position: absolute;
+  right: 26px;
+  bottom: 25px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: var(--preview-brand);
+  box-shadow: 0 4px 10px rgba(10, 15, 24, 0.28), 0 14px 28px rgba(10, 15, 24, 0.22);
+  transition: box-shadow 160ms ease, color 160ms ease;
+
+  &:hover {
+    box-shadow: 0 6px 14px rgba(10, 15, 24, 0.32), 0 18px 34px rgba(10, 15, 24, 0.26);
+    color: #10296c;
+  }
+
+  .preview-cta-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shared motion guard
+// ---------------------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-card-preview-root,
+  .tour-card-preview-root * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
