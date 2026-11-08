@@ -307,19 +307,31 @@
 // Design 02 - Frosted blur
 // ---------------------------------------------------------------------------
 
+.tour-card-frame-s02 {
+  transition: transform 180ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
 .tour-card.preview-card-s02 {
   --s02-panel-deep: color-mix(in srgb, #163a96 20%, #080d18);
 
-  height: 620px;
+  height: auto;
   background: var(--s02-panel-deep);
   border: 0;
   border-radius: 24px;
   box-shadow: 0 24px 48px rgba(17, 25, 40, 0.18);
 
+  &:hover {
+    transform: none;
+  }
+
   > a {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
   }
 
   .tour-card-media {
@@ -334,7 +346,7 @@
   .tour-card-body {
     position: relative;
     flex: 1;
-    padding: 12px 20px 88px;
+    padding: 12px 20px 20px;
     isolation: isolate;
 
     // Blur the decorative layer itself so the photo edge cannot reflect into it.
@@ -383,7 +395,10 @@
 
   .tour-card-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.22);
-    padding-top: 12px;
+    align-items: center;
+    min-height: 64px;
+    gap: 8px;
+    padding: 12px 100px 0 0;
 
     :is(span, p) {
       color: rgba(255, 255, 255, 0.78);
@@ -391,7 +406,7 @@
 
     strong {
       color: #fff;
-      font-size: 1.28rem;
+      font-size: 1.18rem;
     }
   }
 
@@ -401,14 +416,23 @@
 
   .tour-card-duration {
     align-items: center;
-    min-height: 34px;
-    padding: 0 12px;
+    min-height: 32px;
+    padding: 0 8px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
-    gap: 8px;
+    gap: 4px;
     backdrop-filter: blur(6px);
+
+    span {
+      font-size: 0.75rem;
+    }
+
+    .tour-card-duration-icon {
+      width: 12px;
+      height: 12px;
+    }
   }
 
   .offer-countdown {
@@ -439,24 +463,59 @@
 
 .preview-cta.preview-cta-s02 {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
+  right: 20px;
+  bottom: 24px;
+  width: 92px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 52px;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0 8px;
   border-radius: 999px;
   background: #fff;
   color: var(--preview-brand);
-  font-size: 0.98rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  white-space: nowrap;
   box-shadow: 0 12px 26px rgba(15, 22, 36, 0.16);
   transition: background 160ms ease;
 
+  svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
   &:hover {
     background: #f2f4f9;
+  }
+}
+
+@media (max-width: 380px) {
+  .tour-card.preview-card-s02 {
+    .tour-card-body {
+      padding-inline: 16px;
+    }
+
+    .tour-card-bottom {
+      gap: 6px;
+      padding-right: 96px;
+
+      strong {
+        font-size: 1.08rem;
+      }
+    }
+
+    .tour-card-duration {
+      padding-inline: 6px;
+    }
+  }
+
+  .preview-cta.preview-cta-s02 {
+    right: 16px;
+    width: 88px;
+    font-size: 0.75rem;
   }
 }
 
