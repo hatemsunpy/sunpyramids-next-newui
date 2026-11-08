@@ -462,7 +462,7 @@
 // ---------------------------------------------------------------------------
 
 .tour-card.preview-card-s03 {
-  height: 620px;
+  height: auto;
   background: #10141c;
   border: 0;
   border-radius: 24px;
@@ -472,13 +472,10 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
   }
 
   .tour-card-media {
-    flex: 1;
-    aspect-ratio: auto;
-
     &::after {
       content: "";
       position: absolute;
@@ -500,7 +497,7 @@
     padding: 16px 20px;
 
     h3 {
-      margin: auto 0 10px;
+      margin: 0 0 10px;
       color: #fff;
       font-size: 1.45rem;
       font-weight: 800;
