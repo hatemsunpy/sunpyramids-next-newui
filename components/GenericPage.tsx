@@ -14,7 +14,7 @@ import { PlannerRequestFlow } from "@/components/CustomerFlows";
 import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { uiCopy } from "@/lib/ui-copy";
-import { siteContact } from "@/lib/site-contact";
+import { officeMapUrl, siteContact } from "@/lib/site-contact";
 import { accessibleTravelCopy } from "@/lib/accessible-travel-copy";
 import { sustainabilitySections } from "@/lib/sustainability-copy";
 import { SustainabilityTabs } from "@/components/SustainabilityTabs";
@@ -269,15 +269,11 @@ function ContactPage({
                   </div>
                   <div className="item-detail">
                     <strong>Head Office</strong>
-                    {settings?.locationUrl ? (
-                      <p>
-                        <a href={settings.locationUrl} target="_blank" rel="noreferrer">
-                          {siteContact.address}
-                        </a>
-                      </p>
-                    ) : (
-                      <p>{siteContact.address}</p>
-                    )}
+                    <p>
+                      <a href={officeMapUrl} target="_blank" rel="noreferrer">
+                        {siteContact.address}
+                      </a>
+                    </p>
                   </div>
                 </div>
               </div>

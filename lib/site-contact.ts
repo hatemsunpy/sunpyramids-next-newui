@@ -1,13 +1,20 @@
 export const APPROVED_BRAND_LOGO = "/images/logo.webp";
 
+// Owner-provided deployment config: office address and the map URL derived
+// from the SAME constant, so label and map can never disagree. The API-owned
+// settings.locationUrl points elsewhere and is deliberately not used here.
+const officeAddress =
+  "25 Sphinx Street (Sun Pyramid Group Tower), off Abu El-Houl El-Seyahi Street, Al Haram, Giza";
+
+export const officeMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(officeAddress)}`;
+
 export const siteContact = {
   phones: [
     { display: "+20 109 588 8830", href: "tel:+201095888830" },
     { display: "+20 109 588 8831", href: "tel:+201095888831" },
     { display: "+20 109 588 8835", href: "tel:+201095888835" },
   ],
-  address:
-    "Pyramids View Tower - Mansourieh Intersection with Faisal - Above Tseppas Pastry - Fourth Floor",
+  address: officeAddress,
   whatsapp: {
     display: "+20 109 588 8830",
     digits: "201095888830",

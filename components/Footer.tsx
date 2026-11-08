@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import type { Locale, PublicSiteSettings } from "@/types/api";
 import { withLocale } from "@/lib/locales";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { uiCopy } from "@/lib/ui-copy";
-import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
+import { APPROVED_BRAND_LOGO, officeMapUrl, siteContact } from "@/lib/site-contact";
 
 const links = [
   ["home", "/"], ["oneDay", "/egypt-tours/one-day-tours"], ["multiDays", "/egypt-tours/multi-days-tours"],
@@ -56,8 +57,14 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
         <section className="footer-connect" aria-label="Connect with Sun Pyramids Tours">
           <p className="footer-title">{copy.contactInfo}</p>
           <div className="footer-primary-contact">
-            <a href={siteContact.phones[0].href}>{siteContact.phones[0].display}</a>
-            <a href={`mailto:${emails[0]}`}>{emails[0]}</a>
+            <a href={siteContact.phones[0].href}>
+              <Phone className="footer-contact-icon" aria-hidden="true" />
+              <span dir="ltr">{siteContact.phones[0].display}</span>
+            </a>
+            <a href={`mailto:${emails[0]}`}>
+              <Mail className="footer-contact-icon" aria-hidden="true" />
+              <span dir="ltr">{emails[0]}</span>
+            </a>
           </div>
           {socialLinks.length ? (
             <nav className="footer-social-links" aria-label="Social links">
@@ -98,15 +105,27 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
         </section>
         <section aria-labelledby="footer-details-title">
           <p className="footer-title" id="footer-details-title">{copy.contactInfo}</p>
-          <div className="footer-links">
-            {siteContact.phones.map((phone) => <a key={phone.href} href={phone.href}>{phone.display}</a>)}
+          <div className="footer-links footer-contact-links">
+            {siteContact.phones.map((phone) => (
+              <a key={phone.href} href={phone.href}>
+                <Phone className="footer-contact-icon" aria-hidden="true" />
+                <span dir="ltr">{phone.display}</span>
+              </a>
+            ))}
             <a href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${siteContact.whatsapp.display}`}>
-              {siteContact.whatsapp.display}
+              <MessageCircle className="footer-contact-icon" aria-hidden="true" />
+              <span dir="ltr">{siteContact.whatsapp.display}</span>
             </a>
-            {emails.map((email) => <a key={email} href={`mailto:${email}`}>{email}</a>)}
-            {settings.locationUrl ? (
-              <a href={settings.locationUrl} target="_blank" rel="noreferrer">{siteContact.address}</a>
-            ) : <p>{siteContact.address}</p>}
+            {emails.map((email) => (
+              <a key={email} href={`mailto:${email}`}>
+                <Mail className="footer-contact-icon" aria-hidden="true" />
+                <span dir="ltr">{email}</span>
+              </a>
+            ))}
+            <a href={officeMapUrl} target="_blank" rel="noreferrer">
+              <MapPin className="footer-contact-icon" aria-hidden="true" />
+              <span>{siteContact.address}</span>
+            </a>
             <div id="footer-cert" />
             <TrustIndexLoader containerId="footer-cert" script="https://cdn.trustindex.io/loader-cert.js?c80e286451c98153d1567b8885a" />
           </div>

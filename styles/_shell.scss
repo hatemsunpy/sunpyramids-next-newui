@@ -548,6 +548,22 @@
   color: white;
 }
 
+// Footer contact rows: 18px icon aligned with the first text line, so a
+// wrapping address keeps its left edge under the icon column.
+.site-shell-v2 .footer-primary-contact a,
+.site-shell-v2 .footer-contact-links a {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.site-shell-v2 .footer-contact-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+}
+
 // Destinations render as one vertical column on desktop, two on mobile.
 .site-shell-v2 .footer-destination-links {
   grid-template-columns: 1fr;
