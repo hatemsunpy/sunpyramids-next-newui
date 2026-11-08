@@ -319,6 +319,7 @@
   --s02-panel-deep: color-mix(in srgb, #163a96 20%, #080d18);
 
   height: auto;
+  overflow: clip;
   background: var(--s02-panel-deep);
   border: 0;
   border-radius: 24px;

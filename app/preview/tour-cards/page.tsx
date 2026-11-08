@@ -6,7 +6,8 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight, ShoppingCart } from "lucide-react";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { TourCard } from "@/components/TourCard";
-import { getHomeTours } from "@/lib/data";
+import { getHomeTours, getTourReliable } from "@/lib/data";
+import { resolveRequiredApiResult } from "@/lib/resolve-api-result";
 import { tourPath } from "@/lib/locales";
 import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
 import type { Tour } from "@/types/api";
@@ -47,11 +48,13 @@ function TourCardDesign({
   label,
   caption,
   tour,
+  summary,
 }: {
   variant: PreviewVariant;
   label: string;
   caption: string;
   tour: Tour;
+  summary?: string;
 }) {
   const ctaLabel = `View tour - ${titleOf(tour)}`;
   const photo = photoOf(tour);
@@ -71,6 +74,7 @@ function TourCardDesign({
           locale="en"
           className={`preview-card-${variant}`}
           imageSizes={PREVIEW_CARD_SIZES}
+          summary={summary}
         />
         <Link
           href={tourPath(slugOf(tour), "en")}
@@ -94,6 +98,10 @@ export default async function TourCardDesignsPreviewPage() {
 
   const tours = await getHomeTours(PREVIEW_TOURS_ENDPOINT, "en");
   const tour = tours.find(hasImage) ?? tours[0];
+  const detail = tour
+    ? resolveRequiredApiResult(await getTourReliable(slugOf(tour), "en"), "preview tour")
+    : null;
+  const metaDescription = detail?.seo?.meta_description?.trim() || "";
 
   return (
     <CurrencyProvider>
@@ -117,7 +125,7 @@ export default async function TourCardDesignsPreviewPage() {
           {tour ? (
             <div className="tour-card-preview-grid">
               <TourCardDesign variant="s01" label="Design 01" caption="Soft cut-out" tour={tour} />
-              <TourCardDesign variant="s02" label="Design 02" caption="Frosted blur" tour={tour} />
+              <TourCardDesign variant="s02" label="Design 02" caption="Frosted blur" tour={tour} summary={metaDescription} />
               <TourCardDesign variant="s03" label="Design 03" caption="Full-photo" tour={tour} />
             </div>
           ) : (

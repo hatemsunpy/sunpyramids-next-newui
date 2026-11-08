@@ -110,3 +110,21 @@ describe("TourCard Special Offer Badge", () => {
     expect(screen.getByText("$100.00")).toBeInTheDocument();
   });
 });
+
+describe("TourCard summary", () => {
+  it.each([
+    { label: "default API description", summary: undefined, expected: "Original API description" },
+    { label: "explicit metadata summary", summary: "API metadata description", expected: "API metadata description" },
+    { label: "empty metadata summary", summary: "", expected: null },
+  ])("renders the $label without repeating the title", ({ summary, expected }) => {
+    const { container } = render(
+      <TourCard tour={{ title: "Synthetic tour", short_description: "Original API description" }} summary={summary} />,
+    );
+    expect(screen.getByRole("heading", { name: "Synthetic tour" })).toBeInTheDocument();
+    if (expected) {
+      expect(container.querySelector(".tour-card-summary")).toHaveTextContent(expected);
+    } else {
+      expect(container.querySelector(".tour-card-summary")).toBeNull();
+    }
+  });
+});

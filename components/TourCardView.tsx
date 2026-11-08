@@ -94,6 +94,7 @@ export function TourCardView({
   isSpecialOffer = false,
   labels,
   imageSizes = "(max-width: 768px) 100vw, 25vw",
+  summary,
 }: {
   tour: Tour;
   locale?: Locale;
@@ -101,10 +102,11 @@ export function TourCardView({
   isSpecialOffer?: boolean;
   labels: TourCardViewLabels;
   imageSizes?: string;
+  summary?: string;
 }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
-  const description = tour.short_description || tour.description || title;
+  const description = summary ?? (tour.short_description || tour.description || title);
   const price = priceOf(tour);
   const isOffer = checkSpecialOffer(tour, isSpecialOffer);
   const rawOffer = tour.offer;
@@ -147,7 +149,7 @@ export function TourCardView({
         </div>
         <div className="tour-card-body">
           <h3 className="line-clamp-2">{title}</h3>
-          <p className="line-clamp-2 tour-card-summary">{description}</p>
+          {description ? <p className="line-clamp-2 tour-card-summary">{description}</p> : null}
           <div className="tour-card-meta">
             <span>{placeOf(tour)}</span>
             <span>{categoryOf(tour)}</span>
