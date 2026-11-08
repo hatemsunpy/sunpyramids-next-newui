@@ -836,6 +836,15 @@
   border-bottom-right-radius: var(--spt-radius-card);
 }
 
+.site-shell-v2 .home-page .home-tour-grid .tour-card {
+  border: 0;
+}
+
+.site-shell-v2 .home-page .home-tour-grid .tour-card .tour-card-body {
+  border: 1px solid var(--spt-border);
+  border-radius: var(--spt-radius-card);
+}
+
 .site-shell-v2 :is(.tour-card-media, .blog-card-media) img {
   object-fit: cover;
   transition: transform 600ms var(--spt-ease);
