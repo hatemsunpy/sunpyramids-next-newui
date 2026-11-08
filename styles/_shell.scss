@@ -601,7 +601,8 @@
 
 .site-shell-v2 .footer-signature {
   flex: none;
-  width: 156px;
+  width: clamp(200px, 22vw, 260px);
+  max-width: 100%;
   height: auto;
 }
 
