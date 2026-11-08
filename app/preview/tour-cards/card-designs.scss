@@ -335,6 +335,9 @@
   }
 
   .tour-card-media {
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 48px), transparent);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 48px), transparent);
+
     &::after {
       content: none;
     }
@@ -344,9 +347,21 @@
     position: relative;
     flex: 1;
     padding: 12px 20px 88px;
-    background: rgba(9, 14, 24, 0.6);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    isolation: isolate;
+
+    // Fade the frost above the content edge without fading the text.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -48px 0 0;
+      z-index: -1;
+      background: rgba(9, 14, 24, 0.6);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 48px);
+      mask-image: linear-gradient(180deg, transparent, #000 48px);
+      pointer-events: none;
+    }
 
     h3 {
       margin: 0 0 8px;
@@ -493,7 +508,7 @@
     padding: 16px 20px;
 
     h3 {
-      margin: 0 0 10px;
+      margin: auto 0 10px;
       color: #fff;
       font-size: 1.45rem;
       font-weight: 800;
@@ -525,7 +540,7 @@
   }
 
   .tour-card-bottom {
-    margin-top: auto;
+    margin-top: 10px;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background: rgba(10, 14, 21, 0.55);
     backdrop-filter: blur(8px);
