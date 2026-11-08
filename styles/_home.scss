@@ -2119,6 +2119,12 @@
   text-wrap: balance;
 }
 
+@media (min-width: 768px) {
+  .home-help-panel-v2 h2 {
+    max-width: none;
+  }
+}
+
 .home-help-panel-v2 > .section-heading-eyebrow {
   position: relative;
   z-index: 1;
