@@ -313,7 +313,7 @@ function AboutPage({
   ].filter((item) => item[1]);
 
   return (
-    <main>
+    <main className="about-page">
       <EditorialHeroCompact title={title} eyebrow="Heritage Since 1970" locale={locale} />
 
       <section className="editorial-main-section">

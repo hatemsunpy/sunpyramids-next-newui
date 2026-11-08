@@ -507,6 +507,13 @@
   color: white;
 }
 
+.site-shell-v2 .footer-social-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
 .site-shell-v2 .footer-certification {
   width: min(100%, 185px);
   height: auto;
@@ -582,6 +589,20 @@
 
 .site-shell-v2 .footer-bottom p {
   margin: 0;
+}
+
+// Allow the signature and copyright text to wrap on narrow screens.
+.site-shell-v2 .footer-copyright-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+}
+
+.site-shell-v2 .footer-signature {
+  flex: none;
+  width: 156px;
+  height: auto;
 }
 
 .site-shell-v2 .footer-legal-links {

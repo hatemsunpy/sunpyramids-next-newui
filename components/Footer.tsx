@@ -25,7 +25,19 @@ const destinations = [
   ["destTurkey", "Turkey"], ["destGreece", "Greece"], ["destTanzania", "Tanzania"],
 ] as const;
 
-const footerSocialTypes = new Set(["youtube", "google-plus", "facebook", "instagram", "pinterest", "tripadvisor", "tiktok"]);
+// Static brand-icon paths (frontend UI config only, no backend records).
+const footerSocialIcons: Record<string, string> = {
+  facebook: "/icons/social/facebook.svg",
+  instagram: "/icons/social/instagram.svg",
+  pinterest: "/icons/social/pinterest.svg",
+  youtube: "/icons/social/youtube.svg",
+  tripadvisor: "/icons/social/tripadvisor.svg",
+  tiktok: "/icons/social/tiktok.svg",
+  "google-plus": "/icons/social/google-plus.svg",
+};
+
+// Allowed social types are exactly the keys of the icon map above.
+const footerSocialTypes = new Set(Object.keys(footerSocialIcons));
 
 function socialLabel(type: string) {
   return type.split("-").map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`).join(" ");
@@ -55,7 +67,7 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
 
       <div className="footer-grid">
         <section className="footer-connect" aria-label="Connect with Sun Pyramids Tours">
-          <p className="footer-title">{copy.contactInfo}</p>
+          <p className="footer-title">{copy.contact}</p>
           <div className="footer-primary-contact">
             <a href={siteContact.phones[0].href}>
               <Phone className="footer-contact-icon" aria-hidden="true" />
@@ -69,7 +81,10 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
           {socialLinks.length ? (
             <nav className="footer-social-links" aria-label="Social links">
               {socialLinks.map((item) => (
-                <a key={`${item.type}-${item.url}`} href={item.url} target="_blank" rel="noreferrer">{socialLabel(item.type)}<span aria-hidden="true">↗</span></a>
+                <a key={`${item.type}-${item.url}`} href={item.url} target="_blank" rel="noreferrer">
+                  <Image className="footer-social-icon" src={footerSocialIcons[item.type]} alt="" aria-hidden="true" width={18} height={18} />
+                  <span>{socialLabel(item.type)}</span>
+                </a>
               ))}
             </nav>
           ) : null}
@@ -132,7 +147,17 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
         </section>
       </div>
       <div className="footer-bottom">
-        <p>All rights reserved to {title}, Egypt ©{new Date().getFullYear()}</p>
+        <p className="footer-copyright-note">
+          All rights reserved to
+          <Image
+            className="footer-signature"
+            src="/images/sp-group-signature-white.webp"
+            alt="Sun Pyramid Group"
+            width={2440}
+            height={477}
+          />
+          ©{new Date().getFullYear()}
+        </p>
         <div className="footer-legal-links">
           <Link href={withLocale("/privacy-and-cookies", locale)}>Privacy and Cookies</Link>
           <Link href={withLocale("/terms-and-conditions", locale)}>Terms and Conditions</Link>
