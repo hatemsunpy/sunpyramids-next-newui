@@ -323,6 +323,9 @@
   }
 
   .tour-card-media {
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 80px), transparent);
+
     &::after {
       content: none;
     }
@@ -338,7 +341,7 @@
     &::before {
       content: "";
       position: absolute;
-      inset: -48px -24px -24px;
+      inset: -80px -24px -24px;
       z-index: -1;
       background-color: #666;
       background-image: var(--s02-photo, none);
@@ -347,8 +350,8 @@
       background-repeat: no-repeat;
       background-blend-mode: multiply;
       filter: blur(24px);
-      -webkit-mask-image: linear-gradient(180deg, transparent, #000 48px);
-      mask-image: linear-gradient(180deg, transparent, #000 48px);
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 80px);
+      mask-image: linear-gradient(180deg, transparent, #000 80px);
       pointer-events: none;
     }
 
