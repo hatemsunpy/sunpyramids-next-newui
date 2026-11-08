@@ -516,8 +516,12 @@
 
   .tour-card-meta {
     position: absolute;
-    top: 58px;
+    top: 12px;
     left: 20px;
+    right: 72px;
+    min-height: 44px;
+    align-items: center;
+    flex-wrap: nowrap;
     gap: 8px;
     margin: 0;
 
@@ -526,7 +530,11 @@
       border: 1px solid rgba(255, 255, 255, 0.24);
       color: #fff;
       font-size: 0.78rem;
-      padding: 5px 12px;
+      min-width: 0;
+      padding: 5px 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       backdrop-filter: blur(6px);
     }
   }
