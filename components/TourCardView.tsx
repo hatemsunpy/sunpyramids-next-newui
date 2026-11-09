@@ -13,6 +13,7 @@ export type TourCardVariant = "frosted" | "legacy";
 
 export type TourCardViewLabels = {
   specialOffer: string;
+  specialOffers?: string;
   addToWishlist: string;
   removeFromWishlist: string;
   viewTour?: string;
@@ -52,10 +53,7 @@ function DiscountBadgeIcon({ className = "" }: { className?: string }) {
   );
 }
 
-function checkSpecialOffer(tour: Tour, forceSpecialOffer?: boolean): boolean {
-  if (tour.offer !== undefined && Number(tour.offer) === 0) return false;
-  if (forceSpecialOffer) return true;
-  if (tour.offer && Number(tour.offer) > 0) return true;
+function belongsToSpecialOffers(tour: Tour): boolean {
   const categories = [...(tour.categories || [])];
   if (tour.category) categories.push(tour.category);
   return categories.some((cat) => {
@@ -69,6 +67,13 @@ function checkSpecialOffer(tour: Tour, forceSpecialOffer?: boolean): boolean {
       title.includes("special offer")
     );
   });
+}
+
+function checkSpecialOffer(tour: Tour, forceSpecialOffer?: boolean): boolean {
+  if (tour.offer !== undefined && Number(tour.offer) === 0) return false;
+  if (forceSpecialOffer) return true;
+  if (tour.offer && Number(tour.offer) > 0) return true;
+  return belongsToSpecialOffers(tour);
 }
 
 function DurationClockIcon({ className = "" }: { className?: string }) {
@@ -202,14 +207,24 @@ export function TourCardView({
     />
   );
 
+  const collectionBadge = variant === "frosted" && (isSpecialOffer || belongsToSpecialOffers(tour)) ? (
+    <div className="tour-card-offer-badge tour-card-collection-badge">
+      <svg className="tour-card-offer-icon" aria-hidden="true" viewBox="0 0 20 20" fill="none">
+        <path d="M3 3h6l8 8-6 6-8-8V3Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+        <circle cx="6.5" cy="6.5" r="1.25" fill="currentColor" />
+      </svg>
+      <span>{labels.specialOffers || "Special Offers"}</span>
+    </div>
+  ) : null;
+
   const offerBadge = isOffer ? (
-    <OfferValidity endDate={tour.offer_end_date}>
+    <OfferValidity endDate={tour.offer_end_date} fallback={collectionBadge}>
       <div className="tour-card-offer-badge">
         <DiscountBadgeIcon className="tour-card-offer-icon" />
         <span>{labels.specialOffer || "Special Offer"}</span>
       </div>
     </OfferValidity>
-  ) : null;
+  ) : collectionBadge;
 
   const meta = (
     <div className="tour-card-meta">

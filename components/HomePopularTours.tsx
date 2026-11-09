@@ -11,7 +11,7 @@ const HOME_POPULAR_TOURS_LABEL_KEYS = [
   "shoreExcursionsFilter",
 ] as const;
 
-const HOME_POPULAR_TOURS_UI_LABEL_KEYS = ["specialOffer", "addToWishlist", "removeFromWishlist", "viewTour"] as const;
+const HOME_POPULAR_TOURS_UI_LABEL_KEYS = ["specialOffer", "specialOffers", "addToWishlist", "removeFromWishlist", "viewTour"] as const;
 
 export function HomePopularTours({
   initialTours,

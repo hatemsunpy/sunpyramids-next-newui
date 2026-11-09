@@ -61,13 +61,13 @@ const formCopies: Record<Locale, UiCopy> = {
 };
 
 const tripsCopies: Record<Locale, UiCopy> = {
-  en: { tourTypes: "Tours Type", addToWishlist: "Add to wishlist", removeFromWishlist: "Remove from wishlist", viewTour: "View tour" },
-  fr: { tourTypes: "Types de circuits", addToWishlist: "Ajouter aux favoris", removeFromWishlist: "Retirer des favoris", viewTour: "Voir le circuit" },
-  de: { tourTypes: "Reisearten", addToWishlist: "Zur Wunschliste hinzufügen", removeFromWishlist: "Von der Wunschliste entfernen", viewTour: "Tour ansehen" },
-  it: { tourTypes: "Tipi di tour", addToWishlist: "Aggiungi ai preferiti", removeFromWishlist: "Rimuovi dai preferiti", viewTour: "Vedi tour" },
-  pt: { tourTypes: "Tipos de passeio", addToWishlist: "Adicionar aos favoritos", removeFromWishlist: "Remover dos favoritos", viewTour: "Ver passeio" },
-  es: { tourTypes: "Tipos de tour", addToWishlist: "Añadir a favoritos", removeFromWishlist: "Eliminar de favoritos", viewTour: "Ver tour" },
-  zh: { tourTypes: "旅游类型", addToWishlist: "添加到收藏", removeFromWishlist: "从收藏中移除", viewTour: "查看行程" },
+  en: { tourTypes: "Tours Type", addToWishlist: "Add to wishlist", removeFromWishlist: "Remove from wishlist", viewTour: "View tour", specialOffers: "Special Offers" },
+  fr: { tourTypes: "Types de circuits", addToWishlist: "Ajouter aux favoris", removeFromWishlist: "Retirer des favoris", viewTour: "Voir le circuit", specialOffers: "Offres spéciales" },
+  de: { tourTypes: "Reisearten", addToWishlist: "Zur Wunschliste hinzufügen", removeFromWishlist: "Von der Wunschliste entfernen", viewTour: "Tour ansehen", specialOffers: "Sonderangebote" },
+  it: { tourTypes: "Tipi di tour", addToWishlist: "Aggiungi ai preferiti", removeFromWishlist: "Rimuovi dai preferiti", viewTour: "Vedi tour", specialOffers: "Offerte speciali" },
+  pt: { tourTypes: "Tipos de passeio", addToWishlist: "Adicionar aos favoritos", removeFromWishlist: "Remover dos favoritos", viewTour: "Ver passeio", specialOffers: "Ofertas especiais" },
+  es: { tourTypes: "Tipos de tour", addToWishlist: "Añadir a favoritos", removeFromWishlist: "Eliminar de favoritos", viewTour: "Ver tour", specialOffers: "Ofertas especiales" },
+  zh: { tourTypes: "旅游类型", addToWishlist: "添加到收藏", removeFromWishlist: "从收藏中移除", viewTour: "查看行程", specialOffers: "特别优惠" },
 };
 
 const phoneCountryCopies: Record<Locale, UiCopy> = {

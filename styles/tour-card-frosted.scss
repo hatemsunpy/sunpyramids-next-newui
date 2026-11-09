@@ -237,6 +237,30 @@ body article:is(.tour-card.tour-card--frosted, .tour-related-card.tour-related-c
     backdrop-filter: blur(8px);
   }
 
+  .tour-card-offer-badge {
+    top: 16px;
+    left: auto;
+    inset-inline-start: 16px;
+    inset-inline-end: auto;
+    gap: 6px;
+    width: fit-content;
+    max-width: calc(100% - 88px);
+    height: auto;
+    min-height: 30px;
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: #ffac33;
+    color: #152b63;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0;
+    white-space: normal;
+    box-shadow: 0 3px 12px rgba(35, 25, 8, 0.2);
+
+    .tour-card-offer-icon { flex: 0 0 15px; width: 15px; height: 15px; }
+  }
+
   .offer-countdown > * { background: rgba(255, 255, 255, 0.12); }
   .offer-countdown-value { color: #fff; }
   .offer-countdown-label { color: rgba(255, 255, 255, 0.78); }

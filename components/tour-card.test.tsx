@@ -38,6 +38,7 @@ describe("TourCard Special Offer Badge", () => {
     expect(screen.getByText("$100.00")).toBeInTheDocument();
     expect(screen.queryByText("$80.00")).not.toBeInTheDocument();
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(container.querySelector(".tour-card-collection-badge")).toHaveTextContent("Special Offers");
     expect(container.querySelector(".tour-card-price-original")).toBeNull();
     expect(container.querySelector(".offer-countdown")).toBeNull();
   });
@@ -47,6 +48,14 @@ describe("TourCard Special Offer Badge", () => {
     expect(screen.getByText("$100.00")).toBeInTheDocument();
     expect(container.querySelector(".tour-card-price-original")).toBeNull();
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(screen.getByText("Special Offers")).toBeInTheDocument();
+  });
+
+  it("localizes the collection badge from API category membership without inventing a discount", () => {
+    render(<TourCard tour={{ price: 100, offer: 0, categories: [{ slug: "special-offers" }] }} locale="fr" />);
+    expect(screen.getByText("Offres spéciales")).toBeInTheDocument();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("Offre spéciale")).not.toBeInTheDocument();
   });
 
   it("restores the base price and removes promotion UI when an open card reaches expiry", () => {
@@ -78,6 +87,7 @@ describe("TourCard Special Offer Badge", () => {
     const tour: Tour = { id: 1, title: "Standard Tour", price: 100 };
     render(<TourCard tour={tour} locale="en" />);
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(screen.queryByText("Special Offers")).not.toBeInTheDocument();
   });
 
   it("renders Special Offer badge when isSpecialOffer prop is true", () => {

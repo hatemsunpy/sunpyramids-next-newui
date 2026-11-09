@@ -31,6 +31,7 @@ export function TourCard({
       variant={variant}
       labels={{
         specialOffer: copy.specialOffer,
+        specialOffers: copy.specialOffers,
         addToWishlist: copy.addToWishlist,
         removeFromWishlist: copy.removeFromWishlist,
         viewTour: copy.viewTour,
