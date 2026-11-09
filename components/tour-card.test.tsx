@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { TourCard } from "@/components/TourCard";
+import { RelatedTours } from "@/components/tour/RelatedTours";
 import type { Tour } from "@/types/api";
 import { toTourCardData } from "@/lib/tour-card-data";
 
@@ -111,14 +112,16 @@ describe("TourCard Special Offer Badge", () => {
   });
 });
 
-describe("TourCard summary", () => {
+describe("TourCard summary and variants", () => {
   it.each([
-    { label: "default API description", summary: undefined, expected: "Original API description" },
-    { label: "explicit metadata summary", summary: "API metadata description", expected: "API metadata description" },
-    { label: "empty metadata summary", summary: "", expected: null },
-  ])("renders the $label without repeating the title", ({ summary, expected }) => {
+    { label: "legacy API description", variant: "legacy" as const, summary: undefined, meta: "Backend metadata", expected: "Original API description" },
+    { label: "default backend metadata", variant: undefined, summary: undefined, meta: "Backend metadata", expected: "Backend metadata" },
+    { label: "missing backend metadata", variant: undefined, summary: undefined, meta: undefined, expected: null },
+    { label: "explicit metadata summary", variant: undefined, summary: "Preview metadata", meta: "Backend metadata", expected: "Preview metadata" },
+    { label: "empty metadata summary", variant: undefined, summary: "", meta: "Backend metadata", expected: null },
+  ])("renders the $label", ({ variant, summary, meta, expected }) => {
     const { container } = render(
-      <TourCard tour={{ title: "Synthetic tour", short_description: "Original API description" }} summary={summary} />,
+      <TourCard tour={{ title: "Synthetic tour", short_description: "Original API description", seo: { meta_description: meta } }} summary={summary} variant={variant} />,
     );
     expect(screen.getByRole("heading", { name: "Synthetic tour" })).toBeInTheDocument();
     if (expected) {
@@ -126,5 +129,26 @@ describe("TourCard summary", () => {
     } else {
       expect(container.querySelector(".tour-card-summary")).toBeNull();
     }
+  });
+
+  it("keeps the seasonal legacy card free of the new CTA", () => {
+    render(<TourCard tour={{ title: "Seasonal sample", slug: "sample", price: 100 }} variant="legacy" />);
+    expect(screen.queryByRole("link", { name: "View tour: Seasonal sample" })).toBeNull();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+  });
+
+  it("links the localized frosted action directly to the localized tour route", () => {
+    render(<TourCard tour={{ title: "Sample circuit", slug: "sample" }} locale="fr" />);
+    const cta = screen.getByRole("link", { name: "Voir le circuit: Sample circuit" });
+    expect(cta).toHaveAttribute("href", "/fr/tour/sample");
+    expect(cta.parentElement?.closest("a")).toBeNull();
+  });
+
+  it("keeps related-tour base pricing even when the API contains an offer", () => {
+    render(<RelatedTours tours={[{ id: 999, title: "Related sample", slug: "related", price: 100, offer: 20, wishlisted_exists: true }]} locale="en" />);
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("$80.00")).toBeNull();
+    expect(screen.getByRole("link", { name: "View tour: Related sample" })).toHaveAttribute("href", "/tour/related");
+    expect(screen.getByRole("button", { name: "Remove from wishlist" })).toHaveAttribute("aria-pressed", "true");
   });
 });

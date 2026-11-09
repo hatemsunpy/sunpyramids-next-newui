@@ -1,6 +1,6 @@
 import type { Locale, Tour } from "@/types/api";
 import { uiCopy } from "@/lib/ui-copy";
-import { TourCardView } from "@/components/TourCardView";
+import { TourCardView, type TourCardVariant } from "@/components/TourCardView";
 
 export function TourCard({
   tour,
@@ -9,6 +9,7 @@ export function TourCard({
   isSpecialOffer = false,
   imageSizes,
   summary,
+  variant = "frosted",
 }: {
   tour: Tour;
   locale?: Locale;
@@ -16,6 +17,7 @@ export function TourCard({
   isSpecialOffer?: boolean;
   imageSizes?: string;
   summary?: string;
+  variant?: TourCardVariant;
 }) {
   const copy = uiCopy(locale);
   return (
@@ -26,10 +28,12 @@ export function TourCard({
       isSpecialOffer={isSpecialOffer}
       imageSizes={imageSizes}
       summary={summary}
+      variant={variant}
       labels={{
         specialOffer: copy.specialOffer,
         addToWishlist: copy.addToWishlist,
         removeFromWishlist: copy.removeFromWishlist,
+        viewTour: copy.viewTour,
       }}
     />
   );

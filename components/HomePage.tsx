@@ -116,6 +116,7 @@ export async function HomePage({
                 key={tour.id || tour.slug}
                 tour={tour}
                 locale={locale}
+                variant="legacy"
                 imageSizes={index === 0
                   ? "(max-width: 640px) 850px, (max-width: 1180px) 100vw, 1200px"
                   : "(max-width: 640px) 750px, (max-width: 1180px) 100vw, 800px"}

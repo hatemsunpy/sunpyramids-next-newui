@@ -75,6 +75,7 @@ function TourCardDesign({
           className={`preview-card-${variant}`}
           imageSizes={PREVIEW_CARD_SIZES}
           summary={summary}
+          variant="legacy"
         />
         <Link
           href={tourPath(slugOf(tour), "en")}

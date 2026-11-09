@@ -1,16 +1,21 @@
+import type { CSSProperties } from "react";
 import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { Locale, Tour } from "@/types/api";
 import { tourPath } from "@/lib/locales";
+import { responsiveImageSource } from "@/lib/responsive-image";
 import { PriceText } from "@/components/PriceText";
 import { TourWishlistButtonView } from "@/components/TourWishlistButtonView";
 import { OfferCountdown } from "@/components/OfferCountdown";
 import { OfferValidity } from "@/components/OfferValidity";
 
+export type TourCardVariant = "frosted" | "legacy";
+
 export type TourCardViewLabels = {
   specialOffer: string;
   addToWishlist: string;
   removeFromWishlist: string;
+  viewTour?: string;
 };
 
 function imageOf(item: Tour) {
@@ -87,6 +92,59 @@ function DurationClockIcon({ className = "" }: { className?: string }) {
   );
 }
 
+function TourCardCta({ href, label, title }: { href: string; label: string; title: string }) {
+  return (
+    <Link className="tour-card-cta" href={href} aria-label={`${label}: ${title}`}>
+      <span className="tour-card-cta-label">{label}</span>
+      <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12L12 4M6 4h6v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
+function TourCardPrice({
+  tour,
+  price,
+  discountedPrice,
+  hasDiscount,
+}: {
+  tour: Tour;
+  price: Tour["price"];
+  discountedPrice: Tour["price"];
+  hasDiscount: boolean;
+}) {
+  return (
+    <OfferValidity endDate={tour.offer_end_date} fallback={
+      <strong>{price !== null && price !== undefined ? <PriceText amount={price} /> : "Request Price"}</strong>
+    }>
+      <strong>
+        {discountedPrice !== null && discountedPrice !== undefined ? (
+          <PriceText amount={discountedPrice} />
+        ) : (
+          "Request Price"
+        )}
+      </strong>
+      {hasDiscount ? (
+        <span className="tour-card-price-original">
+          <PriceText amount={price} />
+        </span>
+      ) : null}
+    </OfferValidity>
+  );
+}
+
+function TourCardDuration({ duration }: { duration?: string }) {
+  return (
+    <p className="tour-card-duration">
+      <span className="tour-card-duration-icon" aria-hidden="true">
+        <DurationClockIcon />
+      </span>
+      <span>{duration || "Flexible"}</span>
+    </p>
+  );
+}
+
 export function TourCardView({
   tour,
   locale = "en",
@@ -95,6 +153,7 @@ export function TourCardView({
   labels,
   imageSizes = "(max-width: 768px) 100vw, 25vw",
   summary,
+  variant = "frosted",
 }: {
   tour: Tour;
   locale?: Locale;
@@ -103,10 +162,13 @@ export function TourCardView({
   labels: TourCardViewLabels;
   imageSizes?: string;
   summary?: string;
+  variant?: TourCardVariant;
 }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
-  const description = summary ?? (tour.short_description || tour.description || title);
+  const legacyDescription = summary ?? (tour.short_description || tour.description || title);
+  const metadataDescription = (summary ?? tour.seo?.meta_description ?? "").trim();
+  const description = variant === "legacy" ? legacyDescription : metadataDescription;
   const price = priceOf(tour);
   const isOffer = checkSpecialOffer(tour, isSpecialOffer);
   const rawOffer = tour.offer;
@@ -127,65 +189,97 @@ export function TourCardView({
   const discountedPrice = hasDiscount
     ? (Number(price) * (100 - (offerPercent as number))) / 100
     : price;
+  const href = tourPath(slug, locale);
+  const photo = imageOf(tour);
+  const ctaLabel = labels.viewTour || "View tour";
+  const photoStyle = { "--tour-card-photo": `url(${JSON.stringify(responsiveImageSource(photo, 640))})` } as CSSProperties;
+
+  const wishlist = (
+    <TourWishlistButtonView
+      tour={{ id: tour.id, title: tour.title, wishlisted_exists: tour.wishlisted_exists }}
+      locale={locale}
+      labels={{ addToWishlist: labels.addToWishlist, removeFromWishlist: labels.removeFromWishlist }}
+    />
+  );
+
+  const offerBadge = isOffer ? (
+    <OfferValidity endDate={tour.offer_end_date}>
+      <div className="tour-card-offer-badge">
+        <DiscountBadgeIcon className="tour-card-offer-icon" />
+        <span>{labels.specialOffer || "Special Offer"}</span>
+      </div>
+    </OfferValidity>
+  ) : null;
+
+  const meta = (
+    <div className="tour-card-meta">
+      <span>{placeOf(tour)}</span>
+      <span>{categoryOf(tour)}</span>
+    </div>
+  );
+
+  const countdown = isOffer && tour.offer_end_date
+    ? <OfferCountdown endDate={tour.offer_end_date} locale={locale} />
+    : null;
+
+  const priceNode = (
+    <TourCardPrice tour={tour} price={price} discountedPrice={discountedPrice} hasDiscount={hasDiscount} />
+  );
+
+  if (variant === "legacy") {
+    return (
+      <article className={`tour-card tour-card--legacy ${className}`.trim()}>
+        {wishlist}
+        {offerBadge}
+        <Link href={href}>
+          <div className="tour-card-media">
+            <Image src={photo} alt={title} fill sizes={imageSizes} />
+          </div>
+          <div className="tour-card-body">
+            <h3 className="line-clamp-2">{title}</h3>
+            {description ? <p className="line-clamp-2 tour-card-summary">{description}</p> : null}
+            {meta}
+            {countdown}
+            <div className="tour-card-bottom">
+              <div>
+                <span>Start From</span>
+                <div className="tour-card-price-wrap">{priceNode}</div>
+              </div>
+              <TourCardDuration duration={tour.duration} />
+            </div>
+          </div>
+        </Link>
+      </article>
+    );
+  }
 
   return (
-    <article className={`tour-card ${className}`.trim()}>
-      <TourWishlistButtonView
-        tour={{ id: tour.id, title: tour.title, wishlisted_exists: tour.wishlisted_exists }}
-        locale={locale}
-        labels={{ addToWishlist: labels.addToWishlist, removeFromWishlist: labels.removeFromWishlist }}
-      />
-      {isOffer ? (
-        <OfferValidity endDate={tour.offer_end_date}>
-          <div className="tour-card-offer-badge">
-            <DiscountBadgeIcon className="tour-card-offer-icon" />
-            <span>{labels.specialOffer || "Special Offer"}</span>
-          </div>
-        </OfferValidity>
-      ) : null}
-      <Link href={tourPath(slug, locale)}>
+    <article className={`tour-card tour-card--frosted ${className}`.trim()} style={photoStyle}>
+      {wishlist}
+      {offerBadge}
+      <Link className="tour-card-media-link" href={href}>
         <div className="tour-card-media">
-          <Image src={imageOf(tour)} alt={title} fill sizes={imageSizes} />
-        </div>
-        <div className="tour-card-body">
-          <h3 className="line-clamp-2">{title}</h3>
-          {description ? <p className="line-clamp-2 tour-card-summary">{description}</p> : null}
-          <div className="tour-card-meta">
-            <span>{placeOf(tour)}</span>
-            <span>{categoryOf(tour)}</span>
-          </div>
-          {isOffer && tour.offer_end_date ? <OfferCountdown endDate={tour.offer_end_date} locale={locale} /> : null}
-          <div className="tour-card-bottom">
-            <div>
-              <span>Start From</span>
-              <div className="tour-card-price-wrap">
-                <OfferValidity endDate={tour.offer_end_date} fallback={
-                  <strong>{price !== null && price !== undefined ? <PriceText amount={price} /> : "Request Price"}</strong>
-                }>
-                <strong>
-                  {discountedPrice !== null && discountedPrice !== undefined ? (
-                    <PriceText amount={discountedPrice} />
-                  ) : (
-                    "Request Price"
-                  )}
-                </strong>
-                {hasDiscount ? (
-                  <span className="tour-card-price-original">
-                    <PriceText amount={price} />
-                  </span>
-                ) : null}
-                </OfferValidity>
-              </div>
-            </div>
-            <p className="tour-card-duration">
-              <span className="tour-card-duration-icon" aria-hidden="true">
-                <DurationClockIcon />
-              </span>
-              <span>{tour.duration || "Flexible"}</span>
-            </p>
-          </div>
+          <Image src={photo} alt={title} fill sizes={imageSizes} />
         </div>
       </Link>
+      <div className="tour-card-content">
+        <div className="tour-card-body">
+          <Link className="tour-card-title-link" href={href}>
+            <h3 className="line-clamp-2">{title}</h3>
+          </Link>
+          {description ? <p className="line-clamp-2 tour-card-summary">{description}</p> : null}
+          {meta}
+          {countdown}
+        </div>
+        <div className="tour-card-footer">
+          <div className="tour-card-price-block">
+            <span>Start From</span>
+            <div className="tour-card-price-wrap">{priceNode}</div>
+          </div>
+          <TourCardDuration duration={tour.duration} />
+          <TourCardCta href={href} label={ctaLabel} title={title} />
+        </div>
+      </div>
     </article>
   );
 }

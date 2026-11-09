@@ -51,7 +51,7 @@
   .mc-collection-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }
   .mc-itinerary-list { display: grid; gap: 24px; min-width: 0; }
   .mc-itinerary { min-width: 0; border: 1px solid var(--spt-border-subtle); border-radius: 20px; overflow: hidden; background: var(--spt-surface-card); }
-  .mc-editorial-tour {
+  .mc-editorial-tour:not(.tour-card--frosted) {
     border: 0; border-radius: 0; box-shadow: none; overflow: visible;
     &:hover { transform: none; box-shadow: none; }
     > a { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: stretch; height: auto; }
@@ -140,10 +140,10 @@
     .mc-sub-toolbar { align-items: flex-start; gap: 14px; }
     .mc-sub-toolbar-side { width: 100%; justify-content: space-between; }
     .mc-sub-sort { min-width: 140px; }
-    .mc-editorial-tour > a { grid-template-columns: 1fr; }
-    .mc-editorial-tour .tour-card-media { aspect-ratio: 3 / 2; min-height: 0; }
-    .mc-editorial-tour .tour-card-body { padding: 22px; }
-    .mc-editorial-tour .tour-card-body h3 { padding-right: 0; font-size: 23px; }
+    .mc-editorial-tour:not(.tour-card--frosted) > a { grid-template-columns: 1fr; }
+    .mc-editorial-tour:not(.tour-card--frosted) .tour-card-media { aspect-ratio: 3 / 2; min-height: 0; }
+    .mc-editorial-tour:not(.tour-card--frosted) .tour-card-body { padding: 22px; }
+    .mc-editorial-tour:not(.tour-card--frosted) .tour-card-body h3 { padding-right: 0; font-size: 23px; }
     .mc-itinerary-footer { flex-wrap: wrap; padding: 16px 22px; gap: 12px; }
     .mc-itinerary-footer > a { width: 100%; justify-content: space-between; border-top: 1px solid var(--spt-border-subtle); padding-top: 8px; }
     .mc-planning-note { display: block; padding: 26px; }
@@ -166,6 +166,6 @@
     #mc-results, #mc-overview-title, #mc-places, #mc-traveller-reviews, #mc-trip-help { scroll-margin-top: 100px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .mc-editorial-tour:hover .tour-card-media img { transform: none; }
+    .mc-editorial-tour:not(.tour-card--frosted):hover .tour-card-media img { transform: none; }
   }
 }
