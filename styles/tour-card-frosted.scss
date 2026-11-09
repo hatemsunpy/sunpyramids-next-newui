@@ -14,6 +14,13 @@
   }
 }
 
+@media (max-width: 640px) {
+  // Keep carousel slides readable instead of shrinking the whole row to fit.
+  .home-page--redesign :is(.home-tour-grid, .home-offers-track) > .tour-card--frosted {
+    flex: 0 0 min(79vw, 305px);
+  }
+}
+
 // Only the new variant participates; seasonal and preview legacy cards retain their CSS.
 body article:is(.tour-card.tour-card--frosted, .tour-related-card.tour-related-card--frosted) {
   container-type: inline-size;
