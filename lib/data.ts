@@ -72,8 +72,10 @@ export async function getHome(locale: Locale) {
 }
 
 export async function getHomeTours(endpoint: string, locale: Locale) {
-  const response = await apiFetch<ApiList<Tour>>(endpoint, { locale });
-  return listData(response);
+  // A transient failure must get the existing bounded retries before the
+  // homepage treats this section as empty.
+  const result = await apiFetchReliable<ApiList<Tour>>(endpoint, { locale });
+  return result.ok ? listData(result.value) : [];
 }
 
 export async function getHomeDestinations(locale: Locale) {
