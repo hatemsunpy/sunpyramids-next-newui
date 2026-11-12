@@ -12,7 +12,7 @@ import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/Lan
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
 import type { VoiceLabels } from "@/lib/voice-client-labels";
-import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
+import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 
 const tourLinks = [
   ["oneDay", "/egypt-tours/one-day-tours"],
@@ -618,7 +618,15 @@ export function HeaderClient({
       {firstStyle ? (
         <div className="promo-strip original-strip">
           <p>{home.promoTitle}</p>
-          <Link className="btn-primary" href={withLocale("/egypt-tours/multi-days-tours", locale)}>{home.promoButton}</Link>
+          <div className="promo-strip-actions">
+            <Link className="btn-primary promo-tours-action" href={withLocale("/egypt-tours/multi-days-tours", locale)}>{home.promoButton}</Link>
+            <a className="btn-primary promo-whatsapp-action" href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
+              <span aria-hidden="true" className="promo-whatsapp-mark">
+                <Image src="/images/whatsapp.webp" alt="" width={32} height={32} />
+              </span>
+              <span>WhatsApp</span>
+            </a>
+          </div>
         </div>
       ) : null}
 
