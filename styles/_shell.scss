@@ -256,34 +256,76 @@
 .site-shell-v2 .promo-strip {
   position: relative;
   z-index: 5;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(0.75rem, 2vw, 1.5rem);
   width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   min-height: 34px;
   margin: 0.3rem auto 0;
   border-radius: 12px;
   background: rgb(255 255 255 / 96%);
   color: var(--spt-anchor);
-  padding: 0.22rem 0.45rem 0.22rem 1rem;
+  padding: 0.35rem 0.75rem;
   box-shadow: 0 6px 8px rgb(16 31 64 / 10%);
 }
 
 .site-shell-v2 .promo-strip p {
+  min-width: 0;
+  max-width: 100%;
   margin: 0;
   font-size: 0.78rem;
   font-weight: 600;
-}
-
-.site-shell-v2 .promo-strip .btn-primary {
-  min-height: 28px;
-  padding: 0.28rem 0.8rem;
-  font-size: 0.75rem;
+  line-height: 1.4;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
 }
 
 .site-shell-v2 .promo-strip-actions {
-  display: contents;
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+  gap: 0.5rem;
+  width: min(100%, 18.5rem);
+}
+
+.site-shell-v2 .promo-strip .btn-primary {
+  width: 100%;
+  min-height: 36px;
+  padding: 0.4rem 0.55rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.site-shell-v2 .promo-strip .promo-tours-action {
+  background: var(--spt-amber);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--spt-amber) 32%, transparent);
+
+  &:hover {
+    background: color-mix(in srgb, var(--spt-amber) 60%, var(--spt-amber-hover));
+  }
 }
 
 .site-shell-v2 .promo-strip .promo-whatsapp-action {
-  display: none;
+  gap: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--spt-success-text) 38%, transparent);
+  background: color-mix(in srgb, var(--spt-success-text) 10%, var(--spt-surface-raised));
+  color: var(--spt-success-text);
+  box-shadow: none;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--spt-success-text) 60%, transparent);
+    background: color-mix(in srgb, var(--spt-success-text) 18%, var(--spt-surface-raised));
+  }
+}
+
+.site-shell-v2 .promo-whatsapp-mark {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: currentColor;
+  mask: url("/images/whatsapp.webp") center / contain no-repeat;
 }
 
 .site-shell-v2 .mobile-drawer-backdrop {
@@ -806,73 +848,16 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 0.85rem;
+    padding: 0.45rem 0.75rem;
     text-align: center;
   }
 
   .site-shell-v2 .promo-strip p {
     font-size: 0.85rem;
-    line-height: 1.4;
-    text-wrap: pretty;
-  }
-
-  .site-shell-v2 .promo-strip-actions {
-    display: grid;
-    grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
-    gap: 0.5rem;
-    width: min(100%, 21rem);
   }
 
   .site-shell-v2 .promo-strip .btn-primary {
-    width: 100%;
-    min-height: 44px;
-    padding: 0.6rem 0.7rem;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    line-height: 1.25;
-    text-align: center;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
-  .site-shell-v2 .promo-strip .promo-tours-action {
-    background: var(--spt-amber);
-    box-shadow: 0 4px 10px color-mix(in srgb, var(--spt-amber) 32%, transparent);
-
-    &:hover {
-      background: color-mix(in srgb, var(--spt-amber) 60%, var(--spt-amber-hover));
-    }
-  }
-
-  .site-shell-v2 .promo-strip .promo-whatsapp-action {
-    display: inline-flex;
-    gap: 0.4rem;
-    border: 1px solid color-mix(in srgb, var(--spt-success-text) 38%, transparent);
-    background: color-mix(in srgb, var(--spt-success-text) 10%, var(--spt-surface-raised));
-    color: var(--spt-success-text);
-    box-shadow: none;
-
-    &:hover {
-      border-color: color-mix(in srgb, var(--spt-success-text) 60%, transparent);
-      background: color-mix(in srgb, var(--spt-success-text) 18%, var(--spt-surface-raised));
-    }
-  }
-
-  .site-shell-v2 .promo-whatsapp-mark {
-    display: inline-flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--spt-success-text) 45%, #000);
-  }
-
-  .site-shell-v2 .promo-whatsapp-mark img {
-    width: 0.875rem;
-    height: 0.875rem;
-    object-fit: contain;
+    min-height: 40px;
   }
 
   .site-shell-v2 .footer {

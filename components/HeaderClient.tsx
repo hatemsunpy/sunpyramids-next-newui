@@ -436,7 +436,8 @@ export function HeaderClient({
 
   const handleScroll = useCallback(() => {
     const mobile = window.innerWidth < 512;
-    setIsTop(window.scrollY < (mobile ? window.innerHeight - 440 : window.innerHeight));
+    const topRegionHeight = mobile ? Math.max(1, window.innerHeight - 440) : window.innerHeight;
+    setIsTop(window.scrollY < topRegionHeight);
   }, []);
 
   useEffect(() => {
@@ -621,9 +622,7 @@ export function HeaderClient({
           <div className="promo-strip-actions">
             <Link className="btn-primary promo-tours-action" href={withLocale("/egypt-tours/multi-days-tours", locale)}>{home.promoButton}</Link>
             <a className="btn-primary promo-whatsapp-action" href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
-              <span aria-hidden="true" className="promo-whatsapp-mark">
-                <Image src="/images/whatsapp.webp" alt="" width={32} height={32} />
-              </span>
+              <span aria-hidden="true" className="promo-whatsapp-mark" />
               <span>WhatsApp</span>
             </a>
           </div>
