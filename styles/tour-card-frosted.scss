@@ -1,0 +1,379 @@
+@property --tour-card-glass-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: -70deg;
+}
+
+.mc-itinerary-list:has(.tour-card--frosted) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .mc-itinerary-list:has(.tour-card--frosted) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  // Keep carousel slides readable instead of shrinking the whole row to fit.
+  .home-page--redesign :is(.home-tour-grid, .home-offers-track) > .tour-card--frosted {
+    flex: 0 0 min(79vw, 305px);
+  }
+}
+
+// Only the new variant participates; seasonal and preview legacy cards retain their CSS.
+body article:is(.tour-card.tour-card--frosted, .tour-related-card.tour-related-card--frosted) {
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  overflow: clip;
+  border: 0;
+  border-radius: 24px;
+  background: #0b1120;
+  color: #fff;
+  box-shadow: 0 18px 36px rgba(17, 25, 40, 0.16);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  > :is(.tour-card-media-link, .tour-related-media-link) {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 0;
+  }
+
+  :is(.tour-card-media, .tour-related-media) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 380px;
+    aspect-ratio: 8 / 7;
+    overflow: hidden;
+    border-radius: 0;
+    -webkit-mask-image: linear-gradient(#000 calc(100% - 80px), transparent);
+    mask-image: linear-gradient(#000 calc(100% - 80px), transparent);
+
+    &::after { content: none; }
+
+    img { object-fit: cover; }
+  }
+
+  :is(.tour-card-content, .tour-related-content) {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px 20px 20px;
+
+    // Blur a decorative copy, rather than reflecting samples at the sharp image edge.
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -80px -24px -24px;
+      z-index: -1;
+      background: #666 var(--tour-card-photo, none) center bottom / auto 620px no-repeat;
+      background-blend-mode: multiply;
+      filter: blur(24px);
+      -webkit-mask-image: linear-gradient(transparent, #000 80px);
+      mask-image: linear-gradient(transparent, #000 80px);
+      pointer-events: none;
+    }
+  }
+
+  :is(.tour-card-body, .tour-related-copy) {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    gap: 0;
+  }
+
+  :is(.tour-card-title-link, .tour-related-title-link) {
+    color: #fff;
+    text-decoration: none;
+
+    // Preserve the original card-body click target without nesting the CTA link.
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  }
+
+  :is(.tour-card-body, .tour-related-header) h3 {
+    display: -webkit-box;
+    min-height: 2.7em;
+    margin: 0 0 8px;
+    padding: 0;
+    overflow: hidden;
+    color: #fff;
+    font-size: 1.18rem;
+    font-weight: 700;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  :is(.tour-card-summary, .tour-related-summary) {
+    display: -webkit-box;
+    min-height: 0;
+    margin: 0 0 12px;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .tour-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 14px;
+    padding: 0;
+
+    span {
+      min-width: 0;
+      padding: 4px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  :is(.tour-card-footer, .tour-related-footer) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin-top: auto;
+    padding: 12px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+  }
+
+  .tour-related-meta { display: contents; }
+
+  :is(.tour-card-price-block, .tour-related-price-box) {
+    display: grid;
+    min-width: 0;
+    gap: 3px;
+
+    > span { color: rgba(255, 255, 255, 0.78); font-size: 0.75rem; }
+  }
+
+  .tour-card-price-wrap { display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
+
+  :is(.tour-card-price-wrap, .tour-related-price-box) strong {
+    color: #fff;
+    font-size: 1.18rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .tour-card-price-original { color: rgba(255, 255, 255, 0.62); font-size: 0.75rem; }
+
+  :is(.tour-card-duration, .tour-related-duration) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    max-width: 88px;
+    min-height: 32px;
+    margin: 0;
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+
+    span { color: inherit; font-size: inherit; }
+    .tour-card-duration-icon {
+      flex: 0 0 12px;
+      width: 12px;
+      height: 12px;
+
+      path { stroke: #0b1120; }
+    }
+    svg { width: 100%; height: 100%; }
+  }
+
+  .tour-card-wishlist {
+    background: rgba(17, 24, 39, 0.38);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    backdrop-filter: blur(8px);
+  }
+
+  .tour-card-offer-badge {
+    top: 16px;
+    left: auto;
+    inset-inline-start: 16px;
+    inset-inline-end: auto;
+    gap: 6px;
+    width: fit-content;
+    max-width: calc(100% - 88px);
+    height: auto;
+    min-height: 30px;
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: #ffac33;
+    color: #152b63;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0;
+    white-space: normal;
+    box-shadow: 0 3px 12px rgba(35, 25, 8, 0.2);
+
+    .tour-card-offer-icon { flex: 0 0 15px; width: 15px; height: 15px; }
+  }
+
+  .offer-countdown > * { background: rgba(255, 255, 255, 0.12); }
+  .offer-countdown-value { color: #fff; }
+  .offer-countdown-label { color: rgba(255, 255, 255, 0.78); }
+
+  // This specificity isolates the glass layers from the site's generic CTA sheen.
+  :is(.tour-card-content, .tour-related-content) :is(.tour-card-footer, .tour-related-footer) > a.tour-card-cta[aria-label] {
+    --tour-card-glass-angle: -70deg;
+    position: relative;
+    z-index: 2;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 88px;
+    max-width: 128px;
+    min-height: 44px;
+    padding: 6px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: linear-gradient(-70deg, #ffffff14, #ffffff38, #ffffff14);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 2px 2px #0006;
+    backdrop-filter: blur(2px);
+    box-shadow: inset 0 2px 3px #0003, inset 0 -2px 3px #ffffff6b, inset 0 0 6px #ffffff29, 0 4px 7px #0005;
+    transition: transform 240ms ease, box-shadow 240ms ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: 3;
+      padding: 1px;
+      border-radius: inherit;
+      background: conic-gradient(from var(--tour-card-glass-angle, -70deg), #fffffff2, #ffffff26 15% 35%, #0009 50%, #ffffff40 65% 85%, #fffffff2);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 1;
+      transform: none;
+      transition: --tour-card-glass-angle 320ms ease;
+      pointer-events: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      z-index: 2;
+      border-radius: inherit;
+      background: linear-gradient(-45deg, transparent 25%, #ffffff4d 42% 48%, transparent 60%);
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+      opacity: 1;
+      transform: none;
+      transition: background-position 360ms ease;
+      pointer-events: none;
+    }
+
+    .tour-card-cta-label, svg { position: relative; z-index: 1; }
+    svg { flex: 0 0 14px; width: 14px; height: 14px; }
+
+    &:hover {
+      transform: scale(0.98);
+      &::before { --tour-card-glass-angle: -125deg; }
+      &::after { transform: none; background-position: 30% 50%; }
+    }
+
+    &:active { transform: perspective(400px) rotateX(12deg) translateY(1px); }
+    &:focus-visible { outline: 3px solid #93adff; outline-offset: 3px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      &, &::before, &::after { transition: none; }
+      &:hover, &:active { transform: none; }
+    }
+  }
+
+  @container (max-width: 300px) {
+    :is(.tour-card-content, .tour-related-content) { padding-inline: 16px; }
+    :is(.tour-card-price-wrap, .tour-related-price-box) strong { font-size: 1.08rem; }
+    :is(.tour-card-duration, .tour-related-duration) { padding-inline: 6px; }
+    :is(.tour-card-content, .tour-related-content) :is(.tour-card-footer, .tour-related-footer) > a.tour-card-cta[aria-label] {
+      max-width: 100px;
+      font-size: 0.75rem;
+    }
+  }
+
+  @container (max-width: 260px) {
+    :is(.tour-card-content, .tour-related-content) :is(.tour-card-footer, .tour-related-footer) > a.tour-card-cta[aria-label] {
+      min-width: 44px;
+      width: 44px;
+      padding: 0;
+
+      .tour-card-cta-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &, img, .tour-card-cta, .tour-card-cta::before, .tour-card-cta::after { transition: none; }
+    &:hover, .tour-card-cta:hover, .tour-card-cta:active { transform: none; }
+    &:hover :is(.tour-card-media, .tour-related-media) img { transform: none; }
+  }
+}

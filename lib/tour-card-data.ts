@@ -47,5 +47,8 @@ export function toTourCardData(tour: Tour): Tour {
           name: entry.name,
         }))
       : tour.destinations,
+    ...(tour.seo?.meta_description
+      ? { seo: { meta_description: tour.seo.meta_description } }
+      : {}),
   };
 }

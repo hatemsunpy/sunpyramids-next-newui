@@ -3,10 +3,13 @@ import type { Locale, PublicSiteSettings, TripTaxonomy } from "@/types/api";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { BackToTopButton } from "@/components/BackToTopButton";
 import { BottomBar } from "@/components/BottomBar";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
 import { getPublicSiteSettings, getTripTaxonomy } from "@/lib/data";
+import { getEgyptWeather } from "@/lib/weather";
 import { buildEgyptToursMenu } from "@/lib/egypt-tours-menu";
+import { uiCopy } from "@/lib/ui-copy";
 
 export async function SiteShell({
   children,
@@ -19,9 +22,10 @@ export async function SiteShell({
   settings?: PublicSiteSettings;
   taxonomy?: TripTaxonomy;
 }) {
-  const [settings, taxonomy] = await Promise.all([
+  const [settings, taxonomy, weather] = await Promise.all([
     providedSettings ? Promise.resolve(providedSettings) : getPublicSiteSettings(locale),
     providedTaxonomy ? Promise.resolve(providedTaxonomy) : getTripTaxonomy(locale),
+    getEgyptWeather(),
   ]);
   const headerCategories = taxonomy.allCategories.map(({ slug, title, featured_image }) => ({ slug, title, featured_image }));
   // Reuse route taxonomy when available; other routes read the same
@@ -39,8 +43,10 @@ export async function SiteShell({
           multiDaysChildren={egyptToursMenu.multiDays}
           nileCruisesChildren={egyptToursMenu.nileCruises}
           multiCountryChildren={egyptToursMenu.multiCountry}
+          weather={weather}
         />
         <div id="site-content" tabIndex={-1}>{children}</div>
+        <BackToTopButton label={uiCopy(locale).backToTop} />
         <aside aria-label="Direct support"><WhatsAppButton locale={locale} /></aside>
         <Footer locale={locale} settings={settings} />
         <BottomBar locale={locale} />

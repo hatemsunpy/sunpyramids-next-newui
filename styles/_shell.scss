@@ -256,26 +256,76 @@
 .site-shell-v2 .promo-strip {
   position: relative;
   z-index: 5;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(0.75rem, 2vw, 1.5rem);
   width: min(calc(100% - var(--spt-page-gutter) - var(--spt-page-gutter)), 1440px);
   min-height: 34px;
   margin: 0.3rem auto 0;
   border-radius: 12px;
   background: rgb(255 255 255 / 96%);
   color: var(--spt-anchor);
-  padding: 0.22rem 0.45rem 0.22rem 1rem;
+  padding: 0.35rem 0.75rem;
   box-shadow: 0 6px 8px rgb(16 31 64 / 10%);
 }
 
 .site-shell-v2 .promo-strip p {
+  min-width: 0;
+  max-width: 100%;
   margin: 0;
   font-size: 0.78rem;
   font-weight: 600;
+  line-height: 1.4;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.site-shell-v2 .promo-strip-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
+  gap: 0.5rem;
+  width: min(100%, 18.5rem);
 }
 
 .site-shell-v2 .promo-strip .btn-primary {
-  min-height: 28px;
-  padding: 0.28rem 0.8rem;
-  font-size: 0.75rem;
+  width: 100%;
+  min-height: 36px;
+  padding: 0.4rem 0.55rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.site-shell-v2 .promo-strip .promo-tours-action {
+  background: var(--spt-amber);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--spt-amber) 32%, transparent);
+
+  &:hover {
+    background: color-mix(in srgb, var(--spt-amber) 60%, var(--spt-amber-hover));
+  }
+}
+
+.site-shell-v2 .promo-strip .promo-whatsapp-action {
+  gap: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--spt-success-text) 38%, transparent);
+  background: color-mix(in srgb, var(--spt-success-text) 10%, var(--spt-surface-raised));
+  color: var(--spt-success-text);
+  box-shadow: none;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--spt-success-text) 60%, transparent);
+    background: color-mix(in srgb, var(--spt-success-text) 18%, var(--spt-surface-raised));
+  }
+}
+
+.site-shell-v2 .promo-whatsapp-mark {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: currentColor;
+  mask: url("/images/whatsapp.webp") center / contain no-repeat;
 }
 
 .site-shell-v2 .mobile-drawer-backdrop {
@@ -384,7 +434,12 @@
   margin: 0;
   background: #161a22;
   color: white;
-  padding: clamp(3rem, 6vw, 6rem) var(--spt-gutter) 1.5rem;
+  padding: clamp(3.25rem, 6vw, 6rem) var(--spt-gutter) 1.5rem;
+  border-top-left-radius: var(--spt-radius-curved, 16px);
+  border-top-right-radius: var(--spt-radius-curved, 16px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .site-shell-v2 .footer-lead,
@@ -507,6 +562,13 @@
   color: white;
 }
 
+.site-shell-v2 .footer-social-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
 .site-shell-v2 .footer-certification {
   width: min(100%, 185px);
   height: auto;
@@ -548,6 +610,22 @@
   color: white;
 }
 
+// Footer contact rows: 18px icon aligned with the first text line, so a
+// wrapping address keeps its left edge under the icon column.
+.site-shell-v2 .footer-primary-contact a,
+.site-shell-v2 .footer-contact-links a {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.site-shell-v2 .footer-contact-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+}
+
 // Destinations render as one vertical column on desktop, two on mobile.
 .site-shell-v2 .footer-destination-links {
   grid-template-columns: 1fr;
@@ -568,42 +646,125 @@
   margin: 0;
 }
 
+// Allow the signature and copyright text to wrap on narrow screens.
+.site-shell-v2 .footer-copyright-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.5rem;
+}
+
+.site-shell-v2 .footer-signature {
+  flex: none;
+  width: clamp(200px, 22vw, 260px);
+  max-width: 100%;
+  height: auto;
+}
+
 .site-shell-v2 .footer-legal-links {
   display: flex;
   gap: 1.5rem;
 }
 
-.site-shell-v2 :is(.whatsapp-float, .accessible-travel-widget) {
+.site-shell-v2 :is(.whatsapp-float, .accessible-travel-widget, .back-to-top-float) {
   position: fixed;
   right: clamp(1rem, 2.5vw, 2rem);
   z-index: 45;
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border: 0;
   border-radius: 50%;
   box-shadow: 0 6px 8px rgb(0 0 0 / 18%);
 }
 
 .site-shell-v2 .whatsapp-float {
-  bottom: 1.5rem;
+  bottom: calc(1.5rem + 104px);
   background: #25d366;
 }
 
+.site-shell-v2 .back-to-top-float {
+  bottom: 1.5rem;
+  padding: 0;
+  background: var(--spt-anchor);
+  color: #ffffff;
+  box-shadow:
+    0 6px 8px rgb(0 0 0 / 18%),
+    inset 0 4px 8px rgb(255 255 255 / 25%),
+    inset 0 -4px 8px rgb(0 0 0 / 20%);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.92);
+  transition:
+    opacity 220ms var(--spt-ease),
+    transform 220ms var(--spt-ease),
+    visibility 220ms,
+    background-color 180ms ease;
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  &:hover {
+    background: var(--spt-anchor-deep);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.96);
+  }
+}
+
+.site-shell-v2 .back-to-top-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.site-shell-v2 .back-to-top-ring-track {
+  fill: none;
+  stroke: rgb(255 255 255 / 22%);
+  stroke-width: 3;
+}
+
+.site-shell-v2 .back-to-top-ring-progress {
+  fill: none;
+  stroke: var(--spt-amber);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.site-shell-v2 .back-to-top-icon {
+  position: relative;
+  z-index: 1;
+}
+
 .site-shell-v2 .accessible-travel-widget {
-  bottom: calc(1.5rem + 64px);
+  bottom: calc(1.5rem + 52px);
 }
 
 .site-shell-v2 .accessible-travel-float {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--spt-anchor);
   box-shadow: inset 0 4px 8px rgb(255 255 255 / 25%), inset 0 -4px 8px rgb(0 0 0 / 20%);
   transition: transform 300ms ease;
+}
+
+.site-shell-v2 .accessible-travel-widget:is(:hover, :focus-within) {
+  z-index: 48;
 }
 
 .site-shell-v2 .accessible-travel-widget:is(:hover, :focus-within) .accessible-travel-float {
@@ -614,14 +775,14 @@
   position: absolute;
   right: 0;
   bottom: calc(100% + 12px);
-  width: min(800px, calc(100vw - 4rem));
-  padding: 1.25rem 1.5rem;
+  width: min(300px, calc(100vw - 2rem));
+  padding: 0.9rem 1rem;
   border: 1px solid var(--spt-border);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--spt-surface-raised);
   color: var(--spt-ink);
   text-align: center;
-  box-shadow: 0 20px 40px rgb(0 0 0 / 15%);
+  box-shadow: 0 14px 32px rgb(0 0 0 / 18%);
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px) scale(0.95);
@@ -640,21 +801,24 @@
   content: "";
   position: absolute;
   top: 100%;
-  right: 18px;
+  right: 14px;
   border: 8px solid transparent;
   border-bottom: 0;
   border-top-color: var(--spt-surface-raised);
 }
 
 .site-shell-v2 .accessible-travel-popup p {
-  margin: 0 0 1.25rem;
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .site-shell-v2 .accessible-travel-popup .btn {
-  min-width: 174px;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0.45rem 1.05rem;
+  font-size: 0.84rem;
   border-radius: 999px;
 }
 
@@ -676,24 +840,52 @@
 }
 
 .site-shell-v2 .accessible-travel-float img {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   filter: brightness(0) invert(1);
 }
 
 .site-shell-v2 .whatsapp-float img {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
 @media (max-width: 1023px) {
   .site-shell-v2 .whatsapp-float {
-    display: none;
+    display: grid;
+    bottom: calc(1.5rem + 176px + env(safe-area-inset-bottom, 0px));
   }
 
   .site-shell-v2 .accessible-travel-widget {
-    bottom: calc(1.5rem + 64px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(1.5rem + 124px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-shell-v2 .back-to-top-float {
+    bottom: calc(1.5rem + 72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-shell-v2 .accessible-travel-popup {
+    right: calc(100% + 10px);
+    bottom: 0;
+    width: min(255px, calc(100vw - 5.5rem));
+    transform: translateX(8px) scale(0.95);
+  }
+
+  .site-shell-v2 .accessible-travel-popup::before {
+    inset: 0 auto 0 100%;
+    width: 12px;
+    height: auto;
+  }
+
+  .site-shell-v2 .accessible-travel-popup::after {
+    top: auto;
+    right: auto;
+    bottom: 18px;
+    left: 100%;
+    border: 7px solid transparent;
+    border-right: 0;
+    border-left-color: var(--spt-surface-raised);
   }
 }
 
@@ -756,7 +948,20 @@
   }
 
   .site-shell-v2 .promo-strip {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    text-align: center;
+  }
+
+  .site-shell-v2 .promo-strip p {
+    font-size: 0.85rem;
+  }
+
+  .site-shell-v2 .promo-strip .btn-primary {
+    min-height: 40px;
   }
 
   .site-shell-v2 .footer {
@@ -790,10 +995,6 @@
     flex-direction: column;
   }
 
-  .site-shell-v2 .whatsapp-float {
-    display: none;
-  }
-
   .site-shell-v2 .bottom-bar a.is-active {
     color: var(--spt-anchor);
   }
@@ -809,10 +1010,198 @@
 }
 
 @media (max-width: 1023px) {
+  .site-shell-v2 .bottom-bar--floating {
+    --spt-dock-lift: -12px;
+    right: auto;
+    bottom: calc(0.625rem + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: max-content;
+    max-width: calc(100vw - 1rem);
+    min-height: 0;
+    padding: 0.375rem 0.65rem;
+    border: 1px solid rgb(255 255 255 / 28%);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgb(22 44 64 / 68%), rgb(16 34 50 / 76%));
+    box-shadow: 0 10px 26px rgb(8 23 35 / 26%), inset 0 1px 0 rgb(255 255 255 / 22%);
+    overflow: visible;
+    transform: translateX(-50%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(20px) saturate(160%);
+
+    a {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      gap: 0.2rem;
+      min-width: 54px;
+      min-height: 50px;
+      height: auto;
+      padding: 0.15rem 0.3rem;
+      border-radius: 18px;
+      background: transparent;
+      color: #fff;
+      overflow: visible;
+
+      &:focus-visible {
+        outline: 2px solid var(--spt-focus);
+        outline-offset: 2px;
+      }
+
+      .bottom-dock-icon {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        background: rgb(255 255 255 / 16%);
+        color: #fff;
+        transform: translateY(0) scale(1);
+        transition:
+          transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 220ms var(--spt-ease),
+          box-shadow 220ms var(--spt-ease),
+          border-color 220ms var(--spt-ease);
+
+        svg {
+          display: block;
+          width: 19px;
+          height: 19px;
+          fill: none;
+          stroke: currentColor;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: 1.75;
+        }
+
+        .bottom-home-icon {
+          fill: none;
+          color: inherit;
+        }
+      }
+
+      &:not(.is-active):hover .bottom-dock-icon {
+        background: rgb(255 255 255 / 26%);
+      }
+
+      &:active .bottom-dock-icon {
+        transform: scale(0.94);
+      }
+
+      .bottom-dock-label {
+        position: static;
+        opacity: 0.82;
+        transform: translateY(0);
+        color: rgb(255 255 255 / 88%);
+        font-size: 0.66rem;
+        font-weight: 500;
+        line-height: 1.05;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        pointer-events: none;
+        transition:
+          opacity 200ms var(--spt-ease),
+          color 200ms var(--spt-ease),
+          transform 240ms var(--spt-ease);
+      }
+
+      &.is-active {
+        color: #fff;
+
+        .bottom-dock-icon {
+          transform: translateY(var(--spt-dock-lift)) scale(1.08);
+          background: var(--spt-anchor-brand);
+          color: #fff;
+          border-color: rgb(255 255 255 / 34%);
+          box-shadow:
+            0 6px 16px rgb(22 58 150 / 45%),
+            inset 0 1px 0 rgb(255 255 255 / 26%);
+
+          svg { stroke: currentColor; }
+        }
+
+        .bottom-dock-label {
+          opacity: 1;
+          color: #ffffff;
+          font-weight: 700;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    .site-shell-v2 .bottom-bar--floating {
+      gap: 0.2rem;
+      padding: 0.35rem 0.5rem;
+
+      a {
+        min-width: 48px;
+        padding: 0.1rem 0.2rem;
+
+        .bottom-dock-icon {
+          width: 36px;
+          height: 36px;
+        }
+
+        .bottom-dock-label { font-size: 0.62rem; }
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .site-shell-v2 .bottom-bar--floating a.is-dock-entering .bottom-dock-icon {
+      animation: spt-dock-icon-in 280ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .site-shell-v2 .bottom-bar--floating a.is-dock-leaving .bottom-dock-icon {
+      animation: spt-dock-icon-out 220ms var(--spt-ease) both;
+    }
+  }
+
   // Tour pages use their own fixed booking bar instead of mobile shortcuts.
   .site-shell-v2:has(.tour-page) > .bottom-bar {
     display: none;
   }
+
+  // On tour details (mobile), lift the fixed float buttons above the floating
+  // booking capsule (~58px tall at 10px bottom) and stack Back-to-Top below
+  // wheelchair, with WhatsApp above wheelchair (44px height + 8px gap).
+  .site-shell-v2:has(.tour-page) {
+    --tour-float-offset: 88px;
+
+    .back-to-top-float {
+      bottom: calc(var(--tour-float-offset) + env(safe-area-inset-bottom, 0px));
+    }
+
+    .accessible-travel-widget {
+      bottom: calc(var(--tour-float-offset) + 52px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .whatsapp-float {
+      display: grid;
+      bottom: calc(var(--tour-float-offset) + 104px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+}
+
+@keyframes spt-dock-icon-in {
+  0% { transform: translateY(0) scale(0.96); }
+  60% { transform: translateY(-14px) scale(1.1); }
+  100% { transform: translateY(var(--spt-dock-lift, -12px)) scale(1.08); }
+}
+
+@keyframes spt-dock-icon-out {
+  from { transform: translateY(var(--spt-dock-lift, -12px)) scale(1.08); }
+  to { transform: translateY(0) scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {

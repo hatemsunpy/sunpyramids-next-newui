@@ -12,6 +12,8 @@ export function TourHighlightsDestinations({ tour, locale }: { tour: Tour | null
   const displayDestinations = (featuredDestinations.length ? featuredDestinations : attractionDestinations).slice(0, 4);
   const modalDestinations = attractionDestinations.length ? attractionDestinations : featuredDestinations;
 
+  if (!displayDestinations.length) return null;
+
   return (
     <>
       <div className="tour-destination-story">

@@ -10,9 +10,11 @@ import { multiCountryChildPath } from "@/components/multi-country/routes";
 import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { HeaderWeather } from "@/components/HeaderWeather";
 import { VoiceSearchButton } from "@/components/voice/VoiceSearchButton";
 import type { VoiceLabels } from "@/lib/voice-client-labels";
-import { APPROVED_BRAND_LOGO } from "@/lib/site-contact";
+import type { EgyptWeatherSnapshot } from "@/lib/weather";
+import { APPROVED_BRAND_LOGO, siteContact } from "@/lib/site-contact";
 
 const tourLinks = [
   ["oneDay", "/egypt-tours/one-day-tours"],
@@ -383,6 +385,7 @@ export function HeaderClient({
   labels,
   uiLabels,
   voiceLabels,
+  weather = null,
 }: {
   locale?: Locale;
   siteTitle?: string | null;
@@ -394,6 +397,7 @@ export function HeaderClient({
   labels: HeaderLabels;
   uiLabels: HeaderUiLabels;
   voiceLabels: VoiceLabels;
+  weather?: EgyptWeatherSnapshot | null;
 }) {
   const copy: Record<string, string> = uiLabels;
   const currentThemeLabels = themeLabels[locale];
@@ -436,7 +440,8 @@ export function HeaderClient({
 
   const handleScroll = useCallback(() => {
     const mobile = window.innerWidth < 512;
-    setIsTop(window.scrollY < (mobile ? window.innerHeight - 440 : window.innerHeight));
+    const topRegionHeight = mobile ? Math.max(1, window.innerHeight - 440) : window.innerHeight;
+    setIsTop(window.scrollY < topRegionHeight);
   }, []);
 
   useEffect(() => {
@@ -590,6 +595,7 @@ export function HeaderClient({
             <VoiceSearchButton key={locale} locale={locale} voiceLabels={voiceLabels} inputRef={desktopInputRef} formRef={desktopFormRef} />
           </form>
           <div className="header-actions">
+            <HeaderWeather locale={locale} initialWeather={weather} />
             <button className="circle-action mobile-search-action" type="button" aria-label={copy.search} aria-controls="mobile-navigation" aria-expanded={menuOpen} onClick={(event) => {
               drawerTriggerRef.current = event.currentTarget;
               focusDrawerSearch.current = true;
@@ -618,7 +624,13 @@ export function HeaderClient({
       {firstStyle ? (
         <div className="promo-strip original-strip">
           <p>{home.promoTitle}</p>
-          <Link className="btn-primary" href={withLocale("/egypt-tours/multi-days-tours", locale)}>{home.promoButton}</Link>
+          <div className="promo-strip-actions">
+            <Link className="btn-primary promo-tours-action" href={withLocale("/egypt-tours/one-day-tours", locale)}>{home.promoButton}</Link>
+            <a className="btn-primary promo-whatsapp-action" href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
+              <span aria-hidden="true" className="promo-whatsapp-mark" />
+              <span>WhatsApp</span>
+            </a>
+          </div>
         </div>
       ) : null}
 

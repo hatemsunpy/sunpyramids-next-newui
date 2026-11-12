@@ -17,6 +17,10 @@
     padding-bottom: clamp(2rem, 4vw, 3.25rem);
     background: linear-gradient(180deg, var(--spt-surface-soft) 0%, var(--spt-ground) 100%);
     border-bottom: 1px solid var(--spt-border);
+    border-bottom-left-radius: var(--spt-radius-curved, 16px);
+    border-bottom-right-radius: var(--spt-radius-curved, 16px);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(13, 24, 48, 0.08);
 
     .commerce-hero-inner {
       max-width: var(--spt-shell);

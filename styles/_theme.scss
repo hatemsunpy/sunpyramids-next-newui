@@ -100,10 +100,16 @@ body {
     background: #ffffff;
   }
 
-  .bottom-bar {
+  .bottom-bar:not(.bottom-bar--floating) {
     border-color: var(--spt-border);
     background: var(--spt-surface-raised);
     color: var(--spt-muted);
+  }
+
+  .site-shell-v2 .bottom-bar--floating {
+    border-color: rgb(255 255 255 / 22%);
+    background: linear-gradient(180deg, rgb(24 38 54 / 72%), rgb(15 24 36 / 80%));
+    box-shadow: 0 10px 28px rgb(0 0 0 / 45%), inset 0 1px 0 rgb(255 255 255 / 16%);
   }
 }
 

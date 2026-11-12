@@ -12,6 +12,10 @@
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
     background: linear-gradient(180deg, var(--spt-surface-soft) 0%, var(--spt-ground) 100%);
     border-bottom: 1px solid var(--spt-border);
+    border-bottom-left-radius: var(--spt-radius-curved, 16px);
+    border-bottom-right-radius: var(--spt-radius-curved, 16px);
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(13, 24, 48, 0.08);
 
     .editorial-hero-inner {
       max-width: var(--spt-shell);
@@ -568,6 +572,10 @@
         }
       }
     }
+  }
+
+  .about-page .editorial-related-section {
+    background: transparent;
   }
 
   // ---------------------------------------------------------------------------

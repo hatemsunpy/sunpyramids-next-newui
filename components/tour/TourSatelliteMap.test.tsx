@@ -71,6 +71,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup();
   delete (Element.prototype as unknown as { setPointerCapture?: (pointerId: number) => void }).setPointerCapture;
+  delete (HTMLElement.prototype as unknown as { scrollIntoView?: (options?: ScrollIntoViewOptions) => void }).scrollIntoView;
   vi.unstubAllGlobals();
   vi.useRealTimers();
 });
@@ -128,6 +129,35 @@ it("selects a destination from the modal list without removing any pin", () => {
   expect(document.querySelector(".tour-satellite-pin:not(.is-active)")!.textContent).toBe("1");
   expect(screen.getByRole("button", { name: "Luxor" }).className).toContain("is-active");
   expect(screen.getByRole("button", { name: "Cairo" }).className).not.toContain("is-active");
+});
+
+it("reveals the matching list row when a map pin is clicked and re-clicked, without scrolling on list selection", () => {
+  const revealedRows: HTMLElement[] = [];
+  const revealOptions: Array<ScrollIntoViewOptions | undefined> = [];
+  (HTMLElement.prototype as unknown as { scrollIntoView?: (options?: ScrollIntoViewOptions) => void }).scrollIntoView = function (this: HTMLElement, options?: ScrollIntoViewOptions) {
+    revealedRows.push(this);
+    revealOptions.push(options);
+  };
+  render(
+    <TourDestinationsModal tour={tourStub} locale="en" destinations={destinations} open onClose={() => {}} />,
+  );
+  resizeViewport(800, 500);
+  flushViewTimers();
+
+  fireEvent.click(within(document.body).getByRole("button", { name: "2. Luxor" }));
+  expect(revealedRows).toHaveLength(1);
+  expect(revealedRows[0]).toBe(screen.getByRole("button", { name: "Luxor" }));
+  expect(revealOptions[0]).toEqual({ block: "nearest", behavior: "smooth" });
+  expect(screen.getByRole("button", { name: "Luxor" })).toHaveAttribute("aria-pressed", "true");
+
+  fireEvent.click(within(document.body).getByRole("button", { name: "2. Luxor" }));
+  expect(revealedRows).toHaveLength(2);
+  expect(revealedRows[1]).toBe(screen.getByRole("button", { name: "Luxor" }));
+
+  fireEvent.click(screen.getByRole("button", { name: "Cairo" }));
+  expect(revealedRows).toHaveLength(2);
+  expect(screen.getByRole("button", { name: "Cairo" })).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByRole("button", { name: "Luxor" })).toHaveAttribute("aria-pressed", "false");
 });
 
 it("selects the matching destination when a pin is clicked", () => {

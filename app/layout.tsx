@@ -11,6 +11,7 @@ import { NavigationLoadingBar } from "@/components/NavigationLoadingBar";
 import { isLocale } from "@/lib/locales";
 import "./globals.scss";
 import "@/styles/batch-one.scss";
+import "@/styles/tour-card-frosted.scss";
 
 const themeScript = `(() => {
   let saved;

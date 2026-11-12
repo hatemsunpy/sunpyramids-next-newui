@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowRight, MapPin, Share2, X } from "lucide-react";
 import { useCurrency } from "@/components/CurrencyProvider";
 import { useTourActions } from "@/components/tour/TourActions";
 import { TourSatelliteMap } from "@/components/tour/TourSatelliteMap";
@@ -16,11 +17,11 @@ export function DeferredTourMapImage({ sizes }: { sizes: string }) {
   );
 }
 
-function DestinationList({ destinations, activeDestination, onSelect }: { destinations: TourDestination[]; activeDestination: TourDestination; onSelect: (destination: TourDestination) => void }) {
+function DestinationList({ destinations, activeDestination, onSelect, registerRow }: { destinations: TourDestination[]; activeDestination: TourDestination; onSelect: (destination: TourDestination) => void; registerRow: (destination: TourDestination, node: HTMLButtonElement | null) => void }) {
   return (
     <div className="tour-destinations-list" aria-label="Tour destinations">
       {destinations.map((destination) => (
-        <button key={destination.id || destination.slug} type="button" className={destination === activeDestination ? "is-active" : ""} onClick={() => onSelect(destination)}>
+        <button key={destination.id || destination.slug} ref={(node) => registerRow(destination, node)} type="button" className={destination === activeDestination ? "is-active" : ""} onClick={() => onSelect(destination)} aria-pressed={destination === activeDestination}>
           <span className="tour-destination-marker" aria-hidden="true" />
           <span>{destination.title || destination.name}</span>
         </button>
@@ -36,6 +37,20 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
   const { actionMessage, shareTour } = useTourActions(tour, locale);
   const modalRef = useRef<HTMLElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const listRowsRef = useRef(new Map<TourDestination, HTMLButtonElement>());
+
+  const registerRow = useCallback((destination: TourDestination, node: HTMLButtonElement | null) => {
+    if (node) listRowsRef.current.set(destination, node);
+    else listRowsRef.current.delete(destination);
+  }, []);
+
+  const handleMapSelect = useCallback((destination: TourDestination) => {
+    setActiveDestination(destination);
+    const row = listRowsRef.current.get(destination);
+    if (!row) return;
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+    row.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -80,21 +95,38 @@ export function TourDestinationsModal({ tour, locale, destinations, open, onClos
     <div className="tour-destinations-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <section ref={modalRef} className="tour-destinations-modal" role="dialog" aria-modal="true" aria-labelledby="tour-destinations-title">
         <header className="tour-destinations-head">
-          <h2 id="tour-destinations-title">View Destinations</h2>
-          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">×</button>
+          <div className="tour-destinations-head-group">
+            <span className="tour-destinations-head-icon" aria-hidden="true">
+              <MapPin size={20} strokeWidth={2} />
+            </span>
+            <h2 id="tour-destinations-title">View Destinations</h2>
+          </div>
+          <button ref={closeButtonRef} type="button" onClick={onClose} aria-label="Close destinations">
+            <X size={20} strokeWidth={2} aria-hidden="true" />
+          </button>
         </header>
         <div className="tour-destinations-layout">
-          <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} />
+          <TourSatelliteMap destinations={destinations} activeDestination={activeDestination} onSelect={handleMapSelect} />
           <div className="tour-destinations-summary">
             <h3>{tour.title || tour.name}</h3>
-            <div className="tour-destinations-price-row">
-              {price !== null && price !== undefined && price !== "" ? <div><span>Price</span><strong>{format(price)}</strong></div> : <span />}
-              <button className="btn-outline" type="button" onClick={shareTour}>Share</button>
+            <div className="tour-destinations-card">
+              {price !== null && price !== undefined && price !== "" ? (
+                <div className="tour-destinations-price">
+                  <span>Price</span>
+                  <strong>{format(price)}</strong>
+                </div>
+              ) : null}
+              <div className="tour-destinations-actions">
+                <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now <ArrowRight size={18} strokeWidth={2} aria-hidden="true" /></button>
+                <button className="btn-outline tour-destinations-share" type="button" onClick={shareTour}>
+                  <Share2 size={16} strokeWidth={2} aria-hidden="true" />
+                  Share
+                </button>
+              </div>
+              {actionMessage ? <p className="tour-destinations-status" role="status">{actionMessage}</p> : null}
             </div>
-            <button className="btn-primary tour-destinations-book" type="button" onClick={openBookingPanel}>Book now</button>
             <h4>Destinations</h4>
-            <DestinationList destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} />
-            {actionMessage ? <p className="tour-booking-status" role="status">{actionMessage}</p> : null}
+            <DestinationList destinations={destinations} activeDestination={activeDestination} onSelect={setActiveDestination} registerRow={registerRow} />
           </div>
         </div>
       </section>

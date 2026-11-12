@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { TourCard } from "@/components/TourCard";
+import { RelatedTours } from "@/components/tour/RelatedTours";
 import type { Tour } from "@/types/api";
 import { toTourCardData } from "@/lib/tour-card-data";
 
@@ -37,6 +38,7 @@ describe("TourCard Special Offer Badge", () => {
     expect(screen.getByText("$100.00")).toBeInTheDocument();
     expect(screen.queryByText("$80.00")).not.toBeInTheDocument();
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(container.querySelector(".tour-card-collection-badge")).toHaveTextContent("Special Offers");
     expect(container.querySelector(".tour-card-price-original")).toBeNull();
     expect(container.querySelector(".offer-countdown")).toBeNull();
   });
@@ -46,6 +48,14 @@ describe("TourCard Special Offer Badge", () => {
     expect(screen.getByText("$100.00")).toBeInTheDocument();
     expect(container.querySelector(".tour-card-price-original")).toBeNull();
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(screen.getByText("Special Offers")).toBeInTheDocument();
+  });
+
+  it("localizes the collection badge from API category membership without inventing a discount", () => {
+    render(<TourCard tour={{ price: 100, offer: 0, categories: [{ slug: "special-offers" }] }} locale="fr" />);
+    expect(screen.getByText("Offres spéciales")).toBeInTheDocument();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("Offre spéciale")).not.toBeInTheDocument();
   });
 
   it("restores the base price and removes promotion UI when an open card reaches expiry", () => {
@@ -77,6 +87,7 @@ describe("TourCard Special Offer Badge", () => {
     const tour: Tour = { id: 1, title: "Standard Tour", price: 100 };
     render(<TourCard tour={tour} locale="en" />);
     expect(screen.queryByText("Special Offer")).not.toBeInTheDocument();
+    expect(screen.queryByText("Special Offers")).not.toBeInTheDocument();
   });
 
   it("renders Special Offer badge when isSpecialOffer prop is true", () => {
@@ -108,5 +119,46 @@ describe("TourCard Special Offer Badge", () => {
     // 20% off $100 = $80.00
     expect(screen.getByText("$80.00")).toBeInTheDocument();
     expect(screen.getByText("$100.00")).toBeInTheDocument();
+  });
+});
+
+describe("TourCard summary and variants", () => {
+  it.each([
+    { label: "legacy API description", variant: "legacy" as const, summary: undefined, meta: "Backend metadata", expected: "Original API description" },
+    { label: "default backend metadata", variant: undefined, summary: undefined, meta: "Backend metadata", expected: "Backend metadata" },
+    { label: "missing backend metadata", variant: undefined, summary: undefined, meta: undefined, expected: null },
+    { label: "explicit metadata summary", variant: undefined, summary: "Preview metadata", meta: "Backend metadata", expected: "Preview metadata" },
+    { label: "empty metadata summary", variant: undefined, summary: "", meta: "Backend metadata", expected: null },
+  ])("renders the $label", ({ variant, summary, meta, expected }) => {
+    const { container } = render(
+      <TourCard tour={{ title: "Synthetic tour", short_description: "Original API description", seo: { meta_description: meta } }} summary={summary} variant={variant} />,
+    );
+    expect(screen.getByRole("heading", { name: "Synthetic tour" })).toBeInTheDocument();
+    if (expected) {
+      expect(container.querySelector(".tour-card-summary")).toHaveTextContent(expected);
+    } else {
+      expect(container.querySelector(".tour-card-summary")).toBeNull();
+    }
+  });
+
+  it("keeps the seasonal legacy card free of the new CTA", () => {
+    render(<TourCard tour={{ title: "Seasonal sample", slug: "sample", price: 100 }} variant="legacy" />);
+    expect(screen.queryByRole("link", { name: "View tour: Seasonal sample" })).toBeNull();
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+  });
+
+  it("links the localized frosted action directly to the localized tour route", () => {
+    render(<TourCard tour={{ title: "Sample circuit", slug: "sample" }} locale="fr" />);
+    const cta = screen.getByRole("link", { name: "Voir le circuit: Sample circuit" });
+    expect(cta).toHaveAttribute("href", "/fr/tour/sample");
+    expect(cta.parentElement?.closest("a")).toBeNull();
+  });
+
+  it("keeps related-tour base pricing even when the API contains an offer", () => {
+    render(<RelatedTours tours={[{ id: 999, title: "Related sample", slug: "related", price: 100, offer: 20, wishlisted_exists: true }]} locale="en" />);
+    expect(screen.getByText("$100.00")).toBeInTheDocument();
+    expect(screen.queryByText("$80.00")).toBeNull();
+    expect(screen.getByRole("link", { name: "View tour: Related sample" })).toHaveAttribute("href", "/tour/related");
+    expect(screen.getByRole("button", { name: "Remove from wishlist" })).toHaveAttribute("aria-pressed", "true");
   });
 });
