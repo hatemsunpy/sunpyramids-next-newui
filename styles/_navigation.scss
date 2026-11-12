@@ -63,6 +63,10 @@
   padding: 3px 6px;
 }
 
+:root:not([data-theme="dark"]) .site-shell-v2 .header-language:hover > img {
+  filter: none;
+}
+
 :root[data-theme="dark"] .header-language > img {
   filter: invert(1);
 }
