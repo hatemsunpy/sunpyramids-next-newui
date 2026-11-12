@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
+import { TourHighlights } from "@/components/tour/TourHighlights";
 import { TourHighlightsDestinations } from "@/components/tour/TourHighlightsDestinations";
 import type { Tour } from "@/types/api";
 
@@ -24,6 +25,15 @@ function renderStories(tour: Tour) {
 }
 
 describe("tour highlight destination media", () => {
+  it("shows the highlights text together with the destinations and map entry", () => {
+    const tour = { ...highlightsTour({ featured_image: featuredImage }), highlights: "<p>See the desert at sunset.</p>" };
+    render(<TourHighlights tour={tour} locale="en" />);
+
+    expect(screen.getByText("See the desert at sunset.")).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Giza Highlights" })).toBeVisible();
+    expect(screen.getByRole("button", { name: /Explore all destinations/ })).toBeVisible();
+  });
+
   it("uses only the destination featured_image when banner alternatives also exist", () => {
     const items = renderStories(highlightsTour({ banner, phone_banner: phoneBanner, featured_image: featuredImage, gallery: [galleryImage] }));
     const itemsArray = Array.from(items);

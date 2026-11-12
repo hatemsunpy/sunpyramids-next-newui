@@ -14,23 +14,27 @@ export type BreadcrumbItem = {
 export async function DiscoveryHero({
   title,
   breadcrumbs = [],
+  breadcrumbLabel = "Breadcrumbs",
   eyebrow = "Sun Pyramids Tours",
   description,
   totalCount,
   metaBadges = [],
   bgImage,
   mobileBgImage,
+  className = "",
   children,
   locale = "en",
 }: {
   title: string;
   breadcrumbs?: BreadcrumbItem[];
+  breadcrumbLabel?: string;
   eyebrow?: string;
   description?: string | null;
   totalCount?: number | null;
   metaBadges?: string[];
   bgImage?: string | null;
   mobileBgImage?: string | null;
+  className?: string;
   children?: ReactNode;
   locale?: Locale | string;
 }) {
@@ -50,7 +54,7 @@ export async function DiscoveryHero({
     <link rel="preload" as="image" href={mobileImage} media="(max-width: 768px)" fetchPriority="high" />
     <link rel="preload" as="image" href={desktopImage} media="(min-width: 769px)" fetchPriority="high" />
     <header
-      className="discovery-hero"
+      className={`discovery-hero ${className}`.trim()}
       data-image-blur-preview={preview || mobilePreview ? "" : undefined}
       data-image-source={bannerImage}
       style={{
@@ -61,7 +65,7 @@ export async function DiscoveryHero({
     >
       <div className="discovery-hero-inner">
         {breadcrumbs.length > 0 && (
-          <nav className="discovery-breadcrumbs" aria-label="Breadcrumbs">
+          <nav className="discovery-breadcrumbs" aria-label={breadcrumbLabel}>
             {breadcrumbs.map((item, index) => {
               const isLast = index === breadcrumbs.length - 1;
               return (

@@ -1,8 +1,9 @@
 import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { ApiPage, Locale, PublicSiteSettings, TeamMember, Tour } from "@/types/api";
-import { ContactForm } from "@/components/ContactForm";
+import { CompanyAboutPage, CompanyContactPage } from "@/components/CompanyPages";
 import { HomeNeedHelpForm } from "@/components/HomeNeedHelpForm";
+import { companyPageCopy } from "@/lib/company-page-copy";
 import { homeCopy } from "@/lib/home-copy";
 import { DestinationCard } from "@/components/DestinationCard";
 import { HomeUpcomingEventCard } from "@/components/HomeUpcomingEventCard";
@@ -14,7 +15,7 @@ import { PlannerRequestFlow } from "@/components/CustomerFlows";
 import { withLocale } from "@/lib/locales";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 import { uiCopy } from "@/lib/ui-copy";
-import { officeMapUrl, siteContact } from "@/lib/site-contact";
+import { siteContact } from "@/lib/site-contact";
 import { accessibleTravelCopy } from "@/lib/accessible-travel-copy";
 import { sustainabilitySections } from "@/lib/sustainability-copy";
 import { SustainabilityTabs } from "@/components/SustainabilityTabs";
@@ -45,15 +46,6 @@ const fallbackBanners: Record<string, string> = {
   "make-your-trip": "/images/makeYourTripImage.webp",
   "rent-car": "/images/Cairo_Egypt_Unsplash.webp",
 };
-
-function meta(page: ApiPage | null, key: string) {
-  return page?.metas?.find((item) => item.meta_key === key);
-}
-
-function metaHtml(page: ApiPage | null, key: string) {
-  const item = meta(page, key);
-  return String(item?.meta_value || item?.value || item?.description || "");
-}
 
 function heroImage(page: ApiPage | null, route: string) {
   return page?.banner || page?.featured_image || page?.image || fallbackBanners[route] || "/images/aboutusmainbanner.webp";
@@ -89,11 +81,36 @@ export function GenericPage({
   const image = heroImage(page, route);
 
   if (route === "about-us") {
-    return <AboutPage page={page} title={title} image={image} locale={locale} faqs={faqs} team={team} />;
+    return (
+      <CompanyAboutPage
+        page={page}
+        title={page?.title || page?.name || uiCopy(locale).about || title}
+        image={image}
+        locale={locale}
+        settings={settings}
+        team={team}
+        faqSection={
+          <FaqTeaser
+            faqs={faqs}
+            locale={locale}
+            heading={homeCopy(locale).faqTitle}
+            linkLabel={companyPageCopy(locale).faqAction}
+          />
+        }
+      />
+    );
   }
 
   if (route === "contact-us") {
-    return <ContactPage page={page} title={title} image={image} locale={locale} settings={settings} />;
+    return (
+      <CompanyContactPage
+        page={page}
+        title={page?.title || page?.name || uiCopy(locale).contact || title}
+        image={image}
+        locale={locale}
+        settings={settings}
+      />
+    );
   }
 
   if (route === "faqs") {
@@ -168,214 +185,6 @@ function ContentPage({
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(page?.content || page?.description) }}
             />
           </div>
-        </div>
-      </section>
-    </main>
-  );
-}
-
-function ContactPage({
-  page,
-  title,
-  locale,
-  settings,
-}: {
-  page: ApiPage | null;
-  title: string;
-  image: string;
-  locale: Locale;
-  settings?: PublicSiteSettings;
-}) {
-  const dynamicEmails = settings?.notificationEmails?.length ? settings.notificationEmails : siteContact.safeFallbackEmails;
-  const emails = [...new Set([...dynamicEmails, ...siteContact.staticEmails])];
-  const copy = uiCopy(locale);
-
-  return (
-    <main>
-      <EditorialHeroCompact title={title} eyebrow={copy.contactInfo || "Direct Contact"} locale={locale} />
-      <section className="editorial-main-section">
-        <div className="editorial-container">
-          <div className="editorial-contact-layout">
-            <div className="contact-info-card">
-              <span className="card-eyebrow">{copy.contactInfo || "Get in Touch"}</span>
-              <h2>We&apos;re Here to Help</h2>
-              <div
-                className="contact-intro"
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(
-                    page?.content ||
-                      page?.description ||
-                      "Have questions about booking, private guides, or custom itineraries? Reach our 24/7 Cairo operations team.",
-                  ),
-                }}
-              />
-
-              <div className="contact-items-list">
-                <div className="contact-item">
-                  <div className="icon-pill" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                    </svg>
-                  </div>
-                  <div className="item-detail">
-                    <strong>Phone Support</strong>
-                    {siteContact.phones.map((phone) => (
-                      <p key={phone.href}>
-                        <a href={phone.href}>{phone.display}</a>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="contact-item">
-                  <div className="icon-pill" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                    </svg>
-                  </div>
-                  <div className="item-detail">
-                    <strong>WhatsApp Hotline</strong>
-                    <p>
-                      <a href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer">
-                        {siteContact.whatsapp.display}
-                      </a>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="contact-item">
-                  <div className="icon-pill" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </div>
-                  <div className="item-detail">
-                    <strong>Email Inquiries</strong>
-                    {emails.map((email) => (
-                      <p key={email}>
-                        <a href={`mailto:${email}`}>{email}</a>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="contact-item">
-                  <div className="icon-pill" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div className="item-detail">
-                    <strong>Head Office</strong>
-                    <p>
-                      <a href={officeMapUrl} target="_blank" rel="noreferrer">
-                        {siteContact.address}
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="contact-form-card">
-              <h2>Send a Message</h2>
-              <p className="form-subtitle">Fill out the form below and an Egypt specialist will reply promptly.</p>
-              <ContactForm locale={locale} />
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
-}
-
-function AboutPage({
-  page,
-  title,
-  locale,
-  faqs,
-  team,
-}: {
-  page: ApiPage | null;
-  title: string;
-  image: string;
-  locale: Locale;
-  faqs: ApiPage[];
-  team: TeamMember[];
-}) {
-  const copy = uiCopy(locale);
-  const gallery = page?.gallery || [];
-  const goals = [
-    ["Our Mission", metaHtml(page, "mission")],
-    ["Our Vision", metaHtml(page, "vision")],
-  ].filter((item) => item[1]);
-
-  return (
-    <main className="about-page">
-      <EditorialHeroCompact title={title} eyebrow="Heritage Since 1970" locale={locale} />
-
-      <section className="editorial-main-section">
-        <div className="editorial-container">
-          <div className="editorial-story-section">
-            <div className="story-content">
-              <span className="story-eyebrow">Pioneering Egypt Exploration</span>
-              <h2>Sun Pyramids Tours</h2>
-              <div
-                className="story-body editorial-prose"
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeHtml(metaHtml(page, "about-sun-pyramids") || page?.content),
-                }}
-              />
-            </div>
-            <div className="story-media">
-              <Image
-                src={String(page?.feature_1 || gallery[0] || "/images/aboutusmainbanner.webp")}
-                alt={title}
-                fill
-                sizes="(max-width: 920px) 100vw, 50vw"
-              />
-            </div>
-          </div>
-
-          {goals.length > 0 && (
-            <div className="editorial-goals-grid">
-              {goals.map(([goalTitle, html]) => (
-                <article className="goal-card" key={goalTitle}>
-                  <h3>{goalTitle}</h3>
-                  <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }} />
-                </article>
-              ))}
-            </div>
-          )}
-
-          {team.length > 0 && (
-            <section className="editorial-team-section">
-              <div className="team-header">
-                <h2>{copy.team || "Meet Our Dedicated Team"}</h2>
-                <p>The Egyptologists, trip designers, and hospitality leaders behind your journey.</p>
-              </div>
-              <div className="editorial-team-grid">
-                {team.map((member) => (
-                  <article className="team-card" key={`${member.name}-${member.position}`}>
-                    <div className="team-photo-wrap">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                      />
-                    </div>
-                    <h3>{member.name}</h3>
-                    <p>{member.position}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <FaqTeaser faqs={faqs} locale={locale} />
         </div>
       </section>
     </main>
@@ -721,14 +530,24 @@ function GalleryStrip({ gallery }: { gallery: string[] }) {
   );
 }
 
-function FaqTeaser({ faqs, locale = "en" }: { faqs: ApiPage[]; locale?: Locale }) {
+function FaqTeaser({
+  faqs,
+  locale = "en",
+  heading = "Frequently Asked Questions",
+  linkLabel = "See all FAQs",
+}: {
+  faqs: ApiPage[];
+  locale?: Locale;
+  heading?: string;
+  linkLabel?: string;
+}) {
   if (!faqs.length) return null;
   return (
     <section className="editorial-related-section">
       <div className="section-header">
-        <h2>Frequently Asked Questions</h2>
+        <h2>{heading}</h2>
         <Link className="see-more" href={withLocale("/faqs", locale)}>
-          See all FAQs &rarr;
+          {linkLabel} <span aria-hidden="true">&rarr;</span>
         </Link>
       </div>
       <div className="editorial-faq-container">

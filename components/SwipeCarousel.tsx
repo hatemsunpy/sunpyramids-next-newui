@@ -1,7 +1,10 @@
 "use client";
 
 import {
+  useCallback,
+  useEffect,
   useRef,
+  useState,
   type ComponentPropsWithoutRef,
   type DragEvent as ReactDragEvent,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -9,8 +12,14 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 
+type CarouselControlLabels = {
+  previousLabel: string;
+  nextLabel: string;
+};
+
 type SwipeCarouselProps = ComponentPropsWithoutRef<"div"> & {
   ariaLabel: string;
+  controls?: CarouselControlLabels;
 };
 
 type DragState = {
@@ -165,20 +174,124 @@ function useSwipeCarouselInteractions() {
   };
 }
 
-export function SwipeCarousel({ ariaLabel, children, className = "", ...props }: SwipeCarouselProps) {
-  const interactions = useSwipeCarouselInteractions();
+function useCarouselEdges(enabled: boolean) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
 
+  const updateEdges = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const scrollable = maxScroll > 1;
+    const atStart = !scrollable || track.scrollLeft <= 1;
+    const atEnd = !scrollable || track.scrollLeft >= maxScroll - 1;
+
+    setCanPrev(scrollable && !atStart);
+    setCanNext(scrollable && !atEnd);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const track = trackRef.current;
+    if (!track) return;
+
+    let frame = 0;
+    const schedule = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(updateEdges);
+    };
+
+    updateEdges();
+    track.addEventListener("scroll", schedule, { passive: true });
+    track.addEventListener("load", schedule, true);
+    window.addEventListener("resize", schedule);
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
+    observer?.observe(track);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      track.removeEventListener("scroll", schedule);
+      track.removeEventListener("load", schedule, true);
+      window.removeEventListener("resize", schedule);
+      observer?.disconnect();
+    };
+  }, [enabled, updateEdges]);
+
+  return { trackRef, canPrev, canNext };
+}
+
+function ChevronIcon({ direction }: { direction: "previous" | "next" }) {
   return (
+    <svg aria-hidden="true" fill="none" focusable="false" viewBox="0 0 24 24">
+      <path
+        d={direction === "previous" ? "M15 18l-6-6 6-6" : "M9 18l6-6-6-6"}
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
+
+export function SwipeCarousel({ ariaLabel, children, className = "", controls, ...props }: SwipeCarouselProps) {
+  const interactions = useSwipeCarouselInteractions();
+  const { trackRef, canPrev, canNext } = useCarouselEdges(Boolean(controls));
+
+  const track = (
     <div
       {...props}
       {...interactions}
-      aria-label={ariaLabel}
-      aria-roledescription="carousel"
+      aria-label={controls ? undefined : ariaLabel}
+      aria-roledescription={controls ? undefined : "carousel"}
       className={`swipe-carousel ${className}`.trim()}
-      role="region"
+      ref={controls ? trackRef : undefined}
+      role={controls ? "group" : "region"}
       tabIndex={0}
     >
       {children}
+    </div>
+  );
+
+  if (!controls) return track;
+
+  return (
+    <div
+      aria-label={ariaLabel}
+      aria-roledescription="carousel"
+      className="swipe-carousel-frame"
+      role="region"
+    >
+      <div className="swipe-carousel-controls">
+        <button
+          aria-label={controls.previousLabel}
+          className="swipe-carousel-control"
+          disabled={!canPrev}
+          onClick={() => {
+            const track = trackRef.current;
+            if (track) moveByCard(track, -1);
+          }}
+          type="button"
+        >
+          <ChevronIcon direction="previous" />
+        </button>
+        <button
+          aria-label={controls.nextLabel}
+          className="swipe-carousel-control"
+          disabled={!canNext}
+          onClick={() => {
+            const track = trackRef.current;
+            if (track) moveByCard(track, 1);
+          }}
+          type="button"
+        >
+          <ChevronIcon direction="next" />
+        </button>
+      </div>
+      {track}
     </div>
   );
 }

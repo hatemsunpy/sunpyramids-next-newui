@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useId, useState } from "react";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { PhoneCountryInput, phoneCountryCopy, type PhoneCountry, type PhoneCountryLoadState } from "@/components/PhoneCountryInput";
 import { SearchSelectDropdown } from "@/components/SearchSelectDropdown";
@@ -25,19 +25,23 @@ export function ContactForm({
   tourTitle,
   tourDate,
   submitLabel,
+  showLabels = false,
 }: {
   locale?: Locale;
   tourId?: number;
   tourTitle?: string;
   tourDate?: string;
   submitLabel?: string;
+  showLabels?: boolean;
 }) {
   const router = useRouter();
   const copy = uiCopy(locale);
+  const formId = useId();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const isTourInquiry = tourId != null;
   const [countries, setCountries] = useState<PhoneCountry[]>([]);
   const [countryLoadState, setCountryLoadState] = useState<PhoneCountryLoadState>("loading");
+  const phoneId = showLabels ? `${formId}-phone` : "contact-phone";
 
   useEffect(() => {
     let active = true;
@@ -151,23 +155,27 @@ export function ContactForm({
       ) : (
         <>
           <div className="form-field">
-            <input name="name" placeholder={copy.fullName} autoComplete="name" required />
+            {showLabels && <label htmlFor={`${formId}-name`}>{copy.fullName} <span aria-hidden="true">*</span></label>}
+            <input id={showLabels ? `${formId}-name` : undefined} name="name" placeholder={showLabels ? undefined : copy.fullName} autoComplete="name" required />
           </div>
           <div className="form-field">
-            <input name="email" type="email" placeholder={copy.email} autoComplete="email" required />
+            {showLabels && <label htmlFor={`${formId}-email`}>{copy.email} <span aria-hidden="true">*</span></label>}
+            <input id={showLabels ? `${formId}-email` : undefined} name="email" type="email" placeholder={showLabels ? undefined : copy.email} autoComplete="email" required />
           </div>
           <div className="form-field">
-            <label htmlFor="contact-phone">{copy.phone} <span className="phone-required" aria-hidden="true">*</span></label>
+            <label htmlFor={phoneId}>{copy.phone} <span className="phone-required" aria-hidden="true">*</span></label>
             <PhoneCountryInput
-              id="contact-phone" countries={countries} loadState={countryLoadState}
+              id={phoneId} countries={countries} loadState={countryLoadState}
               copy={phoneCountryCopy(copy)} required
             />
           </div>
           <div className="form-field">
-            <input name="country" placeholder={copy.country} autoComplete="country-name" required />
+            {showLabels && <label htmlFor={`${formId}-country`}>{copy.country} <span aria-hidden="true">*</span></label>}
+            <input id={showLabels ? `${formId}-country` : undefined} name="country" placeholder={showLabels ? undefined : copy.country} autoComplete="country-name" required />
           </div>
           <div className="form-field">
-            <textarea name="message" placeholder={copy.writeUs} rows={5} required />
+            {showLabels && <label htmlFor={`${formId}-message`}>{copy.writeUs.trim().replace(/[.…。]+$/u, "")} <span aria-hidden="true">*</span></label>}
+            <textarea id={showLabels ? `${formId}-message` : undefined} name="message" placeholder={showLabels ? undefined : copy.writeUs} rows={5} required />
           </div>
         </>
       )}

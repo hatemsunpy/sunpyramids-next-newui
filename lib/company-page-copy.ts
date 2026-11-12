@@ -1,0 +1,92 @@
+import type { Locale } from "@/types/api";
+
+const en = {
+  breadcrumb: "Breadcrumb",
+  story: "Our story",
+  services: "Travel services",
+  guests: "Where our guests come from",
+  guestsDescription: "We welcome travelers from around the world.",
+  benefits: "What our partnerships offer",
+  benefitItems: ["Benefits from trusted partners", "Transport, accommodation and city tours", "Tours tailored to your plans"],
+  certification: "Travelife certification",
+  mission: "Our mission",
+  vision: "Our vision",
+  partners: "Our travel partners",
+  previousPartners: "Previous travel partners",
+  nextPartners: "Next travel partners",
+  leadership: "A message from our executive manager",
+  executiveManager: "Executive Manager",
+  office: "Visit our Giza office",
+  directions: "Get directions",
+  follow: "Follow Sun Pyramids Tours",
+  faqAction: "See all FAQs",
+  tripHelp: "Need help planning your trip?",
+};
+
+const copy: Record<Locale, typeof en> = {
+  en,
+  fr: {
+    breadcrumb: "Fil d’Ariane",
+    story: "Notre histoire", services: "Nos services de voyage", guests: "D’où viennent nos voyageurs ?",
+    guestsDescription: "Nous accueillons des voyageurs du monde entier.", benefits: "Les avantages de nos partenariats",
+    benefitItems: ["Des avantages auprès de partenaires de confiance", "Transport, hébergement et visites guidées", "Des circuits adaptés à vos projets"],
+    certification: "Certification Travelife", mission: "Notre mission", vision: "Notre vision", partners: "Nos partenaires de voyage",
+    previousPartners: "Partenaires de voyage précédents", nextPartners: "Partenaires de voyage suivants",
+    leadership: "Un message de notre directeur exécutif", executiveManager: "Directeur exécutif", office: "Notre bureau à Gizeh",
+    directions: "Voir l’itinéraire", follow: "Suivez Sun Pyramids Tours", faqAction: "Voir toutes les questions", tripHelp: "Besoin d’aide pour préparer votre voyage ?",
+  },
+  de: {
+    breadcrumb: "Brotkrümelnavigation",
+    story: "Unsere Geschichte", services: "Unsere Reiseleistungen", guests: "Woher unsere Gäste kommen",
+    guestsDescription: "Wir begrüßen Reisende aus aller Welt.", benefits: "Vorteile unserer Partnerschaften",
+    benefitItems: ["Vorteile bei verlässlichen Partnern", "Transport, Unterkünfte und Stadtführungen", "Touren nach Ihren Wünschen"],
+    certification: "Travelife-Zertifizierung", mission: "Unsere Mission", vision: "Unsere Vision", partners: "Unsere Reisepartner",
+    previousPartners: "Vorherige Reisepartner", nextPartners: "Nächste Reisepartner",
+    leadership: "Ein Grußwort unseres Geschäftsführers", executiveManager: "Geschäftsführer", office: "Unser Büro in Gizeh",
+    directions: "Route anzeigen", follow: "Folgen Sie Sun Pyramids Tours", faqAction: "Alle Fragen anzeigen", tripHelp: "Brauchen Sie Hilfe bei der Reiseplanung?",
+  },
+  it: {
+    breadcrumb: "Percorso di navigazione",
+    story: "La nostra storia", services: "I nostri servizi di viaggio", guests: "Da dove vengono i nostri ospiti",
+    guestsDescription: "Accogliamo viaggiatori da tutto il mondo.", benefits: "I vantaggi delle nostre collaborazioni",
+    benefitItems: ["Vantaggi da partner di fiducia", "Trasporti, alloggi e visite guidate", "Tour su misura per il tuo viaggio"],
+    certification: "Certificazione Travelife", mission: "La nostra missione", vision: "La nostra visione", partners: "I nostri partner di viaggio",
+    previousPartners: "Partner di viaggio precedenti", nextPartners: "Partner di viaggio successivi",
+    leadership: "Un messaggio del nostro direttore esecutivo", executiveManager: "Direttore esecutivo", office: "Il nostro ufficio a Giza",
+    directions: "Indicazioni stradali", follow: "Segui Sun Pyramids Tours", faqAction: "Vedi tutte le domande", tripHelp: "Ti serve aiuto per organizzare il tuo viaggio?",
+  },
+  pt: {
+    breadcrumb: "Caminho de navegação",
+    story: "A nossa história", services: "Serviços de viagem", guests: "De onde vêm os nossos viajantes",
+    guestsDescription: "Recebemos viajantes de todo o mundo.", benefits: "As vantagens das nossas parcerias",
+    benefitItems: ["Benefícios de parceiros de confiança", "Transporte, alojamento e visitas guiadas", "Passeios à medida dos seus planos"],
+    certification: "Certificação Travelife", mission: "A nossa missão", vision: "A nossa visão", partners: "Os nossos parceiros de viagem",
+    previousPartners: "Parceiros de viagem anteriores", nextPartners: "Parceiros de viagem seguintes",
+    leadership: "Uma mensagem do nosso diretor executivo", executiveManager: "Diretor executivo", office: "O nosso escritório em Gizé",
+    directions: "Ver direções", follow: "Siga a Sun Pyramids Tours", faqAction: "Ver todas as perguntas", tripHelp: "Precisa de ajuda a planear a sua viagem?",
+  },
+  es: {
+    breadcrumb: "Ruta de navegación",
+    story: "Nuestra historia", services: "Servicios de viaje", guests: "De dónde vienen nuestros viajeros",
+    guestsDescription: "Recibimos a viajeros de todo el mundo.", benefits: "Ventajas de nuestras colaboraciones",
+    benefitItems: ["Ventajas de socios de confianza", "Transporte, alojamiento y visitas guiadas", "Excursiones a medida para tu viaje"],
+    certification: "Certificación Travelife", mission: "Nuestra misión", vision: "Nuestra visión", partners: "Nuestros socios de viaje",
+    previousPartners: "Socios de viaje anteriores", nextPartners: "Socios de viaje siguientes",
+    leadership: "Un mensaje de nuestro director ejecutivo", executiveManager: "Director ejecutivo", office: "Nuestra oficina en Guiza",
+    directions: "Cómo llegar", follow: "Sigue a Sun Pyramids Tours", faqAction: "Ver todas las preguntas", tripHelp: "¿Necesitas ayuda para planificar tu viaje?",
+  },
+  zh: {
+    breadcrumb: "面包屑导航",
+    story: "我们的故事", services: "旅行服务", guests: "我们的旅客来自哪里",
+    guestsDescription: "我们欢迎来自世界各地的旅客。", benefits: "合作伙伴为旅客提供的服务",
+    benefitItems: ["来自可信赖合作伙伴的优惠", "交通、住宿和城市观光", "按您的计划定制行程"],
+    certification: "Travelife 认证", mission: "我们的使命", vision: "我们的愿景", partners: "我们的旅行合作伙伴",
+    previousPartners: "上一个旅行合作伙伴", nextPartners: "下一个旅行合作伙伴",
+    leadership: "执行经理寄语", executiveManager: "执行经理", office: "我们的吉萨办公室",
+    directions: "查看路线", follow: "关注 Sun Pyramids Tours", faqAction: "查看所有常见问题", tripHelp: "需要协助规划行程吗？",
+  },
+};
+
+export function companyPageCopy(locale: Locale) {
+  return copy[locale];
+}

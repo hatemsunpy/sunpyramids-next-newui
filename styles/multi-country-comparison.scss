@@ -65,7 +65,11 @@
 }
 
 @media (max-width: 720px) {
-  .site-shell-v2:has(.mc-compare-tray) .accessible-travel-widget { bottom: calc(265px + env(safe-area-inset-bottom, 0px)); }
+  .site-shell-v2:has(.mc-compare-tray) {
+    .back-to-top-float { bottom: calc(265px + env(safe-area-inset-bottom, 0px)); }
+    .accessible-travel-widget { bottom: calc(317px + env(safe-area-inset-bottom, 0px)); }
+    .whatsapp-float { bottom: calc(369px + env(safe-area-inset-bottom, 0px)); }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

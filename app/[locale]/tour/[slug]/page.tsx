@@ -1,6 +1,7 @@
 import "@/styles/tour-detail.scss";
 import "@/styles/interior.scss";
 import type { Metadata } from "next";
+import { cache } from "react";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteShell } from "@/components/SiteShell";
 import { TourPage } from "@/components/TourPage";
@@ -12,11 +13,13 @@ import { metadataFromPage } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
+const loadTour = cache(getTourReliable);
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolved = await params;
   const locale = await resolvePrefixedLocale(Promise.resolve({ locale: resolved.locale }));
   const slug = decodePathSegment(resolved.slug);
-  const tour = resolveRequiredApiResult(await getTourReliable(slug, locale), `tour "${slug}"`);
+  const tour = resolveRequiredApiResult(await loadTour(slug, locale), `tour "${slug}"`);
   return metadataFromPage(tour, tourPath(slug, locale), locale);
 }
 
@@ -25,7 +28,7 @@ export default async function Page({ params }: Props) {
   const locale = await resolvePrefixedLocale(Promise.resolve({ locale: resolved.locale }));
   const slug = decodePathSegment(resolved.slug);
   const settingsPromise = getPublicSiteSettings(locale);
-  const tour = resolveRequiredApiResult(await getTourReliable(slug, locale), `tour "${slug}"`);
+  const tour = resolveRequiredApiResult(await loadTour(slug, locale), `tour "${slug}"`);
   const [relatedTours, settings, taxonomy] = await Promise.all([
     getRelatedTours(tour, locale, 12),
     settingsPromise,

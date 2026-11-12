@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { GenericPage } from "@/components/GenericPage";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteShell } from "@/components/SiteShell";
-import { getCompanyTeam, getFaqs, getPage } from "@/lib/data";
+import { getCompanyTeam, getFaqs, getPage, getPublicSiteSettings } from "@/lib/data";
 import { metadataFromPage } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,11 +12,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page() {
-  const [page, faqs, team] = await Promise.all([getPage("about-us", "en"), getFaqs("en", 5), getCompanyTeam("en")]);
+  const [page, faqs, team, settings] = await Promise.all([
+    getPage("about-us", "en"),
+    getFaqs("en", 5),
+    getCompanyTeam("en"),
+    getPublicSiteSettings("en"),
+  ]);
   return (
-    <SiteShell locale="en">
+    <SiteShell locale="en" settings={settings}>
       <JsonLd schema={page?.seo?.structure_schema} />
-      <GenericPage page={page} fallbackTitle="About Us" route="about-us" faqs={faqs} team={team} />
+      <GenericPage page={page} fallbackTitle="About Us" route="about-us" faqs={faqs} team={team} settings={settings} />
     </SiteShell>
   );
 }

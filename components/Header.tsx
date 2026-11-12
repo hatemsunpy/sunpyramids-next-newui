@@ -1,5 +1,6 @@
 import type { Locale } from "@/types/api";
 import type { EgyptToursMenuChild } from "@/lib/egypt-tours-menu";
+import type { EgyptWeatherSnapshot } from "@/lib/weather";
 import { pickHomeLabels, pickUiLabels, pickVoiceLabels } from "@/lib/home-client-labels";
 import { HeaderClient, type HeaderTourCategory } from "@/components/HeaderClient";
 
@@ -33,6 +34,7 @@ export function Header({
   multiDaysChildren = [],
   nileCruisesChildren = [],
   multiCountryChildren = [],
+  weather = null,
 }: {
   locale?: Locale;
   siteTitle?: string | null;
@@ -41,6 +43,7 @@ export function Header({
   multiDaysChildren?: EgyptToursMenuChild[];
   nileCruisesChildren?: EgyptToursMenuChild[];
   multiCountryChildren?: EgyptToursMenuChild[];
+  weather?: EgyptWeatherSnapshot | null;
 }) {
   const labels = pickHomeLabels(locale, HEADER_LABEL_KEYS);
   const uiLabels = pickUiLabels(locale, HEADER_UI_LABEL_KEYS);
@@ -57,6 +60,7 @@ export function Header({
       labels={labels}
       uiLabels={uiLabels}
       voiceLabels={voiceLabels}
+      weather={weather}
     />
   );
 }

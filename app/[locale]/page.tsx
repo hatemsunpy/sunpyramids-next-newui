@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { HomePage } from "@/components/HomePage";
 import { JsonLd } from "@/components/JsonLd";
@@ -11,6 +12,8 @@ import type { Locale } from "@/types/api";
 
 type Props = { params: Promise<{ locale: string }> };
 
+const loadHome = cache(getHome);
+
 async function resolveLocale(params: Promise<{ locale: string }>): Promise<Locale> {
   const { locale } = await params;
   if (!isLocale(locale) || locale === "en") notFound();
@@ -19,7 +22,7 @@ async function resolveLocale(params: Promise<{ locale: string }>): Promise<Local
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await resolveLocale(params);
-  const page = await getHome(locale);
+  const page = await loadHome(locale);
   return metadataFromPage(page, `/${locale}`, locale);
 }
 
@@ -27,7 +30,7 @@ export default async function Page({ params }: Props) {
   const locale = await resolveLocale(params);
   const yesterday = getYesterdayCalendarDate();
   const [page, tours, popularTours, specialOffers, highlights, blogs, faqs, settings, events, taxonomy] = await Promise.all([
-    getHome(locale),
+    loadHome(locale),
     getHomeTours("tours?exists=wishlisted&categories.id=7&order_by=display_order,asc&page=1&page_limit=4", locale),
     getHomeTours("tours/home?featured=1&page=1&order_by=display_order,asc&page_limit=8", locale),
     getHomeTours("tours/home?page=1&page_limit=4&order_by=display_order,asc&categories.id=53", locale),

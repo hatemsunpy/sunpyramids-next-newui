@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import type { Locale, PublicSiteSettings } from "@/types/api";

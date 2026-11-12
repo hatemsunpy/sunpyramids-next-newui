@@ -1423,6 +1423,10 @@ input[data-native-type] {
   background: linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
     url("/images/aboutusmainbanner.png") center/cover;
   padding: 7rem 1rem 4rem;
+  border-bottom-left-radius: var(--spt-radius-curved, 16px);
+  border-bottom-right-radius: var(--spt-radius-curved, 16px);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(13, 24, 48, 0.08);
 }
 
 .tour-page-hero {
@@ -1458,6 +1462,10 @@ input[data-native-type] {
   background-position: center;
   background-size: cover;
   padding: 9rem clamp(1rem, 4vw, 5rem) 3rem;
+  border-bottom-left-radius: var(--spt-radius-curved, 16px);
+  border-bottom-right-radius: var(--spt-radius-curved, 16px);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(13, 24, 48, 0.08);
 }
 
 .original-page-hero h1 {

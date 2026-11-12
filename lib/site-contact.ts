@@ -1,12 +1,16 @@
 export const APPROVED_BRAND_LOGO = "/images/logo.webp";
 
-// Owner-provided deployment config: office address and the map URL derived
-// from the SAME constant, so label and map can never disagree. The API-owned
-// settings.locationUrl points elsewhere and is deliberately not used here.
+// Owner-provided deployment config: the approved office address and the exact
+// Google Maps listing (CID) are a paired deployment pair, so the displayed
+// address and every map link can never disagree. The Dashboard short link
+// still carries a legacy address slug; it is deliberately not used here.
 const officeAddress =
   "25 Sphinx Street (Sun Pyramid Group Tower), off Abu El-Houl El-Seyahi Street, Al Haram, Giza";
+const officeGooglePlaceCid = "907361815771537360";
 
-export const officeMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(officeAddress)}`;
+export const officeMapUrl = `https://www.google.com/maps?cid=${officeGooglePlaceCid}`;
+
+export const officeMapEmbedUrl = `https://maps.google.com/maps?cid=${officeGooglePlaceCid}&z=17&output=embed`;
 
 export const siteContact = {
   phones: [

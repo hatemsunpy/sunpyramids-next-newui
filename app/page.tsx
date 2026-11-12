@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { SiteShell } from "@/components/SiteShell";
 import { HomePage } from "@/components/HomePage";
 import { JsonLd } from "@/components/JsonLd";
@@ -6,15 +7,17 @@ import { getCategories, getHome, getHomeBlogs, getHomeDestinations, getHomeFaqs,
 import { getYesterdayCalendarDate } from "@/lib/local-date";
 import { metadataFromPage } from "@/lib/seo";
 
+const loadHome = cache(getHome);
+
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getHome("en");
+  const page = await loadHome("en");
   return metadataFromPage(page, "/", "en");
 }
 
 export default async function Page() {
   const yesterday = getYesterdayCalendarDate();
   const [page, tours, popularTours, specialOffers, highlights, blogs, faqs, settings, events, taxonomy] = await Promise.all([
-    getHome("en"),
+    loadHome("en"),
     getHomeTours("tours?exists=wishlisted&categories.id=7&order_by=display_order,asc&page=1&page_limit=4", "en"),
     getHomeTours("tours/home?featured=1&page=1&order_by=display_order,asc&page_limit=8", "en"),
     getHomeTours("tours/home?page=1&page_limit=4&order_by=display_order,asc&categories.id=53", "en"),

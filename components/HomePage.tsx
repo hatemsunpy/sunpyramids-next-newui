@@ -22,7 +22,6 @@ import { sanitizeHtml } from "@/lib/sanitize-html";
 import { toTourCardData } from "@/lib/tour-card-data";
 import { homeCopy } from "@/lib/home-copy";
 import { homeSectionLabels } from "@/lib/home-section-labels";
-import { getImageBlurPlaceholders } from "@/lib/image-blur.server";
 
 function ShortcutIcon({ type }: { type: "make" | "find" | "car" }) {
   if (type === "find") {
@@ -31,10 +30,10 @@ function ShortcutIcon({ type }: { type: "make" | "find" | "car" }) {
   if (type === "car") {
     return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 17h14l-1-6-2-3H8l-2 3-1 6Z" /><circle cx="8" cy="17" r="1.5" /><circle cx="16" cy="17" r="1.5" /></svg>;
   }
-  return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 15 8-3 3-8 2 1-1 7 5 3-1 2-6-1-3 5-2-1 1-5-5 2-1-2Z" /></svg>;
+  return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m16.5 3.5 4 4L7 21l-5 1 1-5L16.5 3.5Z" /><path d="m14 6 4 4" /></svg>;
 }
 
-export async function HomePage({
+export function HomePage({
   page,
   tours,
   popularTours,
@@ -67,7 +66,6 @@ export async function HomePage({
   const heroImages = page?.gallery?.length
     ? page.gallery
     : [page?.banner || page?.image || "/images/mainBanner.webp"];
-  const heroBlurImages = await getImageBlurPlaceholders(heroImages);
   const heroCopySlides = [
     { title: copy.heroMainTitle, accent: copy.heroMainAccent, description: copy.heroMainDescription },
     { title: copy.heroSlide1Title, accent: copy.heroSlide1Accent, description: copy.heroSlide1Description },
@@ -84,7 +82,7 @@ export async function HomePage({
   return (
     <main className="home-page home-page--redesign">
       <section className="home-hero-v2">
-        <HomeHeroScene images={heroImages} blurImages={heroBlurImages} alt="Sun Pyramids Tours Egypt experience" slides={heroCopySlides} />
+        <HomeHeroScene images={heroImages} alt="Sun Pyramids Tours Egypt experience" slides={heroCopySlides} />
         <nav className="home-mobile-shortcuts" aria-label="Quick trip actions">
           <Link href={withLocale("/make-your-trip", locale)}><ShortcutIcon type="make" /><strong>{copy.makeTripShort}</strong></Link>
           <Link href={withLocale("/trips", locale)}><ShortcutIcon type="find" /><strong>{copy.findTripShort}</strong></Link>
@@ -289,7 +287,9 @@ export async function HomePage({
         <div className="home-help-panel-v2"><SectionEyebrow>{labels.help}</SectionEyebrow><h2>{copy.needHelp}</h2><Activity mode="visible"><HomeNeedHelpForm locale={locale} /></Activity></div>
       </section>
 
-      <TravelPartners />
+      <div className="home-partners-carousel">
+        <TravelPartners locale={locale} />
+      </div>
     </main>
   );
 }
