@@ -1228,12 +1228,12 @@
   .site-shell-v2 .site-header-at-top .header-main {
     width: 100%;
     min-height: 54px;
-    padding: 0.25rem 0.625rem;
-    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    gap: 0.375rem;
   }
 
   .site-shell-v2 .header-logo img {
-    width: clamp(5.5rem, 25vw, 7.8rem);
+    width: clamp(4.75rem, 22vw, 7.5rem);
     height: auto;
   }
 
@@ -1243,7 +1243,7 @@
     gap: 0.25rem;
   }
 
-  .site-shell-v2 .header-actions > :is(.header-language, .header-theme-toggle, .signin-action),
+  .site-shell-v2 .header-actions > :is(.header-language, .signin-action),
   .site-shell-v2 .header-search {
     display: none;
   }
@@ -1298,7 +1298,7 @@
     display: inline-flex;
   }
 
-  .site-shell-v2 .header-actions > .circle-action svg {
+  .site-shell-v2 .header-actions > :is(.circle-action, .header-theme-toggle) svg {
     width: 18px;
     height: 18px;
   }
