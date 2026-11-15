@@ -31,3 +31,6 @@ skills-lock.json
 # Delegate configuration and workflows
 .delegate/
 .agent/workflows/
+
+graphify-out/
+scratch/

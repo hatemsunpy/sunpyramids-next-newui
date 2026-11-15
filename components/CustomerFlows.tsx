@@ -5,8 +5,9 @@ import Image from "@/components/ResponsiveImage";
 import { useSearchParams } from "next/navigation";
 import { useProgressRouter as useRouter } from "@/components/useProgressRouter";
 import { FormEvent, Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import type { Locale } from "@/types/api";
+import { ThemeToggle, themeLabels } from "@/components/ThemeToggle";
 import {
   apiDelete,
   apiGet,
@@ -186,6 +187,38 @@ type AuthResetHandoff = { email?: string; otp?: string };
 
 const PASSWORD_ENTRY_MODES: readonly string[] = ["sign-in", "sign-up", "create-password", "reset-password"];
 
+// Navigation that used to sit inside the form card moved to the shared page
+// header so the card can hold only the flow itself.
+export function AuthTopNav({ locale = "en" }: { locale?: Locale }) {
+  const copy = uiCopy(locale);
+  const router = useRouter();
+
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(withLocale("/", locale));
+    }
+  }
+
+  return (
+    <nav className="auth-utility" aria-label="Page navigation">
+      <button type="button" className="auth-nav-back" onClick={handleBack} aria-label={copy.back || "Back"}>
+        <span aria-hidden="true">←</span>
+        <span>{copy.back || "Back"}</span>
+      </button>
+      <Link href={withLocale("/", locale)} className="auth-nav-home" aria-label={copy.home || "Home"}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span>{copy.home || "Home"}</span>
+      </Link>
+      <ThemeToggle labels={themeLabels[locale]} />
+    </nav>
+  );
+}
+
 export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Locale }) {
   const copy = uiCopy(locale);
   const router = useRouter();
@@ -195,6 +228,10 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
   const [rememberEmail, setRememberEmail] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [resetOtp, setResetOtp] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [mismatch, setMismatch] = useState(false);
+  const confirmRef = useRef<HTMLInputElement>(null);
   const title = {
     "sign-in": copy.welcome,
     "sign-up": copy.createAccount,
@@ -203,6 +240,14 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
     "create-password": copy.createPassword,
     "confirm-code": copy.confirmCode,
   }[mode] || "Account";
+  const subtitle = {
+    "sign-in": copy.authHintSignIn,
+    "sign-up": copy.authHintSignUp,
+    "forget-password": copy.authHintForget,
+    "confirm-code": copy.authHintConfirm,
+    "create-password": copy.authHintCreate,
+    "reset-password": copy.authHintCreate,
+  }[mode] || "";
 
   useEffect(() => {
     queueMicrotask(() => setRememberEmail(getCookie("sunpyramids-email") || ""));
@@ -247,9 +292,21 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    if (mode === "sign-up" || mode === "create-password" || mode === "reset-password") {
+      // Client-side confirmation check first: a mismatch must never reach the
+      // API or trigger the submit button's loading state.
+      const password = String(form.get("password") || "");
+      const confirmation = String(form.get("confirmPassword") || "");
+      if (password !== confirmation) {
+        setMismatch(true);
+        queueMicrotask(() => confirmRef.current?.focus());
+        return;
+      }
+      setMismatch(false);
+    }
     setState("loading");
     setMessage("");
-    const form = new FormData(event.currentTarget);
 
     try {
       if (mode === "sign-in") {
@@ -346,50 +403,42 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
     window.location.href = clientApiUrl(endpoint);
   }
 
-  function handleBack() {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(withLocale("/", locale));
-    }
-  }
-
   // Password entry only on the modes that actually ask for one. An explicit
   // list replaces the old substring match, which also rendered an unrelated
   // required password field on forget-password and blocked submissions there.
   const isPasswordMode = PASSWORD_ENTRY_MODES.includes(mode);
+  const needsConfirm = mode === "sign-up" || mode === "create-password" || mode === "reset-password";
+  // Cross-links: on sign-in only the create-account prompt is repeated (the
+  // forget-password link already sits inline); other modes list every sibling.
+  const crossLinks = mode === "sign-in"
+    ? [{ mode: "sign-up", href: "/auth/sign-up", label: copy.createAccount }]
+    : [
+        { mode: "sign-in", href: "/auth/sign-in", label: copy.signIn },
+        { mode: "sign-up", href: "/auth/sign-up", label: copy.createAccount },
+        { mode: "forget-password", href: "/auth/forget-password", label: copy.forgetPassword },
+      ].filter((item) => item.mode !== mode);
 
   return (
     <div className={`auth-form-wrap auth-mode-${mode}`}>
-      <nav className="auth-nav-row" aria-label="Page navigation">
-        <button type="button" className="auth-nav-back" onClick={handleBack} aria-label={copy.back || "Back"}>
-          <span aria-hidden="true">←</span>
-          <span>{copy.back || "Back"}</span>
-        </button>
-        <Link href={withLocale("/", locale)} className="auth-nav-home" aria-label={copy.home || "Home"}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-          <span>{copy.home || "Home"}</span>
-        </Link>
-      </nav>
       <div className="auth-heading">
         <p className="eyebrow">Sun Pyramids Tours</p>
         <h1>{title}</h1>
+        {subtitle ? <p className="auth-subtitle">{subtitle}</p> : null}
       </div>
       {mode === "sign-in" || mode === "sign-up" ? (
-        <div className="social-row">
-          <button type="button" onClick={() => socialRedirect("auth/google/redirect")}>
-            <Image src="/images/google.webp" alt="" width={20} height={20} aria-hidden="true" />
-            Google
-          </button>
-          <button type="button" onClick={() => socialRedirect("auth/facebook/redirect")}>
-            <Image src="/images/facebook-logo.webp" alt="" width={20} height={20} aria-hidden="true" />
-            Facebook
-          </button>
-          <div className="auth-divider" aria-hidden="true" />
-        </div>
+        <>
+          <div className="social-row">
+            <button type="button" onClick={() => socialRedirect("auth/google/redirect")}>
+              <Image src="/images/google.webp" alt="" width={20} height={20} aria-hidden="true" />
+              Google
+            </button>
+            <button type="button" onClick={() => socialRedirect("auth/facebook/redirect")}>
+              <Image src="/images/facebook-logo.webp" alt="" width={20} height={20} aria-hidden="true" />
+              Facebook
+            </button>
+          </div>
+          <p className="auth-divider">{copy.authSocialDivider}</p>
+        </>
       ) : null}
       <form className="auth-form" onSubmit={submit} aria-describedby={message ? "auth-form-message" : undefined}>
         {mode === "sign-up" ? (
@@ -437,34 +486,102 @@ export function AuthFlow({ mode, locale = "en" }: { mode: string; locale?: Local
         {isPasswordMode ? (
           <div className="auth-field">
             <label htmlFor="auth-password">{copy.password}</label>
-            <input id="auth-password" name="password" type="password" placeholder={copy.password} autoComplete={mode === "sign-in" ? "current-password" : "new-password"} minLength={8} required />
+            <div className="auth-input-wrap">
+              <input
+                id="auth-password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder={copy.password}
+                autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
+                minLength={8}
+                required
+                aria-describedby="auth-password-hint"
+                onChange={() => setMismatch(false)}
+              />
+              <button
+                type="button"
+                className="auth-eye-toggle"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-pressed={showPassword}
+                aria-label={showPassword ? copy.hidePassword : copy.showPassword}
+              >
+                {showPassword ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+              </button>
+            </div>
+            <p className="auth-hint" id="auth-password-hint">{copy.authPasswordHint}</p>
           </div>
         ) : null}
-        {mode === "sign-up" || mode === "create-password" || mode === "reset-password" ? (
+        {needsConfirm ? (
           <div className="auth-field">
             <label htmlFor="auth-confirm-password">{copy.confirmPassword}</label>
-            <input id="auth-confirm-password" name="confirmPassword" type="password" placeholder={copy.confirmPassword} autoComplete="new-password" minLength={8} required />
+            <div className="auth-input-wrap">
+              <input
+                id="auth-confirm-password"
+                ref={confirmRef}
+                name="confirmPassword"
+                type={showConfirm ? "text" : "password"}
+                placeholder={copy.confirmPassword}
+                autoComplete="new-password"
+                minLength={8}
+                required
+                className={mismatch ? "is-invalid" : undefined}
+                aria-invalid={mismatch || undefined}
+                aria-describedby={mismatch ? "auth-confirm-error auth-password-hint" : "auth-password-hint"}
+                onChange={() => setMismatch(false)}
+              />
+              <button
+                type="button"
+                className="auth-eye-toggle"
+                onClick={() => setShowConfirm((visible) => !visible)}
+                aria-pressed={showConfirm}
+                aria-label={showConfirm ? copy.hidePassword : copy.showPassword}
+              >
+                {showConfirm ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+              </button>
+            </div>
+            {mismatch ? (
+              <p className="auth-field-error" id="auth-confirm-error" role="alert">{copy.authPasswordMismatch}</p>
+            ) : null}
           </div>
         ) : null}
         {mode === "sign-in" ? (
-          <label className="inline-check">
-            <input name="signSave" type="checkbox" defaultChecked={!!rememberEmail} /> {copy.saveLogin}
-          </label>
+          <div className="auth-field-row">
+            <label className="inline-check">
+              <input name="signSave" type="checkbox" defaultChecked={!!rememberEmail} /> {copy.saveLogin}
+            </label>
+            <Link href={withLocale("/auth/forget-password", locale)} className="auth-inline-link">{copy.forgetPassword}</Link>
+          </div>
         ) : null}
         {mode === "sign-up" ? (
           <label className="inline-check">
             <input name="agreeTerms" type="checkbox" required /> {copy.agreeTerms}
           </label>
         ) : null}
-        <button className="btn-primary" type="submit" disabled={state === "loading"}>
-          {state === "loading" ? "Please wait..." : title}
+        <button className="btn-primary auth-submit" type="submit" disabled={state === "loading"}>
+          {state === "loading" ? (
+            <>
+              <span className="auth-spinner" aria-hidden="true" />
+              <span>Please wait...</span>
+            </>
+          ) : (
+            title
+          )}
         </button>
       </form>
-      {message ? <p id="auth-form-message" className={statusClass(state)} role={state === "error" ? "alert" : "status"}>{message}</p> : null}
+      {message ? (
+        <p id="auth-form-message" className={statusClass(state)} role={state === "error" ? "alert" : "status"}>
+          {state === "error" ? (
+            <AlertCircle className="auth-message-icon" aria-hidden="true" />
+          ) : (
+            <CheckCircle2 className="auth-message-icon" aria-hidden="true" />
+          )}
+          <span>{message}</span>
+        </p>
+      ) : null}
       <nav className="auth-links" aria-label="Account access">
-        <Link href={withLocale("/auth/sign-in", locale)} className={mode === "sign-in" ? "is-active" : undefined} aria-current={mode === "sign-in" ? "page" : undefined}>{copy.signIn}</Link>
-        <Link href={withLocale("/auth/sign-up", locale)} className={mode === "sign-up" ? "is-active" : undefined} aria-current={mode === "sign-up" ? "page" : undefined}>{copy.createAccount}</Link>
-        <Link href={withLocale("/auth/forget-password", locale)} className={mode === "forget-password" ? "is-active" : undefined} aria-current={mode === "forget-password" ? "page" : undefined}>{copy.forgetPassword}</Link>
+        {crossLinks.map(({ mode: linkMode, href, label }) => (
+          <Link key={linkMode} href={withLocale(href, locale)}>{label}</Link>
+        ))}
       </nav>
     </div>
   );

@@ -170,14 +170,13 @@
 }
 
 .certification {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 14rem);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
 
   > img {
     width: 100%;
     height: auto;
-    padding: 0.75rem;
-    border-radius: var(--spt-radius-sm);
-    background: #fff;
+    border-radius: var(--spt-radius-card);
+    box-shadow: 0 8px 24px rgb(13 24 48 / 0.08);
   }
 }
 
@@ -447,7 +446,6 @@
   }
 
   .services > .photo { grid-row: auto; }
-  .certification > img { max-width: 14rem; }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .benefits { gap: 0; }
   .letter > div:first-child { display: flex; align-items: center; gap: 0.9rem; }

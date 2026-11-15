@@ -116,7 +116,7 @@ body {
 :root[data-theme="dark"] .auth-clone,
 :root[data-theme="dark"] .account-page,
 :root[data-theme="dark"] .social-auth-status {
-  .auth-nav-row,
+  .auth-form-wrap,
   .account-navigation,
   .account-card,
   .social-auth-panel {
@@ -138,6 +138,8 @@ body {
 
   .auth-nav-back:hover,
   .auth-nav-home:hover,
+  .auth-utility .theme-toggle:hover,
+  .auth-eye-toggle:hover,
   .social-row button:hover,
   .account-navigation a:hover,
   .account-card .btn-outline:hover {
@@ -147,6 +149,19 @@ body {
   .auth-form input:not([type="checkbox"]):focus-visible,
   .account-field input:focus-visible {
     background: var(--spt-surface-raised);
+    box-shadow: 0 0 0 4px var(--spt-anchor-soft);
+  }
+
+  .form-message {
+    border-color: color-mix(in srgb, var(--spt-link) 30%, transparent);
+    background: var(--spt-anchor-soft);
+    color: var(--spt-link);
+  }
+
+  .form-message.error {
+    border-color: color-mix(in srgb, var(--spt-danger-text) 40%, transparent);
+    background: color-mix(in srgb, var(--spt-danger-text) 12%, var(--spt-surface));
+    color: var(--spt-danger-text);
   }
 
   .auth-brand img,

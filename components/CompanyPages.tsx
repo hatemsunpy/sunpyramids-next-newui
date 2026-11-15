@@ -176,7 +176,13 @@ export function CompanyAboutPage({
               <h2>{copy.certification}</h2>
               <CompanyProse html={certification} />
             </div>
-            <Image src="/images/certified-logo.webp" alt="Travelife Certified" width={430} height={167} sizes="(max-width: 760px) 60vw, 230px" />
+            <Image
+              src="/images/certified.webp"
+              alt="Sun Pyramids Tours Travelife sustainability certificate"
+              width={1061}
+              height={763}
+              sizes="(max-width: 760px) 100vw, 480px"
+            />
           </section>
         )}
 

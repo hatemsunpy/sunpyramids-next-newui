@@ -248,7 +248,20 @@ export function HomePage({
           <h2>Tailored <span>guidance</span> for your <span>sustainability</span> journey</h2>
           <Link className="btn-primary" href={withLocale("/sustainability", locale)}>{copy.seeMore}<span aria-hidden="true">↗</span></Link>
         </div>
-        <Image src="/images/certified-logo.webp" alt="Certified sustainable travel" width={430} height={167} />
+        <Image
+          className="home-certification-logo--light"
+          src="/images/certified-logo.webp"
+          alt="Certified sustainable travel"
+          width={430}
+          height={167}
+        />
+        <Image
+          className="home-certification-logo--dark"
+          src="/images/certified_footer_white.webp"
+          alt="Certified sustainable travel"
+          width={340}
+          height={132}
+        />
       </section>
 
       <TravelMomentsGallery socialLinks={socialLinks} locale={locale} />
