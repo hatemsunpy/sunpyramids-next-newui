@@ -39,6 +39,7 @@
     "node_modules",
     "nuxt_sunpyramids",
     "tests",
+    "output",
     "**/*.test.ts",
     "**/*.test.tsx"
   ]

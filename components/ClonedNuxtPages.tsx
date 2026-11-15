@@ -4,7 +4,7 @@ import { Suspense, type CSSProperties } from "react";
 import type { ApiPage, Locale, Tour, TripTaxonomy } from "@/types/api";
 import { BlogCard } from "@/components/BlogCard";
 import { ContactForm } from "@/components/ContactForm";
-import { AccountFlow, AuthFlow, CartFlow } from "@/components/CustomerFlows";
+import { AccountFlow, AuthFlow, AuthTopNav, CartFlow } from "@/components/CustomerFlows";
 import { DestinationCard } from "@/components/DestinationCard";
 import { DiscoveryHero } from "@/components/DiscoveryHero";
 import { EmptyState } from "@/components/EmptyState";
@@ -40,6 +40,7 @@ export async function AuthPage({ mode, locale = "en" }: { mode: string; locale?:
           <Link className="auth-brand" href={withLocale("/", locale)}>
             <Image src={APPROVED_BRAND_LOGO} alt="Sun Pyramids Tours" width={180} height={51} priority />
           </Link>
+          <AuthTopNav locale={locale} />
         </div>
         <Suspense fallback={<div className="auth-form-wrap auth-form-loading"><span aria-hidden="true" /><h1>{copy.myProfile}</h1></div>}>
           <AuthFlow mode={mode} locale={locale} />
@@ -50,6 +51,7 @@ export async function AuthPage({ mode, locale = "en" }: { mode: string; locale?:
         <div className="auth-image-caption">
           <span>{copy.egyptTours}</span>
           <strong>Sun Pyramids Tours</strong>
+          <p>{copy.bookTripDescription}</p>
         </div>
       </section>
     </main>

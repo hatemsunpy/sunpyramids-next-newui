@@ -1,9 +1,20 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import type { Locale } from "@/types/api";
 
 const THEME_KEY = "sunpyramids-theme";
 const THEME_EVENT = "sunpyramids:theme-change";
+
+export const themeLabels: Record<Locale, { toggle: string; light: string; dark: string }> = {
+  en: { toggle: "Toggle color theme", light: "Light", dark: "Dark" },
+  fr: { toggle: "Basculer le thème de couleur", light: "Clair", dark: "Sombre" },
+  de: { toggle: "Farbthema umschalten", light: "Hell", dark: "Dunkel" },
+  it: { toggle: "Cambia tema colore", light: "Chiaro", dark: "Scuro" },
+  pt: { toggle: "Alternar tema de cor", light: "Claro", dark: "Escuro" },
+  es: { toggle: "Cambiar tema de color", light: "Claro", dark: "Oscuro" },
+  zh: { toggle: "切换颜色主题", light: "浅色", dark: "深色" },
+};
 
 type Theme = "light" | "dark";
 

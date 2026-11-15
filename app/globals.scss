@@ -1708,77 +1708,9 @@ input[data-native-type] {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.auth-clone {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 100vh;
-  background: var(--spt-surface);
-}
-
-.auth-panel {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  padding: 2rem clamp(1.5rem, 5vw, 7.5rem);
-}
-
-.auth-top {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.auth-form-wrap {
-  align-self: center;
-}
-
-.auth-form-wrap h1 {
-  margin: 0 0 1.5rem;
-  font-size: clamp(2rem, 4vw, 3.4rem);
-}
-
-.auth-form,
-.auth-links {
-  display: grid;
-  gap: 1rem;
-}
-
-.auth-form input {
-  border: 1px solid #eeeeee;
-  border-radius: 1rem;
-  padding: 1rem;
-  outline: 0;
-}
-
-.auth-links {
-  grid-template-columns: repeat(3, max-content);
-  margin-top: 1.25rem;
-  color: var(--spt-link);
-  font-weight: 700;
-}
-
-.social-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.social-row button,
-.btn-outline {
-  border: 1px solid #eeeeee;
-  border-radius: 1rem;
-  background: var(--spt-surface);
-  padding: 0.9rem 1rem;
-  color: var(--spt-link);
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.inline-check {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-weight: 700;
-}
+// Auth pages are styled entirely in styles/_account.scss (single source of
+// truth). Only the generic .form-message rules stay here because other flows
+// (account, cart, social callback) also render them outside .auth-clone.
 
 .form-message {
   margin: 1rem 0 0;
@@ -1788,18 +1720,6 @@ input[data-native-type] {
 
 .form-message.error {
   color: #dc2626;
-}
-
-.auth-image {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  padding: 2rem;
-}
-
-.auth-image img {
-  object-fit: cover;
-  border-radius: 2.5rem;
 }
 
 .account-layout,
@@ -2235,7 +2155,6 @@ input[data-native-type] {
   .impact-overview,
   .planner-layout,
   .contact-clone,
-  .auth-clone,
   .account-layout,
   .cart-layout,
   .event-detail-layout,
@@ -2251,10 +2170,6 @@ input[data-native-type] {
   .about-gallery,
   .gallery-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .auth-image {
-    display: none;
   }
 
   .trips-filter {
@@ -2328,14 +2243,6 @@ input[data-native-type] {
   .about-gallery,
   .gallery-strip {
     grid-template-columns: 1fr;
-  }
-
-  .auth-links {
-    grid-template-columns: 1fr;
-  }
-
-  .auth-panel {
-    padding: 1.5rem;
   }
 
   .original-page-hero {
