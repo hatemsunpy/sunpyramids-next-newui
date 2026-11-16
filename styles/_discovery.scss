@@ -1025,6 +1025,16 @@
       input {
         font-family: inherit;
         font-size: 0.95rem;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        color: var(--spt-ink);
+        width: 100%;
+
+        &::placeholder {
+          color: var(--spt-muted);
+        }
       }
     }
 

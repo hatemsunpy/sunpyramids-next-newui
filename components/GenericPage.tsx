@@ -305,7 +305,7 @@ function PlannerPage({
   const showPageContent = hasMeaningfulPageCopy(page?.content, route, title);
 
   return (
-    <main className="planner-page">
+    <main className="planner-page" data-planner-route={route}>
       <header className="planner-hero">
         <div className="planner-hero-inner">
           <nav className="planner-breadcrumb" aria-label="Breadcrumb">
@@ -402,6 +402,7 @@ function ImpactPage({
   const sustainabilityCopy = sustainabilitySections(locale);
   const bodyHtml = sanitizeHtml(page?.content || page?.description);
   const hasPageBody = hasMeaningfulPageCopy(page?.content || page?.description, route, title);
+  const helpTitleId = `${route}-help-title`;
 
   return (
     <main className={isSustainability ? "sustainability-page" : "accessible-travel-page"}>
@@ -505,16 +506,14 @@ function ImpactPage({
           <TrustIndexLoader containerId="sustainability-reviews" script="https://cdn.trustindex.io/loader.js?1d15b034519c8049128609a4d4e" />
         </section>
       )}
-      {isSustainability && (
-        <section className="sustainability-help-section" aria-labelledby="sustainability-help-title">
-          <div className="editorial-container">
-            <div className="home-help-panel-v2">
-              <h2 id="sustainability-help-title">{homeCopy(locale).needHelp}</h2>
-              <HomeNeedHelpForm locale={locale} />
-            </div>
+      <section className={`${route}-help-section`} aria-labelledby={helpTitleId}>
+        <div className="editorial-container">
+          <div className="home-help-panel-v2">
+            <h2 id={helpTitleId}>{homeCopy(locale).needHelp}</h2>
+            <HomeNeedHelpForm locale={locale} />
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </main>
   );
 }
