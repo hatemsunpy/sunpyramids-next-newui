@@ -398,6 +398,35 @@
   }
 }
 
+:global(:root[data-theme="dark"]) :global(.site-shell-v2) .contactForm {
+  --contact-field-border: color-mix(in srgb, var(--spt-border), var(--spt-muted) 42%);
+
+  :global(.form-field) > input,
+  :global(.phone-country-input) {
+    min-height: 56px;
+  }
+
+  :global(.form-field) > :is(input, textarea) {
+    border-color: var(--contact-field-border);
+
+    &:focus {
+      border-color: var(--spt-focus);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--spt-focus) 22%, transparent);
+    }
+  }
+
+  :global(.phone-country-input) {
+    border-radius: var(--spt-radius-card);
+    background: var(--spt-surface-raised);
+
+    &:not(:focus-within, :has([aria-invalid="true"])) {
+      border-color: var(--contact-field-border);
+    }
+
+    :global(input.phone-country-number) { background: transparent; }
+  }
+}
+
 .office {
   grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
   gap: 0;

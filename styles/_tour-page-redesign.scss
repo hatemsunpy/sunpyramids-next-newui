@@ -2104,7 +2104,17 @@
   }
 
   .tour-page-redesign .tour-gallery-main {
+    position: relative;
+    z-index: 2;
     height: clamp(22rem, 100vw, 29rem);
+    border-radius: var(--tour-photo-radius, 0.875rem);
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 6px 18px rgba(13, 24, 48, 0.08);
+  }
+
+  .tour-page-redesign .tour-gallery-slide {
+    border-radius: inherit;
   }
 
   .tour-page-redesign .tour-gallery-previews {

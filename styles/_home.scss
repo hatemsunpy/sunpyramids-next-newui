@@ -524,6 +524,26 @@
   letter-spacing: 0.03em;
 }
 
+:root[data-theme="dark"] .home-page--redesign .home-search-fields .flowbite-datepicker-input-wrapper {
+  border-color: color-mix(in srgb, var(--spt-border), var(--spt-muted) 42%);
+  background: var(--spt-surface-raised);
+
+  &:hover {
+    border-color: var(--spt-muted);
+  }
+
+  &.is-open,
+  &:has(:focus-visible) {
+    border-color: var(--spt-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--spt-focus) 22%, transparent);
+  }
+
+  .flowbite-datepicker-native-input {
+    align-self: stretch;
+    background: transparent;
+  }
+}
+
 .home-page--redesign .home-search-fields fieldset {
   display: flex;
   align-items: center;
@@ -831,6 +851,11 @@
   overflow: hidden;
   aspect-ratio: 1.4 / 1;
   background: transparent;
+}
+
+.site-shell-v2 .blog-card-media {
+  border-radius: var(--spt-radius-card);
+  isolation: isolate;
 }
 
 .site-shell-v2 .home-page .tour-card-media {
@@ -2109,6 +2134,109 @@
   }
 }
 
+:root[data-theme="dark"] #home-reviews .ti-widget {
+  // Trustindex injects its light preset after the site's styles.
+  :is(.ti-widget-header, .ti-review-item > .ti-inner) {
+    background-color: var(--spt-surface) !important;
+    box-shadow: inset 0 0 0 1px var(--spt-border);
+  }
+
+  :is(.ti-widget-container, .ti-name, .ti-header-rating, .ti-rating-text) {
+    color: var(--spt-ink);
+  }
+
+  :is(.ti-date, .ti-header-rating-reviews, .ti-tab-item) {
+    color: var(--spt-muted);
+  }
+
+  .ti-tab-item :is(.ti-item-label, .ti-rating) {
+    color: inherit;
+  }
+
+  .ti-platform-tabs::after {
+    background-color: var(--spt-border);
+    opacity: 1;
+  }
+
+  .ti-tab-item.ti-tab-active {
+    color: var(--spt-ink);
+
+    &::after { background-color: var(--spt-amber); }
+  }
+
+  .ti-tab-item:not(.ti-tab-active):hover {
+    background-color: var(--spt-surface-raised);
+  }
+
+  .ti-platform-tab-nav .ti-arrow-next {
+    border-start-end-radius: var(--spt-radius-panel);
+    background-image: linear-gradient(to left, var(--spt-surface) 65%, transparent);
+  }
+
+  .ti-platform-tab-nav .ti-arrow-prev {
+    border-start-start-radius: var(--spt-radius-panel);
+    background-image: linear-gradient(to right, var(--spt-surface) 65%, transparent);
+  }
+
+  :is(.ti-arrow-next, .ti-arrow-prev, .ti-next, .ti-prev)::before {
+    border-color: var(--spt-ink);
+  }
+
+  .ti-controls :is(.ti-prev, .ti-next) {
+    background-color: var(--spt-surface-raised);
+    outline-color: var(--spt-border);
+  }
+
+  .ti-controls-line {
+    background-color: var(--spt-border);
+
+    .dot { background-color: var(--spt-muted); }
+  }
+
+  .ti-header-write-btn {
+    background-color: var(--spt-surface-raised);
+    border-color: var(--spt-muted);
+    color: var(--spt-ink) !important;
+
+    &:hover {
+      background-color: var(--spt-surface-soft) !important;
+      border-color: var(--spt-link) !important;
+    }
+  }
+
+  .ti-write-btn-dropdown {
+    background-color: var(--spt-surface-raised);
+
+    &::before { border-bottom-color: var(--spt-surface-raised); }
+
+    a {
+      border-bottom-color: var(--spt-border);
+      color: var(--spt-ink);
+
+      &:hover { background-color: var(--spt-surface-soft); }
+    }
+  }
+
+  .ti-header-logo-img {
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0 0 0 3px white;
+  }
+
+  .ti-show-original-text,
+  .ti-read-more span {
+    color: var(--spt-link);
+    opacity: 1;
+  }
+
+  .ti-read-more::after { background-color: var(--spt-border); }
+
+  :is(a, [role="button"]):focus-visible {
+    outline: 2px solid var(--spt-focus) !important;
+    outline-offset: 2px;
+  }
+}
+
 .home-faq-section-v2 {
   background: var(--spt-surface);
   padding-block: var(--spt-section);
@@ -2285,10 +2413,15 @@
   padding: 0.75rem 0.9rem;
 }
 
-.home-help-panel-v2 .home-help-form .btn-primary {
+:is(.home-help-panel, .home-help-panel-v2) .home-help-form .btn-primary {
   align-self: end;
   min-height: 50px;
   border: 0;
+  outline: none;
+
+  &::before {
+    display: none !important;
+  }
 }
 
 .home-help-panel-v2 .home-help-form [role="alert"] {
@@ -2554,11 +2687,11 @@
     justify-self: start;
   }
 
-  .home-help-panel-v2 .home-help-form {
+  :is(.home-help-panel, .home-help-panel-v2) .home-help-form {
     grid-template-columns: 1fr 1fr;
   }
 
-  .home-help-panel-v2 .home-help-form .btn-primary {
+  :is(.home-help-panel, .home-help-panel-v2) .home-help-form .btn-primary {
     grid-column: 1 / -1;
   }
 }
@@ -3021,11 +3154,11 @@
     border-radius: var(--spt-radius-panel);
   }
 
-  .home-help-panel-v2 .home-help-form {
+  :is(.home-help-panel, .home-help-panel-v2) .home-help-form {
     grid-template-columns: 1fr;
   }
 
-  .home-help-panel-v2 .home-help-form .btn-primary {
+  :is(.home-help-panel, .home-help-panel-v2) .home-help-form .btn-primary {
     grid-column: auto;
   }
 }

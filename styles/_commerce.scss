@@ -1278,6 +1278,133 @@
   }
 }
 
+:root[data-theme="dark"] .site-shell-v2 {
+  // Checkout cards & forms
+  .checkout-section-card {
+    background: var(--spt-surface);
+    border-color: var(--spt-border);
+
+    .section-header {
+      border-bottom-color: var(--spt-border);
+
+      .step-number {
+        background: var(--spt-anchor-soft);
+        color: var(--spt-link);
+        border: 1px solid color-mix(in srgb, var(--spt-link) 30%, transparent);
+      }
+
+      h2 {
+        color: var(--spt-ink);
+      }
+    }
+
+    .form-group {
+      label {
+        color: var(--spt-ink);
+        .req { color: var(--spt-danger-text); }
+      }
+
+      input,
+      textarea,
+      .phone-country-input,
+      .search-select-trigger--boxed {
+        background: var(--spt-surface-raised);
+        border-color: color-mix(in srgb, var(--spt-border), var(--spt-muted) 42%);
+        color: var(--spt-ink);
+
+        &::placeholder {
+          color: var(--spt-muted);
+        }
+
+        &:focus,
+        &:focus-within {
+          border-color: var(--spt-focus);
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--spt-focus) 22%, transparent);
+        }
+      }
+    }
+  }
+
+  // Payment methods in checkout
+  .payment-method-card {
+    background: var(--spt-surface-raised);
+    border-color: var(--spt-border);
+
+    &:hover {
+      border-color: var(--spt-anchor-brand);
+      background-color: var(--spt-surface-soft);
+    }
+
+    &.is-selected {
+      border-color: var(--spt-link);
+      background-color: var(--spt-anchor-soft);
+      box-shadow: 0 0 0 1px var(--spt-link);
+    }
+
+    .payment-method-top .method-name {
+      color: var(--spt-ink);
+    }
+  }
+
+  // Cart editor drawer
+  .cart-editor-panel {
+    background-color: var(--spt-surface-soft);
+    border-color: var(--spt-border);
+
+    .cart-editor-title {
+      color: var(--spt-ink);
+    }
+
+    .editor-field {
+      label {
+        color: var(--spt-muted);
+      }
+
+      input[type="date"],
+      input[type="number"] {
+        background: var(--spt-surface-raised);
+        border-color: var(--spt-border);
+        color: var(--spt-ink);
+        color-scheme: dark;
+
+        &:focus {
+          border-color: var(--spt-focus);
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--spt-focus) 22%, transparent);
+        }
+      }
+    }
+
+    .cart-option-fieldset {
+      background: var(--spt-surface);
+      border-color: var(--spt-border);
+
+      legend {
+        color: var(--spt-ink);
+      }
+    }
+  }
+
+  // Coupon area in checkout & cart
+  .summary-coupon-area {
+    background-color: var(--spt-surface-soft);
+    border-color: var(--spt-border);
+
+    .coupon-input-group input {
+      background: var(--spt-surface-raised);
+      border-color: var(--spt-border);
+      color: var(--spt-ink);
+
+      &::placeholder {
+        color: var(--spt-muted);
+      }
+
+      &:focus {
+        border-color: var(--spt-focus);
+      }
+    }
+  }
+}
+
 @keyframes sptSpin {
   to {
     transform: rotate(360deg);

@@ -1,5 +1,5 @@
 // The same glass rim and moving reflection used by the tour booking button.
-$button-targets: 'button:not([class*="backdrop"]):not([class*="overlay"]), a[role="button"], a[class*="btn-"], a[class*="-btn"], a[class*="-button"], a[class*="-cta"]';
+$button-targets: 'button:not([class*="backdrop"]):not([class*="overlay"]):not(.bottom-dock-btn):not([class*="bottom-"]):not(.voice-mic), a[role="button"]:not([class*="bottom-"]), a[class*="btn-"]:not([class*="bottom-"]), a[class*="-btn"]:not([class*="bottom-"]), a[class*="-button"]:not([class*="bottom-"]), a[class*="-cta"]:not([class*="bottom-"])';
 
 // Keep this positioning fallback below component rules for fixed/absolute buttons.
 :where(body) :where(#{$button-targets}) {
@@ -89,4 +89,16 @@ body :is(#{$button-targets}):not(.dropdown > button):is(:disabled, [aria-disable
   body :is(#{$button-targets}):not(.dropdown > button)::after {
     display: none;
   }
+}
+
+// Mobile bottom bar items and search popup must never inherit glass rims or hover reflection beams
+body .bottom-bar :is(button, a)::before,
+body .bottom-bar :is(button, a)::after,
+body .bottom-dock-btn::before,
+body .bottom-dock-btn::after,
+body [class*="bottom-search"]::before,
+body [class*="bottom-search"]::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
 }

@@ -2301,7 +2301,7 @@ export function PlannerRequestFlow({ route, locale = "en" }: { route: "make-your
       </fieldset>
 
       {/* Step 3: Contact & Special Requests */}
-      <fieldset className="planner-step-group">
+      <fieldset className="planner-step-group planner-contact-step">
         <legend>
           <span className="step-badge" aria-hidden="true">3</span>
           <span>Lead Guest & Contact Details</span>

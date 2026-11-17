@@ -81,19 +81,87 @@ body {
     color: var(--spt-muted);
   }
 
-  .home-help-panel-v2 .home-help-form input {
-    background: #ffffff;
-    color: #1d1f1f;
-  }
-
   .home-signature-grid .tour-card--feature,
   .home-editorial-grid .blog-card--lead,
   .home-plan-section__media,
-  .home-help-panel-v2,
   .discovery-hero,
   .book-trip-hero,
   .account-hero {
     color: #ffffff;
+  }
+
+  .home-faq-title {
+    background-image: none !important;
+  }
+
+  :is(.home-help-panel, .home-help-panel-v2) {
+    --home-help-field-border: color-mix(in srgb, var(--spt-border), var(--spt-muted) 42%);
+
+    border: 1px solid var(--spt-border) !important;
+    background: var(--spt-surface) !important;
+    background-image: none !important;
+    color: var(--spt-ink) !important;
+    padding: clamp(1.25rem, 4.5vw, 4rem);
+
+    > .section-heading-eyebrow {
+      display: none;
+    }
+
+    h2 {
+      max-width: 25ch;
+      margin-bottom: 1.5rem;
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      line-height: 1.1;
+      color: var(--spt-ink) !important;
+    }
+
+    .home-help-form {
+      gap: 1rem;
+
+      .home-help-label {
+        color: var(--spt-muted) !important;
+        font-size: 0.875rem;
+      }
+
+      input[name="name"],
+      .search-select-trigger,
+      .phone-country-input {
+        min-height: 52px;
+        border-radius: var(--spt-radius-sm);
+        background: var(--spt-surface-raised) !important;
+      }
+
+      input[name="name"],
+      .search-select-trigger,
+      .phone-country-input:not(:focus-within, :has([aria-invalid="true"])) {
+        border-color: var(--home-help-field-border) !important;
+        color: var(--spt-ink) !important;
+      }
+
+      input[name="name"]:focus-visible,
+      .search-select-trigger:is(:focus-visible, [data-state="open"]) {
+        border-color: var(--spt-focus) !important;
+      }
+
+      input.phone-country-number {
+        background: transparent !important;
+        color: var(--spt-ink) !important;
+      }
+
+      .btn-primary {
+        min-height: 52px;
+        border: 0 !important;
+        outline: none;
+
+        &::before {
+          display: none !important;
+        }
+      }
+
+      [role="alert"] {
+        color: var(--spt-danger-text);
+      }
+    }
   }
 
   .home-page--redesign .home-partners img {
