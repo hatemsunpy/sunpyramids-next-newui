@@ -5,11 +5,13 @@ export function Pagination({
   lastPage,
   basePath,
   query,
+  anchor,
 }: {
   page: number;
   lastPage: number;
   basePath: string;
   query: URLSearchParams;
+  anchor?: string;
 }) {
   const maxShown = 5;
   const half = Math.floor(maxShown / 2);
@@ -27,7 +29,7 @@ export function Pagination({
       next.set("page", String(p));
     }
     const qs = next.toString();
-    return `${basePath}${qs ? `?${qs}` : ""}`;
+    return `${basePath}${qs ? `?${qs}` : ""}${anchor ? `#${anchor}` : ""}`;
   };
 
   return (

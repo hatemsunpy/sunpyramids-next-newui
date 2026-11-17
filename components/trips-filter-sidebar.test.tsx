@@ -110,6 +110,87 @@ describe("TripsFilterSidebar — complete Tours Type filter", () => {
   });
 });
 
+describe("TripsFilterSidebar — Multi-Country", () => {
+  const multiCountryTaxonomy: TripTaxonomy = {
+    ...taxonomy,
+    allCategories: [
+      ...taxonomy.allCategories,
+      { id: 1001, title: "Multi-Country tour packages", slug: "middle-east-tours" },
+      { id: 1002, title: "Egypt and Jordan", slug: "egypt-and-jordan-tour-packages", parent_id: 1001 },
+    ],
+  };
+
+  it("shows the parent and its live children when the facet count omits the parent", () => {
+    render(<TripsFilterSidebar taxonomy={multiCountryTaxonomy} />);
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+    const types = within(sidebar.getByRole("button", { name: "Tours Type" }).parentElement!);
+    const destinations = within(sidebar.getByRole("button", { name: "Destinations" }).parentElement!);
+
+    expect(types.getByRole("link", { name: "Multi-Country" })).toHaveAttribute("href", "/trips?main=middle-east-tours");
+    expect(destinations.getByRole("link", { name: "Egypt and Jordan" })).toHaveAttribute("href", "/trips?category=1002");
+    expect(destinations.getByRole("link", { name: "Cairo Tours" })).toHaveAttribute("href", "/trips?destination=cairo");
+    expect(sidebar.getAllByRole("link", { name: "Egypt and Jordan" })).toHaveLength(1);
+  });
+
+  it("keeps the matching type selected and preserves independent filters when choosing a combination", () => {
+    render(
+      <TripsFilterSidebar
+        taxonomy={multiCountryTaxonomy}
+        active={{ main: "middle-east-tours", destination: "cairo", days: 7, page: 2 }}
+      />,
+    );
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+
+    expect(sidebar.getByRole("link", { name: "Multi-Country" })).toHaveAttribute("aria-current", "true");
+    expect(sidebar.getByRole("link", { name: "Egypt and Jordan" })).toHaveAttribute(
+      "href", "/trips?main=middle-east-tours&destination=cairo&category=1002&days=7",
+    );
+  });
+
+  it("replaces a selected combination with a country destination while preserving duration", () => {
+    render(
+      <TripsFilterSidebar
+        taxonomy={multiCountryTaxonomy}
+        active={{ category: "1002", days: 7, page: 2 }}
+      />,
+    );
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+
+    expect(sidebar.getByRole("link", { name: "Greece" })).toHaveAttribute("href", "/trips?destination=greece&days=7");
+  });
+});
+
+describe("TripsFilterSidebar — country destinations", () => {
+  it("links each footer country to the Laravel destination filter", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} />);
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+    const destinations = within(sidebar.getByRole("button", { name: "Destinations" }).parentElement!);
+
+    for (const country of ["Jordan", "Morocco", "Tunisia", "Turkey", "Greece", "Tanzania"]) {
+      expect(destinations.getByRole("link", { name: country })).toHaveAttribute("href", `/trips?destination=${country.toLowerCase()}`);
+    }
+  });
+
+  it("shows the localized selection and clears it when choosing an API destination", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} locale="es" active={{ destination: "Greece", days: 6 }} />);
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+
+    const greece = sidebar.getByRole("link", { name: "Grecia" });
+    expect(greece).toHaveAttribute("aria-current", "true");
+    expect(greece).toHaveAttribute("href", "/es/trips?days=6");
+    expect(sidebar.getByRole("link", { name: "Cairo Tours" })).toHaveAttribute("href", "/es/trips?destination=cairo&days=6");
+  });
+
+  it("switches from an old country keyword link to the exact destination", () => {
+    render(<TripsFilterSidebar taxonomy={taxonomy} active={{ title: "Jordan" }} />);
+    const sidebar = within(screen.getByRole("complementary", { name: /filter tours/i }));
+
+    const jordan = sidebar.getByRole("link", { name: "Jordan" });
+    expect(jordan).not.toHaveAttribute("aria-current");
+    expect(jordan).toHaveAttribute("href", "/trips?destination=jordan");
+  });
+});
+
 describe("TripsFilterSidebar — days propagation through filter links", () => {
   it("days=5 + add destination → days preserved in the destination link", () => {
     render(<TripsFilterSidebar taxonomy={taxonomy} locale="en" active={{ days: 5 }} />);

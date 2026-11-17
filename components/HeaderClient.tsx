@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { ApiPage, Locale } from "@/types/api";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ApiList, ApiPage, Locale } from "@/types/api";
 import type { EgyptToursMenuChild } from "@/lib/egypt-tours-menu";
+import { apiGet } from "@/lib/client-api";
+import { DESTINATION_DIRECTORY_LINKS, countryDestinationHref, countryDestinationPreviewPhoto, destinationsPath, jordanDestinationSlug } from "@/lib/destination-links";
 import { multiCountryChildPath } from "@/components/multi-country/routes";
 import { stripLocale, withLocale } from "@/lib/locales";
 import { LanguageCurrencyModal, LanguageCurrencyTrigger } from "@/components/LanguageCurrencyModal";
@@ -29,6 +31,7 @@ type TourLinkKey = (typeof tourLinks)[number][0];
 const primaryNavLinks = [
   ["home", "/"],
   ["egyptTours", null],
+  ["destinations", null],
   ["rentCar", "/rent-car"],
   ["about", "/about-us"],
   ["contact", "/contact-us"],
@@ -97,6 +100,7 @@ export type HeaderLabels = {
 export type HeaderUiLabels = {
   home: string;
   egyptTours: string;
+  destinations: string;
   oneDay: string;
   multiDays: string;
   nileCruises: string;
@@ -112,7 +116,228 @@ export type HeaderUiLabels = {
   signIn: string;
   specialOffer: string;
   makeTrip: string;
-};
+} & Record<(typeof DESTINATION_DIRECTORY_LINKS)[number][0], string>;
+
+function NavigationPreview({ href, title, image, onClick, priority }: {
+  href: string;
+  title?: string;
+  image?: string;
+  onClick: () => void;
+  priority?: boolean;
+}) {
+  return (
+    <div className="dropdown-panel__preview" aria-hidden="true">
+      <Link href={href} className="dropdown-preview-card" tabIndex={-1} onClick={onClick}>
+        <div className="dropdown-preview-media">
+          {image && (
+            <Image
+              key={image}
+              src={image}
+              alt=""
+              fill
+              sizes="260px"
+              priority={priority}
+              className="dropdown-preview-img dropdown-preview-img--visible"
+            />
+          )}
+          <div className="dropdown-preview-gradient" />
+        </div>
+        <div className="dropdown-preview-content">
+          {title && <span className="dropdown-preview-title">{title}</span>}
+        </div>
+      </Link>
+    </div>
+  );
+}
+
+const destinationPreviewQuery = new URLSearchParams({ page_limit: "20" });
+for (const [, slug] of DESTINATION_DIRECTORY_LINKS) destinationPreviewQuery.append("slug[]", slug);
+destinationPreviewQuery.append("slug[]", jordanDestinationSlug);
+
+function DestinationsNavigation({ locale, pathname, uiLabels, closeMenu }: {
+  locale: Locale;
+  pathname: string;
+  uiLabels: HeaderUiLabels;
+  closeMenu?: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const items = DESTINATION_DIRECTORY_LINKS.map(([key, slug]) => {
+    const href = countryDestinationHref(slug);
+    return { slug, href: withLocale(href, locale), label: uiLabels[key], active: isActivePath(pathname, href) };
+  });
+  const activeItem = items.find((item) => item.active);
+  const directoryCurrent = stripLocale(pathname).replace(/\/$/, "") === destinationsPath;
+  const destinationsActive = Boolean(activeItem) || directoryCurrent;
+  const [previewSlug, setPreviewSlug] = useState((activeItem ?? items[0]).slug);
+  const [cmsPhotos, setCmsPhotos] = useState<Record<string, string> | null>(null);
+  const panelId = useId();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const focusOnOpen = useRef<"first" | "last" | null>(null);
+  const openedByHover = useRef(false);
+  const clearCloseTimer = () => clearTimeout(closeTimer.current);
+
+  const openMenu = (byHover = false) => {
+    openedByHover.current = byHover;
+    setPreviewSlug((activeItem ?? items[0]).slug);
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    if (focusOnOpen.current) {
+      const links = menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]');
+      const link = focusOnOpen.current === "first" ? links?.[0] : links?.[links.length - 1];
+      focusOnOpen.current = null;
+      link?.focus();
+    }
+    const closeOutside = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOutside);
+    return () => document.removeEventListener("pointerdown", closeOutside);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || cmsPhotos) return;
+    let stale = false;
+    apiGet<ApiList<ApiPage>>(`destinations?${destinationPreviewQuery}`, locale, false)
+      .then(({ data }) => {
+        if (stale) return;
+        const places = Array.isArray(data) ? data : data?.data ?? [];
+        const photos: Record<string, string> = {};
+        for (const place of places) {
+          const photo = place.featured_image || place.banner || place.gallery?.[0];
+          if (place.slug && photo) photos[place.slug.toLowerCase()] = photo;
+        }
+        setCmsPhotos(photos);
+      })
+      .catch(() => { /* The menu can use its editorial photographs during an API outage. */ });
+    return () => { stale = true; };
+  }, [open, locale, cmsPhotos]);
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  if (closeMenu) {
+    return (
+      <details className={`mobile-tour-group${destinationsActive ? " nav-item-active" : ""}`}>
+        <summary>
+          <span>{uiLabels.destinations}</span>
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" /></svg>
+        </summary>
+        <div>
+          {items.map(({ href, label, active }) => (
+            <Link key={href} href={href} aria-current={active ? "page" : undefined} onClick={closeMenu}>
+              {label}<ArrowIcon />
+            </Link>
+          ))}
+        </div>
+      </details>
+    );
+  }
+
+  const preview = items.find(({ slug }) => slug === previewSlug) ?? items[0];
+  const cmsPhoto = (previewSlug === "jordan" ? cmsPhotos?.[jordanDestinationSlug] : undefined) ?? cmsPhotos?.[previewSlug];
+
+  return (
+    <div
+      className={`dropdown${open ? " dropdown-open" : ""}${destinationsActive ? " nav-item-active" : ""}`}
+      ref={menuRef}
+      onPointerEnter={(event) => {
+        if (event.pointerType !== "mouse") return;
+        clearCloseTimer();
+        if (!open) openMenu(true);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType !== "mouse") return;
+        clearCloseTimer();
+        closeTimer.current = setTimeout(() => {
+          if (!menuRef.current?.querySelector(":focus-visible")) setOpen(false);
+        }, 180);
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open) {
+          event.preventDefault();
+          clearCloseTimer();
+          setOpen(false);
+          triggerRef.current?.focus();
+          return;
+        }
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+        event.preventDefault();
+        if (!open) {
+          focusOnOpen.current = event.key === "ArrowDown" ? "first" : "last";
+          openMenu();
+          return;
+        }
+        const links = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+        const current = links.indexOf(document.activeElement as HTMLElement);
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        const next = current < 0 ? (step === 1 ? 0 : links.length - 1) : (current + step + links.length) % links.length;
+        links[next]?.focus();
+      }}
+    >
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        aria-haspopup="menu"
+        onClick={(event) => {
+          clearCloseTimer();
+          if (open && openedByHover.current && event.detail > 0) {
+            openedByHover.current = false;
+          } else if (open) {
+            setOpen(false);
+          } else {
+            openMenu();
+          }
+        }}
+      >
+        {uiLabels.destinations}
+        <svg className="dropdown-chevron" aria-hidden="true" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" /></svg>
+      </button>
+      <div
+        className="dropdown-panel destination-dropdown-panel"
+        id={panelId}
+        role="menu"
+        aria-label={uiLabels.destinations}
+        hidden={!open}
+      >
+        <div className="dropdown-panel__links">
+          {items.map(({ slug, href, label, active }) => (
+            <Link
+              key={href}
+              href={href}
+              className={`dropdown-link-item${slug === previewSlug ? " dropdown-link-item--active" : ""}`}
+              role="menuitem"
+              aria-current={active ? "page" : undefined}
+              onPointerEnter={() => setPreviewSlug(slug)}
+              onFocus={() => setPreviewSlug(slug)}
+              onClick={() => setOpen(false)}
+            >
+              <span className="dropdown-link-indicator" aria-hidden="true" />
+              <span className="dropdown-link-label">{label}</span>
+              <ArrowIcon />
+            </Link>
+          ))}
+        </div>
+        {open && (
+          <NavigationPreview
+            href={preview.href}
+            title={preview.label}
+            image={cmsPhoto || countryDestinationPreviewPhoto(previewSlug)}
+            onClick={() => setOpen(false)}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
 
 function NavDropdown({
   locale,
@@ -340,35 +565,16 @@ function NavDropdown({
             ) : null}
           </div>
         ) : null}
-        <div className="dropdown-panel__preview" aria-hidden="true">
-          <Link
-            href={withLocale(previewHref, locale)}
-            className="dropdown-preview-card"
-            tabIndex={-1}
-            onClick={() => {
-              clearCloseTimeout();
-              setOpen(false);
-            }}
-          >
-            <div className="dropdown-preview-media">
-              {previewImage ? (
-                <Image
-                  key={previewImage}
-                  src={previewImage}
-                  alt=""
-                  fill
-                  sizes="260px"
-                  priority
-                  className="dropdown-preview-img dropdown-preview-img--visible"
-                />
-              ) : null}
-              <div className="dropdown-preview-gradient" />
-            </div>
-            <div className="dropdown-preview-content">
-              {previewTitle ? <span className="dropdown-preview-title">{previewTitle}</span> : null}
-            </div>
-          </Link>
-        </div>
+        <NavigationPreview
+          href={withLocale(previewHref, locale)}
+          title={previewTitle}
+          image={previewImage}
+          priority
+          onClick={() => {
+            clearCloseTimeout();
+            setOpen(false);
+          }}
+        />
       </div>
     </div>
   );
@@ -500,6 +706,17 @@ export function HeaderClient({
   const closeLangModal = useCallback(() => setLangOpen(false), []);
 
   const renderPrimaryNavigation = (mobile = false) => primaryNavLinks.map(([key, href]) => {
+    if (key === "destinations") {
+      return (
+        <DestinationsNavigation
+          key={`${key}-${pathname}`}
+          locale={locale}
+          pathname={pathname}
+          uiLabels={uiLabels}
+          closeMenu={mobile ? closeMenu : undefined}
+        />
+      );
+    }
     if (href === null) {
       if (!mobile)
         return (

@@ -1,7 +1,7 @@
 // Presentation-only classifier for the user-approved Multi Country journey
 // routes. These are route identifiers used to scope visual presentation —
 // never a source of category records, titles, images, or IDs.
-const MULTI_COUNTRY_PARENT_SLUG = "middle-east-tours";
+export const MULTI_COUNTRY_PARENT_SLUG = "middle-east-tours";
 
 const MULTI_COUNTRY_SUBCATEGORY_SLUGS = new Set([
   "egypt-and-jordan-tour-packages",

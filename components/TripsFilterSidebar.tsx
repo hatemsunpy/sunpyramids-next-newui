@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import type { Locale, TripTaxonomy } from "@/types/api";
+import type { ApiPage, Locale, TripTaxonomy } from "@/types/api";
+import { MULTI_COUNTRY_PARENT_SLUG, orderTripleCountryJourneyLast } from "@/components/multi-country/routes";
+import { COUNTRY_DESTINATION_LINKS } from "@/lib/destination-links";
 import { withLocale } from "@/lib/locales";
 import { TRIP_TYPE_SLUGS } from "@/lib/trip-types";
 import { uiCopy } from "@/lib/ui-copy";
@@ -15,6 +17,8 @@ type ActiveFilters = {
   page?: number;
   days?: number;
 };
+
+const tourTypeSlugs = [...TRIP_TYPE_SLUGS, MULTI_COUNTRY_PARENT_SLUG];
 
 export function TripsFilterSidebar({
   taxonomy,
@@ -29,6 +33,17 @@ export function TripsFilterSidebar({
 }) {
   const copy = uiCopy(locale);
   const tripsPath = withLocale("/trips", locale);
+  const multiCountry = taxonomy.allCategories.find((item) => item.slug === MULTI_COUNTRY_PARENT_SLUG);
+  // allCategories contains the children even when the API omits the parent from facet counts.
+  const countryCombinations = multiCountry?.id
+    ? orderTripleCountryJourneyLast(taxonomy.allCategories.filter(
+        (item): item is ApiPage & { id: number; slug: string } =>
+          item.parent_id === multiCountry.id && Boolean(item.id && item.slug),
+      ))
+    : [];
+  const countryCombinationIds = new Set(countryCombinations.map((item) => String(item.id)));
+  const activeCountry = COUNTRY_DESTINATION_LINKS.find(([, slug]) => slug === active.destination?.toLowerCase());
+  const selectedDestination = activeCountry?.[1] ?? active.destination;
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
@@ -100,7 +115,7 @@ export function TripsFilterSidebar({
   };
 
   // Helper to build URL query with preserved parameters
-  const buildFilterHref = (key: keyof ActiveFilters, value?: string) => {
+  const buildFilterHref = (key: "main" | "destination" | "category", value: string) => {
     const next = {
       main: active.main || "",
       category: active.category || "",
@@ -114,9 +129,22 @@ export function TripsFilterSidebar({
       // a child ID across a root-category change.
       next.category = "";
     } else if (key === "destination") {
-      next.destination = next.destination === value ? "" : value || "";
+      next.destination = selectedDestination === value ? "" : value;
+      if (COUNTRY_DESTINATION_LINKS.some(([, slug]) => slug === next.destination)) {
+        if (countryCombinationIds.has(next.category)) next.category = "";
+        // The old country shortcuts used title. Avoid applying that same
+        // keyword as a second filter when the user selects the destination.
+        if (next.title.toLowerCase() === next.destination) next.title = "";
+      }
     } else if (key === "category") {
       next.category = next.category === value ? "" : value || "";
+      // The category query takes precedence over main, so clear an incompatible type.
+      const isCountryCombination = countryCombinationIds.has(next.category);
+      const isMultiCountryType = next.main === MULTI_COUNTRY_PARENT_SLUG;
+      if (next.category && next.main && isCountryCombination !== isMultiCountryType) {
+        next.main = "";
+      }
+      if (isCountryCombination && activeCountry) next.destination = "";
     }
 
     const params = new URLSearchParams();
@@ -150,17 +178,40 @@ export function TripsFilterSidebar({
   const activeDestination = taxonomy.destinations.find(
     (item) => item.slug === active.destination,
   );
+  const activeDestinationLabel = activeCountry ? copy[activeCountry[0]] : activeDestination?.title || activeDestination?.name;
   const activeChildCategory = taxonomy.allCategories.find(
     (item) => String(item.id) === active.category,
   );
-  const tourTypeCategories = TRIP_TYPE_SLUGS.flatMap((slug) => {
+  const tourTypeCategories = tourTypeSlugs.flatMap((slug) => {
     const category = taxonomy.allCategories.find((item) => item.slug === slug);
     return category ? [category] : [];
   });
-  const tourTypeSlugs = new Set<string>(TRIP_TYPE_SLUGS);
   const experienceCategories = taxonomy.childCategories.filter(
-    (item) => !item.slug || !tourTypeSlugs.has(item.slug),
+    (item) => !countryCombinationIds.has(String(item.id)) && !tourTypeSlugs.some((slug) => slug === item.slug),
   );
+  const destinationOptions = [
+    ...taxonomy.destinations.map((item) => ({
+      key: "destination" as const,
+      value: item.slug || "",
+      id: item.id || item.slug,
+      label: item.title || item.name,
+    })),
+    ...countryCombinations.map((item) => ({
+      key: "category" as const,
+      value: String(item.id),
+      id: item.id,
+      label: item.title || item.name,
+    })),
+    ...COUNTRY_DESTINATION_LINKS.map(([labelKey, slug]) => ({
+      key: "destination" as const,
+      value: slug,
+      id: `country:${slug}`,
+      label: copy[labelKey],
+    })),
+  ];
+  const tourTypeLabel = (item: ApiPage) => item.slug === MULTI_COUNTRY_PARENT_SLUG
+    ? copy.multiCountry
+    : item.title || item.name;
 
   // The pill reflects what the user requested (e.g. "1 Day"); the unqualified
   // days=1 Day Tour fallback remains internal API behavior, never a pill.
@@ -217,7 +268,7 @@ export function TripsFilterSidebar({
                           <polyline points="20 6 9 17 4 12" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </span>
-                      <span>{item.title || item.name}</span>
+                      <span>{tourTypeLabel(item)}</span>
                     </span>
                     {count !== undefined && <span className="item-count">{count}</span>}
                   </Link>
@@ -228,47 +279,44 @@ export function TripsFilterSidebar({
         </div>
       )}
 
-      {/* Egypt Destinations */}
-      {taxonomy.destinations.length > 0 && (
-        <div className="discovery-filter-group">
-          <button
-            type="button"
-            className="group-header"
-            aria-expanded={openGroups.destinations}
-            onClick={() => toggleGroup("destinations")}
-          >
-            <span>Destinations</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-          {openGroups.destinations && (
-            <div className="group-items">
-              {taxonomy.destinations.map((item) => {
-                const isSelected = active.destination === item.slug;
-                return (
-                  <Link
-                    key={item.id || item.slug}
-                    href={buildFilterHref("destination", item.slug || "")}
-                    onClick={() => isMobile && setIsDrawerOpen(false)}
-                    className={`filter-item-link${isSelected ? " is-active" : ""}`}
-                    aria-current={isSelected ? "true" : undefined}
-                  >
-                    <span className="item-text">
-                      <span className="item-checkbox" aria-hidden="true">
-                        <svg viewBox="0 0 24 24">
-                          <polyline points="20 6 9 17 4 12" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                      <span>{item.title || item.name}</span>
+      <div className="discovery-filter-group">
+        <button
+          type="button"
+          className="group-header"
+          aria-expanded={openGroups.destinations}
+          onClick={() => toggleGroup("destinations")}
+        >
+          <span>{copy.destinations}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+        {openGroups.destinations && (
+          <div className="group-items">
+            {destinationOptions.map(({ id, key, value, label }) => {
+              const isSelected = Boolean(value && (key === "destination" ? selectedDestination : active.category) === value);
+              return (
+                <Link
+                  key={`${key}:${id}`}
+                  href={buildFilterHref(key, value)}
+                  onClick={() => isMobile && setIsDrawerOpen(false)}
+                  className={`filter-item-link${isSelected ? " is-active" : ""}`}
+                  aria-current={isSelected ? "true" : undefined}
+                >
+                  <span className="item-text">
+                    <span className="item-checkbox" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </span>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
+                    <span>{label}</span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Child Categories */}
       {experienceCategories.length > 0 && (
@@ -370,20 +418,20 @@ export function TripsFilterSidebar({
             <Link
               href={clearFilterHref("main")}
               className="active-tag"
-              title={`Remove filter "${activeMainCategory.title || activeMainCategory.name}"`}
+              title={`Remove filter "${tourTypeLabel(activeMainCategory)}"`}
             >
-              <span>{activeMainCategory.title || activeMainCategory.name}</span>
+              <span>{tourTypeLabel(activeMainCategory)}</span>
               <span className="remove-x" aria-hidden="true">&times;</span>
             </Link>
           )}
 
-          {activeDestination && (
+          {activeDestinationLabel && (
             <Link
               href={clearFilterHref("destination")}
               className="active-tag"
-              title={`Remove filter "${activeDestination.title || activeDestination.name}"`}
+              title={`Remove filter "${activeDestinationLabel}"`}
             >
-              <span>{activeDestination.title || activeDestination.name}</span>
+              <span>{activeDestinationLabel}</span>
               <span className="remove-x" aria-hidden="true">&times;</span>
             </Link>
           )}

@@ -91,11 +91,12 @@ export async function getHomeFaqs(locale: Locale) {
   return listData(response);
 }
 
+const HOME_BLOGS_ENDPOINT = "blogs/home?page_limit=8&order_by=id,desc";
+
 export async function getHomeBlogs(locale: Locale) {
-  const response = await apiFetch<ApiList<ApiPage>>(
-    "blogs/home?page_limit=8&order_by=id,desc",
-    { locale },
-  );
+  const response = await apiFetch<ApiList<ApiPage>>(HOME_BLOGS_ENDPOINT, {
+    locale,
+  });
   return listData(response);
 }
 
@@ -331,11 +332,26 @@ export async function getBlogCategory(slugOrId: string | number, locale: Locale)
   return listData(response)[0] ?? null;
 }
 
+function faqsListEndpoint(limit: number) {
+  return `faqs?page_limit=${limit}`;
+}
+
 export async function getFaqs(locale: Locale, limit = 200) {
-  const response = await apiFetch<ApiList<ApiPage>>(`faqs?page_limit=${limit}`, {
+  const response = await apiFetch<ApiList<ApiPage>>(faqsListEndpoint(limit), {
     locale,
   });
   return listData(response);
+}
+
+export async function getEgyptTravelResourcesData(locale: Locale) {
+  const [blogsResult, faqsResult] = await Promise.all([
+    apiFetchReliable<ApiList<ApiPage>>(HOME_BLOGS_ENDPOINT, { locale }, { maxAttempts: 2 }),
+    apiFetchReliable<ApiList<ApiPage>>(faqsListEndpoint(200), { locale }, { maxAttempts: 2 }),
+  ]);
+  return {
+    blogs: blogsResult.ok ? listData(blogsResult.value) : [],
+    faqs: faqsResult.ok ? listData(faqsResult.value) : [],
+  };
 }
 
 export async function getTour(slug: string, locale: Locale) {

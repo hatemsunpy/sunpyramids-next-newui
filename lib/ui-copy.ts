@@ -91,8 +91,18 @@ const phoneCountryCopies: Record<Locale, UiCopy> = {
   zh: { phonePlaceholder: "请输入电话号码", selectCallingCode: "选择国家区号", callingCode: "国家区号", searchCountryCode: "搜索国家或区号", noCountriesFound: "未找到国家", loadingCountryCodes: "正在加载国家区号...", countryCodesUnavailable: "国家区号暂时不可用。请刷新页面后重试。", phoneWithoutCountryCode: "不含国家区号的电话号码", enterPhoneDigits: "请在 {code} 后输入 {count} 位数字", enterValidPhone: "请输入有效的电话号码", countryCallingCodes: "国家电话区号" },
 };
 
+const destinationDirectoryCopies: Record<Locale, UiCopy> = {
+  en: { destEgypt: "Egypt", allDestinations: "All Destinations", destinationsIntro: "Explore our destinations and find your next trip." },
+  fr: { destEgypt: "Égypte", allDestinations: "Toutes les destinations", destinationsIntro: "Explorez nos destinations et trouvez votre prochain voyage." },
+  de: { destEgypt: "Ägypten", allDestinations: "Alle Reiseziele", destinationsIntro: "Entdecken Sie unsere Reiseziele und finden Sie Ihre nächste Reise." },
+  it: { destEgypt: "Egitto", allDestinations: "Tutte le destinazioni", destinationsIntro: "Esplora le nostre destinazioni e trova il tuo prossimo viaggio." },
+  pt: { destEgypt: "Egito", allDestinations: "Todos os destinos", destinationsIntro: "Explore nossos destinos e encontre sua próxima viagem." },
+  es: { destEgypt: "Egipto", allDestinations: "Todos los destinos", destinationsIntro: "Explora nuestros destinos y encuentra tu próximo viaje." },
+  zh: { destEgypt: "埃及", allDestinations: "所有目的地", destinationsIntro: "探索我们的目的地，寻找您的下一段旅程。" },
+};
+
 export function uiCopy(locale: Locale): UiCopy {
-  return new Proxy({ ...en, ...(copies[locale] ?? {}), ...formCopies[locale], ...tripsCopies[locale], ...phoneCountryCopies[locale] }, {
+  return new Proxy({ ...en, ...(copies[locale] ?? {}), ...formCopies[locale], ...tripsCopies[locale], ...phoneCountryCopies[locale], ...destinationDirectoryCopies[locale] }, {
     get(target, property: string) {
       return target[property] ?? en[property] ?? property;
     },
