@@ -1,0 +1,91 @@
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 46px;
+  padding-inline: 1.05rem;
+  border: 1px solid rgb(255 255 255 / 65%);
+  border-radius: 999px;
+  background: rgb(9 19 36 / 42%);
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { background: rgb(9 19 36 / 85%); color: white; }
+}
+
+.section {
+  padding-block: clamp(2.35rem, 5.5vw, 4.75rem);
+  scroll-margin-top: 114px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin-block-end: clamp(1.15rem, 2.25vw, 1.75rem);
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  color: var(--spt-link);
+  font-weight: 700;
+}
+
+.collectionGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.35vw, 1.15rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.collectionLink {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.45rem, 1vw, 0.8rem);
+  min-height: 76px;
+  height: 100%;
+  padding: clamp(0.75rem, 1.5vw, 1.3rem);
+  border: 1px solid var(--spt-border-subtle);
+  border-radius: var(--spt-radius-card);
+  background: var(--spt-surface-card);
+  color: var(--spt-link);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { border-color: var(--spt-link); }
+  span { overflow-wrap: anywhere; }
+}
+
+.places {
+  border-block-start: 1px solid var(--spt-border-subtle);
+}
+
+.placeGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-block-start: clamp(1.15rem, 2.25vw, 1.75rem);
+}
+
+@media (max-width: 900px) {
+  .collectionGrid, .placeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .placeGrid { grid-template-columns: minmax(0, 1fr); }
+  .collectionLink { grid-template-columns: minmax(0, 1fr) auto; gap: 0.45rem; min-height: 88px; }
+  .collectionLink svg:first-child { grid-column: 1 / -1; }
+}

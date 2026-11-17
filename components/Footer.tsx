@@ -1,7 +1,8 @@
 import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
-import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import type { Locale, PublicSiteSettings } from "@/types/api";
+import { DESTINATION_DIRECTORY_LINKS, countryDestinationHref, destinationsPath } from "@/lib/destination-links";
 import { withLocale } from "@/lib/locales";
 import { TrustIndexLoader } from "@/components/TrustIndexLoader";
 import { uiCopy } from "@/lib/ui-copy";
@@ -13,16 +14,6 @@ const links = [
   ["specialOffer", "/trips?main=special-offers"], ["rentCar", "/rent-car"], ["about", "/about-us"],
   ["contact", "/contact-us"], ["guide", "/egypt-travel-guide"], ["faqs", "/faqs"],
   ["events", "/events"], ["accessible", "/accessible-travel"],
-] as const;
-
-// User-requested static navigation labels (frontend-owned UI). These are not
-// backend destination records: each link reuses the existing live tour-search
-// route /trips?title=<English country name> via lib/trips-query.ts, so no
-// destination IDs or slugs are invented. Search values stay English; labels
-// are localized through lib/ui-copy.ts.
-const destinations = [
-  ["destJordan", "Jordan"], ["destMorocco", "Morocco"], ["destTunisia", "Tunisia"],
-  ["destTurkey", "Turkey"], ["destGreece", "Greece"], ["destTanzania", "Tanzania"],
 ] as const;
 
 // Static brand-icon paths (frontend UI config only, no backend records).
@@ -109,10 +100,12 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
           </nav>
         </section>
         <section aria-labelledby="footer-destinations-title">
-          <h2 className="footer-title" id="footer-destinations-title">{copy.destinations}</h2>
-          <nav className="footer-links footer-destination-links" aria-label="Destinations">
-            {destinations.map(([key, title]) => (
-              <Link key={title} href={withLocale(`/trips?title=${encodeURIComponent(title)}`, locale)}>
+          <h2 className="footer-title" id="footer-destinations-title">
+            <Link href={withLocale(destinationsPath, locale)}>{copy.destinations}</Link>
+          </h2>
+          <nav className="footer-links footer-destination-links" aria-labelledby="footer-destinations-title">
+            {DESTINATION_DIRECTORY_LINKS.map(([key, slug]) => (
+              <Link key={slug} href={withLocale(countryDestinationHref(slug), locale)}>
                 <span>{copy[key]}</span><span aria-hidden="true">↗</span>
               </Link>
             ))}
@@ -128,7 +121,10 @@ export function Footer({ locale = "en", settings }: { locale?: Locale; settings:
               </a>
             ))}
             <a href={siteContact.whatsapp.contactUrl} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${siteContact.whatsapp.display}`}>
-              <MessageCircle className="footer-contact-icon" aria-hidden="true" />
+              <svg className="footer-contact-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+                <path d="M12 2a10 10 0 0 0-8.56 15.17L2 22l4.83-1.44A10 10 0 1 0 12 2Z" />
+                <Phone x={6.5} y={6.5} width={11} height={11} strokeWidth={3.5} />
+              </svg>
               <span dir="ltr">{siteContact.whatsapp.display}</span>
             </a>
             {emails.map((email) => (

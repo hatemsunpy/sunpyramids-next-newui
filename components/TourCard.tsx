@@ -10,6 +10,7 @@ export function TourCard({
   imageSizes,
   summary,
   variant = "frosted",
+  showLegacyAction = false,
 }: {
   tour: Tour;
   locale?: Locale;
@@ -18,6 +19,7 @@ export function TourCard({
   imageSizes?: string;
   summary?: string;
   variant?: TourCardVariant;
+  showLegacyAction?: boolean;
 }) {
   const copy = uiCopy(locale);
   return (
@@ -29,6 +31,7 @@ export function TourCard({
       imageSizes={imageSizes}
       summary={summary}
       variant={variant}
+      showLegacyAction={showLegacyAction}
       labels={{
         specialOffer: copy.specialOffer,
         specialOffers: copy.specialOffers,

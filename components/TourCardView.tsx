@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { ArrowUpRight } from "lucide-react";
 import Image from "@/components/ResponsiveImage";
 import Link from "next/link";
 import type { Locale, Tour } from "@/types/api";
@@ -159,6 +160,7 @@ export function TourCardView({
   imageSizes = "(max-width: 768px) 100vw, 25vw",
   summary,
   variant = "frosted",
+  showLegacyAction = false,
 }: {
   tour: Tour;
   locale?: Locale;
@@ -168,6 +170,7 @@ export function TourCardView({
   imageSizes?: string;
   summary?: string;
   variant?: TourCardVariant;
+  showLegacyAction?: boolean;
 }) {
   const slug = tour.slug || String(tour.id || "");
   const title = tour.title || tour.name || "Egypt Tour";
@@ -260,7 +263,12 @@ export function TourCardView({
                 <span>Start From</span>
                 <div className="tour-card-price-wrap">{priceNode}</div>
               </div>
-              <TourCardDuration duration={tour.duration} />
+              {showLegacyAction ? (
+                <div className="tour-card-legacy-details">
+                  <TourCardDuration duration={tour.duration} />
+                  <span className="tour-card-legacy-action" aria-hidden="true">{ctaLabel}<ArrowUpRight size={15} /></span>
+                </div>
+              ) : <TourCardDuration duration={tour.duration} />}
             </div>
           </div>
         </Link>

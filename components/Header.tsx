@@ -1,6 +1,7 @@
 import type { Locale } from "@/types/api";
 import type { EgyptToursMenuChild } from "@/lib/egypt-tours-menu";
 import type { EgyptWeatherSnapshot } from "@/lib/weather";
+import { DESTINATION_DIRECTORY_LINKS } from "@/lib/destination-links";
 import { pickHomeLabels, pickUiLabels, pickVoiceLabels } from "@/lib/home-client-labels";
 import { HeaderClient, type HeaderTourCategory } from "@/components/HeaderClient";
 
@@ -9,6 +10,8 @@ const HEADER_LABEL_KEYS = ["promoTitle", "promoButton"] as const;
 const HEADER_UI_LABEL_KEYS = [
   "home",
   "egyptTours",
+  "destinations",
+  ...DESTINATION_DIRECTORY_LINKS.map(([key]) => key),
   "oneDay",
   "multiDays",
   "nileCruises",
